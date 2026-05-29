@@ -121,6 +121,7 @@ header{text-align:center;margin-bottom:48px;position:relative}
   overflow:hidden;
   transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease;
   backdrop-filter:blur(10px);
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
 }
 .card::before{
   content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1px;
@@ -433,10 +434,11 @@ canvas{background:#000;border:1px solid rgba(255,255,255,.1);border-radius:8px;m
 .context-menu{
   position:fixed;z-index:200;background:rgba(20,8,48,.98);
   border:1px solid rgba(255,255,255,.15);border-radius:12px;
-  padding:6px;min-width:200px;
+  padding:6px;min-width:220px;
   box-shadow:0 16px 40px rgba(0,0,0,.6);
   backdrop-filter:blur(10px);
   animation:ctxFade .15s ease;
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
 }
 @keyframes ctxFade{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
 .context-menu button{
@@ -448,13 +450,22 @@ canvas{background:#000;border:1px solid rgba(255,255,255,.1);border-radius:8px;m
 .context-menu button:hover{background:rgba(255,255,255,.08)}
 .context-menu button.danger{color:var(--neon-pink)}
 
-/* Card-add (+ Thêm trò) */
+/* Card-add (+ Thêm trò) — bright neon yellow */
 .card-add{
-  background:linear-gradient(135deg,rgba(255,230,0,.05),rgba(255,138,42,.05))!important;
-  border-style:dashed!important;border-color:rgba(255,230,0,.3)!important;
+  background:linear-gradient(135deg,rgba(255,230,0,.18),rgba(255,138,42,.22))!important;
+  border:2px dashed var(--neon-yellow)!important;
   cursor:pointer;
+  text-align:center;
+  box-shadow:0 0 20px rgba(255,230,0,.25);
 }
-.card-add:hover{border-color:var(--neon-yellow)!important;background:rgba(255,230,0,.08)!important}
+.card-add:hover{
+  border-color:#fff!important;background:rgba(255,230,0,.28)!important;
+  box-shadow:0 0 30px rgba(255,230,0,.5);
+}
+.card-add .emoji{font-size:54px!important;animation:plusPulse 1.6s ease-in-out infinite;filter:drop-shadow(0 0 16px var(--neon-yellow))}
+.card-add h3{color:var(--neon-yellow)!important;font-size:18px!important;text-shadow:0 0 12px rgba(255,230,0,.6)}
+.card-add p{color:rgba(255,230,0,.7)!important}
+@keyframes plusPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18) rotate(8deg)}}
 
 /* Favorites picker overlay */
 .fav-picker{
@@ -477,8 +488,23 @@ canvas{background:#000;border:1px solid rgba(255,255,255,.1);border-radius:8px;m
   background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
   border-radius:12px;padding:12px;cursor:pointer;transition:all .2s;
   display:flex;align-items:center;gap:10px;
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
 }
 .fav-picker-item:hover{background:rgba(0,240,255,.1);border-color:var(--neon-cyan);transform:translateY(-2px)}
+.fav-picker-item.checked{
+  background:linear-gradient(135deg,rgba(57,255,127,.18),rgba(0,240,255,.12));
+  border-color:var(--neon-green);
+  box-shadow:0 0 14px rgba(57,255,127,.3);
+}
+.fav-picker-item .fav-check{
+  flex-shrink:0;width:22px;height:22px;border-radius:6px;
+  border:2px solid rgba(255,255,255,.3);background:rgba(0,0,0,.25);
+  display:flex;align-items:center;justify-content:center;font-size:14px;color:transparent;
+  transition:all .2s;
+}
+.fav-picker-item.checked .fav-check{
+  border-color:var(--neon-green);background:var(--neon-green);color:#0a1f0e;
+}
 .fav-picker-item .emoji{font-size:24px;flex-shrink:0}
 .fav-picker-item .title{font-family:'Bungee',cursive;font-size:12px;color:var(--text);letter-spacing:.02em}
 .fav-picker-empty{color:var(--muted);text-align:center;padding:24px;font-style:italic;grid-column:1/-1}
@@ -764,7 +790,7 @@ footer b{color:var(--neon-cyan)}
 <div id="fav-picker" class="fav-picker">
   <div class="fav-picker-box">
     <div class="fav-picker-head">
-      <h3>⭐ Thêm trò vào ưa thích</h3>
+      <h3>⭐ Chọn trò ưa thích · tick để thêm/bỏ</h3>
       <button class="fav-picker-close" onclick="closeFavPicker()">✕</button>
     </div>
     <div class="fav-picker-list" id="fav-picker-list"></div>
@@ -829,47 +855,60 @@ function renderFavsTab(){
   const grid=document.getElementById('favorites-grid');
   if(!grid)return;
   const favs=getFavs();
-  // Clear all except the add button
-  [...grid.querySelectorAll('.card[data-game]')].forEach(c=>c.remove());
-  // Build clones from existing cards in other tabs
+  // Build sourceCards map BEFORE wiping the grid (avoids matching our own clones)
   const sourceCards={};
   document.querySelectorAll('.tab-content:not([data-tab="favorites"]) .card[data-game]').forEach(c=>{
-    sourceCards[c.dataset.game]=c;
+    if(!sourceCards[c.dataset.game]) sourceCards[c.dataset.game]=c;
   });
-  const addBtn=grid.querySelector('.card-add');
+  // Wipe everything in the grid and rebuild from scratch
+  grid.innerHTML='';
+  // Add favorited cards first
   favs.forEach(id=>{
     if(!sourceCards[id])return;
     const clone=sourceCards[id].cloneNode(true);
+    clone.classList.add('is-fav'); // ensure star icon
     attachCardHandlers(clone);
-    grid.insertBefore(clone,addBtn);
+    grid.appendChild(clone);
   });
+  // Always append the "+" add-button at the end
+  const addCard=document.createElement('div');
+  addCard.className='card card-add';
+  addCard.dataset.action='add-favorite';
+  addCard.style.setProperty('--ac','var(--neon-yellow)');
+  addCard.innerHTML='<div class="emoji">➕</div><h3>Thêm trò</h3><p>Bấm để chọn trò thêm vào đây</p>';
+  attachCardHandlers(addCard);
+  grid.appendChild(addCard);
 }
 
 function openFavPicker(){
-  const picker=document.getElementById('fav-picker');
+  document.getElementById('fav-picker').classList.add('open');
+  renderFavPickerList();
+}
+function renderFavPickerList(){
   const list=document.getElementById('fav-picker-list');
   list.innerHTML='';
   const favs=getFavs();
-  const available=[];
+  const allCards=[];
   document.querySelectorAll('.tab-content:not([data-tab="favorites"]) .card[data-game]').forEach(c=>{
     const id=c.dataset.game;
-    if(favs.includes(id))return;
     const emoji=c.querySelector('.emoji')?.textContent||'🎮';
     const title=c.querySelector('h3')?.textContent||id;
-    available.push({id,emoji,title});
+    allCards.push({id,emoji,title,checked:favs.includes(id)});
   });
-  if(available.length===0){
-    list.innerHTML='<div class="fav-picker-empty">Đã thêm hết tất cả các trò vào ưa thích rồi! 🌟</div>';
-  } else {
-    available.forEach(g=>{
-      const item=document.createElement('div');
-      item.className='fav-picker-item';
-      item.innerHTML=`<span class="emoji">${g.emoji}</span><span class="title">${g.title}</span>`;
-      item.onclick=()=>{addFav(g.id);openFavPicker();};
-      list.appendChild(item);
-    });
+  if(allCards.length===0){
+    list.innerHTML='<div class="fav-picker-empty">Chưa có trò nào để chọn 🌟</div>';
+    return;
   }
-  picker.classList.add('open');
+  allCards.forEach(g=>{
+    const item=document.createElement('div');
+    item.className='fav-picker-item'+(g.checked?' checked':'');
+    item.innerHTML=`<span class="fav-check">✓</span><span class="emoji">${g.emoji}</span><span class="title">${g.title}</span>`;
+    item.onclick=()=>{
+      if(g.checked) removeFav(g.id); else addFav(g.id);
+      renderFavPickerList(); // refresh checkbox states in picker
+    };
+    list.appendChild(item);
+  });
 }
 function closeFavPicker(){document.getElementById('fav-picker').classList.remove('open')}
 document.getElementById('fav-picker').onclick=e=>{if(e.target.id==='fav-picker')closeFavPicker()};
