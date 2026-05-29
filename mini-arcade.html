@@ -50,21 +50,6 @@ body::after{
   mix-blend-mode:multiply;
 }
 .shell{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:32px 24px 80px}
-
-/* Categories — Game / Học mà chơi */
-.cat{margin-bottom:40px}
-.cat-title{
-  font-family:'Bungee',cursive;
-  font-size:clamp(18px,3.5vw,24px);
-  color:var(--neon-cyan);
-  text-shadow:0 0 16px rgba(0,240,255,.4);
-  margin-bottom:16px;
-  letter-spacing:.02em;
-  padding-bottom:10px;
-  border-bottom:1px solid rgba(0,240,255,.18);
-  display:flex;align-items:center;gap:10px;
-}
-.cat-emoji{font-size:1.2em;filter:drop-shadow(0 0 8px var(--neon-cyan))}
 header{text-align:center;margin-bottom:48px}
 .logo{
   font-family:'Bungee',cursive;
@@ -122,19 +107,19 @@ header{text-align:center;margin-bottom:48px}
 
 /* Modal */
 .modal{
-  position:fixed;inset:0;background:rgba(5,2,15,.85);backdrop-filter:blur(8px);
-  z-index:100;display:none;align-items:flex-start;justify-content:center;
-  padding:24px 14px;overflow-y:auto;
+  position:fixed;inset:0;background:rgba(5,2,15,.92);backdrop-filter:blur(8px);
+  z-index:100;display:none;align-items:stretch;justify-content:center;
+  padding:0;overflow:hidden;
 }
 .modal.open{display:flex}
 .modal-content{
-  background:linear-gradient(180deg,rgba(30,10,70,.95) 0%,rgba(15,5,40,.95) 100%);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:20px;max-width:780px;width:100%;
-  padding:20px;position:relative;
-  box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 80px rgba(177,75,255,.18) inset;
-  margin:auto;
-  display:flex;flex-direction:column;max-height:94vh;
+  background:linear-gradient(180deg,rgba(30,10,70,.95) 0%,rgba(15,5,40,.98) 100%);
+  border:none;border-radius:0;
+  max-width:none;width:100%;height:100vh;max-height:100vh;
+  padding:18px 16px 12px;position:relative;
+  box-shadow:none;
+  margin:0;
+  display:flex;flex-direction:column;
 }
 .modal-head,.status{flex-shrink:0}
 .modal-head{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
@@ -257,8 +242,8 @@ canvas{background:#000;border:1px solid rgba(255,255,255,.1);border-radius:8px;m
 /* Hangman */
 .hangman-figure{font-family:'JetBrains Mono',monospace;font-size:16px;line-height:1.2;white-space:pre;color:var(--neon-yellow);background:rgba(0,0,0,.3);padding:12px;border-radius:8px}
 .hangman-word{font-family:'JetBrains Mono',monospace;font-size:28px;letter-spacing:8px;color:var(--neon-cyan);margin:14px 0;font-weight:700}
-.hangman-letters{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;max-width:420px}
-.hangman-letters button{padding:8px;border-radius:6px;background:rgba(0,240,255,.1);border:1px solid rgba(0,240,255,.3);color:var(--neon-cyan);cursor:pointer;font-weight:700;font-family:'JetBrains Mono',monospace}
+.hangman-letters{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;width:100%;max-width:none}
+.hangman-letters button{padding:14px 4px;border-radius:8px;background:rgba(0,240,255,.1);border:1px solid rgba(0,240,255,.3);color:var(--neon-cyan);cursor:pointer;font-weight:700;font-family:'JetBrains Mono',monospace;font-size:17px;min-height:48px}
 .hangman-letters button:disabled{opacity:.3;cursor:default}
 .hangman-letters button.miss{background:rgba(255,45,149,.2);border-color:var(--neon-pink);color:var(--neon-pink)}
 .hangman-letters button.hit{background:rgba(57,255,127,.2);border-color:var(--neon-green);color:var(--neon-green)}
@@ -304,6 +289,11 @@ canvas{background:#000;border:1px solid rgba(255,255,255,.1);border-radius:8px;m
 .tetris-stat{background:rgba(255,255,255,.05);padding:8px 12px;border-radius:8px;margin-bottom:8px}
 
 /* Flag Quiz */
+.flag-mode{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%;max-width:360px;margin-bottom:8px}
+.flag-mode button{padding:10px 8px;border-radius:10px;background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.12);color:var(--text);font-family:'Be Vietnam Pro',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.flag-mode button.active{background:linear-gradient(135deg,rgba(255,230,0,.2),rgba(255,138,42,.2));border-color:var(--neon-yellow);color:var(--neon-yellow);box-shadow:0 0 14px rgba(255,230,0,.3)}
+.flag-mode button:not(.active):hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2)}
+.flag-country-name{font-family:'Bungee',cursive;font-size:18px;color:var(--neon-cyan);text-shadow:0 0 12px rgba(0,240,255,.5);text-align:center;margin:4px 0}
 .flag-img{
   width:100%;max-width:300px;height:auto;aspect-ratio:3/2;object-fit:contain;
   background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);
@@ -409,6 +399,121 @@ canvas{background:#000;border:1px solid rgba(255,255,255,.1);border-radius:8px;m
 .quiz-end .stars{font-size:36px;margin:8px 0;letter-spacing:6px}
 .quiz-end .summary{color:var(--muted);font-size:14px}
 
+/* Tabs */
+.tabs{
+  display:flex;gap:6px;margin-bottom:24px;padding:6px;
+  background:rgba(20,8,48,.7);border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;backdrop-filter:blur(10px);overflow-x:auto;
+}
+.tab{
+  flex:1 1 auto;min-width:fit-content;
+  padding:12px 14px;border-radius:12px;cursor:pointer;
+  background:transparent;border:none;color:var(--muted);
+  font-family:'Bungee',cursive;font-size:13px;letter-spacing:.03em;
+  transition:all .25s;display:flex;align-items:center;gap:6px;justify-content:center;
+  white-space:nowrap;
+}
+.tab:hover{color:var(--text);background:rgba(255,255,255,.05)}
+.tab.active{
+  background:linear-gradient(135deg,var(--neon-pink) 0%,var(--neon-purple) 100%);
+  color:#fff;box-shadow:0 4px 20px rgba(255,45,149,.4);
+}
+.tab .tab-emoji{font-size:1.2em}
+.tab-content{display:none}
+.tab-content.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Formula display */
+.formula-levels{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:520px;margin-bottom:12px;
+}
+.formula-levels button{
+  padding:12px 8px;border-radius:12px;cursor:pointer;
+  background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.1);
+  color:var(--text);font-family:'Be Vietnam Pro',sans-serif;font-size:13px;font-weight:600;
+  transition:all .2s;
+}
+.formula-levels button.active{
+  background:linear-gradient(135deg,rgba(0,240,255,.2),rgba(177,75,255,.2));
+  border-color:var(--neon-cyan);color:var(--neon-cyan);
+  box-shadow:0 0 14px rgba(0,240,255,.3);
+}
+.formula-list{width:100%;max-width:680px}
+.formula-card{
+  background:linear-gradient(180deg,rgba(177,75,255,.06) 0%,rgba(0,240,255,.04) 100%);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;padding:14px;margin-bottom:12px;
+}
+.formula-name{
+  font-family:'Bungee',cursive;font-size:14px;color:var(--neon-cyan);
+  text-shadow:0 0 10px rgba(0,240,255,.3);margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+}
+.formula-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:50%;background:var(--neon-pink);
+  color:#fff;font-size:12px;flex-shrink:0;
+}
+.formula-eq{
+  font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--neon-yellow);
+  background:rgba(0,0,0,.35);padding:12px 14px;border-radius:10px;
+  margin:8px 0;text-align:center;line-height:1.5;
+  border:1px solid rgba(255,230,0,.15);white-space:pre-wrap;
+}
+.formula-ex{
+  font-size:13px;line-height:1.55;margin:8px 0;
+  padding:10px 12px;background:rgba(57,255,127,.05);
+  border-radius:8px;border-left:3px solid var(--neon-green);
+}
+.formula-ex b{color:var(--neon-green)}
+.formula-explain{
+  font-size:13px;line-height:1.55;color:var(--text);
+  padding:8px 12px;background:rgba(255,138,42,.05);
+  border-radius:8px;border-left:3px solid var(--neon-orange);
+  margin-top:6px;
+}
+.formula-explain b{color:var(--neon-orange)}
+
+/* Pinyin display in formula examples */
+.pinyin-block{
+  display:flex;flex-direction:column;gap:2px;align-items:center;
+  margin:6px 0;padding:8px 10px;background:rgba(0,0,0,.25);border-radius:8px;
+}
+.pinyin-zh{font-size:22px;color:#fff;font-weight:700;letter-spacing:2px}
+.pinyin-py{font-size:14px;color:var(--neon-cyan);font-style:italic;font-family:'JetBrains Mono',monospace}
+.pinyin-vi{font-size:13px;color:var(--muted);margin-top:2px}
+
+/* Mental arithmetic */
+.mental-expr{
+  font-family:'JetBrains Mono',monospace;font-size:36px;
+  color:var(--neon-cyan);text-align:center;margin:18px 0;
+  padding:18px 14px;background:rgba(0,0,0,.3);border-radius:12px;
+  text-shadow:0 0 20px rgba(0,240,255,.4);font-weight:700;
+}
+.mental-eq{color:var(--neon-yellow)}
+.mental-q{color:var(--neon-pink);font-size:1.2em}
+.mental-opts{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:10px;
+}
+.mental-opts button{
+  padding:18px;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;
+  background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.12);
+  color:var(--text);border-radius:14px;cursor:pointer;transition:all .2s;
+}
+.mental-opts button:not(:disabled):hover{
+  background:rgba(0,240,255,.15);border-color:var(--neon-cyan);transform:translateY(-2px);
+}
+.mental-opts button.correct{
+  background:linear-gradient(135deg,rgba(57,255,127,.3),rgba(57,255,127,.15))!important;
+  border-color:var(--neon-green)!important;color:#fff!important;
+  box-shadow:0 0 20px rgba(57,255,127,.5);
+}
+.mental-opts button.wrong{
+  background:linear-gradient(135deg,rgba(255,45,149,.3),rgba(255,45,149,.15))!important;
+  border-color:var(--neon-pink)!important;color:#fff!important;
+}
+.mental-opts button:disabled{cursor:default}
+
 /* mobile arrow pad */
 .dpad{display:none;grid-template-columns:60px 60px 60px;grid-template-rows:60px 60px;gap:6px;margin-top:14px;justify-content:center}
 .dpad button{background:rgba(0,240,255,.15);border:1px solid var(--neon-cyan);color:var(--neon-cyan);border-radius:10px;font-size:24px;cursor:pointer;font-weight:700}
@@ -459,11 +564,11 @@ footer b{color:var(--neon-cyan)}
   .flag-feedback{margin-top:10px}
 
   /* Hangman (cả VN và EN) */
-  .hangman-figure{font-size:12px;padding:6px;line-height:1.1}
+  .hangman-figure{font-size:11px;padding:5px;line-height:1.05}
   .hangman-word,.hg-en-word{font-size:22px;letter-spacing:4px;margin:8px 0}
   .hg-en-meaning{font-size:13px}
-  .hangman-letters{grid-template-columns:repeat(7,1fr);gap:4px;max-width:100%}
-  .hangman-letters button{padding:7px 4px;font-size:12px}
+  .hangman-letters{grid-template-columns:repeat(7,1fr);gap:5px;width:100%;max-width:none}
+  .hangman-letters button{padding:13px 2px;font-size:16px;min-height:44px}
 
   /* Quiz (Grammar EN/VN) */
   .quiz-level-pick{gap:6px;margin-bottom:10px}
@@ -489,8 +594,13 @@ footer b{color:var(--neon-cyan)}
   <p class="tagline">Chạm để bắt đầu</p>
 </header>
 
-<section class="cat">
-  <h2 class="cat-title"><span class="cat-emoji">🎮</span>Game</h2>
+<div class="tabs">
+  <button class="tab active" data-tab="game"><span class="tab-emoji">🎮</span>Game</button>
+  <button class="tab" data-tab="learn"><span class="tab-emoji">📚</span>Học mà chơi</button>
+  <button class="tab" data-tab="formulas"><span class="tab-emoji">📐</span>Tủ công thức</button>
+</div>
+
+<div class="tab-content active" data-tab="game">
   <div class="grid">
     <div class="card" data-game="ttt" style="--ac:var(--neon-pink)"><div class="emoji">❌⭕</div><h3>Caro 3×3</h3><p>Tic Tac Toe — chơi liên tục, tính điểm</p></div>
     <div class="card" data-game="gomoku" style="--ac:var(--neon-cyan)"><div class="emoji">⚫⚪</div><h3>Cờ Caro 5</h3><p>Gomoku 15×15 — đủ 5 nốt là thắng</p></div>
@@ -508,18 +618,29 @@ footer b{color:var(--neon-cyan)}
     <div class="card" data-game="numguess" style="--ac:var(--neon-cyan)"><div class="emoji">🎲</div><h3>Đoán số 1-100</h3><p>Máy nghĩ — bạn đoán, gợi ý cao/thấp</p></div>
     <div class="card" data-game="darts" style="--ac:var(--neon-yellow)"><div class="emoji">🎯</div><h3>Ném phi tiêu</h3><p>10 phi tiêu vào hồng tâm — tính điểm</p></div>
   </div>
-</section>
+</div>
 
-<section class="cat">
-  <h2 class="cat-title"><span class="cat-emoji">📚</span>Học mà chơi</h2>
+<div class="tab-content" data-tab="learn">
   <div class="grid">
-    <div class="card" data-game="flags" style="--ac:var(--neon-yellow)"><div class="emoji">🌐</div><h3>Đố Cờ Quốc Gia</h3><p>200+ nước & vùng lãnh thổ — chọn đúng để biết thêm về quốc gia đó</p></div>
+    <div class="card" data-game="flags" style="--ac:var(--neon-yellow)"><div class="emoji">🌐</div><h3>Đố Cờ / Thủ đô</h3><p>200+ nước & vùng lãnh thổ — 2 chế độ chơi</p></div>
+    <div class="card" data-game="mental" style="--ac:var(--neon-cyan)"><div class="emoji">🧮</div><h3>Tính nhẩm</h3><p>Cộng-trừ-nhân-chia — câu hỏi vô tận (random)</p></div>
     <div class="card" data-game="hangman" style="--ac:var(--neon-orange)"><div class="emoji">🅰️</div><h3>Đoán chữ tiếng Việt</h3><p>Đố từ về địa danh, ẩm thực, văn hóa Việt</p></div>
-    <div class="card" data-game="hangmanEn" style="--ac:var(--neon-pink)"><div class="emoji">🔤</div><h3>Hangman EN</h3><p>Đố từ vựng tiếng Anh — 3 cấp: Tiểu học / THCS / THPT</p></div>
+    <div class="card" data-game="hangmanEn" style="--ac:var(--neon-pink)"><div class="emoji">🔤</div><h3>Hangman EN</h3><p>Đố từ vựng tiếng Anh — 3 cấp độ</p></div>
     <div class="card" data-game="grammarVn" style="--ac:var(--neon-orange)"><div class="emoji">🇻🇳</div><h3>Ngữ pháp tiếng Việt</h3><p>Trắc nghiệm — Tiểu học / THCS / THPT</p></div>
-    <div class="card" data-game="grammarEn" style="--ac:var(--neon-green)"><div class="emoji">📚</div><h3>Ngữ pháp EN</h3><p>Trắc nghiệm tiếng Anh — Beginner / Intermediate / Advanced</p></div>
+    <div class="card" data-game="grammarEn" style="--ac:var(--neon-green)"><div class="emoji">📚</div><h3>Ngữ pháp EN</h3><p>Trắc nghiệm tiếng Anh — 3 trình độ</p></div>
   </div>
-</section>
+</div>
+
+<div class="tab-content" data-tab="formulas">
+  <div class="grid">
+    <div class="card" data-game="mathFormulas" style="--ac:var(--neon-cyan)"><div class="emoji">➗</div><h3>Công thức Toán</h3><p>Tiểu học → THPT — kèm ví dụ & giải thích</p></div>
+    <div class="card" data-game="physicsFormulas" style="--ac:var(--neon-yellow)"><div class="emoji">⚛️</div><h3>Công thức Vật lý</h3><p>Cơ học, điện, sóng, hạt nhân</p></div>
+    <div class="card" data-game="chemFormulas" style="--ac:var(--neon-green)"><div class="emoji">🧪</div><h3>Công thức Hóa học</h3><p>Số mol, phản ứng, hữu cơ</p></div>
+    <div class="card" data-game="bioFormulas" style="--ac:var(--neon-pink)"><div class="emoji">🧬</div><h3>Công thức Sinh học</h3><p>Tế bào, di truyền, sinh thái</p></div>
+    <div class="card" data-game="englishFormulas" style="--ac:var(--neon-purple)"><div class="emoji">🇬🇧</div><h3>Công thức English</h3><p>Ngữ pháp tổng hợp 12 năm học</p></div>
+    <div class="card" data-game="chineseFormulas" style="--ac:var(--neon-orange)"><div class="emoji">🇨🇳</div><h3>Công thức Tiếng Trung</h3><p>Pinyin + cấu trúc câu (có phiên âm)</p></div>
+  </div>
+</div>
 
 <footer>
   <p>Made by <b>Bố Chin</b> with love <span style="color:var(--neon-pink)">♥</span></p>
@@ -563,6 +684,18 @@ $('#close-btn').onclick=closeModal;
 modal.onclick=e=>{if(e.target===modal)closeModal()};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))closeModal()});
 $$('.card[data-game]').forEach(c=>c.onclick=()=>openGame(c.dataset.game));
+
+// Tab switching
+$$('.tab').forEach(t=>{
+  t.onclick=()=>{
+    const id=t.dataset.tab;
+    $$('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));
+    $$('.tab-content').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));
+    localStorage.setItem('activeTab',id);
+  };
+});
+const savedTab=localStorage.getItem('activeTab');
+if(savedTab){const t=document.querySelector(`.tab[data-tab="${savedTab}"]`);if(t)t.click();}
 
 function setStatus(html){mStatus.innerHTML=html}
 function addBtn(label,cls,onclick){
@@ -1732,9 +1865,12 @@ games.flags = (()=>{
   const ROAST  = ['Cùi bắp man!','Lêu lêu sai rồi!','Đậu cùi bắp!','Sai bét nhè!'];
 
   const DIFF={easy:{c:4,sc:false,lbl:'Dễ'},hard:{c:6,sc:true,lbl:'Khó'},expert:{c:8,sc:true,lbl:'Cực khó'}};
+  const MODES={flag:{lbl:'🚩 Đố cờ'},capital:{lbl:'🏛️ Đố thủ đô'}};
   let current,options,score=0,total=0,streak=0,answered=false;
   let difficulty=localStorage.getItem('flagsDifficulty')||'easy';
   if(!DIFF[difficulty])difficulty='easy';
+  let mode=localStorage.getItem('flagsMode')||'flag';
+  if(!MODES[mode])mode='flag';
   let best=parseInt(localStorage.getItem('flagsBest')||'0');
   let bestStreak=parseInt(localStorage.getItem('flagsBestStreak')||'0');
 
@@ -1745,6 +1881,11 @@ games.flags = (()=>{
   function setDifficulty(d){
     if(difficulty===d)return;
     difficulty=d;localStorage.setItem('flagsDifficulty',d);
+    score=0;total=0;streak=0;answered=false;next();
+  }
+  function setMode(m){
+    if(mode===m)return;
+    mode=m;localStorage.setItem('flagsMode',m);
     score=0;total=0;streak=0;answered=false;next();
   }
   function next(){
@@ -1779,19 +1920,39 @@ games.flags = (()=>{
   function render(showFb=false,picked=null){
     mArea.innerHTML='';mCtrls.innerHTML='';
     Object.keys(DIFF).forEach(d=>addBtn(DIFF[d].lbl,d===difficulty?'warn':'alt',()=>setDifficulty(d)));
+
+    // Mode toggle at top of mArea
+    const mt=document.createElement('div');mt.className='flag-mode';
+    Object.keys(MODES).forEach(m=>{
+      const b=document.createElement('button');b.textContent=MODES[m].lbl;
+      if(m===mode)b.classList.add('active');
+      b.onclick=()=>setMode(m);mt.appendChild(b);
+    });
+    mArea.appendChild(mt);
+
     const img=document.createElement('img');
     img.className='flag-img';
     img.src=`https://flagcdn.com/w320/${current.c}.png`;
     img.alt='Quốc kỳ';
     img.onerror=()=>{img.style.display='none'};
     mArea.appendChild(img);
+
+    if(mode==='capital'){
+      const cn=document.createElement('div');cn.className='flag-country-name';
+      cn.innerHTML=`🌍 <b>${current.n}</b>`;
+      mArea.appendChild(cn);
+    }
+
     const q=document.createElement('p');q.className='flag-q';
-    q.innerHTML='Đây là cờ của <b>quốc gia / vùng lãnh thổ</b> nào?';
+    q.innerHTML = mode==='flag'
+      ? 'Đây là cờ của <b>quốc gia / vùng lãnh thổ</b> nào?'
+      : 'Đâu là <b>thủ đô</b> của nước này?';
     mArea.appendChild(q);
+
     const opts=document.createElement('div');opts.className='flag-options';
     options.forEach(o=>{
       const b=document.createElement('button');
-      b.textContent=o.n;
+      b.textContent = mode==='flag' ? o.n : o.cap;
       if(showFb){
         b.disabled=true;
         if(o.c===current.c)b.classList.add('correct');
@@ -1818,7 +1979,9 @@ games.flags = (()=>{
         fb.appendChild(facts);
       } else {
         const info=document.createElement('div');info.className='flag-wrong-info';
-        info.innerHTML=`Đáp án đúng là <b>${current.n}</b> — thủ đô ${current.cap}, ${current.con}.`;
+        info.innerHTML = mode==='flag'
+          ? `Đáp án đúng là <b>${current.n}</b> — thủ đô ${current.cap}, ${current.con}.`
+          : `Thủ đô của <b>${current.n}</b> là <b>${current.cap}</b> (${current.con}).`;
         fb.appendChild(info);
       }
       mArea.appendChild(fb);
@@ -2288,6 +2451,363 @@ games.grammarVn = (()=>{
   }
   return {title:'Trắc nghiệm ngữ pháp tiếng Việt',init};
 })();
+
+
+
+/* ========== 21. MENTAL ARITHMETIC — Tính nhẩm ========== */
+games.mental = (()=>{
+  const LVL_INFO={primary:{lbl:'Tiểu học',emoji:'🌱'},secondary:{lbl:'THCS',emoji:'🌿'},high:{lbl:'THPT',emoji:'🌳'}};
+  const PRAISE=['Đỉnh!','Nhanh quá!','Giỏi ghê!','Đúng rồi!','Xuất sắc!','Tuyệt vời!'];
+  const ROAST=['Tiếc quá!','Gần đúng rồi!','Thử lại nhé!','Không sao!'];
+  let level=localStorage.getItem('mentalLevel')||'primary';
+  if(!LVL_INFO[level])level='primary';
+  let problem,score=0,total=0,streak=0,answered=false,picked=null;
+  let bestStreak=parseInt(localStorage.getItem('mentalBest')||'0');
+  function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+  function gen(){
+    let display,ans;
+    if(level==='primary'){
+      const op=['+','−','×','÷'][rand(0,3)];
+      let a,b;
+      if(op==='+'){a=rand(10,99);b=rand(5,99);ans=a+b;display=`${a} + ${b}`}
+      else if(op==='−'){a=rand(20,99);b=rand(1,a);ans=a-b;display=`${a} − ${b}`}
+      else if(op==='×'){a=rand(2,9);b=rand(2,9);ans=a*b;display=`${a} × ${b}`}
+      else {b=rand(2,9);ans=rand(2,9);a=b*ans;display=`${a} ÷ ${b}`}
+    } else if(level==='secondary'){
+      const t=rand(0,4);
+      if(t===0){const a=rand(-30,30),b=rand(-30,30),op=['+','−'][rand(0,1)];ans=op==='+'?a+b:a-b;display=`(${a}) ${op} (${b})`}
+      else if(t===1){const a=rand(2,15);ans=a*a;display=`${a}²`}
+      else if(t===2){const pct=[10,20,25,50,75][rand(0,4)],base=rand(2,20)*10;ans=Math.round(pct*base/100);display=`${pct}% của ${base}`}
+      else if(t===3){const a=rand(11,25),b=rand(2,9);ans=a*b;display=`${a} × ${b}`}
+      else {const b=rand(2,9),q=rand(11,25);ans=q;display=`${b*q} ÷ ${b}`}
+    } else {
+      const t=rand(0,4);
+      if(t===0){const a=rand(2,5),b=rand(2,5);ans=Math.pow(a,b);display=`${a}^${b}`}
+      else if(t===1){const s=rand(2,15);ans=s;display=`√${s*s}`}
+      else if(t===2){const a=rand(3,6);ans=1;for(let i=2;i<=a;i++)ans*=i;display=`${a}!`}
+      else if(t===3){const a=rand(2,12),b=rand(2,12),c=rand(2,12);if(rand(0,1)){ans=a*b+c;display=`${a} × ${b} + ${c}`}else{ans=a*(b+c);display=`${a} × (${b} + ${c})`}}
+      else {const pct=rand(5,40),base=rand(10,99)*10;ans=Math.round(pct*base/100);display=`${pct}% của ${base}`}
+    }
+    const opts=[ans];let tries=0;
+    while(opts.length<4 && tries<60){tries++;const spread=Math.max(3,Math.floor(Math.abs(ans)*0.4));const o=ans+(rand(-spread,spread)||1);if(!opts.includes(o))opts.push(o)}
+    while(opts.length<4)opts.push(ans+opts.length*11);
+    opts.sort(()=>Math.random()-0.5);
+    problem={display,ans,opts};
+  }
+  function init(){score=0;total=0;streak=0;gen();render()}
+  function setLevel(l){if(level===l)return;level=l;localStorage.setItem('mentalLevel',l);score=0;total=0;streak=0;gen();render()}
+  function pick(v){
+    if(answered)return;
+    answered=true;picked=v;total++;
+    if(v===problem.ans){score++;streak++;if(streak>bestStreak){bestStreak=streak;localStorage.setItem('mentalBest',bestStreak)}}
+    else streak=0;
+    render();
+  }
+  function nextQ(){answered=false;picked=null;gen();render()}
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const w=document.createElement('div');w.className='quiz-wrap';
+    const pk=document.createElement('div');pk.className='quiz-level-pick';
+    Object.keys(LVL_INFO).forEach(l=>{
+      const b=document.createElement('button');
+      b.innerHTML=`<span class="lvl-emoji">${LVL_INFO[l].emoji}</span>${LVL_INFO[l].lbl}`;
+      if(l===level)b.classList.add('active');
+      b.onclick=()=>setLevel(l);pk.appendChild(b);
+    });
+    w.appendChild(pk);
+    const card=document.createElement('div');card.className='quiz-card';
+    card.innerHTML=`<div class="quiz-mascot">🧮</div>
+      <div class="quiz-progress"><span>Đúng <b>${score}</b>/${total}</span><span>🔥 <b>${streak}</b></span><span>🏆 <b>${bestStreak}</b></span></div>
+      <div class="mental-expr">${problem.display} <span class="mental-eq">=</span> <span class="mental-q">?</span></div>`;
+    const opts=document.createElement('div');opts.className='mental-opts';
+    problem.opts.forEach(o=>{
+      const b=document.createElement('button');b.textContent=o;
+      if(answered){b.disabled=true;if(o===problem.ans)b.classList.add('correct');else if(o===picked)b.classList.add('wrong')}
+      b.onclick=()=>pick(o);opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if(answered){
+      const correct=picked===problem.ans;
+      const fb=document.createElement('div');fb.className='quiz-feedback '+(correct?'right':'wrong');
+      const msgs=correct?PRAISE:ROAST;
+      fb.innerHTML=`<div class="fb-emoji">${correct?'🎉':'😅'}</div><div class="fb-msg">${msgs[rand(0,msgs.length-1)]}</div>`;
+      if(!correct)fb.innerHTML+=`<div class="quiz-explain" style="margin-top:8px"><b>Đáp án đúng:</b> ${problem.ans}</div>`;
+      card.appendChild(fb);
+      addBtn('CÂU TIẾP →','warn',nextQ);
+    }
+    w.appendChild(card);mArea.appendChild(w);
+    setStatus(`Cấp <b>${LVL_INFO[level].lbl}</b> · Điểm <b>${score}</b>/${total} · 🔥 <b>${streak}</b>`);
+  }
+  return {title:'Tính nhẩm',init};
+})();
+
+/* ========== FORMULA FACTORY — chia sẻ logic cho 6 môn ========== */
+function makeFormulaGame(title, data){
+  const KEY='formula_'+title.replace(/\s+/g,'_');
+  let level=localStorage.getItem(KEY)||Object.keys(data.levels)[0];
+  if(!data.levels[level])level=Object.keys(data.levels)[0];
+  function init(){render()}
+  function setLevel(l){if(level===l)return;level=l;localStorage.setItem(KEY,l);render()}
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const lp=document.createElement('div');lp.className='formula-levels';
+    const lvls=Object.keys(data.levels);
+    if(lvls.length>3)lp.style.gridTemplateColumns='repeat(4,1fr)';
+    lvls.forEach(l=>{
+      const b=document.createElement('button');
+      b.textContent=data.levels[l].lbl;
+      if(l===level)b.classList.add('active');
+      b.onclick=()=>setLevel(l);lp.appendChild(b);
+    });
+    mArea.appendChild(lp);
+    const list=document.createElement('div');list.className='formula-list';
+    data.levels[level].list.forEach((f,i)=>{
+      const card=document.createElement('div');card.className='formula-card';
+      const exHtml = data.isChinese ? renderChineseExample(f.ex) : f.ex.replace(/\n/g,'<br>');
+      card.innerHTML=`<div class="formula-name"><span class="formula-num">${i+1}</span>${f.n}</div>
+        <div class="formula-eq">${f.f}</div>
+        <div class="formula-ex"><b>Ví dụ:</b><br>${exHtml}</div>
+        <div class="formula-explain"><b>💡 Giải thích:</b> ${f.ex2}</div>`;
+      list.appendChild(card);
+    });
+    mArea.appendChild(list);
+    setStatus(`${data.emoji} <b>${data.name}</b> · ${data.levels[level].lbl} · ${data.levels[level].list.length} công thức`);
+  }
+  return {title,init};
+}
+function renderChineseExample(ex){
+  // ex format: "汉字|pinyin|nghĩa\nnext line..." or plain string with \n
+  const lines=ex.split('\n').filter(x=>x.trim());
+  return lines.map(line=>{
+    if(line.includes('|')){
+      const parts=line.split('|');
+      return `<div class="pinyin-block"><div class="pinyin-zh">${parts[0]}</div><div class="pinyin-py">${parts[1]||''}</div>${parts[2]?`<div class="pinyin-vi">${parts[2]}</div>`:''}</div>`;
+    }
+    return line;
+  }).join('');
+}
+
+/* ========== 22. CÔNG THỨC TOÁN ========== */
+games.mathFormulas = makeFormulaGame('Công thức Toán', {
+  emoji:'➗',name:'Toán',
+  levels:{
+    primary:{lbl:'Tiểu học',list:[
+      {n:'Phép cộng có nhớ',f:'a + b = c',ex:'27 + 45 = 72\n(7+5=12 viết 2 nhớ 1; 2+4+1=7)',ex2:'Cộng các đơn vị trước. Nếu tổng ≥ 10 thì "nhớ 1" sang cột chục.'},
+      {n:'Phép trừ có nhớ',f:'a − b = c',ex:'53 − 28 = 25\n(3−8 không đủ, mượn 1 chục: 13−8=5; 5−2−1=2)',ex2:'Khi số bị trừ nhỏ hơn số trừ, mượn 1 đơn vị từ hàng kế bên.'},
+      {n:'Bảng cửu chương',f:'a × b với a, b ∈ {1...9}',ex:'7 × 8 = 56',ex2:'Học thuộc bảng nhân từ 2 đến 9 — nền tảng cho mọi phép tính.'},
+      {n:'Phép chia hết',f:'a ÷ b = c (vì a = b × c)',ex:'72 ÷ 8 = 9 (vì 8 × 9 = 72)',ex2:'Chia là ngược của phép nhân. Hỏi: "b nhân mấy bằng a?"'},
+      {n:'Chu vi hình chữ nhật',f:'P = (a + b) × 2',ex:'Dài 6cm, rộng 4cm → P = (6+4)×2 = 20 cm',ex2:'a: chiều dài, b: chiều rộng. Chu vi là tổng độ dài 4 cạnh.'},
+      {n:'Diện tích hình chữ nhật',f:'S = a × b',ex:'Dài 6cm, rộng 4cm → S = 6×4 = 24 cm²',ex2:'Diện tích = chiều dài × chiều rộng (đơn vị bình phương).'},
+      {n:'Chu vi & Diện tích hình vuông',f:'P = a × 4 ; S = a × a',ex:'Cạnh 5cm → P = 20cm, S = 25 cm²',ex2:'Hình vuông là hình chữ nhật có 4 cạnh bằng nhau.'},
+      {n:'Đổi đơn vị độ dài',f:'1 km = 1000 m = 100000 cm = 1000000 mm',ex:'2.5 km = 2500 m = 250000 cm',ex2:'Mỗi bước đơn vị (m→cm→mm) nhân 10.'},
+      {n:'Phân số bằng nhau',f:'a/b = (a×k)/(b×k) với k ≠ 0',ex:'1/2 = 2/4 = 3/6 = 50/100',ex2:'Nhân (chia) cả tử và mẫu cho cùng một số khác 0 thì giá trị phân số không đổi.'},
+    ]},
+    secondary:{lbl:'THCS',list:[
+      {n:'Bình phương của tổng',f:'(a + b)² = a² + 2ab + b²',ex:'(x + 3)² = x² + 6x + 9',ex2:'Khai triển bình phương của tổng. Quan trọng để giải PT.'},
+      {n:'Bình phương của hiệu',f:'(a − b)² = a² − 2ab + b²',ex:'(x − 5)² = x² − 10x + 25',ex2:'Giống tổng nhưng dấu của 2ab là dấu trừ.'},
+      {n:'Hiệu hai bình phương',f:'a² − b² = (a + b)(a − b)',ex:'x² − 9 = (x+3)(x−3)',ex2:'Phân tích hiệu hai bình phương thành nhân tử.'},
+      {n:'Lập phương của tổng',f:'(a + b)³ = a³ + 3a²b + 3ab² + b³',ex:'(x + 2)³ = x³ + 6x² + 12x + 8',ex2:'Khai triển lập phương — hệ số 1-3-3-1 (giống tam giác Pascal hàng 3).'},
+      {n:'Định lý Py-ta-go',f:'a² + b² = c² (tam giác vuông)',ex:'Cạnh 3 và 4 → cạnh huyền = √(9+16) = √25 = 5',ex2:'Tổng bình phương 2 cạnh góc vuông = bình phương cạnh huyền.'},
+      {n:'Phương trình bậc nhất',f:'ax + b = 0 ⟹ x = −b/a (a ≠ 0)',ex:'3x − 6 = 0 ⟹ x = 6/3 = 2',ex2:'Chuyển b sang vế phải đổi dấu, chia cả 2 vế cho a.'},
+      {n:'Tỉ số lượng giác',f:'sin α = đối/huyền ; cos α = kề/huyền ; tan α = đối/kề',ex:'Tam giác 3-4-5: sin = 3/5, cos = 4/5',ex2:'Trong tam giác vuông, tỉ số giữa các cạnh tùy thuộc vào góc nhọn.'},
+      {n:'Diện tích tam giác',f:'S = (a × h) / 2',ex:'Đáy 6cm, cao 4cm → S = (6×4)/2 = 12 cm²',ex2:'a là đáy, h là chiều cao tương ứng. Áp dụng cho mọi tam giác.'},
+      {n:'Chu vi & Diện tích hình tròn',f:'C = 2πr ; S = πr² (π ≈ 3.14)',ex:'r = 5cm → C ≈ 31.4 cm, S ≈ 78.5 cm²',ex2:'r là bán kính. π (pi) là hằng số ≈ 3.14159...'},
+      {n:'Hệ phương trình bậc nhất',f:'{ ax + by = c \\n   dx + ey = f }',ex:'{x+y=5; x−y=1} → x=3, y=2 (cộng 2 PT: 2x=6)',ex2:'Có thể giải bằng phương pháp thế hoặc cộng đại số.'},
+    ]},
+    high:{lbl:'THPT',list:[
+      {n:'Phương trình bậc 2',f:'ax² + bx + c = 0\\nΔ = b² − 4ac\\nx = (−b ± √Δ) / 2a',ex:'x²−5x+6=0: Δ=1, x = (5±1)/2 = 3 hoặc 2',ex2:'Δ>0: 2 nghiệm; Δ=0: nghiệm kép; Δ<0: vô nghiệm thực.'},
+      {n:'Định lý Vi-ét',f:'x₁ + x₂ = −b/a ; x₁ × x₂ = c/a',ex:'x²−5x+6=0: x₁+x₂=5, x₁·x₂=6 ⟹ nghiệm 2 và 3',ex2:'Tổng và tích 2 nghiệm của PT bậc 2 mà không cần giải.'},
+      {n:'Lượng giác cơ bản',f:'sin²x + cos²x = 1\\ntan x = sin x / cos x',ex:'sin 30° = 1/2, cos 30° = √3/2 → (1/2)² + (√3/2)² = 1',ex2:'Hằng đẳng thức lượng giác Pythagore — dùng để biến đổi biểu thức.'},
+      {n:'Công thức cộng',f:'sin(a±b) = sin a·cos b ± cos a·sin b\\ncos(a±b) = cos a·cos b ∓ sin a·sin b',ex:'sin 75° = sin(45°+30°) = (√6+√2)/4',ex2:'Tính sin/cos của tổng/hiệu hai góc khi biết sin/cos của từng góc.'},
+      {n:'Đạo hàm cơ bản',f:'(xⁿ)′ = n·xⁿ⁻¹\\n(sin x)′ = cos x ; (cos x)′ = −sin x\\n(eˣ)′ = eˣ ; (ln x)′ = 1/x',ex:'(x³)′ = 3x² ; (x²+5x)′ = 2x+5',ex2:'Đạo hàm cho biết tốc độ thay đổi của hàm số tại một điểm.'},
+      {n:'Quy tắc đạo hàm',f:'(u + v)′ = u′ + v′\\n(uv)′ = u′v + uv′\\n(u/v)′ = (u′v − uv′)/v²',ex:'(x²·sin x)′ = 2x·sin x + x²·cos x',ex2:'Đạo hàm tổng/tích/thương — quy tắc cơ bản cho hàm phức tạp.'},
+      {n:'Tích phân cơ bản',f:'∫xⁿ dx = xⁿ⁺¹/(n+1) + C (n ≠ −1)\\n∫sin x dx = −cos x + C\\n∫cos x dx = sin x + C',ex:'∫x² dx = x³/3 + C',ex2:'Tích phân là phép ngược của đạo hàm. C là hằng số tích phân.'},
+      {n:'Logarit',f:'log(ab) = log a + log b\\nlog(a/b) = log a − log b\\nlog(aⁿ) = n·log a',ex:'log(100·1000) = 2 + 3 = 5',ex2:'Logarit chuyển phép nhân thành cộng — đơn giản hóa tính toán.'},
+      {n:'Cấp số cộng',f:'aₙ = a₁ + (n−1)d\\nSₙ = n(a₁ + aₙ)/2',ex:'a₁=2, d=3 → a₅ = 14, S₅ = 40',ex2:'d là công sai (hiệu giữa 2 số liên tiếp).'},
+      {n:'Cấp số nhân',f:'aₙ = a₁ · qⁿ⁻¹\\nSₙ = a₁(qⁿ − 1)/(q − 1)',ex:'a₁=2, q=3 → a₄ = 54, S₄ = 80',ex2:'q là công bội (tỉ số giữa 2 số liên tiếp).'},
+      {n:'Tổ hợp & Chỉnh hợp',f:'C(n,k) = n!/(k!(n−k)!)\\nA(n,k) = n!/(n−k)!',ex:'C(5,2)=10 (chọn) ; A(5,2)=20 (chọn có thứ tự)',ex2:'C: chọn k từ n không xét thứ tự. A: có xét thứ tự.'},
+    ]}
+  }
+});
+
+/* ========== 23. CÔNG THỨC VẬT LÝ ========== */
+games.physicsFormulas = makeFormulaGame('Công thức Vật lý', {
+  emoji:'⚛️',name:'Vật lý',
+  levels:{
+    primary:{lbl:'Cấp 1 (Lớp 6-7)',list:[
+      {n:'Vận tốc',f:'v = s / t',ex:'Đi 100m trong 20s → v = 100/20 = 5 m/s',ex2:'s: quãng đường (m), t: thời gian (s). Đo độ nhanh chậm của chuyển động.'},
+      {n:'Khối lượng riêng',f:'D = m / V',ex:'Nhôm 270g, V=100cm³ → D = 2.7 g/cm³',ex2:'D đặc trưng cho mỗi chất. Nước: D = 1 g/cm³.'},
+      {n:'Trọng lượng',f:'P = 10 × m (xấp xỉ)',ex:'Vật 5kg → P = 50 N',ex2:'P: trọng lượng (Newton), m: khối lượng (kg). Là lực hút Trái Đất.'},
+      {n:'Áp suất',f:'p = F / S',ex:'F = 60N, S = 0.2m² → p = 300 Pa',ex2:'F: lực ép, S: diện tích. Áp suất càng lớn khi diện tích càng nhỏ.'},
+      {n:'Lực đẩy Acsimet',f:'F_A = d × V',ex:'Vật chìm trong nước (d=10000 N/m³), V=0.001m³ → F_A = 10 N',ex2:'d: trọng lượng riêng chất lỏng, V: thể tích phần chìm.'},
+      {n:'Đổi km/h ⟷ m/s',f:'1 m/s = 3.6 km/h',ex:'72 km/h = 72/3.6 = 20 m/s',ex2:'Chia 3.6 để đổi từ km/h sang m/s, nhân 3.6 để đổi ngược.'},
+    ]},
+    secondary:{lbl:'Cấp 2 (Lớp 8-9)',list:[
+      {n:'Công cơ học',f:'A = F × s',ex:'Lực 50N kéo vật đi 10m → A = 500 J',ex2:'A: công (Joule). Chỉ tính khi có lực và có chuyển động cùng phương.'},
+      {n:'Công suất',f:'P = A / t',ex:'Công 600J trong 30s → P = 20 W',ex2:'Công suất cho biết tốc độ thực hiện công.'},
+      {n:'Định luật Ôm',f:'I = U / R',ex:'U = 12V, R = 4Ω → I = 3 A',ex2:'I: cường độ dòng điện (A), U: hiệu điện thế (V), R: điện trở (Ω).'},
+      {n:'Công suất điện',f:'P = U × I = I² × R = U² / R',ex:'Đèn 220V−100W → I ≈ 0.45 A',ex2:'3 công thức tương đương, dùng tùy dữ liệu có sẵn.'},
+      {n:'Định luật Joule-Lenz',f:'Q = I² × R × t',ex:'I=2A, R=10Ω, t=60s → Q = 2400 J',ex2:'Nhiệt lượng tỏa ra trên điện trở khi có dòng điện.'},
+      {n:'Động năng & Thế năng',f:'W_đ = ½mv² ; W_t = mgh',ex:'2kg, v=3m/s → W_đ = 9 J ; cao 5m → W_t = 100 J (g=10)',ex2:'Động năng do chuyển động, thế năng do vị trí cao.'},
+      {n:'Định luật về công',f:'Không máy cơ đơn giản nào cho ta lợi về công',ex:'Lợi 2 lần về lực thì thiệt 2 lần về đường đi',ex2:'Đòn bẩy, ròng rọc, mặt phẳng nghiêng — chỉ thay đổi cách thực hiện công.'},
+    ]},
+    high:{lbl:'Cấp 3 (Lớp 10-12)',list:[
+      {n:'Chuyển động biến đổi đều',f:'v = v₀ + at\\ns = v₀t + ½at²\\nv² − v₀² = 2as',ex:'v₀=0, a=2m/s², t=5s → v=10 m/s, s=25m',ex2:'v₀: vận tốc đầu, a: gia tốc, t: thời gian.'},
+      {n:'Định luật II Newton',f:'F = m × a',ex:'Vật 5kg, F = 20N → a = 4 m/s²',ex2:'F: lực tổng hợp. Định luật cơ bản của cơ học.'},
+      {n:'Bảo toàn động lượng',f:'m₁v₁ + m₂v₂ = m₁v₁′ + m₂v₂′',ex:'Hệ kín: tổng động lượng trước = sau va chạm',ex2:'p = m·v. Áp dụng cho va chạm, bắn súng, nổ...'},
+      {n:'Vạn vật hấp dẫn',f:'F = G × (m₁ × m₂) / r²',ex:'G = 6.67 × 10⁻¹¹ N·m²/kg²',ex2:'Hai vật bất kỳ hút nhau, lực tỉ lệ nghịch bình phương khoảng cách.'},
+      {n:'Cơ năng',f:'W = ½mv² + mgh',ex:'1kg ở cao 5m, v=4m/s → W = 8+50 = 58 J',ex2:'Tổng động + thế năng. Trong hệ kín không ma sát: W bảo toàn.'},
+      {n:'Sóng cơ',f:'λ = v × T = v / f',ex:'v=340m/s, f=1700Hz → λ = 0.2 m',ex2:'λ: bước sóng, v: vận tốc, T: chu kỳ, f: tần số (Hz).'},
+      {n:'Mạch dao động LC',f:'T = 2π × √(L × C)\\nf = 1 / (2π√(LC))',ex:'L=10mH, C=100nF → T ≈ 6.28×10⁻⁵ s',ex2:'L: độ tự cảm (H), C: điện dung (F). Tạo sóng điện từ.'},
+      {n:'Hệ thức Einstein',f:'E = m × c² (c = 3×10⁸ m/s)',ex:'1g vật chất ↔ E ≈ 9×10¹³ J',ex2:'Năng lượng và khối lượng tương đương. Cơ sở của phản ứng hạt nhân.'},
+      {n:'Định luật khúc xạ',f:'n₁·sin i = n₂·sin r',ex:'Ánh sáng từ không khí (n=1) vào nước (n=1.33), i=60° → sin r = sin 60°/1.33',ex2:'Khi ánh sáng đi qua mặt phân cách 2 môi trường, tia bị bẻ gãy.'},
+    ]}
+  }
+});
+
+/* ========== 24. CÔNG THỨC HÓA HỌC ========== */
+games.chemFormulas = makeFormulaGame('Công thức Hóa học', {
+  emoji:'🧪',name:'Hóa học',
+  levels:{
+    primary:{lbl:'Cấp 1 (Lớp 8)',list:[
+      {n:'Nguyên tử & Phân tử',f:'Phân tử = nhóm nguyên tử liên kết',ex:'H₂O = 2 nguyên tử H + 1 nguyên tử O',ex2:'Nguyên tử là hạt nhỏ nhất của nguyên tố. Phân tử là 2+ nguyên tử kết hợp.'},
+      {n:'Số mol',f:'n = m / M',ex:'36g H₂O (M=18) → n = 2 mol',ex2:'n: số mol, M: khối lượng mol. 1 mol = 6.022×10²³ hạt.'},
+      {n:'Khối lượng từ số mol',f:'m = n × M',ex:'0.5 mol H₂SO₄ (M=98) → m = 49 g',ex2:'Tính khối lượng khi biết số mol và khối lượng mol.'},
+      {n:'Bảo toàn khối lượng',f:'m(chất tham gia) = m(sản phẩm)',ex:'CaCO₃ → CaO + CO₂ ; 100g = 56g + 44g',ex2:'Trong phản ứng hóa học, tổng khối lượng không đổi.'},
+      {n:'Nồng độ phần trăm',f:'C% = (m_ct / m_dd) × 100%',ex:'20g muối + 80g nước → C% = 20/100 × 100% = 20%',ex2:'m_ct: chất tan, m_dd: dung dịch (= chất tan + dung môi).'},
+      {n:'Tỷ khối khí',f:'d_{A/B} = M_A / M_B',ex:'CO₂ (M=44) so với không khí (M≈29): d ≈ 1.52 (nặng hơn)',ex2:'Cho biết khí A nặng hay nhẹ hơn khí B bao nhiêu lần.'},
+    ]},
+    secondary:{lbl:'Cấp 2 (Lớp 9)',list:[
+      {n:'Thể tích khí (đktc)',f:'V = n × 22.4 (lít)',ex:'2 mol O₂ ở đktc → V = 44.8 lít',ex2:'đktc: 0°C, 1 atm. Mọi khí lý tưởng chiếm 22.4 L/mol.'},
+      {n:'Nồng độ mol',f:'C_M = n / V (mol/lít)',ex:'0.5 mol NaCl trong 250ml → C_M = 2 M',ex2:'V là thể tích dung dịch (lít).'},
+      {n:'Axit + Bazơ',f:'Axit + Bazơ → Muối + Nước',ex:'HCl + NaOH → NaCl + H₂O',ex2:'Phản ứng trung hòa. H⁺ kết hợp OH⁻ tạo nước.'},
+      {n:'Kim loại + Axit',f:'KL + HCl/H₂SO₄ loãng → Muối + H₂↑',ex:'Zn + 2HCl → ZnCl₂ + H₂↑',ex2:'Chỉ KL đứng trước H trong dãy hoạt động. Sinh khí hidro.'},
+      {n:'Oxit + Axit',f:'Oxit bazơ + Axit → Muối + Nước',ex:'CuO + 2HCl → CuCl₂ + H₂O',ex2:'Oxit kim loại tác dụng với axit tạo muối tương ứng.'},
+      {n:'Cân bằng phương trình',f:'Số nguyên tử mỗi nguyên tố phải bằng nhau ở 2 vế',ex:'Fe + O₂ → Fe₃O₄ ⟶ 3Fe + 2O₂ → Fe₃O₄',ex2:'Thêm hệ số trước mỗi chất để cân bằng nguyên tử.'},
+    ]},
+    high:{lbl:'Cấp 3 (Lớp 10-12)',list:[
+      {n:'Phương trình khí lý tưởng',f:'PV = nRT',ex:'1 mol ở 273K, 1 atm → V = 22.4 L',ex2:'R = 0.082 L·atm/(mol·K). T tính bằng Kelvin.'},
+      {n:'Độ pH',f:'pH = −log[H⁺]',ex:'[H⁺] = 10⁻³ M → pH = 3 (axit)',ex2:'pH < 7: axit, = 7: trung tính, > 7: bazơ.'},
+      {n:'Hằng số cân bằng K_c',f:'aA + bB ⇌ cC + dD\\nK_c = [C]ᶜ[D]ᵈ / ([A]ᵃ[B]ᵇ)',ex:'N₂ + 3H₂ ⇌ 2NH₃: K_c = [NH₃]² / ([N₂][H₂]³)',ex2:'K_c lớn → phản ứng thuận chiều, nhỏ → nghịch chiều.'},
+      {n:'Phản ứng oxi hóa khử',f:'Chất khử cho e⁻, chất oxi hóa nhận e⁻',ex:'Zn + Cu²⁺ → Zn²⁺ + Cu',ex2:'Cân bằng số electron cho và nhận. Số oxi hóa thay đổi.'},
+      {n:'Phản ứng este hóa',f:'Axit + Ancol ⇌ Este + H₂O',ex:'CH₃COOH + C₂H₅OH ⇌ CH₃COOC₂H₅ + H₂O',ex2:'Cần xúc tác H₂SO₄ đặc, đun nóng. Este có mùi thơm.'},
+      {n:'Công thức Ankan',f:'CₙH₂ₙ₊₂',ex:'CH₄ (n=1), C₂H₆ (n=2)... C₄H₁₀ có 2 đồng phân',ex2:'Hidrocacbon no, mạch hở. Từ C₄ có đồng phân.'},
+      {n:'Phản ứng cộng anken',f:'CH₂=CH₂ + X₂ → CH₂X-CH₂X',ex:'C₂H₄ + Br₂ → C₂H₄Br₂ (mất màu nước Brom)',ex2:'Anken có liên kết đôi C=C. Phản ứng cộng phá vỡ 1 liên kết π.'},
+      {n:'Glucose & Saccharose',f:'C₆H₁₂O₆ (glucose) ; C₁₂H₂₂O₁₁ (saccharose)',ex:'Glucose có nhóm -CHO ⟶ tráng bạc với AgNO₃/NH₃',ex2:'Glucose là monosaccharide, saccharose là disaccharide (glucose + fructose).'},
+    ]}
+  }
+});
+
+/* ========== 25. CÔNG THỨC SINH HỌC ========== */
+games.bioFormulas = makeFormulaGame('Công thức Sinh học', {
+  emoji:'🧬',name:'Sinh học',
+  levels:{
+    primary:{lbl:'Cấp 1 (Tiểu học)',list:[
+      {n:'Cấu tạo cây xanh',f:'6 cơ quan: Rễ, Thân, Lá, Hoa, Quả, Hạt',ex:'Cây cam: rễ (hút nước), lá (quang hợp), hoa-quả-hạt (sinh sản)',ex2:'Mỗi cơ quan có chức năng riêng giúp cây sống và phát triển.'},
+      {n:'Phân loại động vật',f:'Có xương sống / Không xương sống',ex:'Có xương sống: cá, ếch, rắn, chim, thú\\nKhông xương sống: sâu, ốc, tôm, nhện',ex2:'Động vật có xương sống có cột sống bên trong.'},
+      {n:'Chuỗi thức ăn',f:'Mặt Trời → Cỏ → ĐV ăn cỏ → ĐV ăn thịt',ex:'Cỏ → Châu chấu → Ếch → Rắn → Đại bàng',ex2:'Năng lượng từ Mặt Trời truyền qua các sinh vật.'},
+      {n:'Quang hợp cơ bản',f:'Lá + Ánh sáng + Nước + CO₂ → Thức ăn + O₂',ex:'Ban ngày cây hấp thu CO₂ và nhả O₂',ex2:'Lá xanh tạo thức ăn cho cây nhờ ánh sáng Mặt Trời.'},
+      {n:'Vòng đời ếch',f:'Trứng → Nòng nọc → Ếch non → Ếch trưởng thành',ex:'Ếch đẻ trứng trong nước, nòng nọc có đuôi, sau mọc chân rụng đuôi',ex2:'Ếch là động vật lưỡng cư — sống cả nước và cạn.'},
+    ]},
+    secondary:{lbl:'Cấp 2 (Lớp 6-9)',list:[
+      {n:'Cấu tạo tế bào',f:'Màng - Tế bào chất - Nhân (+ bào quan)',ex:'TB động vật: ti thể, ribosome, lưới nội chất, bộ Golgi\\nTB thực vật: thêm lục lạp + thành xenlulozơ',ex2:'Tế bào là đơn vị cơ bản của sự sống.'},
+      {n:'Quang hợp',f:'6CO₂ + 6H₂O —(ánh sáng, diệp lục)→ C₆H₁₂O₆ + 6O₂',ex:'Lá xanh ngày nắng → hấp thu CO₂, tạo glucose, nhả O₂',ex2:'Cây xanh chuyển năng lượng ánh sáng thành năng lượng hóa học.'},
+      {n:'Hô hấp tế bào',f:'C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + ATP',ex:'Mọi sinh vật đều hô hấp để tạo năng lượng cho hoạt động',ex2:'Ngược với quang hợp — giải phóng năng lượng từ đường.'},
+      {n:'Quy luật Menđen',f:'F1: đồng tính ; F2: 3 trội : 1 lặn',ex:'Đậu đỏ AA × trắng aa → F1: Aa (đỏ) → F2: 3 đỏ : 1 trắng',ex2:'Mỗi cặp gen phân ly trong giảm phân tạo giao tử.'},
+      {n:'Cấu tạo tim người',f:'4 ngăn: 2 nhĩ (trên) + 2 thất (dưới)',ex:'Máu: nhĩ phải → thất phải → phổi → nhĩ trái → thất trái → cơ thể',ex2:'Vòng tuần hoàn nhỏ qua phổi, lớn qua cơ thể.'},
+      {n:'Hệ tuần hoàn',f:'Tim + Mạch máu (động mạch, tĩnh mạch, mao mạch)',ex:'Động mạch: máu đỏ tươi từ tim đi\\nTĩnh mạch: máu đỏ sẫm về tim',ex2:'Vận chuyển oxi, dinh dưỡng, CO₂, chất thải.'},
+    ]},
+    high:{lbl:'Cấp 3 (Lớp 10-12)',list:[
+      {n:'Cấu trúc ADN',f:'Xoắn kép, A-T (2 liên kết H), G-X (3 liên kết H)',ex:'Mạch 1: 5′-ATGCGT-3′ → Mạch 2: 3′-TACGCA-5′',ex2:'ADN là chuỗi xoắn kép. A liên kết T, G liên kết X (Watson-Crick).'},
+      {n:'Tổng hợp protein',f:'ADN → mARN → Protein\\n(Phiên mã → Dịch mã)',ex:'ADN: ATG CGA → mARN: AUG CGA → Protein: Met-Arg',ex2:'ADN tạo mARN trong nhân, ribosome dịch mARN thành protein.'},
+      {n:'Mã di truyền',f:'64 codon (3 nucleotit/codon), mã hóa 20 axit amin',ex:'AUG: Met (mở đầu) ; UAA/UAG/UGA: stop',ex2:'Mỗi 3 nucleotit (codon) mã hóa 1 axit amin.'},
+      {n:'Phân ly độc lập',f:'F2: 9 : 3 : 3 : 1 (lai 2 cặp gen độc lập)',ex:'AaBb × AaBb → 9 A_B_ : 3 A_bb : 3 aaB_ : 1 aabb',ex2:'Các cặp gen di truyền độc lập khi trên các NST khác nhau.'},
+      {n:'Liên kết gen',f:'Các gen trên cùng NST di truyền cùng nhau',ex:'AB/ab × AB/ab → 1 AB/AB : 2 AB/ab : 1 ab/ab',ex2:'Khác phân ly độc lập. Hoán vị gen tạo tỉ lệ trung gian.'},
+      {n:'Hardy-Weinberg',f:'p² + 2pq + q² = 1\\np + q = 1',ex:'p(A)=0.6, q(a)=0.4 → AA=0.36, Aa=0.48, aa=0.16',ex2:'Trong quần thể cân bằng, tần số gen ổn định qua các thế hệ.'},
+      {n:'Quy tắc 10% năng lượng',f:'Mỗi bậc dinh dưỡng chuyển ~10% năng lượng cho bậc trên',ex:'Cỏ 1000J → Châu chấu 100J → Ếch 10J → Rắn 1J',ex2:'~90% mất qua hô hấp/nhiệt. Vì sao chuỗi thức ăn hiếm khi quá 4-5 bậc.'},
+    ]}
+  }
+});
+
+/* ========== 26. CÔNG THỨC TIẾNG ANH ========== */
+games.englishFormulas = makeFormulaGame('Công thức Tiếng Anh', {
+  emoji:'🇬🇧',name:'Tiếng Anh',
+  levels:{
+    primary:{lbl:'Tiểu học',list:[
+      {n:'Verb "to be"',f:'I am ; You/We/They are ; He/She/It is',ex:'I am 8 years old.\\nShe is my sister.',ex2:'Be là động từ "thì, là, ở". Cách dùng khác nhau theo chủ ngữ.'},
+      {n:'Plural nouns',f:'cat → cats ; box → boxes ; baby → babies',ex:'1 dog → 2 dogs\\n1 watch → 2 watches\\n1 city → 2 cities',ex2:'Thêm -s đa số. -es nếu kết -s/-x/-ch/-sh. y→i+es nếu y trước phụ âm.'},
+      {n:'Mạo từ a / an / the',f:'a + phụ âm ; an + nguyên âm ; the: xác định',ex:'a cat ; an apple ; the sun',ex2:'a/an: lần đầu nói đến. the: đã biết hoặc cụ thể.'},
+      {n:'Present simple',f:'I/You/We/They + V (nguyên thể)\\nHe/She/It + V-s/es',ex:'I play football.\\nHe plays football.',ex2:'Dùng cho thói quen, sự thật. Ngôi 3 số ít thêm -s/-es.'},
+      {n:'Possessive adjectives',f:'my / your / his / her / its / our / their',ex:'This is my book.\\nThat is her cat.',ex2:'Đứng trước danh từ để chỉ sở hữu.'},
+      {n:'Wh-questions',f:'What/Where/When/Who/Why/How + trợ ĐT + S + V',ex:'What is your name?\\nWhere do you live?',ex2:'Câu hỏi mở (không chỉ Yes/No). Từ để hỏi luôn ở đầu câu.'},
+    ]},
+    secondary:{lbl:'THCS',list:[
+      {n:'Present continuous',f:'S + am/is/are + V-ing',ex:'I am reading a book now.\\nThey are playing football.',ex2:'Hành động đang xảy ra. Dấu hiệu: now, Look!, at the moment.'},
+      {n:'Past simple',f:'S + V2/V-ed ; S + was/were',ex:'I went to school yesterday.\\nShe was happy.',ex2:'Hành động đã hoàn thành. Có thời gian cụ thể: yesterday, last week.'},
+      {n:'Present perfect',f:'S + have/has + V3/V-ed',ex:'I have lived here for 5 years.\\nShe has just left.',ex2:'Hành động trong quá khứ còn liên quan đến hiện tại. Dùng for/since/just/already/yet.'},
+      {n:'So sánh hơn / nhất',f:'Ngắn: tall→taller→tallest\\nDài: beautiful→more beautiful→the most beautiful',ex:'She is taller than me.\\nHe is the tallest in class.',ex2:'Tính từ ngắn (1-2 âm tiết): -er/-est. Dài: more/most + adj.'},
+      {n:'Conditional type 1',f:'If + S + V (hiện tại), S + will + V',ex:'If it rains, I will stay home.',ex2:'Điều kiện có thật ở hiện/tương lai. Kết quả có khả năng xảy ra.'},
+      {n:'Conditional type 2',f:'If + S + V2 (were), S + would + V',ex:'If I were rich, I would travel the world.',ex2:'Điều kiện không có thật ở hiện tại. "Were" dùng cho mọi ngôi.'},
+      {n:'Passive voice',f:'S + be + V3 (+ by O)',ex:'Active: She wrote the letter.\\nPassive: The letter was written by her.',ex2:'Bị động nhấn mạnh đối tượng chịu tác động.'},
+    ]},
+    high:{lbl:'THPT',list:[
+      {n:'Conditional type 3',f:'If + S + had + V3, S + would have + V3',ex:'If I had studied harder, I would have passed.',ex2:'Điều kiện không có thật trong quá khứ. Diễn tả tiếc nuối.'},
+      {n:'Mixed conditionals',f:'If + S + had + V3, S + would + V (loại 3 → 2)',ex:'If I had taken that job, I would be rich now.',ex2:'Quá khứ không có thật ảnh hưởng đến hiện tại.'},
+      {n:'Mệnh đề quan hệ',f:'who/whom (người), which (vật), whose (sở hữu), that (chung)',ex:'The girl who is sitting there is my sister.',ex2:'Bổ sung thông tin cho danh từ trước nó.'},
+      {n:'Đảo ngữ (Inversion)',f:'Hardly/Never/Not only + trợ ĐT + S + V',ex:'Never have I seen such a beautiful sight!',ex2:'Đảo ngữ để nhấn mạnh. Đưa trợ động từ lên trước chủ ngữ.'},
+      {n:'Reported speech',f:'Lùi 1 thì: am→was, V→V2, will→would',ex:'"I am tired" → He said (that) he was tired.',ex2:'Trực tiếp → gián tiếp. Đại từ, trạng từ thời gian cũng đổi.'},
+      {n:'Subjunctive',f:'It is essential/important that S + V (nguyên thể)',ex:'It is essential that he be on time.',ex2:'Sau "important/essential/necessary that" dùng V nguyên thể.'},
+      {n:'Cleft sentence',f:'It is/was + N/Pro + that/who + V',ex:'It was John who broke the window.',ex2:'Câu chẻ — nhấn mạnh thành phần trong câu.'},
+      {n:'Passive with reporting verbs',f:'S + be + V3 + to V (after expect/believe/say/think)',ex:'He is said to have lived in Paris.',ex2:'Nhấn mạnh nguồn tin, không phải hành động.'},
+    ]}
+  }
+});
+
+/* ========== 27. CÔNG THỨC TIẾNG TRUNG (có Pinyin + dạy đọc) ========== */
+games.chineseFormulas = makeFormulaGame('Công thức Tiếng Trung', {
+  emoji:'🇨🇳',name:'Tiếng Trung',isChinese:true,
+  levels:{
+    pinyin:{lbl:'🔤 Pinyin',list:[
+      {n:'4 Thanh điệu (声调)',f:'Thanh 1: ā (cao đều, ngang)\nThanh 2: á (lên cao, sắc)\nThanh 3: ǎ (xuống rồi lên, hỏi)\nThanh 4: à (xuống thấp, huyền nặng)\nThanh nhẹ: a (không dấu)',ex:'妈|mā|mẹ\n麻|má|cây gai\n马|mǎ|ngựa\n骂|mà|mắng\n吗|ma|à, ư (trợ từ hỏi)',ex2:'Cùng âm "ma" nhưng thanh khác → NGHĨA khác hoàn toàn. Đây là điểm cực kỳ quan trọng của tiếng Trung.'},
+      {n:'Phụ âm đầu (声母) – 21 cái',f:'Môi: b p m f\nĐầu lưỡi: d t n l\nGốc lưỡi: g k h\nMặt lưỡi: j q x\nUốn lưỡi: zh ch sh r\nRăng: z c s',ex:'爸|bà|bố\n妈|mā|mẹ\n哥|gē|anh\n姐|jiě|chị\n是|shì|là',ex2:'21 phụ âm đầu. b/p, d/t, g/k, j/q, zh/ch, z/c — cặp đầu KHÔNG bật hơi, cặp sau CÓ bật hơi.'},
+      {n:'Nguyên âm đơn (韵母) – 6 cái',f:'a (a) — miệng mở to\no (o) — môi tròn\ne (ơ) — miệng he hé\ni (i) — miệng kéo ngang\nu (u) — môi tròn nhỏ\nü (uy) — môi tròn + lưỡi cao',ex:'啊|ā|à (cảm thán)\n我|wǒ|tôi\n饿|è|đói\n一|yī|một\n五|wǔ|năm\n女|nǚ|nữ',ex2:'"ü" viết thành "u" khi đi sau j/q/x/y (vì 4 chữ này KHÔNG đi với u thường). Ví dụ: ju thực ra là jü.'},
+      {n:'Nguyên âm phức (复韵母)',f:'ai ei ao ou\nan en ang eng ong\nia ie iao iu (iou)\nua uo uai ui (uei)\nüe üan ün',ex:'好|hǎo|tốt\n国|guó|nước\n谢|xiè|cảm ơn\n要|yào|muốn\n月|yuè|tháng',ex2:'Đọc nối liền không tách. "iou" viết tắt thành "iu", "uei" viết tắt thành "ui" khi có phụ âm đầu.'},
+      {n:'Quy tắc đặt dấu thanh',f:'Thứ tự ưu tiên: a > o = e > i = u = ü\nNếu i và u đứng cạnh → dấu trên chữ ĐỨNG SAU',ex:'hǎo (dấu trên a)\nxiè (dấu trên e)\nguì (dấu trên i, vì u đứng trước)\nliú (dấu trên u, vì i đứng trước)',ex2:'Có a thì luôn đặt trên a. Không có a thì xem o/e. Cuối cùng mới đến i/u/ü.'},
+      {n:'Khi nào ü viết là u?',f:'Sau j, q, x, y → ü viết thành u\nSau n, l → vẫn giữ ü (vì n và l đi được cả u thường)',ex:'居|jū| (thực ra là jü)\n去|qù| (thực ra là qǜ)\n女|nǚ|nữ (giữ dấu ¨)\n绿|lǜ|màu xanh',ex2:'Cẩn thận: "nu" và "nü" KHÁC nhau. "nu" = 努 (nỗ lực), "nü" = 女 (nữ).'},
+      {n:'Biến điệu thanh 3',f:'2 thanh 3 liền nhau → thanh 3 đầu đọc thành thanh 2\n(viết vẫn giữ dấu thanh 3)',ex:'你好|nǐ hǎo|xin chào\n→ thực tế đọc: ní hǎo\n很好|hěn hǎo|rất tốt\n→ đọc: hén hǎo',ex2:'Quy tắc đọc, không phải quy tắc viết. Khi học nói cần nhớ.'},
+      {n:'Thanh nhẹ (轻声)',f:'Một số chữ cuối từ đọc nhẹ, không có thanh điệu rõ ràng',ex:'妈妈|māma|mẹ (ma sau nhẹ)\n爸爸|bàba|bố\n哥哥|gēge|anh\n东西|dōngxi|đồ vật',ex2:'Thường ở chữ thứ 2 của từ ghép láy lại, trợ từ (吗 ma, 呢 ne, 吧 ba), và một số hậu tố.'},
+    ]},
+    primary:{lbl:'Cơ bản (HSK 1-2)',list:[
+      {n:'Câu khẳng định cơ bản',f:'Chủ ngữ + Động từ + Tân ngữ (S + V + O)',ex:'我吃苹果|Wǒ chī píngguǒ|Tôi ăn táo\n他喝水|Tā hē shuǐ|Anh ấy uống nước',ex2:'Trật tự cơ bản tiếng Trung giống tiếng Việt: ai làm gì cái gì.'},
+      {n:'Động từ 是 (shì)',f:'A 是 B (A là B)',ex:'我是学生|Wǒ shì xuéshēng|Tôi là học sinh\n他是中国人|Tā shì Zhōngguórén|Anh ấy là người TQ',ex2:'是 dùng để xác định danh tính, nghề nghiệp, quốc tịch...'},
+      {n:'Phủ định 不 và 没',f:'不 + ĐT (hiện tại/tương lai)\n没 + ĐT (quá khứ, đặc biệt với 有)',ex:'我不去|Wǒ bù qù|Tôi không đi\n我没去|Wǒ méi qù|Tôi đã không đi\n我没有钱|Wǒ méiyǒu qián|Tôi không có tiền',ex2:'不: phủ định ý chí, hiện tại. 没: phủ định quá khứ, đi với 有.'},
+      {n:'Câu hỏi với 吗 (ma)',f:'Câu khẳng định + 吗 ?',ex:'你是中国人吗?|Nǐ shì Zhōngguórén ma?|Bạn là người TQ à?\n你喝茶吗?|Nǐ hē chá ma?|Bạn uống trà không?',ex2:'Thêm 吗 cuối câu khẳng định → câu hỏi Yes/No.'},
+      {n:'Từ để hỏi cơ bản',f:'什么 shénme (gì)\n谁 shéi (ai)\n哪儿 nǎr (đâu)\n几 jǐ (mấy)\n多少 duōshǎo (bao nhiêu)',ex:'你叫什么名字?|Nǐ jiào shénme míngzi?|Bạn tên gì?\n你住在哪儿?|Nǐ zhù zài nǎr?|Bạn ở đâu?',ex2:'Đặt từ để hỏi ngay tại vị trí thông tin cần hỏi.'},
+      {n:'Số đếm 1-100',f:'一二三四五六七八九十\n二十 èrshí (20) ; 一百 yìbǎi (100)',ex:'一|yī|1\n十|shí|10\n二十三|èrshísān|23\n一百|yìbǎi|100',ex2:'Cấu trúc: số chục + 十 + số đơn vị. VD: 35 = 三十五 (sānshíwǔ).'},
+      {n:'Lượng từ 个 (gè)',f:'Số + 个 + danh từ',ex:'三个苹果|sān ge píngguǒ|3 quả táo\n两个人|liǎng ge rén|2 người',ex2:'个 là lượng từ vạn năng. Lưu ý: 2 = 两 (liǎng) khi đếm, không phải 二 (èr).'},
+      {n:'Có / không có với 有',f:'S + 有 + O (có) ; S + 没有 + O (không có)',ex:'我有一本书|Wǒ yǒu yì běn shū|Tôi có 1 cuốn sách\n我没有钱|Wǒ méiyǒu qián|Tôi không có tiền',ex2:'有 nghĩa là "có". Phủ định luôn dùng 没, KHÔNG dùng 不有.'},
+    ]},
+    secondary:{lbl:'Trung cấp (HSK 3-4)',list:[
+      {n:'Cấu trúc 把 (bǎ)',f:'S + 把 + O + V + bổ ngữ',ex:'我把书放在桌子上|Wǒ bǎ shū fàng zài zhuōzi shàng|Tôi đặt sách lên bàn\n他把门关上了|Tā bǎ mén guānshàng le|Anh ấy đã đóng cửa lại',ex2:'Cấu trúc 把 nhấn mạnh kết quả của hành động lên đối tượng.'},
+      {n:'Bị động với 被 (bèi)',f:'O + 被 + (S) + V + bổ ngữ',ex:'苹果被我吃了|Píngguǒ bèi wǒ chī le|Táo bị tôi ăn rồi\n书被她拿走了|Shū bèi tā ná zǒu le|Sách bị cô ấy lấy đi',ex2:'Bị động. Thường dùng cho việc tiêu cực, không như ý.'},
+      {n:'So sánh với 比 (bǐ)',f:'A 比 B + Tính từ',ex:'我比他高|Wǒ bǐ tā gāo|Tôi cao hơn anh ấy\n今天比昨天热|Jīntiān bǐ zuótiān rè|Hôm nay nóng hơn hôm qua',ex2:'So sánh hơn. KHÔNG dùng 更 trước tính từ khi có 比.'},
+      {n:'Trợ từ 了 / 过 / 着',f:'了: hoàn thành / thay đổi\n过: đã từng (kinh nghiệm)\n着: đang tiếp diễn / trạng thái',ex:'我吃了|Wǒ chī le|Tôi ăn rồi\n我去过北京|Wǒ qùguo Běijīng|Tôi từng đi Bắc Kinh\n他笑着说|Tā xiàozhe shuō|Anh ấy mỉm cười nói',ex2:'Tiếng Trung không chia động từ, dùng trợ từ để chỉ thời thái.'},
+      {n:'Trợ từ kết cấu 的/地/得',f:'的 (de): định ngữ — TÍNH TỪ + 的 + DANH TỪ\n地 (de): trạng ngữ — TÍNH TỪ + 地 + ĐỘNG TỪ\n得 (de): bổ ngữ — ĐỘNG TỪ + 得 + TÍNH TỪ',ex:'漂亮的花|piàoliang de huā|hoa đẹp\n慢慢地走|mànman de zǒu|đi chầm chậm\n跑得快|pǎo de kuài|chạy nhanh',ex2:'Cùng đọc "de" nhưng VAI TRÒ khác. Sai chữ này = sai ngữ pháp.'},
+      {n:'Phương vị từ',f:'A 在 B + 上/下/前/后/里/外/旁边',ex:'书在桌子上|Shū zài zhuōzi shàng|Sách ở trên bàn\n我家在学校旁边|Wǒ jiā zài xuéxiào pángbiān|Nhà tôi cạnh trường',ex2:'在 là động từ "ở". Phương vị từ đặt sau danh từ chỉ địa điểm.'},
+      {n:'Câu phức điều kiện 如果 ... 就',f:'如果 A, 就 B (Nếu A thì B)',ex:'如果下雨, 我就不去|Rúguǒ xià yǔ, wǒ jiù bù qù|Nếu mưa thì tôi không đi',ex2:'Có thể bỏ 如果 hoặc 就 nhưng giữ 1 cái. 就 nhấn mạnh kết quả.'},
+    ]},
+    high:{lbl:'Cao cấp (HSK 5-6)',list:[
+      {n:'虽然 ... 但是 / 可是',f:'虽然 A, 但是 B (Tuy A nhưng B)',ex:'虽然下雨, 但是我还是去了|Suīrán xià yǔ, dànshì wǒ háishì qù le|Tuy mưa nhưng tôi vẫn đi',ex2:'Cặp liên từ nhượng bộ - trái ngược. Diễn tả "mặc dù... nhưng".'},
+      {n:'不仅 ... 而且 ...',f:'不仅 A, 而且 B (Không chỉ A mà còn B)',ex:'他不仅聪明, 而且勤奋|Tā bùjǐn cōngmíng, érqiě qínfèn|Anh ấy không chỉ thông minh mà còn chăm chỉ',ex2:'Quan hệ tăng cấp. Dùng để khen ngợi nhiều mặt cùng lúc.'},
+      {n:'因为 ... 所以 ...',f:'因为 A, 所以 B (Vì A nên B)',ex:'因为下雨, 所以我没去|Yīnwèi xià yǔ, suǒyǐ wǒ méi qù|Vì mưa nên tôi không đi',ex2:'Quan hệ nguyên nhân - kết quả. Có thể bỏ 1 trong 2 chữ.'},
+      {n:'即使 ... 也 ...',f:'即使 A, 也 B (Dù A thì cũng B)',ex:'即使下雨, 我也要去|Jíshǐ xià yǔ, wǒ yě yào qù|Dù mưa tôi cũng đi',ex2:'Giả định cực đoan. Nhấn mạnh quyết tâm dù có khó khăn.'},
+      {n:'Bổ ngữ trình độ với 得',f:'V + 得 + tính từ/cụm bổ ngữ',ex:'他跑得很快|Tā pǎo de hěn kuài|Anh ấy chạy rất nhanh\n你说得对|Nǐ shuō de duì|Bạn nói đúng',ex2:'Mô tả động tác đó được thực hiện như thế nào / đến mức nào.'},
+      {n:'是 ... 的 (nhấn mạnh)',f:'是 + thông tin cần nhấn + 的',ex:'我是昨天来的|Wǒ shì zuótiān lái de|Tôi đến hôm qua đấy\n他是坐飞机来的|Tā shì zuò fēijī lái de|Anh ấy đến bằng máy bay',ex2:'Nhấn mạnh thời gian/cách thức/địa điểm của hành động ĐÃ XẢY RA.'},
+      {n:'连 ... 也 / 都 ...',f:'连 + đối tượng + 也/都 + V (ngay cả... cũng)',ex:'他连一个字也不认识|Tā lián yí ge zì yě bù rènshi|Anh ấy đến 1 chữ cũng không biết',ex2:'Nhấn mạnh mức độ cực đoan, thường mang sắc thái ngạc nhiên.'},
+      {n:'A 跟 B 一样',f:'A 跟 B 一样 + tính từ (A giống B)',ex:'我跟他一样高|Wǒ gēn tā yíyàng gāo|Tôi cao bằng anh ấy',ex2:'So sánh BẰNG nhau. Phủ định: A 跟 B 不一样.'},
+    ]}
+  }
+});
 
 
 </script>
