@@ -508,6 +508,19 @@ canvas{background:#000;border:1px solid rgba(255,255,255,.1);border-radius:8px;m
 .fav-picker-item .emoji{font-size:24px;flex-shrink:0}
 .fav-picker-item .title{font-family:'Bungee',cursive;font-size:12px;color:var(--text);letter-spacing:.02em}
 .fav-picker-empty{color:var(--muted);text-align:center;padding:24px;font-style:italic;grid-column:1/-1}
+.fav-picker-action{
+  display:block;width:100%;margin-top:18px;padding:15px 20px;
+  background:linear-gradient(135deg,var(--neon-green) 0%,var(--neon-cyan) 100%);
+  border:none;border-radius:14px;color:#0a1f0e;
+  font-family:'Bungee',cursive;font-size:15px;letter-spacing:.04em;
+  cursor:pointer;transition:all .2s;
+  box-shadow:0 8px 24px rgba(57,255,127,.35);
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+}
+.fav-picker-action:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 32px rgba(57,255,127,.5)}
+.fav-picker-action:disabled{
+  background:rgba(255,255,255,.08);color:var(--muted);cursor:not-allowed;box-shadow:none;
+}
 
 .card{position:relative}
 .card.is-fav::after{
@@ -790,10 +803,11 @@ footer b{color:var(--neon-cyan)}
 <div id="fav-picker" class="fav-picker">
   <div class="fav-picker-box">
     <div class="fav-picker-head">
-      <h3>⭐ Chọn trò ưa thích · tick để thêm/bỏ</h3>
+      <h3>⭐ Chọn trò để thêm</h3>
       <button class="fav-picker-close" onclick="closeFavPicker()">✕</button>
     </div>
     <div class="fav-picker-list" id="fav-picker-list"></div>
+    <button class="fav-picker-action" id="fav-picker-submit" onclick="submitFavPicker()">⭐ Thêm vào ưa thích</button>
   </div>
 </div>
 
@@ -880,7 +894,9 @@ function renderFavsTab(){
   grid.appendChild(addCard);
 }
 
+let pendingTicks = new Set();
 function openFavPicker(){
+  pendingTicks = new Set();
   document.getElementById('fav-picker').classList.add('open');
   renderFavPickerList();
 }
@@ -888,27 +904,46 @@ function renderFavPickerList(){
   const list=document.getElementById('fav-picker-list');
   list.innerHTML='';
   const favs=getFavs();
-  const allCards=[];
+  const available=[];
   document.querySelectorAll('.tab-content:not([data-tab="favorites"]) .card[data-game]').forEach(c=>{
     const id=c.dataset.game;
+    if(favs.includes(id))return; // skip already-favorited
     const emoji=c.querySelector('.emoji')?.textContent||'🎮';
     const title=c.querySelector('h3')?.textContent||id;
-    allCards.push({id,emoji,title,checked:favs.includes(id)});
+    available.push({id,emoji,title});
   });
-  if(allCards.length===0){
-    list.innerHTML='<div class="fav-picker-empty">Chưa có trò nào để chọn 🌟</div>';
+  if(available.length===0){
+    list.innerHTML='<div class="fav-picker-empty">Đã thêm hết tất cả các trò rồi! 🌟</div>';
+    updatePickerAction();
     return;
   }
-  allCards.forEach(g=>{
+  available.forEach(g=>{
     const item=document.createElement('div');
-    item.className='fav-picker-item'+(g.checked?' checked':'');
+    item.className='fav-picker-item'+(pendingTicks.has(g.id)?' checked':'');
     item.innerHTML=`<span class="fav-check">✓</span><span class="emoji">${g.emoji}</span><span class="title">${g.title}</span>`;
     item.onclick=()=>{
-      if(g.checked) removeFav(g.id); else addFav(g.id);
-      renderFavPickerList(); // refresh checkbox states in picker
+      if(pendingTicks.has(g.id)) pendingTicks.delete(g.id);
+      else pendingTicks.add(g.id);
+      renderFavPickerList();
     };
     list.appendChild(item);
   });
+  updatePickerAction();
+}
+function updatePickerAction(){
+  const btn=document.getElementById('fav-picker-submit');
+  if(!btn)return;
+  const n=pendingTicks.size;
+  btn.disabled = n===0;
+  btn.textContent = n===0 ? '⭐ Tick chọn trò để thêm' : `⭐ Thêm ${n} trò vào ưa thích`;
+}
+function submitFavPicker(){
+  if(pendingTicks.size===0)return;
+  const f=getFavs();
+  pendingTicks.forEach(id=>{if(!f.includes(id))f.push(id)});
+  setFavs(f);
+  pendingTicks = new Set();
+  closeFavPicker();
 }
 function closeFavPicker(){document.getElementById('fav-picker').classList.remove('open')}
 document.getElementById('fav-picker').onclick=e=>{if(e.target.id==='fav-picker')closeFavPicker()};
