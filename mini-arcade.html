@@ -432,24 +432,27 @@ canvas{background:#000;border:1px solid rgba(255,255,255,.1);border-radius:8px;m
 
 /* Tabs */
 .tabs{
-  display:flex;gap:6px;margin-bottom:24px;padding:6px;
+  display:flex;gap:4px;margin-bottom:24px;padding:5px;
   background:rgba(20,8,48,.7);border:1px solid rgba(255,255,255,.08);
-  border-radius:16px;backdrop-filter:blur(10px);overflow-x:auto;
+  border-radius:16px;backdrop-filter:blur(10px);
 }
 .tab{
-  flex:1 1 auto;min-width:fit-content;
-  padding:12px 14px;border-radius:12px;cursor:pointer;
+  flex:1 1 0;min-width:0;
+  padding:12px 6px;border-radius:12px;cursor:pointer;
   background:transparent;border:none;color:var(--muted);
-  font-family:'Bungee',cursive;font-size:13px;letter-spacing:.03em;
-  transition:all .25s;display:flex;align-items:center;gap:6px;justify-content:center;
-  white-space:nowrap;
+  font-family:'Bungee',cursive;font-size:12px;letter-spacing:.01em;
+  transition:all .25s;display:flex;align-items:center;gap:5px;justify-content:center;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .tab:hover{color:var(--text);background:rgba(255,255,255,.05)}
 .tab.active{
   background:linear-gradient(135deg,var(--neon-pink) 0%,var(--neon-purple) 100%);
   color:#fff;box-shadow:0 4px 20px rgba(255,45,149,.4);
 }
-.tab .tab-emoji{font-size:1.2em}
+.tab .tab-emoji{font-size:1.1em;flex-shrink:0}
+@media (max-width:380px){
+  .tab{font-size:11px;padding:11px 4px;gap:3px;letter-spacing:0}
+}
 .tab-content{display:none}
 .tab-content.active{display:block;animation:fadeIn .3s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
