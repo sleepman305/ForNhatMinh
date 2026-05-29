@@ -845,6 +845,8 @@ $$('.tab').forEach(t=>{
     $$('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));
     $$('.tab-content').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));
     localStorage.setItem('activeTab',id);
+    // Always re-render favorites when entering its tab — bulletproofs against any earlier error
+    if(id==='favorites'){try{renderFavsTab()}catch(e){console.warn('[favs] tab switch render',e)}}
   };
 });
 const savedTab=localStorage.getItem('activeTab');
@@ -866,32 +868,41 @@ function applyFavStars(){
 }
 
 function renderFavsTab(){
-  const grid=document.getElementById('favorites-grid');
-  if(!grid)return;
-  const favs=getFavs();
-  // Build sourceCards map BEFORE wiping the grid (avoids matching our own clones)
-  const sourceCards={};
-  document.querySelectorAll('.tab-content:not([data-tab="favorites"]) .card[data-game]').forEach(c=>{
-    if(!sourceCards[c.dataset.game]) sourceCards[c.dataset.game]=c;
-  });
-  // Wipe everything in the grid and rebuild from scratch
-  grid.innerHTML='';
-  // Add favorited cards first
-  favs.forEach(id=>{
-    if(!sourceCards[id])return;
-    const clone=sourceCards[id].cloneNode(true);
-    clone.classList.add('is-fav'); // ensure star icon
-    attachCardHandlers(clone);
-    grid.appendChild(clone);
-  });
-  // Always append the "+" add-button at the end
-  const addCard=document.createElement('div');
-  addCard.className='card card-add';
-  addCard.dataset.action='add-favorite';
-  addCard.style.setProperty('--ac','var(--neon-yellow)');
-  addCard.innerHTML='<div class="emoji">➕</div><h3>Thêm trò</h3><p>Bấm để chọn trò thêm vào đây</p>';
-  attachCardHandlers(addCard);
-  grid.appendChild(addCard);
+  try {
+    const grid=document.getElementById('favorites-grid');
+    if(!grid){console.warn('[favs] grid not found');return}
+    const favs=getFavs();
+    // Build sourceCards map from all OTHER tabs
+    const sourceCards={};
+    try {
+      document.querySelectorAll('.tab-content:not([data-tab="favorites"]) .card[data-game]').forEach(c=>{
+        if(!sourceCards[c.dataset.game]) sourceCards[c.dataset.game]=c;
+      });
+    } catch(e){console.warn('[favs] sourceCards err',e)}
+    // Remove only existing favorite-clones (cards with data-game) — keep + card
+    [...grid.querySelectorAll('.card[data-game]')].forEach(c=>{try{c.remove()}catch(e){}});
+    // Ensure + card exists; create if missing (defensive)
+    let addCard = grid.querySelector('.card-add');
+    if(!addCard){
+      addCard = document.createElement('div');
+      addCard.className='card card-add';
+      addCard.dataset.action='add-favorite';
+      try{addCard.style.setProperty('--ac','var(--neon-yellow)')}catch(e){}
+      addCard.innerHTML='<div class="emoji">➕</div><h3>Thêm trò</h3><p>Bấm để chọn trò thêm vào đây</p>';
+      try{attachCardHandlers(addCard)}catch(e){console.warn('[favs] attach addCard err',e)}
+      grid.appendChild(addCard);
+    }
+    // Insert favorited clones BEFORE the + card
+    favs.forEach(id=>{
+      if(!sourceCards[id]){console.warn('[favs] no source for',id);return}
+      try {
+        const clone=sourceCards[id].cloneNode(true);
+        clone.classList.add('is-fav');
+        attachCardHandlers(clone);
+        grid.insertBefore(clone, addCard);
+      } catch(e){console.warn('[favs] clone err for',id,e)}
+    });
+  } catch(e){console.warn('[favs] renderFavsTab fatal',e)}
 }
 
 let pendingTicks = new Set();
