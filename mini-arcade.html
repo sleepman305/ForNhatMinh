@@ -430,105 +430,6 @@ canvas{background:#000;border:1px solid rgba(255,255,255,.1);border-radius:8px;m
 .quiz-end .stars{font-size:36px;margin:8px 0;letter-spacing:6px}
 .quiz-end .summary{color:var(--muted);font-size:14px}
 
-/* Context menu */
-.context-menu{
-  position:fixed;z-index:200;background:rgba(20,8,48,.98);
-  border:1px solid rgba(255,255,255,.15);border-radius:12px;
-  padding:6px;min-width:220px;
-  box-shadow:0 16px 40px rgba(0,0,0,.6);
-  backdrop-filter:blur(10px);
-  animation:ctxFade .15s ease;
-  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
-}
-@keyframes ctxFade{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
-.context-menu button{
-  display:block;width:100%;text-align:left;
-  padding:11px 14px;border-radius:8px;background:transparent;border:none;
-  color:var(--text);font-family:'Be Vietnam Pro',sans-serif;font-size:14px;
-  cursor:pointer;transition:background .15s;
-}
-.context-menu button:hover{background:rgba(255,255,255,.08)}
-.context-menu button.danger{color:var(--neon-pink)}
-
-/* Card-add (+ Thêm trò) — bright neon yellow */
-.card-add{
-  background:linear-gradient(135deg,rgba(255,230,0,.18),rgba(255,138,42,.22))!important;
-  border:2px dashed var(--neon-yellow)!important;
-  cursor:pointer;
-  text-align:center;
-  box-shadow:0 0 20px rgba(255,230,0,.25);
-}
-.card-add:hover{
-  border-color:#fff!important;background:rgba(255,230,0,.28)!important;
-  box-shadow:0 0 30px rgba(255,230,0,.5);
-}
-.card-add .emoji{font-size:54px!important;animation:plusPulse 1.6s ease-in-out infinite;filter:drop-shadow(0 0 16px var(--neon-yellow))}
-.card-add h3{color:var(--neon-yellow)!important;font-size:18px!important;text-shadow:0 0 12px rgba(255,230,0,.6)}
-.card-add p{color:rgba(255,230,0,.7)!important}
-@keyframes plusPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18) rotate(8deg)}}
-
-/* Favorites picker overlay */
-.fav-picker{
-  position:fixed;inset:0;background:rgba(5,2,15,.92);backdrop-filter:blur(10px);
-  z-index:150;display:none;align-items:flex-start;justify-content:center;
-  padding:24px 16px;overflow-y:auto;
-}
-.fav-picker.open{display:flex}
-.fav-picker-box{
-  background:linear-gradient(180deg,rgba(30,10,70,.98),rgba(15,5,40,.98));
-  border:1px solid rgba(255,255,255,.12);border-radius:18px;
-  padding:20px;width:100%;max-width:680px;
-  box-shadow:0 24px 60px rgba(0,0,0,.5);
-}
-.fav-picker-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.fav-picker-head h3{font-family:'Bungee',cursive;color:var(--neon-yellow);font-size:18px;margin:0}
-.fav-picker-close{background:var(--neon-pink);border:none;color:#fff;width:36px;height:36px;border-radius:10px;font-size:18px;cursor:pointer}
-.fav-picker-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
-.fav-picker-item{
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
-  border-radius:12px;padding:12px;cursor:pointer;transition:all .2s;
-  display:flex;align-items:center;gap:10px;
-  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
-}
-.fav-picker-item:hover{background:rgba(0,240,255,.1);border-color:var(--neon-cyan);transform:translateY(-2px)}
-.fav-picker-item.checked{
-  background:linear-gradient(135deg,rgba(57,255,127,.18),rgba(0,240,255,.12));
-  border-color:var(--neon-green);
-  box-shadow:0 0 14px rgba(57,255,127,.3);
-}
-.fav-picker-item .fav-check{
-  flex-shrink:0;width:22px;height:22px;border-radius:6px;
-  border:2px solid rgba(255,255,255,.3);background:rgba(0,0,0,.25);
-  display:flex;align-items:center;justify-content:center;font-size:14px;color:transparent;
-  transition:all .2s;
-}
-.fav-picker-item.checked .fav-check{
-  border-color:var(--neon-green);background:var(--neon-green);color:#0a1f0e;
-}
-.fav-picker-item .emoji{font-size:24px;flex-shrink:0}
-.fav-picker-item .title{font-family:'Bungee',cursive;font-size:12px;color:var(--text);letter-spacing:.02em}
-.fav-picker-empty{color:var(--muted);text-align:center;padding:24px;font-style:italic;grid-column:1/-1}
-.fav-picker-action{
-  display:block;width:100%;margin-top:18px;padding:15px 20px;
-  background:linear-gradient(135deg,var(--neon-green) 0%,var(--neon-cyan) 100%);
-  border:none;border-radius:14px;color:#0a1f0e;
-  font-family:'Bungee',cursive;font-size:15px;letter-spacing:.04em;
-  cursor:pointer;transition:all .2s;
-  box-shadow:0 8px 24px rgba(57,255,127,.35);
-  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
-}
-.fav-picker-action:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 32px rgba(57,255,127,.5)}
-.fav-picker-action:disabled{
-  background:rgba(255,255,255,.08);color:var(--muted);cursor:not-allowed;box-shadow:none;
-}
-
-.card{position:relative}
-.card.is-fav::after{
-  content:'⭐';position:absolute;top:8px;right:8px;font-size:18px;
-  filter:drop-shadow(0 0 6px rgba(255,230,0,.7));
-  pointer-events:none;
-}
-
 /* Tabs */
 .tabs{
   display:flex;gap:6px;margin-bottom:24px;padding:6px;
@@ -729,7 +630,6 @@ footer b{color:var(--neon-cyan)}
   <button class="tab active" data-tab="game"><span class="tab-emoji">🎮</span>Game</button>
   <button class="tab" data-tab="learn"><span class="tab-emoji">📚</span>Học mà chơi</button>
   <button class="tab" data-tab="formulas"><span class="tab-emoji">📐</span>Tủ công thức</button>
-  <button class="tab" data-tab="favorites"><span class="tab-emoji">⭐</span>Ưa thích</button>
 </div>
 
 <div class="tab-content active" data-tab="game">
@@ -772,14 +672,6 @@ footer b{color:var(--neon-cyan)}
     <div class="card" data-game="englishFormulas" style="--ac:var(--neon-purple)"><div class="emoji">🇬🇧</div><h3>Công thức English</h3><p>Ngữ pháp tổng hợp 12 năm học</p></div>
     <div class="card" data-game="chineseFormulas" style="--ac:var(--neon-orange)"><div class="emoji">🇨🇳</div><h3>Công thức Tiếng Trung</h3><p>Pinyin + cấu trúc câu (có phiên âm)</p></div>
   </div>
-
-<div class="tab-content" data-tab="favorites">
-  <div class="grid" id="favorites-grid">
-    <div class="card card-add" data-action="add-favorite" style="--ac:var(--neon-yellow)">
-      <div class="emoji">➕</div><h3>Thêm trò</h3><p>Chọn 1 trò từ tab khác để cho vào đây</p>
-    </div>
-  </div>
-</div>
 </div>
 
 <footer>
@@ -797,17 +689,6 @@ footer b{color:var(--neon-cyan)}
     <div class="status" id="status"></div>
     <div class="game-area" id="game-area"></div>
     <div class="controls" id="controls"></div>
-  </div>
-</div>
-
-<div id="fav-picker" class="fav-picker">
-  <div class="fav-picker-box">
-    <div class="fav-picker-head">
-      <h3>⭐ Chọn trò để thêm</h3>
-      <button class="fav-picker-close" onclick="closeFavPicker()">✕</button>
-    </div>
-    <div class="fav-picker-list" id="fav-picker-list"></div>
-    <button class="fav-picker-action" id="fav-picker-submit" onclick="submitFavPicker()">⭐ Thêm vào ưa thích</button>
   </div>
 </div>
 
@@ -845,184 +726,13 @@ $$('.tab').forEach(t=>{
     $$('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));
     $$('.tab-content').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));
     localStorage.setItem('activeTab',id);
-    // Always re-render favorites when entering its tab — bulletproofs against any earlier error
-    if(id==='favorites'){try{renderFavsTab()}catch(e){console.warn('[favs] tab switch render',e)}}
   };
 });
 const savedTab=localStorage.getItem('activeTab');
 if(savedTab){const t=document.querySelector(`.tab[data-tab="${savedTab}"]`);if(t)t.click();}
 
-// ===== FAVORITES =====
-const FAV_KEY='favoriteGames';
-function getFavs(){try{return JSON.parse(localStorage.getItem(FAV_KEY)||'[]')}catch(e){return[]}}
-function setFavs(arr){localStorage.setItem(FAV_KEY,JSON.stringify(arr));renderFavsTab();applyFavStars()}
-function isFav(id){return getFavs().includes(id)}
-function addFav(id){const f=getFavs();if(!f.includes(id)){f.push(id);setFavs(f)}}
-function removeFav(id){setFavs(getFavs().filter(x=>x!==id))}
-
-function applyFavStars(){
-  const favs=getFavs();
-  document.querySelectorAll('.card[data-game]').forEach(c=>{
-    c.classList.toggle('is-fav',favs.includes(c.dataset.game));
-  });
-}
-
-function renderFavsTab(){
-  try {
-    const grid=document.getElementById('favorites-grid');
-    if(!grid){console.warn('[favs] grid not found');return}
-    const favs=getFavs();
-    // Build sourceCards map from all OTHER tabs
-    const sourceCards={};
-    try {
-      document.querySelectorAll('.tab-content:not([data-tab="favorites"]) .card[data-game]').forEach(c=>{
-        if(!sourceCards[c.dataset.game]) sourceCards[c.dataset.game]=c;
-      });
-    } catch(e){console.warn('[favs] sourceCards err',e)}
-    // Remove only existing favorite-clones (cards with data-game) — keep + card
-    [...grid.querySelectorAll('.card[data-game]')].forEach(c=>{try{c.remove()}catch(e){}});
-    // Ensure + card exists; create if missing (defensive)
-    let addCard = grid.querySelector('.card-add');
-    if(!addCard){
-      addCard = document.createElement('div');
-      addCard.className='card card-add';
-      addCard.dataset.action='add-favorite';
-      try{addCard.style.setProperty('--ac','var(--neon-yellow)')}catch(e){}
-      addCard.innerHTML='<div class="emoji">➕</div><h3>Thêm trò</h3><p>Bấm để chọn trò thêm vào đây</p>';
-      try{attachCardHandlers(addCard)}catch(e){console.warn('[favs] attach addCard err',e)}
-      grid.appendChild(addCard);
-    }
-    // Insert favorited clones BEFORE the + card
-    favs.forEach(id=>{
-      if(!sourceCards[id]){console.warn('[favs] no source for',id);return}
-      try {
-        const clone=sourceCards[id].cloneNode(true);
-        clone.classList.add('is-fav');
-        attachCardHandlers(clone);
-        grid.insertBefore(clone, addCard);
-      } catch(e){console.warn('[favs] clone err for',id,e)}
-    });
-  } catch(e){console.warn('[favs] renderFavsTab fatal',e)}
-}
-
-let pendingTicks = new Set();
-function openFavPicker(){
-  pendingTicks = new Set();
-  document.getElementById('fav-picker').classList.add('open');
-  renderFavPickerList();
-}
-function renderFavPickerList(){
-  const list=document.getElementById('fav-picker-list');
-  list.innerHTML='';
-  const favs=getFavs();
-  const available=[];
-  document.querySelectorAll('.tab-content:not([data-tab="favorites"]) .card[data-game]').forEach(c=>{
-    const id=c.dataset.game;
-    if(favs.includes(id))return; // skip already-favorited
-    const emoji=c.querySelector('.emoji')?.textContent||'🎮';
-    const title=c.querySelector('h3')?.textContent||id;
-    available.push({id,emoji,title});
-  });
-  if(available.length===0){
-    list.innerHTML='<div class="fav-picker-empty">Đã thêm hết tất cả các trò rồi! 🌟</div>';
-    updatePickerAction();
-    return;
-  }
-  available.forEach(g=>{
-    const item=document.createElement('div');
-    item.className='fav-picker-item'+(pendingTicks.has(g.id)?' checked':'');
-    item.innerHTML=`<span class="fav-check">✓</span><span class="emoji">${g.emoji}</span><span class="title">${g.title}</span>`;
-    item.onclick=()=>{
-      if(pendingTicks.has(g.id)) pendingTicks.delete(g.id);
-      else pendingTicks.add(g.id);
-      renderFavPickerList();
-    };
-    list.appendChild(item);
-  });
-  updatePickerAction();
-}
-function updatePickerAction(){
-  const btn=document.getElementById('fav-picker-submit');
-  if(!btn)return;
-  const n=pendingTicks.size;
-  btn.disabled = n===0;
-  btn.textContent = n===0 ? '⭐ Tick chọn trò để thêm' : `⭐ Thêm ${n} trò vào ưa thích`;
-}
-function submitFavPicker(){
-  if(pendingTicks.size===0)return;
-  const f=getFavs();
-  pendingTicks.forEach(id=>{if(!f.includes(id))f.push(id)});
-  setFavs(f);
-  pendingTicks = new Set();
-  closeFavPicker();
-}
-function closeFavPicker(){document.getElementById('fav-picker').classList.remove('open')}
-document.getElementById('fav-picker').onclick=e=>{if(e.target.id==='fav-picker')closeFavPicker()};
-
-// ===== Context menu (right-click PC + long-press mobile) =====
-function showContextMenu(x,y,gameId){
-  document.querySelectorAll('.context-menu').forEach(m=>m.remove());
-  const menu=document.createElement('div');menu.className='context-menu';
-  const fav=isFav(gameId);
-  const b=document.createElement('button');
-  if(fav){b.textContent='✖ Xóa khỏi ưa thích';b.classList.add('danger');b.onclick=()=>{removeFav(gameId);menu.remove();}}
-  else {b.textContent='⭐ Thêm vào ưa thích';b.onclick=()=>{addFav(gameId);menu.remove();}}
-  menu.appendChild(b);
-  document.body.appendChild(menu);
-  // Position (clamp to viewport)
-  const mw=menu.offsetWidth||200,mh=menu.offsetHeight||50;
-  const vw=window.innerWidth,vh=window.innerHeight;
-  menu.style.left=Math.min(x,vw-mw-8)+'px';
-  menu.style.top=Math.min(y,vh-mh-8)+'px';
-  // Click outside to close
-  setTimeout(()=>{
-    const close=e=>{if(!menu.contains(e.target)){menu.remove();document.removeEventListener('click',close);document.removeEventListener('touchstart',close);}};
-    document.addEventListener('click',close);
-    document.addEventListener('touchstart',close);
-  },10);
-}
-
-function attachCardHandlers(card){
-  card.onclick=()=>{
-    const action=card.dataset.action;
-    if(action==='add-favorite')openFavPicker();
-    else openGame(card.dataset.game);
-  };
-  if(card.dataset.action)return; // no context menu on add-button
-  // Right-click (PC)
-  card.oncontextmenu=e=>{e.preventDefault();showContextMenu(e.clientX,e.clientY,card.dataset.game);};
-  // Long-press (mobile)
-  let timer=null,startX=0,startY=0,moved=false;
-  card.addEventListener('touchstart',e=>{
-    if(e.touches.length!==1)return;
-    moved=false;
-    startX=e.touches[0].clientX;startY=e.touches[0].clientY;
-    timer=setTimeout(()=>{
-      if(!moved){
-        e.preventDefault();
-        if(navigator.vibrate)navigator.vibrate(30);
-        showContextMenu(startX,startY,card.dataset.game);
-        timer='fired';
-      }
-    },550);
-  },{passive:false});
-  card.addEventListener('touchmove',e=>{
-    if(!timer||timer==='fired')return;
-    const t=e.touches[0];
-    if(Math.abs(t.clientX-startX)>10||Math.abs(t.clientY-startY)>10){moved=true;clearTimeout(timer);timer=null}
-  });
-  const cancel=()=>{if(timer&&timer!=='fired')clearTimeout(timer);if(timer==='fired'){card.dataset.suppressClick='1';setTimeout(()=>delete card.dataset.suppressClick,300)}timer=null};
-  card.addEventListener('touchend',cancel);
-  card.addEventListener('touchcancel',cancel);
-  // Click guard if long-press fired
-  const origClick=card.onclick;
-  card.onclick=(e)=>{if(card.dataset.suppressClick)return;origClick.call(card,e)};
-}
-
-// Re-attach handlers on all cards (replace old simple onclick)
-document.querySelectorAll('.card[data-game], .card[data-action]').forEach(c=>attachCardHandlers(c));
-applyFavStars();
-renderFavsTab();
+// Card click → open game
+document.querySelectorAll('.card[data-game]').forEach(c=>c.onclick=()=>openGame(c.dataset.game));
 
 function setStatus(html){mStatus.innerHTML=html}
 function addBtn(label,cls,onclick){
