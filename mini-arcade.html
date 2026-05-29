@@ -202,11 +202,24 @@ canvas{background:#000;border:1px solid rgba(255,255,255,.1);border-radius:8px;m
 
 /* Gomoku */
 .gomoku-wrap{overflow:auto;max-width:100%}
-.gomoku-board{grid-template-columns:repeat(15,28px);grid-template-rows:repeat(15,28px);background:#2a1a4a;padding:6px;border-radius:8px;gap:0}
-.gomoku-board .cell{background:transparent;border:1px solid rgba(255,255,255,.08);font-size:20px;border-radius:0}
-.gomoku-board .cell.b{color:#fff;text-shadow:0 0 8px #fff}
-.gomoku-board .cell.w{color:var(--neon-yellow);text-shadow:0 0 8px var(--neon-yellow)}
-.gomoku-board .cell.win{background:rgba(255,230,0,.2)}
+.gomoku-board{grid-template-columns:repeat(15,32px);grid-template-rows:repeat(15,32px);background:#2a1a4a;padding:6px;border-radius:8px;gap:0}
+.gomoku-board .cell{background:transparent;border:1px solid rgba(255,255,255,.1);font-size:0;border-radius:0;position:relative;color:transparent}
+.gomoku-board .cell.b::before, .gomoku-board .cell.w::before{
+  content:'';position:absolute;top:50%;left:50%;width:80%;height:80%;
+  transform:translate(-50%,-50%);border-radius:50%;
+}
+.gomoku-board .cell.b::before{
+  background:radial-gradient(circle at 35% 30%, #4a4a4a 0%, #0a0a0a 60%, #000 100%);
+  box-shadow:0 0 8px rgba(0,0,0,.9), 0 0 0 1.5px rgba(255,255,255,.5), inset 0 -2px 3px rgba(255,255,255,.08);
+}
+.gomoku-board .cell.w::before{
+  background:radial-gradient(circle at 35% 30%, #fff 0%, #e8e8e8 60%, #c8c8c8 100%);
+  box-shadow:0 0 12px rgba(255,255,255,.6), inset 0 -2px 3px rgba(0,0,0,.15);
+}
+.gomoku-board .cell.win::after{
+  content:'';position:absolute;inset:0;background:rgba(255,230,0,.25);
+  box-shadow:inset 0 0 8px rgba(255,230,0,.6);
+}
 
 /* Sudoku */
 .sudoku-board{grid-template-columns:repeat(9,38px);grid-template-rows:repeat(9,38px);gap:1px;background:rgba(255,255,255,.15);padding:2px;border-radius:6px}
@@ -573,8 +586,8 @@ footer b{color:var(--neon-cyan)}
   .btn{padding:9px 14px;font-size:11px}
 
   .ttt-board{grid-template-columns:repeat(3,70px);grid-template-rows:repeat(3,70px)}
-  .gomoku-board{grid-template-columns:repeat(15,22px);grid-template-rows:repeat(15,22px)}
-  .gomoku-board .cell{font-size:16px}
+  .gomoku-board{grid-template-columns:repeat(15,24px);grid-template-rows:repeat(15,24px)}
+  .gomoku-board .cell{font-size:0}
   .sudoku-board{grid-template-columns:repeat(9,32px);grid-template-rows:repeat(9,32px)}
   .sudoku-board .cell{font-size:15px}
   .g2048-board{grid-template-columns:repeat(4,62px);grid-template-rows:repeat(4,62px)}
