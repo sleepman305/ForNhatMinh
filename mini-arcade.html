@@ -399,6 +399,67 @@ canvas{background:#000;border:1px solid rgba(255,255,255,.1);border-radius:8px;m
 .quiz-end .stars{font-size:36px;margin:8px 0;letter-spacing:6px}
 .quiz-end .summary{color:var(--muted);font-size:14px}
 
+/* Context menu */
+.context-menu{
+  position:fixed;z-index:200;background:rgba(20,8,48,.98);
+  border:1px solid rgba(255,255,255,.15);border-radius:12px;
+  padding:6px;min-width:200px;
+  box-shadow:0 16px 40px rgba(0,0,0,.6);
+  backdrop-filter:blur(10px);
+  animation:ctxFade .15s ease;
+}
+@keyframes ctxFade{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.context-menu button{
+  display:block;width:100%;text-align:left;
+  padding:11px 14px;border-radius:8px;background:transparent;border:none;
+  color:var(--text);font-family:'Be Vietnam Pro',sans-serif;font-size:14px;
+  cursor:pointer;transition:background .15s;
+}
+.context-menu button:hover{background:rgba(255,255,255,.08)}
+.context-menu button.danger{color:var(--neon-pink)}
+
+/* Card-add (+ Thêm trò) */
+.card-add{
+  background:linear-gradient(135deg,rgba(255,230,0,.05),rgba(255,138,42,.05))!important;
+  border-style:dashed!important;border-color:rgba(255,230,0,.3)!important;
+  cursor:pointer;
+}
+.card-add:hover{border-color:var(--neon-yellow)!important;background:rgba(255,230,0,.08)!important}
+
+/* Favorites picker overlay */
+.fav-picker{
+  position:fixed;inset:0;background:rgba(5,2,15,.92);backdrop-filter:blur(10px);
+  z-index:150;display:none;align-items:flex-start;justify-content:center;
+  padding:24px 16px;overflow-y:auto;
+}
+.fav-picker.open{display:flex}
+.fav-picker-box{
+  background:linear-gradient(180deg,rgba(30,10,70,.98),rgba(15,5,40,.98));
+  border:1px solid rgba(255,255,255,.12);border-radius:18px;
+  padding:20px;width:100%;max-width:680px;
+  box-shadow:0 24px 60px rgba(0,0,0,.5);
+}
+.fav-picker-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.fav-picker-head h3{font-family:'Bungee',cursive;color:var(--neon-yellow);font-size:18px;margin:0}
+.fav-picker-close{background:var(--neon-pink);border:none;color:#fff;width:36px;height:36px;border-radius:10px;font-size:18px;cursor:pointer}
+.fav-picker-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.fav-picker-item{
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;padding:12px;cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;gap:10px;
+}
+.fav-picker-item:hover{background:rgba(0,240,255,.1);border-color:var(--neon-cyan);transform:translateY(-2px)}
+.fav-picker-item .emoji{font-size:24px;flex-shrink:0}
+.fav-picker-item .title{font-family:'Bungee',cursive;font-size:12px;color:var(--text);letter-spacing:.02em}
+.fav-picker-empty{color:var(--muted);text-align:center;padding:24px;font-style:italic;grid-column:1/-1}
+
+.card{position:relative}
+.card.is-fav::after{
+  content:'⭐';position:absolute;top:8px;right:8px;font-size:18px;
+  filter:drop-shadow(0 0 6px rgba(255,230,0,.7));
+  pointer-events:none;
+}
+
 /* Tabs */
 .tabs{
   display:flex;gap:6px;margin-bottom:24px;padding:6px;
@@ -598,6 +659,7 @@ footer b{color:var(--neon-cyan)}
   <button class="tab active" data-tab="game"><span class="tab-emoji">🎮</span>Game</button>
   <button class="tab" data-tab="learn"><span class="tab-emoji">📚</span>Học mà chơi</button>
   <button class="tab" data-tab="formulas"><span class="tab-emoji">📐</span>Tủ công thức</button>
+  <button class="tab" data-tab="favorites"><span class="tab-emoji">⭐</span>Ưa thích</button>
 </div>
 
 <div class="tab-content active" data-tab="game">
@@ -640,6 +702,14 @@ footer b{color:var(--neon-cyan)}
     <div class="card" data-game="englishFormulas" style="--ac:var(--neon-purple)"><div class="emoji">🇬🇧</div><h3>Công thức English</h3><p>Ngữ pháp tổng hợp 12 năm học</p></div>
     <div class="card" data-game="chineseFormulas" style="--ac:var(--neon-orange)"><div class="emoji">🇨🇳</div><h3>Công thức Tiếng Trung</h3><p>Pinyin + cấu trúc câu (có phiên âm)</p></div>
   </div>
+
+<div class="tab-content" data-tab="favorites">
+  <div class="grid" id="favorites-grid">
+    <div class="card card-add" data-action="add-favorite" style="--ac:var(--neon-yellow)">
+      <div class="emoji">➕</div><h3>Thêm trò</h3><p>Chọn 1 trò từ tab khác để cho vào đây</p>
+    </div>
+  </div>
+</div>
 </div>
 
 <footer>
@@ -667,6 +737,9 @@ const $$ = (sel,p=document)=>[...p.querySelectorAll(sel)];
 const modal=$('#modal'),mTitle=$('#modal-title'),mStatus=$('#status'),mArea=$('#game-area'),mCtrls=$('#controls');
 let currentGame=null;
 const games={};
+// === Global khen/chê (từ trò đố quốc kỳ) ===
+const PRAISE = ['Đỉnh cao!','Kinh đấy!','Quá khủng!','Awesome!','Tuyệt vời!','Đậu xịn quá!','Quá đỉnh!','Bậc thầy!'];
+const ROAST  = ['Cùi bắp man!','Lêu lêu sai rồi!','Đậu cùi bắp!','Sai bét nhè!'];
 function openGame(id){
   const g=games[id];if(!g)return;
   mTitle.textContent=g.title;
@@ -683,7 +756,6 @@ function closeModal(){
 $('#close-btn').onclick=closeModal;
 modal.onclick=e=>{if(e.target===modal)closeModal()};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))closeModal()});
-$$('.card[data-game]').forEach(c=>c.onclick=()=>openGame(c.dataset.game));
 
 // Tab switching
 $$('.tab').forEach(t=>{
@@ -696,6 +768,135 @@ $$('.tab').forEach(t=>{
 });
 const savedTab=localStorage.getItem('activeTab');
 if(savedTab){const t=document.querySelector(`.tab[data-tab="${savedTab}"]`);if(t)t.click();}
+
+// ===== FAVORITES =====
+const FAV_KEY='favoriteGames';
+function getFavs(){try{return JSON.parse(localStorage.getItem(FAV_KEY)||'[]')}catch(e){return[]}}
+function setFavs(arr){localStorage.setItem(FAV_KEY,JSON.stringify(arr));renderFavsTab();applyFavStars()}
+function isFav(id){return getFavs().includes(id)}
+function addFav(id){const f=getFavs();if(!f.includes(id)){f.push(id);setFavs(f)}}
+function removeFav(id){setFavs(getFavs().filter(x=>x!==id))}
+
+function applyFavStars(){
+  const favs=getFavs();
+  document.querySelectorAll('.card[data-game]').forEach(c=>{
+    c.classList.toggle('is-fav',favs.includes(c.dataset.game));
+  });
+}
+
+function renderFavsTab(){
+  const grid=document.getElementById('favorites-grid');
+  if(!grid)return;
+  const favs=getFavs();
+  // Clear all except the add button
+  [...grid.querySelectorAll('.card[data-game]')].forEach(c=>c.remove());
+  // Build clones from existing cards in other tabs
+  const sourceCards={};
+  document.querySelectorAll('.tab-content:not([data-tab="favorites"]) .card[data-game]').forEach(c=>{
+    sourceCards[c.dataset.game]=c;
+  });
+  const addBtn=grid.querySelector('.card-add');
+  favs.forEach(id=>{
+    if(!sourceCards[id])return;
+    const clone=sourceCards[id].cloneNode(true);
+    attachCardHandlers(clone);
+    grid.insertBefore(clone,addBtn);
+  });
+}
+
+function openFavPicker(){
+  const picker=document.getElementById('fav-picker');
+  const list=document.getElementById('fav-picker-list');
+  list.innerHTML='';
+  const favs=getFavs();
+  const available=[];
+  document.querySelectorAll('.tab-content:not([data-tab="favorites"]) .card[data-game]').forEach(c=>{
+    const id=c.dataset.game;
+    if(favs.includes(id))return;
+    const emoji=c.querySelector('.emoji')?.textContent||'🎮';
+    const title=c.querySelector('h3')?.textContent||id;
+    available.push({id,emoji,title});
+  });
+  if(available.length===0){
+    list.innerHTML='<div class="fav-picker-empty">Đã thêm hết tất cả các trò vào ưa thích rồi! 🌟</div>';
+  } else {
+    available.forEach(g=>{
+      const item=document.createElement('div');
+      item.className='fav-picker-item';
+      item.innerHTML=`<span class="emoji">${g.emoji}</span><span class="title">${g.title}</span>`;
+      item.onclick=()=>{addFav(g.id);openFavPicker();};
+      list.appendChild(item);
+    });
+  }
+  picker.classList.add('open');
+}
+function closeFavPicker(){document.getElementById('fav-picker').classList.remove('open')}
+document.getElementById('fav-picker').onclick=e=>{if(e.target.id==='fav-picker')closeFavPicker()};
+
+// ===== Context menu (right-click PC + long-press mobile) =====
+function showContextMenu(x,y,gameId){
+  document.querySelectorAll('.context-menu').forEach(m=>m.remove());
+  const menu=document.createElement('div');menu.className='context-menu';
+  const fav=isFav(gameId);
+  const b=document.createElement('button');
+  if(fav){b.textContent='✖ Xóa khỏi ưa thích';b.classList.add('danger');b.onclick=()=>{removeFav(gameId);menu.remove();}}
+  else {b.textContent='⭐ Thêm vào ưa thích';b.onclick=()=>{addFav(gameId);menu.remove();}}
+  menu.appendChild(b);
+  document.body.appendChild(menu);
+  // Position (clamp to viewport)
+  const mw=menu.offsetWidth||200,mh=menu.offsetHeight||50;
+  const vw=window.innerWidth,vh=window.innerHeight;
+  menu.style.left=Math.min(x,vw-mw-8)+'px';
+  menu.style.top=Math.min(y,vh-mh-8)+'px';
+  // Click outside to close
+  setTimeout(()=>{
+    const close=e=>{if(!menu.contains(e.target)){menu.remove();document.removeEventListener('click',close);document.removeEventListener('touchstart',close);}};
+    document.addEventListener('click',close);
+    document.addEventListener('touchstart',close);
+  },10);
+}
+
+function attachCardHandlers(card){
+  card.onclick=()=>{
+    const action=card.dataset.action;
+    if(action==='add-favorite')openFavPicker();
+    else openGame(card.dataset.game);
+  };
+  if(card.dataset.action)return; // no context menu on add-button
+  // Right-click (PC)
+  card.oncontextmenu=e=>{e.preventDefault();showContextMenu(e.clientX,e.clientY,card.dataset.game);};
+  // Long-press (mobile)
+  let timer=null,startX=0,startY=0,moved=false;
+  card.addEventListener('touchstart',e=>{
+    if(e.touches.length!==1)return;
+    moved=false;
+    startX=e.touches[0].clientX;startY=e.touches[0].clientY;
+    timer=setTimeout(()=>{
+      if(!moved){
+        e.preventDefault();
+        if(navigator.vibrate)navigator.vibrate(30);
+        showContextMenu(startX,startY,card.dataset.game);
+        timer='fired';
+      }
+    },550);
+  },{passive:false});
+  card.addEventListener('touchmove',e=>{
+    if(!timer||timer==='fired')return;
+    const t=e.touches[0];
+    if(Math.abs(t.clientX-startX)>10||Math.abs(t.clientY-startY)>10){moved=true;clearTimeout(timer);timer=null}
+  });
+  const cancel=()=>{if(timer&&timer!=='fired')clearTimeout(timer);if(timer==='fired'){card.dataset.suppressClick='1';setTimeout(()=>delete card.dataset.suppressClick,300)}timer=null};
+  card.addEventListener('touchend',cancel);
+  card.addEventListener('touchcancel',cancel);
+  // Click guard if long-press fired
+  const origClick=card.onclick;
+  card.onclick=(e)=>{if(card.dataset.suppressClick)return;origClick.call(card,e)};
+}
+
+// Re-attach handlers on all cards (replace old simple onclick)
+document.querySelectorAll('.card[data-game], .card[data-action]').forEach(c=>attachCardHandlers(c));
+applyFavStars();
+renderFavsTab();
 
 function setStatus(html){mStatus.innerHTML=html}
 function addBtn(label,cls,onclick){
@@ -1861,8 +2062,6 @@ games.flags = (()=>{
     {c:'sh',n:'Saint Helena',cap:'Jamestown',con:'Châu Phi',f:'Lãnh thổ Anh xa xôi; nơi Napoléon bị lưu đày và qua đời năm 1821.'},
   ];
 
-  const PRAISE = ['Đỉnh cao!','Kinh đấy!','Quá khủng!','Awesome!','Tuyệt vời!','Đậu xịn quá!','Quá đỉnh!','Bậc thầy!'];
-  const ROAST  = ['Cùi bắp man!','Lêu lêu sai rồi!','Đậu cùi bắp!','Sai bét nhè!'];
 
   const DIFF={easy:{c:4,sc:false,lbl:'Dễ'},hard:{c:6,sc:true,lbl:'Khó'},expert:{c:8,sc:true,lbl:'Cực khó'}};
   const MODES={flag:{lbl:'🚩 Đố cờ'},capital:{lbl:'🏛️ Đố thủ đô'}};
@@ -2158,72 +2357,180 @@ games.hangmanEn = (()=>{
 /* ========== 19. GRAMMAR EN — trắc nghiệm ngữ pháp tiếng Anh ========== */
 games.grammarEn = (()=>{
   const QUIZ = {
-    beginner: [
-      {q:'She ___ a teacher.', opts:['is','am','are','be'], a:0, ex:'Chủ ngữ "She" (ngôi 3 số ít) đi với "is".'},
-      {q:'I ___ an apple every day.', opts:['eats','eat','eating','ate'], a:1, ex:'Hiện tại đơn với "I" dùng dạng nguyên thể "eat".'},
-      {q:'There ___ many books on the shelf.', opts:['is','are','be','am'], a:1, ex:'"Many books" số nhiều → "are".'},
-      {q:'___ apple a day keeps the doctor away.', opts:['A','An','The','—'], a:1, ex:'"An" đứng trước nguyên âm /æ/ trong "apple".'},
-      {q:'He ___ from Japan.', opts:['come','comes','coming','came'], a:1, ex:'Ngôi 3 số ít hiện tại đơn → thêm "s": comes.'},
-      {q:'We ___ playing football now.', opts:['is','am','are','be'], a:2, ex:'Hiện tại tiếp diễn với "we" → "are + V-ing".'},
-      {q:'What ___ your name?', opts:['is','are','am','be'], a:0, ex:'"Your name" là danh từ số ít → "is".'},
-      {q:'I have two ___.', opts:['cat','cats','cates','cat\u2019s'], a:1, ex:'"Two" là số nhiều → thêm "s": cats.'},
-      {q:'The cat is ___ the table.', opts:['in','on','at','of'], a:1, ex:'"On" diễn tả vật ở trên bề mặt: con mèo trên bàn.'},
-      {q:'I go to school ___ Monday.', opts:['in','at','on','by'], a:2, ex:'Dùng "on" với ngày trong tuần.'},
-      {q:'She doesn\u2019t ___ vegetables.', opts:['likes','liked','like','liking'], a:2, ex:'Sau "doesn\u2019t" dùng động từ nguyên thể.'},
-      {q:'___ you like coffee?', opts:['Do','Does','Is','Are'], a:0, ex:'Câu hỏi với "you" và động từ thường → "Do".'},
-      {q:'This is ___ pen.', opts:['my','I','me','mine'], a:0, ex:'Trước danh từ dùng tính từ sở hữu "my".'},
-      {q:'How ___ are you?', opts:['much','many','old','long'], a:2, ex:'Hỏi tuổi: "How old".'},
-      {q:'It ___ cold yesterday.', opts:['is','was','be','were'], a:1, ex:'Quá khứ với "It" số ít → "was".'},
-      {q:'We ___ to the zoo last weekend.', opts:['go','goes','went','going'], a:2, ex:'"Last weekend" là quá khứ → "went".'},
-      {q:'Look! It ___ raining.', opts:['is','be','was','does'], a:0, ex:'"Look!" gợi ý hiện tại tiếp diễn → "is raining".'},
-      {q:'She ___ her homework now.', opts:['does','do','is doing','doing'], a:2, ex:'"Now" → hiện tại tiếp diễn: is doing.'},
-      {q:'I ___ to the party tomorrow.', opts:['go','will go','went','going'], a:1, ex:'Tương lai với "tomorrow" → "will go".'},
-      {q:'My brother is ___ than me.', opts:['tall','taller','tallest','more tall'], a:1, ex:'So sánh hơn với tính từ ngắn → thêm "-er".'},
+    primary: [
+      {q:'She ___ a teacher.',opts:['am','is','are','be'],a:1,ex:'He/She/It → is.'},
+      {q:'I ___ ten years old.',opts:['am','is','are','be'],a:0,ex:'I → am.'},
+      {q:'They ___ my friends.',opts:['am','is','are','be'],a:2,ex:'We/You/They → are.'},
+      {q:'My brother ___ a doctor.',opts:['am','is','are','be'],a:1,ex:'My brother (he) → is.'},
+      {q:'We ___ in the classroom.',opts:['am','is','are','be'],a:2,ex:'We → are.'},
+      {q:'Tom and Lisa ___ students.',opts:['am','is','are','be'],a:2,ex:'Plural subject → are.'},
+      {q:'It ___ a beautiful day.',opts:['am','is','are','be'],a:1,ex:'It → is.'},
+      {q:'You ___ very kind.',opts:['am','is','are','be'],a:2,ex:'You → are (both singular and plural).'},
+      {q:'This ___ my book.',opts:['am','is','are','be'],a:1,ex:'This → is.'},
+      {q:'Those ___ my toys.',opts:['am','is','are','be'],a:2,ex:'Those (plural) → are.'},
+      {q:'What is the plural of "box"?',opts:['boxs','boxes','boxies','box'],a:1,ex:'Box ends in -x → add -es.'},
+      {q:'What is the plural of "baby"?',opts:['babys','babies','babyes','baby'],a:1,ex:'Baby → consonant + y → babies.'},
+      {q:'What is the plural of "foot"?',opts:['foots','feet','footes','feets'],a:1,ex:'Foot is irregular → feet.'},
+      {q:'What is the plural of "child"?',opts:['childs','children','childes','childen'],a:1,ex:'Child → children (irregular).'},
+      {q:'What is the plural of "mouse"?',opts:['mouses','mice','mousies','mice\'s'],a:1,ex:'Mouse → mice (irregular).'},
+      {q:'What is the plural of "tooth"?',opts:['tooths','teeth','tooths\'','toothes'],a:1,ex:'Tooth → teeth (irregular).'},
+      {q:'What is the plural of "fish"?',opts:['fishs','fishes','fish','fish\'s'],a:2,ex:'Fish has the same plural form: fish.'},
+      {q:'What is the plural of "man"?',opts:['mans','men','menes','men\'s'],a:1,ex:'Man → men (irregular).'},
+      {q:'What is the plural of "watch"?',opts:['watchs','watches','watchies','watch'],a:1,ex:'Watch ends in -ch → add -es.'},
+      {q:'What is the plural of "city"?',opts:['citys','cities','cityes','citie'],a:1,ex:'City → consonant + y → cities.'},
+      {q:'I have ___ apple.',opts:['a','an','the','no article'],a:1,ex:'Apple starts with vowel sound → an.'},
+      {q:'She is ___ honest girl.',opts:['a','an','the','no article'],a:1,ex:'Honest has silent h → an.'},
+      {q:'Look at ___ sun!',opts:['a','an','the','no article'],a:2,ex:'Sun is unique → the.'},
+      {q:'I want ___ cup of tea.',opts:['a','an','the','no article'],a:0,ex:'Cup starts with consonant → a.'},
+      {q:'___ Earth is round.',opts:['A','An','The','No article'],a:2,ex:'Earth is unique → the.'},
+      {q:'He plays ___ piano.',opts:['a','an','the','no article'],a:2,ex:'Musical instruments use the.'},
+      {q:'She is ___ university student.',opts:['a','an','the','no article'],a:0,ex:'University starts with /j/ sound → a.'},
+      {q:'We had ___ wonderful time.',opts:['a','an','the','no article'],a:0,ex:'Wonderful starts with consonant → a.'},
+      {q:'This is ___ best film I have ever seen.',opts:['a','an','the','no article'],a:2,ex:'Superlatives use the.'},
+      {q:'He went to ___ school yesterday.',opts:['a','an','the','no article'],a:3,ex:'Go to school (as student) → no article.'},
+      {q:'She ___ to school every day.',opts:['go','goes','going','went'],a:1,ex:'She/He/It + V-s/es.'},
+      {q:'They ___ football on Sundays.',opts:['play','plays','playing','played'],a:0,ex:'They + V (no s).'},
+      {q:'My father ___ TV in the evening.',opts:['watch','watches','watching','watched'],a:1,ex:'Father (he) + watches.'},
+      {q:'I ___ in Hanoi.',opts:['live','lives','living','lived'],a:0,ex:'I + V (no s).'},
+      {q:'Birds ___ in the sky.',opts:['fly','flies','flying','flew'],a:0,ex:'Birds (plural) → fly (no s).'},
+      {q:'The Earth ___ around the Sun.',opts:['go','goes','is going','went'],a:1,ex:'Scientific fact → present simple. It → goes.'},
+      {q:'Water ___ at 100°C.',opts:['boil','boils','boiling','boiled'],a:1,ex:'Water (it) → boils.'},
+      {q:'She ___ English very well.',opts:['speak','speaks','speaking','spoken'],a:1,ex:'She + speaks.'},
+      {q:'Cats ___ milk.',opts:['drink','drinks','drinking','drank'],a:0,ex:'Cats (plural) → drink.'},
+      {q:'My mother ___ delicious cakes.',opts:['bake','bakes','baking','baked'],a:1,ex:'Mother (she) → bakes.'},
+      {q:'This is my dog. ___ name is Buddy.',opts:['He','She','It','Its'],a:3,ex:'Possessive of "it" → its.'},
+      {q:'___ is my best friend.',opts:['She','Her','Hers','Herself'],a:0,ex:'Subject position → she.'},
+      {q:'Give the book to ___.',opts:['I','me','my','mine'],a:1,ex:'After preposition → me.'},
+      {q:'Is this pen ___?',opts:['you','your','yours','yourself'],a:2,ex:'Possessive pronoun standalone → yours.'},
+      {q:'___ are my parents.',opts:['They','Them','Their','Theirs'],a:0,ex:'Subject position → they.'},
+      {q:'The teacher gave ___ a present.',opts:['we','us','our','ours'],a:1,ex:'After verb (object) → us.'},
+      {q:'This is ___ house.',opts:['he','him','his','himself'],a:2,ex:'Possessive adjective before noun → his.'},
+      {q:'She did it ___.',opts:['her','hers','herself','she'],a:2,ex:'Reflexive (did it by herself) → herself.'},
+      {q:'Look at ___ in the mirror.',opts:['I','me','myself','my'],a:2,ex:'Reflexive → myself.'},
+      {q:'___ is your name? — My name is Tom.',opts:['What','Who','Where','When'],a:0,ex:'Hỏi tên → what.'},
+      {q:'___ do you live? — In Hanoi.',opts:['What','When','Where','Why'],a:2,ex:'Hỏi nơi chốn → where.'},
+      {q:'___ is your birthday? — May 5th.',opts:['What','When','Where','Who'],a:1,ex:'Hỏi thời gian → when.'},
+      {q:'___ is that man? — He is my uncle.',opts:['What','Who','Where','Why'],a:1,ex:'Hỏi người → who.'},
+      {q:'___ are you late? — Because I missed the bus.',opts:['When','Where','Why','How'],a:2,ex:'Hỏi lý do → why.'},
+      {q:'___ old are you? — I\'m 8.',opts:['What','Who','How','Where'],a:2,ex:'How old = mấy tuổi.'},
+      {q:'___ many books do you have?',opts:['How','What','Which','Why'],a:0,ex:'How many + plural noun.'},
+      {q:'___ much sugar do you need?',opts:['How','What','Which','Why'],a:0,ex:'How much + uncountable noun.'},
+      {q:'___ is my house. (chỉ căn nhà ở xa)',opts:['This','That','These','Those'],a:1,ex:'Xa + số ít → that.'},
+      {q:'___ are my friends. (gần)',opts:['This','That','These','Those'],a:2,ex:'Gần + số nhiều → these.'},
+      {q:'Are ___ your shoes? (xa)',opts:['this','that','these','those'],a:3,ex:'Xa + số nhiều → those.'},
+      {q:'There ___ a book on the table.',opts:['is','are','am','be'],a:0,ex:'Số ít → there is.'},
+      {q:'There ___ many students in the class.',opts:['is','are','am','be'],a:1,ex:'Số nhiều → there are.'},
+      {q:'___ there any milk in the fridge?',opts:['Is','Are','Am','Do'],a:0,ex:'Milk không đếm được, dùng "is".'}
     ],
-    intermediate: [
-      {q:'She ___ in this house since 2010.', opts:['lives','has lived','lived','is living'], a:1, ex:'"Since" đi với thì hiện tại hoàn thành: has lived.'},
-      {q:'If I ___ you, I would study harder.', opts:['am','was','were','be'], a:2, ex:'Câu điều kiện loại 2: If + S + were... (cho mọi ngôi).'},
-      {q:'The book ___ by Tolkien.', opts:['wrote','was written','writes','is wrote'], a:1, ex:'Bị động quá khứ: was/were + V3.'},
-      {q:'He is ___ than his brother.', opts:['tall','taller','tallest','more tall'], a:1, ex:'So sánh hơn với "tall" (1 âm) → "taller".'},
-      {q:'This is the ___ movie I have ever seen.', opts:['good','best','better','most good'], a:1, ex:'So sánh nhất bất quy tắc của "good" là "best".'},
-      {q:'By the time we arrived, the train ___.', opts:['had left','left','leaves','was leaving'], a:0, ex:'Hành động xảy ra trước thời điểm quá khứ → quá khứ hoàn thành.'},
-      {q:'She enjoys ___ music.', opts:['listen','listens','listening','listened'], a:2, ex:'Sau "enjoy" dùng V-ing.'},
-      {q:'I want ___ a doctor.', opts:['be','being','to be','been'], a:2, ex:'Sau "want" dùng to-infinitive: to be.'},
-      {q:'He asked me where I ___.', opts:['live','lived','am living','was living'], a:1, ex:'Câu tường thuật: lùi thì từ "live" → "lived".'},
-      {q:'I\u2019m tired ___ I worked all night.', opts:['but','so','because','although'], a:2, ex:'"Because" giải thích nguyên nhân.'},
-      {q:'She is interested ___ learning languages.', opts:['in','on','at','for'], a:0, ex:'Cụm cố định: interested IN something.'},
-      {q:'I will call you ___ I arrive.', opts:['when','while','until','since'], a:0, ex:'"When + S + V (hiện tại)" cho hành động tương lai.'},
-      {q:'Neither John ___ Mary likes spicy food.', opts:['or','nor','and','but'], a:1, ex:'Cấu trúc "Neither ... nor ...".'},
-      {q:'He suggested ___ a break.', opts:['take','to take','taking','took'], a:2, ex:'Sau "suggest" dùng V-ing.'},
-      {q:'The cake ___ delicious.', opts:['tastes','taste','is taste','tasting'], a:0, ex:'"Taste" là động từ tri giác — dùng dạng đơn, ngôi 3 số ít.'},
-      {q:'I haven\u2019t seen him ___ last week.', opts:['for','since','from','at'], a:1, ex:'"Since" đi với mốc thời gian cụ thể.'},
-      {q:'You ___ wear a helmet when riding a bike.', opts:['should','would','could','might'], a:0, ex:'"Should" cho lời khuyên.'},
-      {q:'The man ___ lives next door is a doctor.', opts:['who','which','whose','whom'], a:0, ex:'Mệnh đề quan hệ chỉ người làm chủ ngữ → "who".'},
-      {q:'If it ___ tomorrow, we will stay home.', opts:['rain','rains','rained','will rain'], a:1, ex:'Câu điều kiện loại 1: If + hiện tại đơn, will + V.'},
-      {q:'She is good ___ playing the piano.', opts:['in','at','on','for'], a:1, ex:'Cụm cố định: good AT something.'},
+    secondary: [
+      {q:'I ___ to school yesterday.',opts:['go','went','gone','going'],a:1,ex:'Quá khứ → went (irregular).'},
+      {q:'She ___ a book last night.',opts:['read','reads','red','reading'],a:0,ex:'Past của read = read (đọc /red/).'},
+      {q:'They ___ football last Sunday.',opts:['play','plays','played','playing'],a:2,ex:'Past simple regular → played.'},
+      {q:'We ___ in Hanoi last year.',opts:['live','lives','lived','living'],a:2,ex:'Past simple → lived.'},
+      {q:'He ___ the door at 8 a.m.',opts:['open','opens','opened','opening'],a:2,ex:'Past simple → opened.'},
+      {q:'I ___ my homework yesterday.',opts:['did','do','done','doing'],a:0,ex:'Past simple of do → did.'},
+      {q:'She ___ a delicious cake last week.',opts:['make','made','makes','making'],a:1,ex:'Past of make → made.'},
+      {q:'My parents ___ me a gift.',opts:['buy','bought','buys','buying'],a:1,ex:'Past of buy → bought.'},
+      {q:'___ you finish your work yesterday?',opts:['Do','Did','Does','Are'],a:1,ex:'Câu hỏi quá khứ → Did.'},
+      {q:'She didn\'t ___ to the party.',opts:['come','came','comes','coming'],a:0,ex:'Sau didn\'t dùng V nguyên thể.'},
+      {q:'Where ___ you born?',opts:['are','were','is','was'],a:1,ex:'You + were (passive past).'},
+      {q:'It ___ raining all night.',opts:['was','were','is','are'],a:0,ex:'It + was.'},
+      {q:'Look! She ___ a song.',opts:['sings','sing','is singing','singing'],a:2,ex:'Look! → đang xảy ra → present continuous.'},
+      {q:'I ___ TV at the moment.',opts:['watch','watches','am watching','watching'],a:2,ex:'At the moment → I am watching.'},
+      {q:'They ___ in the park now.',opts:['play','plays','are playing','playing'],a:2,ex:'Now + plural → are playing.'},
+      {q:'Be quiet! The baby ___.',opts:['sleeps','is sleeping','sleep','slept'],a:1,ex:'Be quiet → đang ngủ → is sleeping.'},
+      {q:'Why ___ you crying?',opts:['do','does','are','is'],a:2,ex:'You + are crying.'},
+      {q:'She ___ to music now.',opts:['listen','listens','is listening','listening'],a:2,ex:'Now → is listening.'},
+      {q:'We ___ for the bus.',opts:['wait','waits','are waiting','waiting'],a:2,ex:'We + are waiting.'},
+      {q:'Don\'t disturb me. I ___ ',opts:['study','studies','am studying','studied'],a:2,ex:'I + am studying.'},
+      {q:'I ___ never ___ to Paris.',opts:['have / been','has / been','had / been','has / gone'],a:0,ex:'Never + present perfect → have been.'},
+      {q:'She ___ ___ here for 5 years.',opts:['have / lived','has / lived','has / live','have / live'],a:1,ex:'She → has + V3.'},
+      {q:'___ you ever ___ sushi?',opts:['Have / eaten','Has / eaten','Have / eat','Has / eat'],a:0,ex:'Ever + present perfect, you → have eaten.'},
+      {q:'He has ___ finished his work.',opts:['just','yet','ago','since'],a:0,ex:'Just + present perfect (vừa mới).'},
+      {q:'They haven\'t arrived ___.',opts:['just','yet','already','since'],a:1,ex:'Yet ở câu phủ định (chưa).'},
+      {q:'She has lived here ___ 2010.',opts:['for','since','ago','in'],a:1,ex:'Since + thời điểm (từ 2010).'},
+      {q:'I have known him ___ ten years.',opts:['for','since','ago','at'],a:0,ex:'For + khoảng thời gian (10 năm).'},
+      {q:'She has ___ done her homework.',opts:['already','yet','ago','since'],a:0,ex:'Already + present perfect (đã).'},
+      {q:'I have ___ this book three times.',opts:['read','reads','reading','be reading'],a:0,ex:'Have + V3. Read past participle = read.'},
+      {q:'My brother is ___ than me.',opts:['tall','taller','tallest','more tall'],a:1,ex:'Comparative ngắn → -er than.'},
+      {q:'This is ___ book I have ever read.',opts:['the better','the best','better','best'],a:1,ex:'Superlative → the best.'},
+      {q:'Mathematics is ___ than English (cho học sinh đó).',opts:['more difficult','difficulter','more difficulter','most difficult'],a:0,ex:'Long adj → more + adj.'},
+      {q:'She is ___ girl in the class.',opts:['beautifuler','more beautiful','the most beautiful','beautifulest'],a:2,ex:'Long adj superlative → the most + adj.'},
+      {q:'Today is ___ than yesterday.',opts:['hot','hotter','hottest','more hot'],a:1,ex:'Hot + ter (gấp đôi t) = hotter.'},
+      {q:'This building is ___ in the city.',opts:['tall','taller','the tallest','more tall'],a:2,ex:'Superlative ngắn → the + adj-est.'},
+      {q:'He runs ___ than his brother.',opts:['fast','faster','fastest','more fast'],a:1,ex:'Fast + er = faster.'},
+      {q:'My phone is ___ as yours.',opts:['as expensive','more expensive','the most expensive','expensiver'],a:0,ex:'As ... as → as expensive as.'},
+      {q:'He is not ___ tall ___ his father.',opts:['as / as','more / than','so / as','both A and C'],a:3,ex:'"As tall as" hoặc "so tall as" (phủ định) đều dùng được.'},
+      {q:'If it ___, I will stay home.',opts:['rain','rains','rained','will rain'],a:1,ex:'If + present simple → conditional 1.'},
+      {q:'If I ___ you, I would study harder.',opts:['am','are','were','was'],a:2,ex:'Conditional 2: were dùng cho mọi ngôi.'},
+      {q:'She would buy a car if she ___ rich.',opts:['is','was','were','be'],a:2,ex:'Conditional 2 → were.'},
+      {q:'If you study hard, you ___ pass the exam.',opts:['will','would','can','might'],a:0,ex:'Conditional 1 → will.'},
+      {q:'Unless you hurry, you ___ late.',opts:['are','will be','were','would be'],a:1,ex:'Unless = if not. Conditional 1 → will be.'},
+      {q:'If I had money, I ___ a new bike.',opts:['buy','bought','would buy','will buy'],a:2,ex:'Conditional 2 → would + V.'},
+      {q:'You ___ wear a helmet when riding a bike.',opts:['should','may','might','need'],a:0,ex:'Lời khuyên → should.'},
+      {q:'___ I borrow your pen?',opts:['May','Will','Shall','Must'],a:0,ex:'Xin phép → may (lịch sự).'},
+      {q:'Students ___ wear uniforms at school.',opts:['must','may','might','could'],a:0,ex:'Bắt buộc → must.'},
+      {q:'She ___ swim when she was 5.',opts:['can','could','may','might'],a:1,ex:'Can (quá khứ) → could.'},
+      {q:'It ___ rain this afternoon.',opts:['must','might','should','can'],a:1,ex:'Có thể → might.'},
+      {q:'You ___ not smoke here.',opts:['should','must','may','need'],a:1,ex:'Cấm tuyệt đối → must not.'},
+      {q:'The book ___ by many students.',opts:['read','reads','is read','was reading'],a:2,ex:'Passive present → is/are + V3.'},
+      {q:'This song ___ by Adele in 2015.',opts:['sung','is sung','was sung','sings'],a:2,ex:'Passive past → was/were + V3.'},
+      {q:'The cake ___ by my mother every weekend.',opts:['bake','is baked','was baked','baking'],a:1,ex:'Every weekend → present, passive → is baked.'},
+      {q:'The window ___ by the boy yesterday.',opts:['broke','was broken','is broken','broken'],a:1,ex:'Yesterday → passive past → was broken.'},
+      {q:'English ___ in many countries.',opts:['speak','speaks','is spoken','was spoken'],a:2,ex:'Sự thật → present passive → is spoken.'},
+      {q:'She is a doctor, ___?',opts:['isn\'t she','is she','doesn\'t she','didn\'t she'],a:0,ex:'Tag question đảo từ trợ. Khẳng định → phủ định: isn\'t she.'},
+      {q:'They went home, ___?',opts:['didn\'t they','did they','don\'t they','aren\'t they'],a:0,ex:'Past simple, khẳng định → didn\'t they.'},
+      {q:'You can swim, ___?',opts:['can\'t you','can you','do you','don\'t you'],a:0,ex:'Can → can\'t you.'},
+      {q:'She enjoys ___ books.',opts:['read','to read','reading','reads'],a:2,ex:'Enjoy + V-ing.'},
+      {q:'I want ___ a doctor.',opts:['be','to be','being','been'],a:1,ex:'Want + to V.'},
+      {q:'He decided ___ a new car.',opts:['buy','to buy','buying','bought'],a:1,ex:'Decide + to V.'},
+      {q:'Stop ___ noise!',opts:['make','to make','making','made'],a:2,ex:'Stop + V-ing (ngừng làm).'},
+      {q:'I would like ___ coffee.',opts:['drink','to drink','drinking','drank'],a:1,ex:'Would like + to V.'},
+      {q:'She is good at ___ English.',opts:['speak','to speak','speaking','spoke'],a:2,ex:'Sau giới từ → V-ing.'}
     ],
-    advanced: [
-      {q:'Had I known about the meeting, I ___ attended.', opts:['will have','would have','would','had'], a:1, ex:'Điều kiện loại 3 đảo ngữ: Had + S + V3, S + would have + V3.'},
-      {q:'___ his lack of experience, he got the job.', opts:['Although','Despite','However','Because'], a:1, ex:'"Despite + N/V-ing" diễn tả sự tương phản.'},
-      {q:'She speaks English ___ she were a native.', opts:['as if','like','as','when'], a:0, ex:'"As if" + giả định lùi thì (were) để diễn tả sự không thật.'},
-      {q:'Hardly ___ when the phone rang.', opts:['I had arrived','had I arrived','I arrived','did I arrive'], a:1, ex:'"Hardly... when..." đảo ngữ: Hardly + had + S + V3.'},
-      {q:'The committee, ___ members are experts, will meet today.', opts:['who','whose','which','whom'], a:1, ex:'Sở hữu trong mệnh đề quan hệ → "whose".'},
-      {q:'Not until I arrived home ___ that I had lost my keys.', opts:['I realized','did I realize','I realize','had I realized'], a:1, ex:'"Not until..." đầu câu → đảo ngữ trợ động từ.'},
-      {q:'He insisted ___ the bill.', opts:['to pay','on paying','of paying','for paying'], a:1, ex:'Cấu trúc cố định: insist ON + V-ing.'},
-      {q:'I\u2019d rather you ___ smoke here.', opts:['don\u2019t','didn\u2019t','wouldn\u2019t','won\u2019t'], a:1, ex:'"I\u2019d rather + S + V quá khứ" diễn tả mong muốn ai làm/không làm gì.'},
-      {q:'Should you ___ any questions, please ask.', opts:['have','had','have had','having'], a:0, ex:'Đảo ngữ điều kiện loại 1 với "should": Should + S + V nguyên thể.'},
-      {q:'___ his advice, I would have failed.', opts:['But for','But of','Without have','Despite'], a:0, ex:'"But for + N" = "Nếu không có..." dùng với điều kiện loại 3.'},
-      {q:'The thief is reported ___ stolen the diamond.', opts:['to have','to have been','having','to be'], a:0, ex:'Bị động chủ ngữ + to have V3 cho hành động đã xảy ra.'},
-      {q:'He apologized for ___ late.', opts:['be','being','been','to be'], a:1, ex:'Sau giới từ "for" dùng V-ing.'},
-      {q:'By next year, I ___ here for ten years.', opts:['live','will live','will have lived','am living'], a:2, ex:'Tương lai hoàn thành: "by + thời điểm" + will have + V3.'},
-      {q:'Were she to come, ___.', opts:['I will be happy','I would be happy','I am happy','I had been happy'], a:1, ex:'Đảo ngữ điều kiện loại 2: Were + S + to V, S + would + V.'},
-      {q:'Only after the storm passed ___.', opts:['we went out','did we go out','we did go out','had we gone out'], a:1, ex:'"Only after..." đầu câu → đảo ngữ trợ động từ.'},
-      {q:'I wish I ___ more time to read.', opts:['have','had','will have','having'], a:1, ex:'"Wish" + quá khứ đơn cho mong ước trái hiện tại.'},
-      {q:'The harder you work, ___.', opts:['the more you earn','the more you will earn','more you earn','you earn more'], a:1, ex:'Cấu trúc so sánh kép: The + comp..., the + comp...'},
-      {q:'No sooner ___ home than it started raining.', opts:['I had got','had I got','I got','did I get'], a:1, ex:'"No sooner... than..." đảo ngữ trợ động từ ở đầu.'},
-      {q:'If only I ___ studied harder!', opts:['have','had','would have','will have'], a:1, ex:'"If only" + quá khứ hoàn thành cho tiếc nuối về quá khứ.'},
-      {q:'It is essential that he ___ on time.', opts:['arrives','arrive','arriving','to arrive'], a:1, ex:'Sau "It is essential that" dùng dạng giả định: V nguyên thể.'},
-    ],
+    high: [
+      {q:'She told me she ___ her keys.',opts:['lost','had lost','has lost','lose'],a:1,ex:'Past in past → had + V3.'},
+      {q:'By the time we arrived, the show ___.',opts:['started','has started','had started','starts'],a:2,ex:'By the time + past → past perfect for prior action.'},
+      {q:'After he ___ his work, he went home.',opts:['finish','finished','had finished','has finished'],a:2,ex:'After + past perfect → main clause in past.'},
+      {q:'I ___ never ___ such a beautiful place before.',opts:['have / seen','had / seen','was / seeing','did / see'],a:1,ex:'Past perfect + never (cho tới lúc đó).'},
+      {q:'When she got to the station, the train ___ already ___.',opts:['had / left','has / left','was / leaving','left'],a:0,ex:'Hành động trước trong quá khứ → past perfect.'},
+      {q:'If I ___ harder, I would have passed.',opts:['studied','had studied','study','have studied'],a:1,ex:'Conditional 3: had + V3.'},
+      {q:'If she ___ the bus, she would have been on time.',opts:['caught','had caught','catches','has caught'],a:1,ex:'Conditional 3 → had caught.'},
+      {q:'If I had taken that job, I ___ rich now.',opts:['am','would be','would have been','will be'],a:1,ex:'Mixed: 3→2 (past → present result).'},
+      {q:'If he hadn\'t helped me, I ___ failed.',opts:['would','would have','had','will'],a:1,ex:'Conditional 3 → would have + V3.'},
+      {q:'If we ___ the truth, we wouldn\'t have argued.',opts:['know','knew','had known','have known'],a:2,ex:'Conditional 3 → had known.'},
+      {q:'The man ___ helped me is my uncle.',opts:['who','whom','which','whose'],a:0,ex:'Người (chủ ngữ) → who.'},
+      {q:'The book ___ I bought is interesting.',opts:['who','whom','which','whose'],a:2,ex:'Vật → which (hoặc that).'},
+      {q:'That\'s the woman ___ son won the prize.',opts:['who','whom','whose','which'],a:2,ex:'Sở hữu → whose.'},
+      {q:'The hotel ___ we stayed was nice.',opts:['where','which','that','when'],a:0,ex:'Nơi chốn → where.'},
+      {q:'This is the day ___ I met him.',opts:['where','when','which','whose'],a:1,ex:'Thời gian → when.'},
+      {q:'The reason ___ he left is unknown.',opts:['why','when','where','which'],a:0,ex:'Lý do → why.'},
+      {q:'The man to ___ I spoke is a doctor.',opts:['who','whom','whose','which'],a:1,ex:'Sau giới từ → whom (formal).'},
+      {q:'Hardly ___ when the phone rang.',opts:['I had finished','had I finished','I have finished','finished I'],a:1,ex:'Hardly + inversion → had I finished.'},
+      {q:'Never ___ such a beautiful sunset.',opts:['I have seen','have I seen','I had seen','seen I'],a:1,ex:'Never đầu câu → đảo trợ ĐT.'},
+      {q:'Not only ___ smart but also kind.',opts:['she is','is she','she has','has she'],a:1,ex:'Not only đầu câu → đảo: is she.'},
+      {q:'Seldom ___ to the cinema.',opts:['he goes','does he go','he does go','go he'],a:1,ex:'Seldom đầu câu → đảo: does he go.'},
+      {q:'Only after the exam ___ relaxed.',opts:['I felt','did I feel','feel I','I have felt'],a:1,ex:'Only after + đảo → did I feel.'},
+      {q:'No sooner ___ than the rain started.',opts:['we arrived','had we arrived','we had arrived','arrived we'],a:1,ex:'No sooner ... than → đảo past perfect.'},
+      {q:'She said, "I am tired." → She said (that) she ___ tired.',opts:['is','was','were','has been'],a:1,ex:'Lùi thì: am → was.'},
+      {q:'He said, "I will come." → He said he ___ come.',opts:['will','would','is going to','comes'],a:1,ex:'Lùi thì: will → would.'},
+      {q:'"Where do you live?" → He asked me where I ___.',opts:['live','lived','had lived','living'],a:1,ex:'Câu hỏi → lùi thì: do you live → I lived.'},
+      {q:'"Don\'t smoke," she said. → She told me ___ smoke.',opts:['don\'t','not to','to not','no'],a:1,ex:'Câu mệnh lệnh phủ định → told sb not to V.'},
+      {q:'"Can you help me?" → He asked if I ___ help him.',opts:['can','could','may','might'],a:1,ex:'Can → could.'},
+      {q:'"I have finished," he said. → He said he ___ finished.',opts:['has','had','have','was'],a:1,ex:'Present perfect → past perfect: had.'},
+      {q:'It is essential that he ___ on time.',opts:['is','be','was','were'],a:1,ex:'Subjunctive sau essential that → V nguyên thể (be).'},
+      {q:'The teacher suggested that she ___ the test.',opts:['takes','take','took','taking'],a:1,ex:'Subjunctive sau suggested that → V nguyên thể.'},
+      {q:'I wish I ___ taller.',opts:['am','was','were','be'],a:2,ex:'Wish + were (cho mọi ngôi).'},
+      {q:'I wish I ___ studied harder.',opts:['have','had','would','did'],a:1,ex:'Wish quá khứ → had + V3.'},
+      {q:'If only she ___ here now!',opts:['is','was','were','be'],a:2,ex:'If only hiện tại → were.'},
+      {q:'___ John who broke the window.',opts:['It was','That was','He was','There was'],a:0,ex:'Câu chẻ → It was + chủ ngữ + who.'},
+      {q:'___ in 2020 that we met.',opts:['It is','It was','That was','There was'],a:1,ex:'Câu chẻ thời gian quá khứ → It was.'},
+      {q:'What I need ___ a good rest.',opts:['is','are','was','being'],a:0,ex:'Câu chẻ với what → động từ chia theo bổ ngữ.'},
+      {q:'You ___ told me earlier!',opts:['should','should have','must','may'],a:1,ex:'Trách quá khứ → should have + V3.'},
+      {q:'She ___ have been at the meeting; I didn\'t see her.',opts:['may','must not','can\'t','mustn\'t'],a:2,ex:'Chắc chắn không → can\'t have + V3.'},
+      {q:'He looks tired. He ___ have worked late.',opts:['should','must','may not','can\'t'],a:1,ex:'Suy đoán chắc chắn → must have + V3.'},
+      {q:'They ___ have arrived by now; the train left 2 hours ago.',opts:['may','might','should','would'],a:2,ex:'Kỳ vọng đã xảy ra → should have + V3.'}
+    ]
   };
   const LVL_INFO = {
     beginner:{lbl:'Tiểu học',emoji:'🌱'},
@@ -2233,8 +2540,6 @@ games.grammarEn = (()=>{
   let level=localStorage.getItem('gramEnLevel')||'beginner';
   if(!QUIZ[level])level='beginner';
   let pool, idx=0, score=0, answered=false, picked=-1, total=0;
-  const PRAISE=['Tuyệt vời! 🎉','Bạn giỏi quá! 🌟','Chính xác! ✨','Đỉnh thật! 💯','Xịn ghê! 🥳'];
-  const ENCOURAGE=['Sai mất rồi! 🌷','Cố lên nhé! 💪','Thử lại nha! 🌈','Không sao! 🌸','Lần sau đúng nhé! 💖'];
 
   function init(){buildPool();render()}
   function buildPool(){
@@ -2297,7 +2602,7 @@ games.grammarEn = (()=>{
     if(answered){
       const correct=picked===q.a;
       const fb=document.createElement('div');fb.className='quiz-feedback '+(correct?'right':'wrong');
-      const msgs=correct?PRAISE:ENCOURAGE;
+      const msgs=correct?PRAISE:ROAST;
       fb.innerHTML=`<div class="fb-emoji">${correct?'🎉':'🌷'}</div><div class="fb-msg">${msgs[Math.floor(Math.random()*msgs.length)]}</div>`;
       card.appendChild(fb);
       const ex=document.createElement('div');ex.className='quiz-explain';
@@ -2315,56 +2620,168 @@ games.grammarEn = (()=>{
 games.grammarVn = (()=>{
   const QUIZ = {
     primary: [
-      {q:'Trong câu "Em bé đang ngủ.", từ "ngủ" là từ loại gì?', opts:['Danh từ','Động từ','Tính từ','Đại từ'], a:1, ex:'"Ngủ" chỉ hoạt động → là động từ.'},
-      {q:'Từ trái nghĩa với "cao" là gì?', opts:['Thấp','Dài','Ngắn','To'], a:0, ex:'"Thấp" là trái nghĩa của "cao" (đối lập về chiều cao).'},
-      {q:'Câu nào sau đây là câu hỏi?', opts:['Trời đẹp quá!','Em đi học.','Hôm nay là thứ mấy?','Mẹ ơi!'], a:2, ex:'Câu hỏi kết thúc bằng dấu chấm hỏi (?).'},
-      {q:'Từ đồng nghĩa với "siêng năng" là gì?', opts:['Lười biếng','Chăm chỉ','Vui vẻ','Buồn bã'], a:1, ex:'"Chăm chỉ" cùng nghĩa với "siêng năng".'},
-      {q:'Dấu câu nào dùng ở cuối câu cảm thán?', opts:['Dấu chấm','Dấu hỏi','Dấu chấm than','Dấu phẩy'], a:2, ex:'Câu cảm thán kết thúc bằng dấu chấm than (!).'},
-      {q:'Từ nào sau đây là danh từ?', opts:['chạy','đẹp','cây','nhanh'], a:2, ex:'"Cây" chỉ sự vật → là danh từ.'},
-      {q:'Trong câu "Bạn Lan rất tốt bụng.", "tốt bụng" là từ loại gì?', opts:['Danh từ','Động từ','Tính từ','Đại từ'], a:2, ex:'"Tốt bụng" chỉ đặc điểm/tính chất → là tính từ.'},
-      {q:'Từ nào sau đây là từ láy?', opts:['bạn bè','học hành','lung linh','sách vở'], a:2, ex:'"Lung linh" lặp lại âm "l-" → là từ láy.'},
-      {q:'Chọn cách viết đúng đầu câu: "___ày mai em đi học."', opts:['Ng','Ngh','Both đúng','Cả 2 sai'], a:0, ex:'Trước "à, a, u, o, ô, ơ, ư" viết "ng": Ngày.'},
-      {q:'Từ trái nghĩa với "vui" là?', opts:['Sướng','Buồn','Hạnh phúc','Mừng'], a:1, ex:'"Buồn" là trạng thái đối lập với "vui".'},
-      {q:'Trong câu "Học sinh chăm chỉ học bài.", chủ ngữ là gì?', opts:['học sinh','Học sinh chăm chỉ','học bài','chăm chỉ'], a:1, ex:'Chủ ngữ là cụm danh từ "Học sinh chăm chỉ" (ai làm việc gì).'},
-      {q:'Chọn cách viết đúng: "Em rất thích đọc ___ cổ tích."', opts:['chuyện','truyện','chuyện cũng được','cả 2 sai'], a:1, ex:'"Truyện" = tác phẩm văn học (truyện cổ tích, truyện ngắn).'},
-      {q:'Câu "Mặt trời ___ rất sáng." điền từ gì hợp lý nhất?', opts:['chiếu','chạy','ăn','nói'], a:0, ex:'"Chiếu" phù hợp với "mặt trời" (mặt trời chiếu sáng).'},
-      {q:'Câu nào dưới đây là câu cảm thán?', opts:['Bạn có khỏe không?','Trời đẹp quá!','Hôm nay là thứ ba.','Em đang học bài.'], a:1, ex:'"Trời đẹp quá!" bộc lộ cảm xúc → câu cảm thán.'},
-      {q:'Trong câu "Mẹ nấu cơm.", từ nào là động từ?', opts:['Mẹ','nấu','cơm','không có'], a:1, ex:'"Nấu" chỉ hành động → động từ.'},
+      {q:'Trong câu "Em bé đang ngủ.", từ "ngủ" là từ loại gì?',opts:['Danh từ','Động từ','Tính từ','Đại từ'],a:1,ex:'"Ngủ" chỉ hoạt động → là động từ.'},
+      {q:'Từ nào sau đây là danh từ?',opts:['chạy','đẹp','cây','nhanh'],a:2,ex:'"Cây" chỉ sự vật → là danh từ.'},
+      {q:'Trong câu "Bạn Lan rất tốt bụng.", "tốt bụng" là từ loại gì?',opts:['Danh từ','Động từ','Tính từ','Đại từ'],a:2,ex:'"Tốt bụng" chỉ đặc điểm → là tính từ.'},
+      {q:'Từ nào sau đây là động từ?',opts:['xanh','sách','đọc','cao'],a:2,ex:'"Đọc" chỉ hoạt động → là động từ.'},
+      {q:'Từ nào sau đây là tính từ?',opts:['bàn','nói','đẹp','ăn'],a:2,ex:'"Đẹp" chỉ đặc điểm → là tính từ.'},
+      {q:'Trong câu "Trời mưa rất to.", "to" là từ loại gì?',opts:['Danh từ','Động từ','Tính từ','Trạng từ'],a:2,ex:'"To" chỉ mức độ/đặc điểm → là tính từ.'},
+      {q:'Từ "học sinh" là loại từ gì?',opts:['Danh từ','Động từ','Tính từ','Đại từ'],a:0,ex:'"Học sinh" chỉ người → là danh từ.'},
+      {q:'Đại từ trong câu "Em chào cô ạ." là từ nào?',opts:['chào','em','cô','ạ'],a:1,ex:'"Em" là đại từ xưng hô.'},
+      {q:'Trong câu "Hôm qua trời mưa.", "hôm qua" thuộc loại từ gì?',opts:['Danh từ','Động từ','Trạng từ chỉ thời gian','Tính từ'],a:2,ex:'"Hôm qua" chỉ thời gian → trạng từ thời gian.'},
+      {q:'Từ nào KHÔNG phải là tính từ?',opts:['xanh','đỏ','hát','cao'],a:2,ex:'"Hát" là động từ, không phải tính từ.'},
+      {q:'Từ trái nghĩa với "cao" là gì?',opts:['Thấp','Dài','Ngắn','To'],a:0,ex:'"Thấp" là trái nghĩa của "cao".'},
+      {q:'Từ đồng nghĩa với "siêng năng" là gì?',opts:['Lười biếng','Chăm chỉ','Vui vẻ','Buồn bã'],a:1,ex:'"Chăm chỉ" cùng nghĩa với "siêng năng".'},
+      {q:'Từ trái nghĩa với "vui" là?',opts:['Sướng','Buồn','Hạnh phúc','Mừng'],a:1,ex:'"Buồn" là trạng thái đối lập với "vui".'},
+      {q:'Từ đồng nghĩa với "xinh đẹp"?',opts:['Xấu xí','Lộng lẫy','Già nua','Bẩn thỉu'],a:1,ex:'"Lộng lẫy" gần nghĩa với "xinh đẹp".'},
+      {q:'Từ trái nghĩa với "sáng"?',opts:['Tối','Mờ','Nắng','Lung linh'],a:0,ex:'"Tối" là đối lập của "sáng".'},
+      {q:'Từ đồng nghĩa với "thông minh"?',opts:['Khôn ngoan','Ngốc nghếch','Lười','Mệt'],a:0,ex:'"Khôn ngoan" gần nghĩa "thông minh".'},
+      {q:'Từ trái nghĩa với "yêu"?',opts:['Thương','Mến','Ghét','Quý'],a:2,ex:'"Ghét" trái nghĩa với "yêu".'},
+      {q:'Từ đồng nghĩa với "to lớn"?',opts:['Bé tí','Khổng lồ','Nhỏ xíu','Vừa phải'],a:1,ex:'"Khổng lồ" cùng nghĩa với "to lớn".'},
+      {q:'Từ trái nghĩa với "nhanh"?',opts:['Lẹ','Mau','Chậm','Vội'],a:2,ex:'"Chậm" trái nghĩa với "nhanh".'},
+      {q:'Từ đồng nghĩa với "giúp đỡ"?',opts:['Hỗ trợ','Cản trở','Gây khó','Bỏ mặc'],a:0,ex:'"Hỗ trợ" cùng nghĩa với "giúp đỡ".'},
+      {q:'Câu nào sau đây là câu hỏi?',opts:['Trời đẹp quá!','Em đi học.','Hôm nay là thứ mấy?','Mẹ ơi!'],a:2,ex:'Câu hỏi kết thúc bằng dấu chấm hỏi (?).'},
+      {q:'Câu nào là câu cảm thán?',opts:['Em đi chợ.','Bạn ơi!','Ôi đẹp quá!','Mai có thi không?'],a:2,ex:'Câu cảm thán bộc lộ cảm xúc + dấu (!).'},
+      {q:'Câu nào là câu cầu khiến?',opts:['Em học bài đi!','Hôm nay trời mưa.','Em đã làm bài.','Sao thế?'],a:0,ex:'Câu cầu khiến yêu cầu/đề nghị hành động.'},
+      {q:'Câu nào là câu kể?',opts:['Bạn đi đâu?','Trời nóng quá!','Lan đang học bài.','Im lặng!'],a:2,ex:'Câu kể trình bày sự việc, kết thúc bằng dấu chấm.'},
+      {q:'Câu "Hãy giữ vệ sinh chung!" thuộc loại câu gì?',opts:['Câu kể','Câu hỏi','Câu cầu khiến','Câu cảm thán'],a:2,ex:'"Hãy" + nội dung yêu cầu = câu cầu khiến.'},
+      {q:'Dấu câu nào dùng ở cuối câu cảm thán?',opts:['Dấu chấm','Dấu hỏi','Dấu chấm than','Dấu phẩy'],a:2,ex:'Câu cảm thán kết thúc bằng dấu chấm than (!).'},
+      {q:'Dấu câu nào dùng để liệt kê?',opts:['Dấu chấm','Dấu phẩy','Dấu hỏi','Dấu chấm than'],a:1,ex:'Dấu phẩy ngăn các mục liệt kê trong câu.'},
+      {q:'Dấu hai chấm (:) thường dùng để làm gì?',opts:['Kết thúc câu','Báo lời nói/giải thích','Ngăn cách','Hỏi'],a:1,ex:'Dấu hai chấm báo trước lời nói trực tiếp hoặc giải thích.'},
+      {q:'Câu "Mẹ mua cho em sách vở bút thước." cần thêm dấu gì?',opts:['Dấu phẩy giữa các từ','Không cần','Dấu chấm than','Dấu hỏi'],a:0,ex:'Cần dấu phẩy giữa các mục liệt kê: sách, vở, bút, thước.'},
+      {q:'Dấu ngoặc kép (" ") dùng để làm gì?',opts:['Trích lời nói','Liệt kê','Hỏi','Kết thúc câu'],a:0,ex:'Dấu ngoặc kép dùng để trích dẫn lời nói hoặc tên riêng đặc biệt.'},
+      {q:'Chọn cách viết đúng đầu câu: "___ày mai em đi học."',opts:['Ng','Ngh','Both đúng','Cả 2 sai'],a:0,ex:'Trước "à, a, u, o, ô, ơ, ư" viết "ng": Ngày.'},
+      {q:'Chọn từ viết đúng:',opts:['chuyện cười','truyện cười','cả 2 đúng','cả 2 sai'],a:2,ex:'Cả "chuyện cười" (sự việc đáng cười) và "truyện cười" (tác phẩm văn học) đều đúng — tùy ngữ cảnh.'},
+      {q:'Chọn cách viết đúng: "Em rất thích đọc ___ cổ tích."',opts:['chuyện','truyện','chuyện cũng được','cả 2 sai'],a:1,ex:'"Truyện" = tác phẩm văn học (truyện cổ tích).'},
+      {q:'Chọn cách viết đúng:',opts:['dòng sông','ròng sông','dòng xông','ròng xông'],a:0,ex:'Đúng chính tả: "dòng sông".'},
+      {q:'Chọn cách viết đúng:',opts:['xa xôi','sa xôi','xa sôi','sa sôi'],a:0,ex:'Đúng chính tả: "xa xôi".'},
+      {q:'Chọn cách viết đúng:',opts:['lăn tăn','nan tan','lan tan','năn tăn'],a:0,ex:'Đúng chính tả: "lăn tăn".'},
+      {q:'Trước "e, ê, i" dùng chữ nào để viết âm "c"?',opts:['c','k','q','gh'],a:1,ex:'Trước e, ê, i dùng "k": kẻ, kê, kim.'},
+      {q:'Chọn cách viết đúng:',opts:['chia sẻ','chia xẻ','cả 2 đúng','cả 2 sai'],a:0,ex:'Đúng chính tả là "chia sẻ" (cùng san sẻ).'},
+      {q:'Chọn cách viết đúng:',opts:['sẵn sàng','xẵn xàng','sẵn xàng','xẵn sàng'],a:0,ex:'Đúng chính tả: "sẵn sàng".'},
+      {q:'Chọn cách viết đúng:',opts:['nhà giáo','nhà záo','nhà ráo','nhà dáo'],a:0,ex:'Đúng chính tả: "nhà giáo" (thầy/cô giáo).'},
+      {q:'Từ nào sau đây là từ láy?',opts:['bạn bè','học hành','lung linh','sách vở'],a:2,ex:'"Lung linh" lặp âm "l-" → là từ láy.'},
+      {q:'Từ nào sau đây là từ ghép?',opts:['xanh xanh','rì rào','cây cối','lung linh'],a:2,ex:'"Cây cối" = 2 từ có nghĩa ghép lại → từ ghép.'},
+      {q:'Từ "lấp lánh" là từ loại gì?',opts:['Từ ghép','Từ láy','Từ đơn','Từ Hán Việt'],a:1,ex:'"Lấp lánh" có âm đầu "l-" lặp → từ láy.'},
+      {q:'Từ nào là từ láy toàn bộ?',opts:['xinh xắn','đo đỏ','ngọt ngào','chăm chỉ'],a:1,ex:'"Đo đỏ" lặp toàn bộ chữ "đo" → láy toàn bộ.'},
+      {q:'Từ "học hành" thuộc loại từ gì?',opts:['Từ láy','Từ ghép','Từ đơn','Từ Hán Việt'],a:1,ex:'Cả "học" và "hành" đều có nghĩa → từ ghép.'},
+      {q:'Trong câu "Học sinh chăm chỉ học bài.", chủ ngữ là gì?',opts:['học sinh','Học sinh chăm chỉ','học bài','chăm chỉ'],a:1,ex:'Chủ ngữ là "Học sinh chăm chỉ" (ai làm việc gì).'},
+      {q:'Vị ngữ của câu "Mẹ đang nấu cơm." là gì?',opts:['Mẹ','đang nấu cơm','cơm','nấu'],a:1,ex:'Vị ngữ là phần "đang nấu cơm".'},
+      {q:'Chủ ngữ trong câu "Đàn chim bay về tổ." là?',opts:['Đàn chim','bay về tổ','chim','tổ'],a:0,ex:'"Đàn chim" là chủ ngữ (ai bay).'},
+      {q:'Trong câu "Hôm nay trời rất đẹp.", "trời" giữ chức vụ gì?',opts:['Chủ ngữ','Vị ngữ','Trạng ngữ','Bổ ngữ'],a:0,ex:'"Trời" là chủ ngữ.'},
+      {q:'Vị ngữ của câu "Bạn em rất thông minh." là gì?',opts:['Bạn em','rất thông minh','em','thông minh'],a:1,ex:'Vị ngữ là "rất thông minh".'},
+      {q:'Câu "Mặt trời ___ rất sáng." điền từ gì?',opts:['chiếu','chạy','ăn','nói'],a:0,ex:'"Chiếu" phù hợp: mặt trời chiếu sáng.'},
+      {q:'Điền từ vào chỗ trống: "Em ___ bài chăm chỉ."',opts:['học','ăn','ngủ','chạy'],a:0,ex:'"Học bài" là cụm từ đúng nghĩa.'},
+      {q:'Điền từ thích hợp: "Cô giáo ___ học sinh rất thương yêu."',opts:['với','có','của','và'],a:0,ex:'Cô giáo VỚI học sinh có quan hệ thương yêu.'},
+      {q:'Điền từ: "Bé ___ nhanh như chớp."',opts:['chạy','ngủ','khóc','đứng'],a:0,ex:'"Chạy nhanh như chớp" là so sánh phù hợp.'},
+      {q:'Điền từ: "Bầu trời ___ trong xanh."',opts:['rất','nhỏ','xa','gần'],a:0,ex:'"Rất" bổ nghĩa cho tính từ "trong xanh".'},
+      {q:'Câu "Mặt trời như quả cầu lửa." dùng biện pháp gì?',opts:['So sánh','Nhân hóa','Ẩn dụ','Điệp ngữ'],a:0,ex:'Có từ "như" → biện pháp so sánh.'},
+      {q:'Câu "Chú gà trống đang gáy báo thức." dùng biện pháp gì?',opts:['So sánh','Nhân hóa','Liệt kê','Ẩn dụ'],a:1,ex:'Gán hành động "báo thức" của người cho gà → nhân hóa.'},
+      {q:'Câu "Đàn cò trắng bay như những bông gòn." dùng biện pháp gì?',opts:['So sánh','Nhân hóa','Liệt kê','Đảo ngữ'],a:0,ex:'Có "như" → so sánh.'},
+      {q:'Trong "Ông trời nổi giận đùng đùng.", phép tu từ là gì?',opts:['So sánh','Nhân hóa','Ẩn dụ','Hoán dụ'],a:1,ex:'Trời được nhân hóa thành "ông" có cảm xúc.'},
+      {q:'Câu "Mặt biển xanh như ngọc bích." có biện pháp gì?',opts:['So sánh','Nhân hóa','Ẩn dụ','Hoán dụ'],a:0,ex:'"Như" + đối tượng so sánh → biện pháp so sánh.'}
     ],
     secondary: [
-      {q:'Biện pháp tu từ nào được dùng trong câu "Mặt trời thức dậy"?', opts:['So sánh','Nhân hóa','Ẩn dụ','Hoán dụ'], a:1, ex:'Gán hành động của người ("thức dậy") cho vật → nhân hóa.'},
-      {q:'Câu nào sau đây là câu ghép?', opts:['Em đi học.','Trời mưa và gió thổi mạnh.','Mẹ đi chợ.','Bạn Lan rất giỏi.'], a:1, ex:'Câu ghép có 2 vế nối với nhau (Trời mưa / gió thổi mạnh).'},
-      {q:'Từ Hán Việt "phụ huynh" có nghĩa là gì?', opts:['Anh em','Cha mẹ và anh chị','Họ hàng','Bà con'], a:1, ex:'"Phụ" = cha, "huynh" = anh → phụ huynh = cha mẹ và anh.'},
-      {q:'Phương thức biểu đạt chính của văn miêu tả là gì?', opts:['Trình bày sự việc','Tả người, vật, cảnh','Bộc lộ cảm xúc','Thuyết phục'], a:1, ex:'Văn miêu tả nhằm tái hiện đặc điểm của đối tượng (người, vật, cảnh).'},
-      {q:'Trong câu "Vì trời mưa nên chúng tôi ở nhà.", cặp quan hệ từ là?', opts:['Vì – nên','Tuy – nhưng','Nếu – thì','Càng – càng'], a:0, ex:'"Vì – nên" biểu thị quan hệ nguyên nhân – kết quả.'},
-      {q:'Câu "Anh ấy là một tay vợt cừ khôi." sử dụng biện pháp tu từ gì?', opts:['Ẩn dụ','Hoán dụ','So sánh','Nhân hóa'], a:1, ex:'"Tay" (bộ phận) thay cho "người" (toàn thể) → hoán dụ.'},
-      {q:'Trạng ngữ trong câu "Sáng nay, em đi học sớm." là?', opts:['Sáng nay','em','đi học sớm','học sớm'], a:0, ex:'"Sáng nay" chỉ thời gian → trạng ngữ.'},
-      {q:'Thành ngữ "Ăn quả nhớ kẻ trồng cây" nói về điều gì?', opts:['Tình bạn','Lòng biết ơn','Sự cần cù','Tài năng'], a:1, ex:'Bài học về biết ơn người đi trước, người tạo ra thành quả.'},
-      {q:'Câu nào sử dụng biện pháp điệp ngữ?', opts:['Đẹp vô cùng Tổ quốc ta ơi!','Mưa rơi, mưa rơi, mưa mãi rơi.','Trăng tròn như chiếc đĩa.','Cây tre xanh.'], a:1, ex:'Lặp lại từ "mưa rơi" → điệp ngữ.'},
-      {q:'Trong câu "Bàn tay ta làm nên tất cả.", "bàn tay" tượng trưng cho điều gì?', opts:['Sự lao động','Sự khéo léo','Sức mạnh','Sự đẹp đẽ'], a:0, ex:'"Bàn tay" hoán dụ chỉ người lao động, sức lao động.'},
-      {q:'Từ nào sau đây là từ ghép chính phụ?', opts:['hoa hồng','bố mẹ','đi đứng','sách vở'], a:0, ex:'"Hoa hồng" có "hoa" là chính, "hồng" là phụ (loại hoa) → ghép chính phụ.'},
-      {q:'Câu nào KHÔNG phải là câu cảm thán?', opts:['Ôi trời ơi!','Sao đẹp thế!','Trời đẹp quá!','Hôm nay là thứ ba.'], a:3, ex:'"Hôm nay là thứ ba." chỉ trình bày sự việc → câu trần thuật.'},
-      {q:'"Người Cha mái tóc bạc / Đốt lửa cho anh nằm" (Tố Hữu) - "Người Cha" chỉ ai và dùng phép gì?', opts:['Cha ruột — so sánh','Bác Hồ — ẩn dụ','Già làng — hoán dụ','Bộ đội — nhân hóa'], a:1, ex:'"Người Cha" là cách ẩn dụ chỉ Bác Hồ trong bài thơ "Đêm nay Bác không ngủ".'},
-      {q:'Từ "lung linh" thuộc kiểu từ nào?', opts:['Từ láy','Từ ghép','Từ đơn','Từ Hán Việt'], a:0, ex:'"Lung linh" có sự lặp lại phụ âm đầu "l" → từ láy.'},
-      {q:'Biện pháp so sánh trong câu "Trẻ em như búp trên cành" có cấu trúc gì?', opts:['A là B','A như B','A bằng B','A của B'], a:1, ex:'Có từ "như" → cấu trúc so sánh "A như B".'},
+      {q:'Từ "học sinh" là từ Hán Việt hay thuần Việt?',opts:['Hán Việt','Thuần Việt','Vay mượn tiếng Pháp','Vay mượn tiếng Anh'],a:0,ex:'"Học sinh" gồm 2 yếu tố gốc Hán → từ Hán Việt.'},
+      {q:'Từ Hán Việt "giang sơn" có nghĩa là gì?',opts:['Sông núi (đất nước)','Mặt trời mọc','Người tài giỏi','Cảnh đẹp'],a:0,ex:'"Giang" = sông, "sơn" = núi → giang sơn = đất nước.'},
+      {q:'"Phụ huynh" trong tiếng Việt nghĩa là?',opts:['Cha mẹ','Anh chị','Thầy cô','Bạn bè'],a:0,ex:'Phụ = cha, huynh = anh → chỉ cha mẹ học sinh.'},
+      {q:'Từ Hán Việt "thiên nhiên" nghĩa là?',opts:['Tự nhiên (trời sinh)','Thiên đường','Bầu trời','Thiên thần'],a:0,ex:'Thiên = trời, nhiên = nhiên/tự nhiên → giới tự nhiên.'},
+      {q:'Từ Hán Việt "phong cảnh" có yếu tố nào nghĩa là "gió"?',opts:['phong','cảnh','cả 2','không có'],a:0,ex:'"Phong" = gió, "cảnh" = cảnh sắc.'},
+      {q:'"Đồng bào" trong tiếng Hán Việt nghĩa là?',opts:['Cùng một bào thai (anh em)','Đồng nghiệp','Bạn cùng lớp','Đồng quê'],a:0,ex:'Đồng = cùng, bào = bọc thai → người cùng nguồn gốc.'},
+      {q:'Yếu tố Hán Việt "sơn" có nghĩa là gì?',opts:['Sông','Núi','Biển','Trời'],a:1,ex:'"Sơn" trong Hán Việt = núi (sơn cước = miền núi).'},
+      {q:'"Quốc gia" có 2 yếu tố Hán Việt nghĩa lần lượt là?',opts:['Nước - nhà','Vua - dân','Trời - đất','Lớn - nhỏ'],a:0,ex:'Quốc = nước, gia = nhà → đất nước.'},
+      {q:'Từ Hán Việt "nhân ái" nghĩa là gì?',opts:['Yêu thương người','Người ác','Người tốt','Người lạ'],a:0,ex:'Nhân = người, ái = yêu → tình yêu thương người.'},
+      {q:'"Bất khuất" nghĩa là?',opts:['Không khuất phục','Bất ngờ','Không quên','Bất hủ'],a:0,ex:'Bất = không, khuất = khuất phục → kiên cường.'},
+      {q:'Câu "Quê hương là chùm khế ngọt" dùng biện pháp gì?',opts:['So sánh','Ẩn dụ','Nhân hóa','Hoán dụ'],a:1,ex:'Quê hương được ví ngầm với chùm khế → ẩn dụ.'},
+      {q:'"Áo nâu liền với áo xanh" dùng biện pháp gì?',opts:['So sánh','Ẩn dụ','Hoán dụ','Nhân hóa'],a:2,ex:'Lấy áo nâu (nông dân), áo xanh (công nhân) thay người → hoán dụ.'},
+      {q:'Câu "Trăng tròn như mâm bạc" có biện pháp gì?',opts:['So sánh','Ẩn dụ','Nhân hóa','Hoán dụ'],a:0,ex:'Có "như" + đối tượng so sánh → so sánh.'},
+      {q:'"Bão táp mưa sa" thể hiện biện pháp nghệ thuật gì?',opts:['Liệt kê','Ẩn dụ','Hoán dụ','Tăng tiến'],a:0,ex:'Liệt kê các hiện tượng tự nhiên.'},
+      {q:'Câu "Mặt trời chân lý chói qua tim" dùng biện pháp gì?',opts:['So sánh','Ẩn dụ','Hoán dụ','Nhân hóa'],a:1,ex:'"Mặt trời chân lý" = ẩn dụ cho lý tưởng cách mạng.'},
+      {q:'Trong "Người buồn cảnh có vui đâu bao giờ", biện pháp nào được dùng?',opts:['Nhân hóa','Ẩn dụ','Tả cảnh ngụ tình','Hoán dụ'],a:2,ex:'Mượn cảnh để diễn tả tâm trạng → tả cảnh ngụ tình.'},
+      {q:'"Ngày ngày mặt trời đi qua trên lăng" có biện pháp gì?',opts:['Ẩn dụ','Nhân hóa','Hoán dụ','So sánh'],a:1,ex:'Mặt trời được nhân hóa: biết "đi qua" như con người.'},
+      {q:'Phép tu từ trong "Đầu xanh có tội tình gì?" là?',opts:['Hoán dụ','Ẩn dụ','So sánh','Nhân hóa'],a:0,ex:'"Đầu xanh" thay cho người trẻ → hoán dụ.'},
+      {q:'"Vì sao? Vì ai? Vì gì?" dùng biện pháp gì?',opts:['Điệp ngữ','Liệt kê','So sánh','Nhân hóa'],a:0,ex:'Lặp "vì" nhiều lần → điệp ngữ.'},
+      {q:'Câu "Cờ bay phấp phới, lòng người rạo rực" dùng phép gì?',opts:['Đối','So sánh','Hoán dụ','Ẩn dụ'],a:0,ex:'2 vế cân xứng đối nhau → phép đối.'},
+      {q:'Câu "Trời mưa nên đường ướt." thuộc loại câu gì?',opts:['Câu đơn','Câu ghép','Câu rút gọn','Câu đặc biệt'],a:1,ex:'Có 2 vế có quan hệ nguyên nhân-kết quả → câu ghép.'},
+      {q:'Câu "Em học bài." thuộc loại câu gì?',opts:['Câu đơn','Câu ghép','Câu phức','Câu đặc biệt'],a:0,ex:'Có 1 cụm chủ-vị → câu đơn.'},
+      {q:'Câu "Nếu trời mưa thì em ở nhà." thuộc loại câu gì?',opts:['Câu đơn','Câu ghép','Câu rút gọn','Câu đặc biệt'],a:1,ex:'Quan hệ điều kiện-kết quả giữa 2 vế → câu ghép.'},
+      {q:'Câu "Mưa." thuộc loại câu gì?',opts:['Câu đơn đầy đủ','Câu rút gọn','Câu đặc biệt','Câu ghép'],a:2,ex:'Không xác định được CN-VN → câu đặc biệt.'},
+      {q:'Trong câu "Vì trời mưa nên em đi muộn", quan hệ giữa 2 vế là?',opts:['Nguyên nhân-kết quả','Tăng tiến','Tương phản','Điều kiện'],a:0,ex:'"Vì... nên..." biểu thị nguyên nhân-kết quả.'},
+      {q:'Câu "Trời càng nóng, em càng mệt." có quan hệ gì?',opts:['Tăng tiến','Tương phản','Nhân-quả','Lựa chọn'],a:0,ex:'"Càng... càng..." → tăng tiến.'},
+      {q:'Cặp quan hệ từ "tuy... nhưng..." thể hiện quan hệ gì?',opts:['Tăng tiến','Tương phản','Nhân-quả','Điều kiện'],a:1,ex:'"Tuy... nhưng..." diễn tả ý tương phản, nhượng bộ.'},
+      {q:'Trong câu "Hôm qua em đi học.", "hôm qua" là?',opts:['Chủ ngữ','Vị ngữ','Trạng ngữ chỉ thời gian','Định ngữ'],a:2,ex:'"Hôm qua" bổ sung ý nghĩa thời gian → trạng ngữ.'},
+      {q:'Trạng ngữ trong câu "Trên sân trường, học sinh chơi đùa." là?',opts:['Trên sân trường','học sinh','chơi đùa','đùa'],a:0,ex:'Trạng ngữ chỉ nơi chốn ở đầu câu.'},
+      {q:'Trong "Cô gái ấy rất xinh đẹp.", "ấy" là?',opts:['Định ngữ','Trạng ngữ','Bổ ngữ','Vị ngữ'],a:0,ex:'"Ấy" bổ nghĩa cho danh từ "cô gái" → định ngữ.'},
+      {q:'Bổ ngữ trong câu "Em đọc sách rất chăm chú." là?',opts:['sách','rất chăm chú','sách rất chăm chú','Em'],a:1,ex:'"Rất chăm chú" bổ sung cho động từ "đọc" → bổ ngữ.'},
+      {q:'Từ "chân" trong "chân bàn" và "chân người" có quan hệ gì?',opts:['Đồng âm','Nhiều nghĩa','Đồng nghĩa','Trái nghĩa'],a:1,ex:'Cùng từ "chân" nghĩa gốc → các nghĩa khác có quan hệ → nhiều nghĩa.'},
+      {q:'Từ "đi" trong "đi đứng" và "đi tu" thể hiện?',opts:['Nhiều nghĩa','Đồng âm','Đồng nghĩa','Trái nghĩa'],a:0,ex:'"Đi" có nhiều nghĩa khác nhau xuất phát từ nghĩa gốc.'},
+      {q:'"Bàn" trong "bàn ghế" và "bàn bạc" là hiện tượng gì?',opts:['Đồng âm','Nhiều nghĩa','Đồng nghĩa','Trái nghĩa'],a:0,ex:'Hai từ "bàn" khác nghĩa, không liên quan → đồng âm.'},
+      {q:'"Đường" trong "đường đi" và "đường ăn" là?',opts:['Đồng âm','Nhiều nghĩa','Đồng nghĩa','Hoán dụ'],a:0,ex:'Hai từ "đường" khác hẳn về nghĩa → đồng âm.'},
+      {q:'Văn bản "Tôi đi học" của Thanh Tịnh thuộc phương thức biểu đạt nào?',opts:['Tự sự','Miêu tả','Biểu cảm','Nghị luận'],a:2,ex:'Tác phẩm bộc lộ cảm xúc của nhân vật → biểu cảm là chính.'},
+      {q:'Văn bản kể lại sự việc theo trình tự thời gian thuộc phương thức?',opts:['Tự sự','Miêu tả','Biểu cảm','Thuyết minh'],a:0,ex:'Kể lại sự việc → tự sự.'},
+      {q:'Văn bản giới thiệu đặc điểm, tính chất một đối tượng là?',opts:['Tự sự','Miêu tả','Thuyết minh','Nghị luận'],a:2,ex:'Giới thiệu tri thức khách quan → thuyết minh.'},
+      {q:'Văn bản bàn luận, đưa ý kiến về vấn đề là?',opts:['Tự sự','Miêu tả','Nghị luận','Hành chính'],a:2,ex:'Bàn luận, lập luận → nghị luận.'},
+      {q:'Văn bản tả vẻ đẹp của một danh lam là?',opts:['Miêu tả','Tự sự','Thuyết minh','Biểu cảm'],a:0,ex:'Tả lại đặc điểm bên ngoài → miêu tả.'},
+      {q:'Cặp quan hệ từ "không những... mà còn..." biểu thị quan hệ?',opts:['Tăng tiến','Tương phản','Lựa chọn','Nguyên nhân'],a:0,ex:'"Không những... mà còn..." diễn tả mức độ tăng dần → tăng tiến.'},
+      {q:'"Hoặc... hoặc..." là cặp quan hệ từ chỉ?',opts:['Lựa chọn','Tương phản','Nhân-quả','Tăng tiến'],a:0,ex:'Đưa ra hai khả năng để chọn → lựa chọn.'},
+      {q:'Trong "Em chăm chỉ nên được điểm cao.", "nên" là?',opts:['Liên từ chỉ nguyên nhân','Liên từ chỉ kết quả','Trạng từ','Đại từ'],a:1,ex:'"Nên" dẫn vào kết quả của nguyên nhân trước đó.'},
+      {q:'Cặp quan hệ từ "sở dĩ... là vì..." biểu thị quan hệ gì?',opts:['Tăng tiến','Tương phản','Nhân-quả','Điều kiện'],a:2,ex:'Giải thích nguyên nhân của kết quả → nhân-quả.'},
+      {q:'Tác phẩm "Lão Hạc" của ai?',opts:['Nam Cao','Nguyễn Du','Vũ Trọng Phụng','Nguyễn Công Hoan'],a:0,ex:'"Lão Hạc" là truyện ngắn nổi tiếng của Nam Cao.'},
+      {q:'Bài thơ "Đêm nay Bác không ngủ" của ai?',opts:['Tố Hữu','Minh Huệ','Xuân Diệu','Huy Cận'],a:1,ex:'Tác giả Minh Huệ viết về Bác Hồ trong chiến dịch Biên giới.'},
+      {q:'"Truyện Kiều" của Nguyễn Du có bao nhiêu câu?',opts:['3254','3000','4000','5000'],a:0,ex:'Truyện Kiều dài 3254 câu thơ lục bát.'},
+      {q:'Tác giả của bài "Sang thu" là?',opts:['Hữu Thỉnh','Tố Hữu','Xuân Quỳnh','Huy Cận'],a:0,ex:'Bài thơ "Sang thu" của Hữu Thỉnh.'},
+      {q:'Câu tục ngữ "Có công mài sắt có ngày nên kim" nói về?',opts:['Sự kiên trì','Tài năng','May mắn','Đoàn kết'],a:0,ex:'Nhấn mạnh tính kiên trì sẽ dẫn đến thành công.'},
+      {q:'"Đói cho sạch, rách cho thơm" khuyên ta điều gì?',opts:['Giữ phẩm chất tốt khi nghèo khó','Giữ vệ sinh','Tiết kiệm','Đoàn kết'],a:0,ex:'Dù trong hoàn cảnh khó khăn vẫn giữ phẩm chất, đạo đức.'},
+      {q:'Thành ngữ "Lên thác xuống ghềnh" có nghĩa?',opts:['Vất vả gian truân','Đi du lịch','Lên cao xuống thấp','Khám phá'],a:0,ex:'Chỉ cuộc sống nhiều khó khăn, vất vả.'},
+      {q:'"Một con ngựa đau, cả tàu bỏ cỏ" thể hiện gì?',opts:['Sự đoàn kết','Tình thương','Cả 2','Ích kỷ'],a:2,ex:'Thể hiện sự đoàn kết và đồng cảm trong tập thể.'},
+      {q:'"Học thầy không tày học bạn" có nghĩa?',opts:['Học bạn giúp tốt hơn','Thầy không quan trọng','Bạn quan trọng nhất','Không học cũng được'],a:0,ex:'Đề cao giá trị học hỏi từ bạn bè cùng trang lứa.'},
+      {q:'Trong câu "Cô ấy có nụ cười rất TƯƠI.", "tươi" nghĩa là?',opts:['Mới hái','Rạng rỡ, vui vẻ','Còn mới','Ẩm ướt'],a:1,ex:'"Tươi" trong văn cảnh này = rạng rỡ, vui vẻ.'},
+      {q:'"Anh ấy có gương mặt SÁNG." — "sáng" ở đây nghĩa là?',opts:['Phát ra ánh sáng','Thông minh, ưa nhìn','Buổi sáng','Sạch sẽ'],a:1,ex:'Chỉ vẻ mặt thông minh, có nét ưa nhìn.'},
+      {q:'"Mẹ NẤU một nồi cơm to." — "nấu" có thể thay bằng?',opts:['thổi','luộc','cháy','đốt'],a:0,ex:'Trong văn nói "thổi cơm" cũng có nghĩa nấu cơm.'}
     ],
     high: [
-      {q:'Phong cách ngôn ngữ báo chí có đặc trưng nổi bật nào?', opts:['Tính cá thể, cảm xúc','Tính thông tin, thời sự, công khai','Tính nghệ thuật, hình ảnh','Tính hành chính, khuôn mẫu'], a:1, ex:'Văn báo chí chú trọng đưa tin nhanh, chính xác, có tính thời sự.'},
-      {q:'Câu "Anh đi anh nhớ quê nhà" sử dụng phép tu từ gì?', opts:['Điệp ngữ','Đối lập','Nói quá','Nói giảm'], a:0, ex:'Lặp từ "anh" → điệp ngữ.'},
-      {q:'Phép liên kết nào dùng từ ngữ khác để thay thế cho từ đã nêu trước?', opts:['Phép lặp','Phép thế','Phép nối','Phép đối'], a:1, ex:'Phép thế thay thế bằng đại từ hoặc từ ngữ đồng nghĩa.'},
-      {q:'"Bác đã đi rồi sao, Bác ơi!" (Tố Hữu) - "đi" ở đây dùng phép tu từ nào?', opts:['Ẩn dụ','Nói giảm, nói tránh','Hoán dụ','Điệp ngữ'], a:1, ex:'Dùng "đi" thay cho "mất, qua đời" để giảm sự đau buồn → nói giảm nói tránh.'},
-      {q:'Hàm ý của câu "Trời lạnh quá!" (khi nói với người đang mở cửa sổ) là?', opts:['Phàn nàn về thời tiết','Đề nghị đóng cửa','Khen ngợi','Cảm thán'], a:1, ex:'Hàm ý gián tiếp đề nghị người nghe đóng cửa lại.'},
-      {q:'Văn bản nghị luận sử dụng phương thức biểu đạt chính nào?', opts:['Tự sự','Miêu tả','Lập luận / nghị luận','Thuyết minh'], a:2, ex:'Văn nghị luận dùng lý lẽ, dẫn chứng → phương thức lập luận.'},
-      {q:'"Lặn lội thân cò khi quãng vắng" (Trần Tế Xương) - "thân cò" là phép gì?', opts:['Ẩn dụ','Hoán dụ','So sánh','Nhân hóa'], a:0, ex:'"Thân cò" ẩn dụ cho thân phận vất vả, lam lũ của người vợ.'},
-      {q:'"Một cây làm chẳng nên non / Ba cây chụm lại nên hòn núi cao" sử dụng biện pháp gì?', opts:['Ẩn dụ','Hoán dụ','Nói quá','Điệp ngữ'], a:0, ex:'"Cây" ẩn dụ cho con người, "hòn núi cao" ẩn dụ cho thành quả lớn.'},
-      {q:'Phong cách ngôn ngữ hành chính – công vụ có đặc trưng?', opts:['Sinh động, hình ảnh','Khuôn mẫu, chính xác, trang trọng','Cảm xúc, biểu cảm','Thân mật, suồng sã'], a:1, ex:'Văn bản hành chính (đơn từ, công văn) đòi hỏi khuôn mẫu, chính xác.'},
-      {q:'"Mặt trời của bắp thì nằm trên đồi / Mặt trời của mẹ, em nằm trên lưng" (Nguyễn Khoa Điềm) - "Mặt trời của mẹ" là phép tu từ?', opts:['Hoán dụ','Ẩn dụ','So sánh','Nhân hóa'], a:1, ex:'Đứa con được ẩn dụ là "mặt trời của mẹ" — nguồn sống, hy vọng.'},
-      {q:'Phép lặp cấu trúc cú pháp nhằm mục đích gì?', opts:['Gây nhàm chán','Tăng tính nhịp điệu, nhấn mạnh','Rút ngắn câu','Tạo nghi vấn'], a:1, ex:'Lặp cấu trúc tạo nhịp điệu và nhấn mạnh ý.'},
-      {q:'"Ngày Huế đổ máu / Chú Hà Nội về" (Tố Hữu) - "đổ máu" dùng phép tu từ nào?', opts:['Nói quá','Hoán dụ','Nói giảm','Ẩn dụ'], a:1, ex:'"Đổ máu" (cái cụ thể) thay cho "chiến tranh" (cái khái quát) → hoán dụ.'},
-      {q:'Văn bản thuyết minh có đặc điểm chính là?', opts:['Bộc lộ cảm xúc','Cung cấp tri thức khách quan','Kể lại sự việc','Tả người tả vật'], a:1, ex:'Văn thuyết minh trình bày tri thức một cách khách quan, chính xác.'},
-      {q:'Câu "Trời xanh đây là của chúng ta / Núi rừng đây là của chúng ta" (Nguyễn Đình Thi) dùng biện pháp gì?', opts:['Điệp cấu trúc','So sánh','Nhân hóa','Đảo ngữ'], a:0, ex:'Lặp lại cấu trúc "... đây là của chúng ta" → điệp cấu trúc.'},
-      {q:'Câu nào sau đây có cấu trúc câu phức (có mệnh đề phụ)?', opts:['Em đi học.','Mưa rơi tầm tã.','Khi mặt trời mọc, gà gáy vang.','Trời xanh và mây trắng.'], a:2, ex:'"Khi mặt trời mọc" là mệnh đề phụ chỉ thời gian → câu phức.'},
-    ],
+      {q:'Câu "Cờ hồng cờ đỏ ngập trời cờ hồng" dùng biện pháp gì?',opts:['Điệp ngữ vòng','Liệt kê','So sánh','Hoán dụ'],a:0,ex:'Từ "cờ hồng" lặp đầu và cuối → điệp ngữ vòng.'},
+      {q:'"Mặt trời xuống biển như hòn lửa" thuộc tu từ?',opts:['So sánh','Ẩn dụ','Hoán dụ','Nhân hóa'],a:0,ex:'Có "như" + đối tượng so sánh.'},
+      {q:'Trong "Người đi Châu Mộc chiều sương ấy", "chiều sương ấy" gợi điều gì?',opts:['Tả thực','Hồi tưởng, tâm trạng','Liệt kê','Đối lập'],a:1,ex:'Gợi không gian mộng mơ trong hồi tưởng.'},
+      {q:'Câu "Ta về mình có nhớ ta / Ta về ta nhớ những hoa cùng người." dùng phép gì?',opts:['Đối','Điệp ngữ','Cả 2','Ẩn dụ'],a:2,ex:'Vừa lặp "ta", "nhớ" vừa có cấu trúc đối.'},
+      {q:'"Súng nổ rung trời giận dữ" có phép?',opts:['Nhân hóa','So sánh','Hoán dụ','Ẩn dụ'],a:0,ex:'Gán cảm xúc "giận dữ" cho súng (vật) → nhân hóa.'},
+      {q:'"Áo chàm đưa buổi phân ly" dùng phép?',opts:['Hoán dụ','Ẩn dụ','Nhân hóa','So sánh'],a:0,ex:'Lấy "áo chàm" thay cho người Việt Bắc → hoán dụ.'},
+      {q:'Phép "đảo ngữ" trong câu "Lác đác bên sông chợ mấy nhà" có tác dụng gì?',opts:['Nhấn mạnh sự thưa thớt','Hỏi','Cảm thán','Liệt kê'],a:0,ex:'Đảo "lác đác" lên đầu để nhấn mạnh.'},
+      {q:'"Câu cá mùa thu" của Nguyễn Khuyến sử dụng phong cách nghệ thuật nào?',opts:['Tả cảnh ngụ tình','Hiện thực','Lãng mạn','Tả thực thuần túy'],a:0,ex:'Tả cảnh để gửi gắm tâm sự → tả cảnh ngụ tình.'},
+      {q:'Phép tu từ "phép đối" trong câu "Vầng trăng vằng vặc giữa trời / Đinh ninh hai miệng một lời song song." thể hiện điều gì?',opts:['Cân bằng hài hòa','Mâu thuẫn','Đối lập','Tăng cấp'],a:0,ex:'Phép đối tạo cân xứng, hài hòa.'},
+      {q:'"Thuyền về có nhớ bến chăng / Bến thì một dạ khăng khăng đợi thuyền." sử dụng?',opts:['Ẩn dụ','So sánh','Hoán dụ','Nhân hóa'],a:0,ex:'Thuyền-bến ẩn dụ cho người yêu xa cách → ẩn dụ.'},
+      {q:'Văn bản hành chính có đặc điểm chính?',opts:['Tính khuôn mẫu, chính xác','Giàu cảm xúc','Hình ảnh','Hư cấu'],a:0,ex:'Văn hành chính cần khuôn mẫu, chính xác, khách quan.'},
+      {q:'Phong cách ngôn ngữ báo chí nhằm mục đích chính?',opts:['Cung cấp thông tin','Bộc lộ cảm xúc','Lập luận','Quy định'],a:0,ex:'Báo chí cung cấp thông tin thời sự.'},
+      {q:'"Phong cách ngôn ngữ sinh hoạt" có đặc điểm?',opts:['Tự nhiên, cảm xúc','Khuôn mẫu','Khoa học','Hình tượng'],a:0,ex:'Lời nói hàng ngày, tự nhiên, đậm tính cá nhân.'},
+      {q:'Phong cách ngôn ngữ khoa học có yêu cầu chính?',opts:['Chính xác, khách quan','Cảm xúc','Hình ảnh','Tu từ'],a:0,ex:'Văn khoa học cần chính xác, khách quan, có logic.'},
+      {q:'Phong cách ngôn ngữ nghệ thuật có đặc trưng?',opts:['Tính hình tượng, cảm xúc','Tính khuôn mẫu','Tính chính xác','Tính khô khan'],a:0,ex:'Văn nghệ thuật giàu hình tượng và cảm xúc.'},
+      {q:'Trong văn nghị luận, phương pháp lập luận nào dùng dẫn chứng để chứng minh?',opts:['Chứng minh','Bình luận','Phân tích','So sánh'],a:0,ex:'Dùng dẫn chứng để chứng minh luận điểm → phép chứng minh.'},
+      {q:'Bài "Hịch tướng sĩ" của Trần Quốc Tuấn thuộc thể loại gì?',opts:['Hịch','Cáo','Chiếu','Phú'],a:0,ex:'"Hịch tướng sĩ" là tác phẩm thuộc thể hịch.'},
+      {q:'"Tây Tiến" của Quang Dũng viết về?',opts:['Đoàn quân Tây Tiến','Quê hương','Tình yêu','Mẹ'],a:0,ex:'Bài thơ ca ngợi đoàn binh Tây Tiến trong kháng chiến chống Pháp.'},
+      {q:'"Đất Nước" trong trường ca của Nguyễn Khoa Điềm nhấn mạnh điều gì?',opts:['Đất Nước của Nhân Dân','Đất Nước của vua chúa','Lãnh thổ','Lịch sử riêng lẻ'],a:0,ex:'Tư tưởng "Đất Nước của Nhân Dân" là chủ đề chính.'},
+      {q:'"Người lái đò sông Đà" của Nguyễn Tuân thuộc thể loại?',opts:['Tùy bút','Truyện ngắn','Tiểu thuyết','Kịch'],a:0,ex:'Đây là tùy bút nổi tiếng của Nguyễn Tuân.'},
+      {q:'Tác phẩm "Vợ chồng A Phủ" của ai?',opts:['Tô Hoài','Nam Cao','Nguyễn Tuân','Kim Lân'],a:0,ex:'"Vợ chồng A Phủ" là truyện ngắn của Tô Hoài.'},
+      {q:'"Sóng" của Xuân Quỳnh có chủ đề chính?',opts:['Tình yêu','Quê hương','Chiến tranh','Lao động'],a:0,ex:'Bài thơ về tình yêu của người con gái.'},
+      {q:'"Việt Bắc" của Tố Hữu sử dụng thể thơ?',opts:['Lục bát','Thơ tự do','Song thất lục bát','Thất ngôn'],a:0,ex:'Trường ca Việt Bắc viết bằng thể lục bát.'},
+      {q:'"Vợ nhặt" của Kim Lân lấy bối cảnh thời nào?',opts:['Nạn đói 1945','Cải cách ruộng đất','Chiến tranh chống Mỹ','Hòa bình'],a:0,ex:'Truyện lấy bối cảnh nạn đói Ất Dậu 1945.'},
+      {q:'"Chí Phèo" của Nam Cao có chủ đề chính?',opts:['Bi kịch tha hóa','Tình yêu','Chiến tranh','Lao động'],a:0,ex:'Bi kịch của người nông dân bị xã hội đẩy vào con đường tha hóa.'},
+      {q:'"Hai đứa trẻ" của Thạch Lam khai thác đề tài?',opts:['Cuộc sống nghèo phố huyện','Tình yêu','Chiến tranh','Cách mạng'],a:0,ex:'Cuộc sống tù đọng, nghèo nàn của phố huyện.'},
+      {q:'Trong văn nghị luận, "luận điểm" là gì?',opts:['Ý kiến của người viết','Dẫn chứng','Câu hỏi','Lời kêu gọi'],a:0,ex:'Luận điểm = ý kiến cần chứng minh.'},
+      {q:'"Luận cứ" trong văn nghị luận là?',opts:['Lý lẽ và dẫn chứng','Đề mục','Câu chủ đề','Câu kết'],a:0,ex:'Luận cứ là lý lẽ + dẫn chứng để chứng minh luận điểm.'},
+      {q:'Phương pháp lập luận nào sử dụng việc "đưa ý kiến đối lập rồi bác bỏ"?',opts:['Bác bỏ','So sánh','Phân tích','Tổng-phân-hợp'],a:0,ex:'Phản bác ý kiến đối lập → phép bác bỏ.'},
+      {q:'Phép lập luận "diễn dịch" đi từ?',opts:['Khái quát đến cụ thể','Cụ thể đến khái quát','Giả định đến thực tế','Đối lập'],a:0,ex:'Diễn dịch: từ ý chung → ví dụ cụ thể.'},
+      {q:'Phép lập luận "quy nạp" đi từ?',opts:['Cụ thể đến khái quát','Khái quát đến cụ thể','Trừu tượng','So sánh'],a:0,ex:'Quy nạp: từ các trường hợp cụ thể → kết luận chung.'},
+      {q:'Thể thơ lục bát mỗi cặp gồm?',opts:['1 câu 6 + 1 câu 8','2 câu 8','1 câu 6 + 1 câu 6','1 câu 7 + 1 câu 7'],a:0,ex:'Lục = 6 chữ, bát = 8 chữ. Cặp: 6/8.'},
+      {q:'Thể thơ song thất lục bát mỗi khổ gồm?',opts:['2 câu 7 + 1 cặp 6/8','2 câu 8 + 2 câu 6','Thất ngôn','Lục bát'],a:0,ex:'1 cặp song thất (2x7 chữ) + 1 cặp lục bát.'},
+      {q:'Vần trong thơ lục bát ngắt nhịp ở chữ thứ?',opts:['6 và 8','2 và 4','4 và 6','Tự do'],a:0,ex:'Vần chân câu 6 vần với chữ thứ 6 câu 8.'},
+      {q:'Thơ thất ngôn bát cú có bao nhiêu câu?',opts:['8','7','6','10'],a:0,ex:'Bát cú = 8 câu, mỗi câu 7 chữ.'},
+      {q:'Bài thơ "Đoàn thuyền đánh cá" của Huy Cận viết về?',opts:['Lao động trên biển','Tình yêu','Chiến tranh','Mẹ'],a:0,ex:'Ca ngợi lao động đánh cá tập thể.'},
+      {q:'Văn nghị luận xã hội thường bàn về?',opts:['Vấn đề trong đời sống xã hội','Tác phẩm văn học','Lịch sử','Khoa học'],a:0,ex:'NLXH bàn về các hiện tượng/quan niệm trong đời sống.'},
+      {q:'Văn nghị luận văn học bàn về?',opts:['Tác phẩm văn học','Khoa học','Đời sống xã hội','Pháp luật'],a:0,ex:'NLVH bàn về tác giả, tác phẩm, vấn đề văn học.'},
+      {q:'Cấu trúc cơ bản của bài văn nghị luận gồm?',opts:['Mở bài-Thân bài-Kết bài','Giới thiệu-Phân tích','Đề-Thực-Luận','Khai-Thừa-Chuyển-Hợp'],a:0,ex:'Cấu trúc 3 phần: mở bài, thân bài, kết bài.'},
+      {q:'Trong văn miêu tả, phương pháp "miêu tả từ xa đến gần" là?',opts:['Trình tự không gian','Trình tự thời gian','Trình tự logic','Miêu tả ngược'],a:0,ex:'Đi theo khoảng cách không gian → trình tự không gian.'},
+      {q:'Khái niệm "điểm nhìn trần thuật" trong văn xuôi là?',opts:['Vị trí người kể chuyện','Nội dung truyện','Nhân vật chính','Bối cảnh'],a:0,ex:'Là vị trí, góc nhìn của người kể với câu chuyện.'}
+    ]
   };
   const LVL_INFO = {
     primary:{lbl:'Tiểu học',emoji:'🌱'},
@@ -2374,8 +2791,6 @@ games.grammarVn = (()=>{
   let level=localStorage.getItem('gramVnLevel')||'primary';
   if(!QUIZ[level])level='primary';
   let pool, idx=0, score=0, answered=false, picked=-1, total=0;
-  const PRAISE=['Tuyệt vời! 🎉','Bạn giỏi quá! 🌟','Chính xác! ✨','Đỉnh thật! 💯','Xịn ghê! 🥳'];
-  const ENCOURAGE=['Sai mất rồi! 🌷','Cố lên nhé! 💪','Thử lại nha! 🌈','Không sao! 🌸','Lần sau đúng nhé! 💖'];
 
   function init(){buildPool();render()}
   function buildPool(){
@@ -2438,7 +2853,7 @@ games.grammarVn = (()=>{
     if(answered){
       const correct=picked===q.a;
       const fb=document.createElement('div');fb.className='quiz-feedback '+(correct?'right':'wrong');
-      const msgs=correct?PRAISE:ENCOURAGE;
+      const msgs=correct?PRAISE:ROAST;
       fb.innerHTML=`<div class="fb-emoji">${correct?'🎉':'🌷'}</div><div class="fb-msg">${msgs[Math.floor(Math.random()*msgs.length)]}</div>`;
       card.appendChild(fb);
       const ex=document.createElement('div');ex.className='quiz-explain';
@@ -2457,8 +2872,6 @@ games.grammarVn = (()=>{
 /* ========== 21. MENTAL ARITHMETIC — Tính nhẩm ========== */
 games.mental = (()=>{
   const LVL_INFO={primary:{lbl:'Tiểu học',emoji:'🌱'},secondary:{lbl:'THCS',emoji:'🌿'},high:{lbl:'THPT',emoji:'🌳'}};
-  const PRAISE=['Đỉnh!','Nhanh quá!','Giỏi ghê!','Đúng rồi!','Xuất sắc!','Tuyệt vời!'];
-  const ROAST=['Tiếc quá!','Gần đúng rồi!','Thử lại nhé!','Không sao!'];
   let level=localStorage.getItem('mentalLevel')||'primary';
   if(!LVL_INFO[level])level='primary';
   let problem,score=0,total=0,streak=0,answered=false,picked=null;
@@ -2591,7 +3004,7 @@ function renderChineseExample(ex){
 games.mathFormulas = makeFormulaGame('Công thức Toán', {
   emoji:'➗',name:'Toán',
   levels:{
-    primary:{lbl:'Tiểu học',list:[
+    primary:{lbl:'Tiểu học (Lớp 1-5)',list:[
       {n:'Phép cộng có nhớ',f:'a + b = c',ex:'27 + 45 = 72\n(7+5=12 viết 2 nhớ 1; 2+4+1=7)',ex2:'Cộng các đơn vị trước. Nếu tổng ≥ 10 thì "nhớ 1" sang cột chục.'},
       {n:'Phép trừ có nhớ',f:'a − b = c',ex:'53 − 28 = 25\n(3−8 không đủ, mượn 1 chục: 13−8=5; 5−2−1=2)',ex2:'Khi số bị trừ nhỏ hơn số trừ, mượn 1 đơn vị từ hàng kế bên.'},
       {n:'Bảng cửu chương',f:'a × b với a, b ∈ {1...9}',ex:'7 × 8 = 56',ex2:'Học thuộc bảng nhân từ 2 đến 9 — nền tảng cho mọi phép tính.'},
@@ -2602,7 +3015,7 @@ games.mathFormulas = makeFormulaGame('Công thức Toán', {
       {n:'Đổi đơn vị độ dài',f:'1 km = 1000 m = 100000 cm = 1000000 mm',ex:'2.5 km = 2500 m = 250000 cm',ex2:'Mỗi bước đơn vị (m→cm→mm) nhân 10.'},
       {n:'Phân số bằng nhau',f:'a/b = (a×k)/(b×k) với k ≠ 0',ex:'1/2 = 2/4 = 3/6 = 50/100',ex2:'Nhân (chia) cả tử và mẫu cho cùng một số khác 0 thì giá trị phân số không đổi.'},
     ]},
-    secondary:{lbl:'THCS',list:[
+    secondary:{lbl:'THCS (Lớp 6-9)',list:[
       {n:'Bình phương của tổng',f:'(a + b)² = a² + 2ab + b²',ex:'(x + 3)² = x² + 6x + 9',ex2:'Khai triển bình phương của tổng. Quan trọng để giải PT.'},
       {n:'Bình phương của hiệu',f:'(a − b)² = a² − 2ab + b²',ex:'(x − 5)² = x² − 10x + 25',ex2:'Giống tổng nhưng dấu của 2ab là dấu trừ.'},
       {n:'Hiệu hai bình phương',f:'a² − b² = (a + b)(a − b)',ex:'x² − 9 = (x+3)(x−3)',ex2:'Phân tích hiệu hai bình phương thành nhân tử.'},
@@ -2614,7 +3027,7 @@ games.mathFormulas = makeFormulaGame('Công thức Toán', {
       {n:'Chu vi & Diện tích hình tròn',f:'C = 2πr ; S = πr² (π ≈ 3.14)',ex:'r = 5cm → C ≈ 31.4 cm, S ≈ 78.5 cm²',ex2:'r là bán kính. π (pi) là hằng số ≈ 3.14159...'},
       {n:'Hệ phương trình bậc nhất',f:'{ ax + by = c \\n   dx + ey = f }',ex:'{x+y=5; x−y=1} → x=3, y=2 (cộng 2 PT: 2x=6)',ex2:'Có thể giải bằng phương pháp thế hoặc cộng đại số.'},
     ]},
-    high:{lbl:'THPT',list:[
+    high:{lbl:'THPT (Lớp 10-12)',list:[
       {n:'Phương trình bậc 2',f:'ax² + bx + c = 0\\nΔ = b² − 4ac\\nx = (−b ± √Δ) / 2a',ex:'x²−5x+6=0: Δ=1, x = (5±1)/2 = 3 hoặc 2',ex2:'Δ>0: 2 nghiệm; Δ=0: nghiệm kép; Δ<0: vô nghiệm thực.'},
       {n:'Định lý Vi-ét',f:'x₁ + x₂ = −b/a ; x₁ × x₂ = c/a',ex:'x²−5x+6=0: x₁+x₂=5, x₁·x₂=6 ⟹ nghiệm 2 và 3',ex2:'Tổng và tích 2 nghiệm của PT bậc 2 mà không cần giải.'},
       {n:'Lượng giác cơ bản',f:'sin²x + cos²x = 1\\ntan x = sin x / cos x',ex:'sin 30° = 1/2, cos 30° = √3/2 → (1/2)² + (√3/2)² = 1',ex2:'Hằng đẳng thức lượng giác Pythagore — dùng để biến đổi biểu thức.'},
@@ -2634,24 +3047,22 @@ games.mathFormulas = makeFormulaGame('Công thức Toán', {
 games.physicsFormulas = makeFormulaGame('Công thức Vật lý', {
   emoji:'⚛️',name:'Vật lý',
   levels:{
-    primary:{lbl:'Cấp 1 (Lớp 6-7)',list:[
+    secondary:{lbl:'THCS (Lớp 6-9)',list:[
       {n:'Vận tốc',f:'v = s / t',ex:'Đi 100m trong 20s → v = 100/20 = 5 m/s',ex2:'s: quãng đường (m), t: thời gian (s). Đo độ nhanh chậm của chuyển động.'},
       {n:'Khối lượng riêng',f:'D = m / V',ex:'Nhôm 270g, V=100cm³ → D = 2.7 g/cm³',ex2:'D đặc trưng cho mỗi chất. Nước: D = 1 g/cm³.'},
       {n:'Trọng lượng',f:'P = 10 × m (xấp xỉ)',ex:'Vật 5kg → P = 50 N',ex2:'P: trọng lượng (Newton), m: khối lượng (kg). Là lực hút Trái Đất.'},
       {n:'Áp suất',f:'p = F / S',ex:'F = 60N, S = 0.2m² → p = 300 Pa',ex2:'F: lực ép, S: diện tích. Áp suất càng lớn khi diện tích càng nhỏ.'},
       {n:'Lực đẩy Acsimet',f:'F_A = d × V',ex:'Vật chìm trong nước (d=10000 N/m³), V=0.001m³ → F_A = 10 N',ex2:'d: trọng lượng riêng chất lỏng, V: thể tích phần chìm.'},
       {n:'Đổi km/h ⟷ m/s',f:'1 m/s = 3.6 km/h',ex:'72 km/h = 72/3.6 = 20 m/s',ex2:'Chia 3.6 để đổi từ km/h sang m/s, nhân 3.6 để đổi ngược.'},
-    ]},
-    secondary:{lbl:'Cấp 2 (Lớp 8-9)',list:[
       {n:'Công cơ học',f:'A = F × s',ex:'Lực 50N kéo vật đi 10m → A = 500 J',ex2:'A: công (Joule). Chỉ tính khi có lực và có chuyển động cùng phương.'},
       {n:'Công suất',f:'P = A / t',ex:'Công 600J trong 30s → P = 20 W',ex2:'Công suất cho biết tốc độ thực hiện công.'},
       {n:'Định luật Ôm',f:'I = U / R',ex:'U = 12V, R = 4Ω → I = 3 A',ex2:'I: cường độ dòng điện (A), U: hiệu điện thế (V), R: điện trở (Ω).'},
       {n:'Công suất điện',f:'P = U × I = I² × R = U² / R',ex:'Đèn 220V−100W → I ≈ 0.45 A',ex2:'3 công thức tương đương, dùng tùy dữ liệu có sẵn.'},
       {n:'Định luật Joule-Lenz',f:'Q = I² × R × t',ex:'I=2A, R=10Ω, t=60s → Q = 2400 J',ex2:'Nhiệt lượng tỏa ra trên điện trở khi có dòng điện.'},
       {n:'Động năng & Thế năng',f:'W_đ = ½mv² ; W_t = mgh',ex:'2kg, v=3m/s → W_đ = 9 J ; cao 5m → W_t = 100 J (g=10)',ex2:'Động năng do chuyển động, thế năng do vị trí cao.'},
-      {n:'Định luật về công',f:'Không máy cơ đơn giản nào cho ta lợi về công',ex:'Lợi 2 lần về lực thì thiệt 2 lần về đường đi',ex2:'Đòn bẩy, ròng rọc, mặt phẳng nghiêng — chỉ thay đổi cách thực hiện công.'},
+      {n:'Định luật về công',f:'Không máy cơ đơn giản nào cho ta lợi về công',ex:'Lợi 2 lần về lực thì thiệt 2 lần về đường đi',ex2:'Đòn bẩy, ròng rọc, mặt phẳng nghiêng — chỉ thay đổi cách thực hiện công.'}
     ]},
-    high:{lbl:'Cấp 3 (Lớp 10-12)',list:[
+    high:{lbl:'THPT (Lớp 10-12)',list:[
       {n:'Chuyển động biến đổi đều',f:'v = v₀ + at\\ns = v₀t + ½at²\\nv² − v₀² = 2as',ex:'v₀=0, a=2m/s², t=5s → v=10 m/s, s=25m',ex2:'v₀: vận tốc đầu, a: gia tốc, t: thời gian.'},
       {n:'Định luật II Newton',f:'F = m × a',ex:'Vật 5kg, F = 20N → a = 4 m/s²',ex2:'F: lực tổng hợp. Định luật cơ bản của cơ học.'},
       {n:'Bảo toàn động lượng',f:'m₁v₁ + m₂v₂ = m₁v₁′ + m₂v₂′',ex:'Hệ kín: tổng động lượng trước = sau va chạm',ex2:'p = m·v. Áp dụng cho va chạm, bắn súng, nổ...'},
@@ -2669,23 +3080,21 @@ games.physicsFormulas = makeFormulaGame('Công thức Vật lý', {
 games.chemFormulas = makeFormulaGame('Công thức Hóa học', {
   emoji:'🧪',name:'Hóa học',
   levels:{
-    primary:{lbl:'Cấp 1 (Lớp 8)',list:[
+    secondary:{lbl:'THCS (Lớp 8-9)',list:[
       {n:'Nguyên tử & Phân tử',f:'Phân tử = nhóm nguyên tử liên kết',ex:'H₂O = 2 nguyên tử H + 1 nguyên tử O',ex2:'Nguyên tử là hạt nhỏ nhất của nguyên tố. Phân tử là 2+ nguyên tử kết hợp.'},
       {n:'Số mol',f:'n = m / M',ex:'36g H₂O (M=18) → n = 2 mol',ex2:'n: số mol, M: khối lượng mol. 1 mol = 6.022×10²³ hạt.'},
       {n:'Khối lượng từ số mol',f:'m = n × M',ex:'0.5 mol H₂SO₄ (M=98) → m = 49 g',ex2:'Tính khối lượng khi biết số mol và khối lượng mol.'},
       {n:'Bảo toàn khối lượng',f:'m(chất tham gia) = m(sản phẩm)',ex:'CaCO₃ → CaO + CO₂ ; 100g = 56g + 44g',ex2:'Trong phản ứng hóa học, tổng khối lượng không đổi.'},
       {n:'Nồng độ phần trăm',f:'C% = (m_ct / m_dd) × 100%',ex:'20g muối + 80g nước → C% = 20/100 × 100% = 20%',ex2:'m_ct: chất tan, m_dd: dung dịch (= chất tan + dung môi).'},
       {n:'Tỷ khối khí',f:'d_{A/B} = M_A / M_B',ex:'CO₂ (M=44) so với không khí (M≈29): d ≈ 1.52 (nặng hơn)',ex2:'Cho biết khí A nặng hay nhẹ hơn khí B bao nhiêu lần.'},
-    ]},
-    secondary:{lbl:'Cấp 2 (Lớp 9)',list:[
       {n:'Thể tích khí (đktc)',f:'V = n × 22.4 (lít)',ex:'2 mol O₂ ở đktc → V = 44.8 lít',ex2:'đktc: 0°C, 1 atm. Mọi khí lý tưởng chiếm 22.4 L/mol.'},
       {n:'Nồng độ mol',f:'C_M = n / V (mol/lít)',ex:'0.5 mol NaCl trong 250ml → C_M = 2 M',ex2:'V là thể tích dung dịch (lít).'},
       {n:'Axit + Bazơ',f:'Axit + Bazơ → Muối + Nước',ex:'HCl + NaOH → NaCl + H₂O',ex2:'Phản ứng trung hòa. H⁺ kết hợp OH⁻ tạo nước.'},
       {n:'Kim loại + Axit',f:'KL + HCl/H₂SO₄ loãng → Muối + H₂↑',ex:'Zn + 2HCl → ZnCl₂ + H₂↑',ex2:'Chỉ KL đứng trước H trong dãy hoạt động. Sinh khí hidro.'},
       {n:'Oxit + Axit',f:'Oxit bazơ + Axit → Muối + Nước',ex:'CuO + 2HCl → CuCl₂ + H₂O',ex2:'Oxit kim loại tác dụng với axit tạo muối tương ứng.'},
-      {n:'Cân bằng phương trình',f:'Số nguyên tử mỗi nguyên tố phải bằng nhau ở 2 vế',ex:'Fe + O₂ → Fe₃O₄ ⟶ 3Fe + 2O₂ → Fe₃O₄',ex2:'Thêm hệ số trước mỗi chất để cân bằng nguyên tử.'},
+      {n:'Cân bằng phương trình',f:'Số nguyên tử mỗi nguyên tố phải bằng nhau ở 2 vế',ex:'Fe + O₂ → Fe₃O₄ ⟶ 3Fe + 2O₂ → Fe₃O₄',ex2:'Thêm hệ số trước mỗi chất để cân bằng nguyên tử.'}
     ]},
-    high:{lbl:'Cấp 3 (Lớp 10-12)',list:[
+    high:{lbl:'THPT (Lớp 10-12)',list:[
       {n:'Phương trình khí lý tưởng',f:'PV = nRT',ex:'1 mol ở 273K, 1 atm → V = 22.4 L',ex2:'R = 0.082 L·atm/(mol·K). T tính bằng Kelvin.'},
       {n:'Độ pH',f:'pH = −log[H⁺]',ex:'[H⁺] = 10⁻³ M → pH = 3 (axit)',ex2:'pH < 7: axit, = 7: trung tính, > 7: bazơ.'},
       {n:'Hằng số cân bằng K_c',f:'aA + bB ⇌ cC + dD\\nK_c = [C]ᶜ[D]ᵈ / ([A]ᵃ[B]ᵇ)',ex:'N₂ + 3H₂ ⇌ 2NH₃: K_c = [NH₃]² / ([N₂][H₂]³)',ex2:'K_c lớn → phản ứng thuận chiều, nhỏ → nghịch chiều.'},
@@ -2702,22 +3111,20 @@ games.chemFormulas = makeFormulaGame('Công thức Hóa học', {
 games.bioFormulas = makeFormulaGame('Công thức Sinh học', {
   emoji:'🧬',name:'Sinh học',
   levels:{
-    primary:{lbl:'Cấp 1 (Tiểu học)',list:[
+    secondary:{lbl:'THCS (Lớp 6-9)',list:[
       {n:'Cấu tạo cây xanh',f:'6 cơ quan: Rễ, Thân, Lá, Hoa, Quả, Hạt',ex:'Cây cam: rễ (hút nước), lá (quang hợp), hoa-quả-hạt (sinh sản)',ex2:'Mỗi cơ quan có chức năng riêng giúp cây sống và phát triển.'},
       {n:'Phân loại động vật',f:'Có xương sống / Không xương sống',ex:'Có xương sống: cá, ếch, rắn, chim, thú\\nKhông xương sống: sâu, ốc, tôm, nhện',ex2:'Động vật có xương sống có cột sống bên trong.'},
       {n:'Chuỗi thức ăn',f:'Mặt Trời → Cỏ → ĐV ăn cỏ → ĐV ăn thịt',ex:'Cỏ → Châu chấu → Ếch → Rắn → Đại bàng',ex2:'Năng lượng từ Mặt Trời truyền qua các sinh vật.'},
       {n:'Quang hợp cơ bản',f:'Lá + Ánh sáng + Nước + CO₂ → Thức ăn + O₂',ex:'Ban ngày cây hấp thu CO₂ và nhả O₂',ex2:'Lá xanh tạo thức ăn cho cây nhờ ánh sáng Mặt Trời.'},
       {n:'Vòng đời ếch',f:'Trứng → Nòng nọc → Ếch non → Ếch trưởng thành',ex:'Ếch đẻ trứng trong nước, nòng nọc có đuôi, sau mọc chân rụng đuôi',ex2:'Ếch là động vật lưỡng cư — sống cả nước và cạn.'},
-    ]},
-    secondary:{lbl:'Cấp 2 (Lớp 6-9)',list:[
       {n:'Cấu tạo tế bào',f:'Màng - Tế bào chất - Nhân (+ bào quan)',ex:'TB động vật: ti thể, ribosome, lưới nội chất, bộ Golgi\\nTB thực vật: thêm lục lạp + thành xenlulozơ',ex2:'Tế bào là đơn vị cơ bản của sự sống.'},
       {n:'Quang hợp',f:'6CO₂ + 6H₂O —(ánh sáng, diệp lục)→ C₆H₁₂O₆ + 6O₂',ex:'Lá xanh ngày nắng → hấp thu CO₂, tạo glucose, nhả O₂',ex2:'Cây xanh chuyển năng lượng ánh sáng thành năng lượng hóa học.'},
       {n:'Hô hấp tế bào',f:'C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + ATP',ex:'Mọi sinh vật đều hô hấp để tạo năng lượng cho hoạt động',ex2:'Ngược với quang hợp — giải phóng năng lượng từ đường.'},
       {n:'Quy luật Menđen',f:'F1: đồng tính ; F2: 3 trội : 1 lặn',ex:'Đậu đỏ AA × trắng aa → F1: Aa (đỏ) → F2: 3 đỏ : 1 trắng',ex2:'Mỗi cặp gen phân ly trong giảm phân tạo giao tử.'},
       {n:'Cấu tạo tim người',f:'4 ngăn: 2 nhĩ (trên) + 2 thất (dưới)',ex:'Máu: nhĩ phải → thất phải → phổi → nhĩ trái → thất trái → cơ thể',ex2:'Vòng tuần hoàn nhỏ qua phổi, lớn qua cơ thể.'},
-      {n:'Hệ tuần hoàn',f:'Tim + Mạch máu (động mạch, tĩnh mạch, mao mạch)',ex:'Động mạch: máu đỏ tươi từ tim đi\\nTĩnh mạch: máu đỏ sẫm về tim',ex2:'Vận chuyển oxi, dinh dưỡng, CO₂, chất thải.'},
+      {n:'Hệ tuần hoàn',f:'Tim + Mạch máu (động mạch, tĩnh mạch, mao mạch)',ex:'Động mạch: máu đỏ tươi từ tim đi\\nTĩnh mạch: máu đỏ sẫm về tim',ex2:'Vận chuyển oxi, dinh dưỡng, CO₂, chất thải.'}
     ]},
-    high:{lbl:'Cấp 3 (Lớp 10-12)',list:[
+    high:{lbl:'THPT (Lớp 10-12)',list:[
       {n:'Cấu trúc ADN',f:'Xoắn kép, A-T (2 liên kết H), G-X (3 liên kết H)',ex:'Mạch 1: 5′-ATGCGT-3′ → Mạch 2: 3′-TACGCA-5′',ex2:'ADN là chuỗi xoắn kép. A liên kết T, G liên kết X (Watson-Crick).'},
       {n:'Tổng hợp protein',f:'ADN → mARN → Protein\\n(Phiên mã → Dịch mã)',ex:'ADN: ATG CGA → mARN: AUG CGA → Protein: Met-Arg',ex2:'ADN tạo mARN trong nhân, ribosome dịch mARN thành protein.'},
       {n:'Mã di truyền',f:'64 codon (3 nucleotit/codon), mã hóa 20 axit amin',ex:'AUG: Met (mở đầu) ; UAA/UAG/UGA: stop',ex2:'Mỗi 3 nucleotit (codon) mã hóa 1 axit amin.'},
@@ -2733,7 +3140,7 @@ games.bioFormulas = makeFormulaGame('Công thức Sinh học', {
 games.englishFormulas = makeFormulaGame('Công thức Tiếng Anh', {
   emoji:'🇬🇧',name:'Tiếng Anh',
   levels:{
-    primary:{lbl:'Tiểu học',list:[
+    primary:{lbl:'Tiểu học (Lớp 1-5)',list:[
       {n:'Verb "to be"',f:'I am ; You/We/They are ; He/She/It is',ex:'I am 8 years old.\\nShe is my sister.',ex2:'Be là động từ "thì, là, ở". Cách dùng khác nhau theo chủ ngữ.'},
       {n:'Plural nouns',f:'cat → cats ; box → boxes ; baby → babies',ex:'1 dog → 2 dogs\\n1 watch → 2 watches\\n1 city → 2 cities',ex2:'Thêm -s đa số. -es nếu kết -s/-x/-ch/-sh. y→i+es nếu y trước phụ âm.'},
       {n:'Mạo từ a / an / the',f:'a + phụ âm ; an + nguyên âm ; the: xác định',ex:'a cat ; an apple ; the sun',ex2:'a/an: lần đầu nói đến. the: đã biết hoặc cụ thể.'},
@@ -2741,7 +3148,7 @@ games.englishFormulas = makeFormulaGame('Công thức Tiếng Anh', {
       {n:'Possessive adjectives',f:'my / your / his / her / its / our / their',ex:'This is my book.\\nThat is her cat.',ex2:'Đứng trước danh từ để chỉ sở hữu.'},
       {n:'Wh-questions',f:'What/Where/When/Who/Why/How + trợ ĐT + S + V',ex:'What is your name?\\nWhere do you live?',ex2:'Câu hỏi mở (không chỉ Yes/No). Từ để hỏi luôn ở đầu câu.'},
     ]},
-    secondary:{lbl:'THCS',list:[
+    secondary:{lbl:'THCS (Lớp 6-9)',list:[
       {n:'Present continuous',f:'S + am/is/are + V-ing',ex:'I am reading a book now.\\nThey are playing football.',ex2:'Hành động đang xảy ra. Dấu hiệu: now, Look!, at the moment.'},
       {n:'Past simple',f:'S + V2/V-ed ; S + was/were',ex:'I went to school yesterday.\\nShe was happy.',ex2:'Hành động đã hoàn thành. Có thời gian cụ thể: yesterday, last week.'},
       {n:'Present perfect',f:'S + have/has + V3/V-ed',ex:'I have lived here for 5 years.\\nShe has just left.',ex2:'Hành động trong quá khứ còn liên quan đến hiện tại. Dùng for/since/just/already/yet.'},
@@ -2750,7 +3157,7 @@ games.englishFormulas = makeFormulaGame('Công thức Tiếng Anh', {
       {n:'Conditional type 2',f:'If + S + V2 (were), S + would + V',ex:'If I were rich, I would travel the world.',ex2:'Điều kiện không có thật ở hiện tại. "Were" dùng cho mọi ngôi.'},
       {n:'Passive voice',f:'S + be + V3 (+ by O)',ex:'Active: She wrote the letter.\\nPassive: The letter was written by her.',ex2:'Bị động nhấn mạnh đối tượng chịu tác động.'},
     ]},
-    high:{lbl:'THPT',list:[
+    high:{lbl:'THPT (Lớp 10-12)',list:[
       {n:'Conditional type 3',f:'If + S + had + V3, S + would have + V3',ex:'If I had studied harder, I would have passed.',ex2:'Điều kiện không có thật trong quá khứ. Diễn tả tiếc nuối.'},
       {n:'Mixed conditionals',f:'If + S + had + V3, S + would + V (loại 3 → 2)',ex:'If I had taken that job, I would be rich now.',ex2:'Quá khứ không có thật ảnh hưởng đến hiện tại.'},
       {n:'Mệnh đề quan hệ',f:'who/whom (người), which (vật), whose (sở hữu), that (chung)',ex:'The girl who is sitting there is my sister.',ex2:'Bổ sung thông tin cho danh từ trước nó.'},
@@ -2811,5 +3218,15 @@ games.chineseFormulas = makeFormulaGame('Công thức Tiếng Trung', {
 
 
 </script>
+<div id="fav-picker" class="fav-picker">
+  <div class="fav-picker-box">
+    <div class="fav-picker-head">
+      <h3>⭐ Thêm trò vào ưa thích</h3>
+      <button class="fav-picker-close" onclick="closeFavPicker()">✕</button>
+    </div>
+    <div class="fav-picker-list" id="fav-picker-list"></div>
+  </div>
+</div>
+
 </body>
 </html>
