@@ -665,6 +665,8 @@ footer b{color:var(--neon-cyan)}
     <div class="card" data-game="rps" style="--ac:var(--neon-purple)"><div class="emoji">✊✋✌️</div><h3>Oẳn tù tì</h3><p>Đấu với máy — first to 5</p></div>
     <div class="card" data-game="numguess" style="--ac:var(--neon-cyan)"><div class="emoji">🎲</div><h3>Đoán số 1-100</h3><p>Máy nghĩ — bạn đoán, gợi ý cao/thấp</p></div>
     <div class="card" data-game="darts" style="--ac:var(--neon-yellow)"><div class="emoji">🎯</div><h3>Ném phi tiêu</h3><p>10 phi tiêu vào hồng tâm — tính điểm</p></div>
+    <div class="card" data-game="mine2d" style="--ac:var(--neon-green)"><div class="emoji">🟫</div><h3>Minecraft 2D</h3><p>Đào - xây - craft. Tìm kim cương!</p></div>
+    <div class="card" data-game="obby" style="--ac:var(--neon-pink)"><div class="emoji">🔴</div><h3>Obby</h3><p>Roblox-style — nhảy né lava, thu sao, 5 màn</p></div>
   </div>
 </div>
 
@@ -688,6 +690,10 @@ footer b{color:var(--neon-cyan)}
     <div class="card" data-game="guessOutput" style="--ac:var(--neon-orange)"><div class="emoji">🎯</div><h3>Đoán output code</h3><p>Python — 40 câu từ in số đến hàm</p></div>
     <div class="card" data-game="itTerms" style="--ac:var(--neon-purple)"><div class="emoji">💻</div><h3>Đố thuật ngữ IT</h3><p>40 câu — HTML, bug, RAM, AI, Bill Gates...</p></div>
     <div class="card" data-game="aiQuiz" style="--ac:var(--neon-cyan)"><div class="emoji">🤖</div><h3>Đào tạo AI</h3><p>50 câu — AI là gì, ví dụ thực tế, ChatGPT, Claude, deepfake...</p></div>
+    <div class="card" data-game="minecraftQuiz" style="--ac:var(--neon-green)"><div class="emoji">🟫</div><h3>Đố Minecraft</h3><p>28 câu — Mojang, mobs, Diamond, Nether, Warden...</p></div>
+    <div class="card" data-game="crafting" style="--ac:var(--neon-orange)"><div class="emoji">⛏️</div><h3>Crafting Minecraft</h3><p>Nhìn ô 3×3 — đoán item được tạo (12 công thức)</p></div>
+    <div class="card" data-game="robloxQuiz" style="--ac:var(--neon-pink)"><div class="emoji">🔴</div><h3>Đố Roblox</h3><p>27 câu — Robux, Lua, Adopt Me, Blox Fruits, Bacon Hair...</p></div>
+    <div class="card" data-game="guessGameTitle" style="--ac:var(--neon-yellow)"><div class="emoji">🎮</div><h3>Đoán game qua mô tả</h3><p>24 game phổ biến — Minecraft, Roblox, Liên Quân, Free Fire...</p></div>
   </div>
 </div>
 
@@ -4346,6 +4352,1050 @@ games.aiQuiz = (()=>{
     setStatus(`🤖 <b>Đào tạo AI</b> · Câu <b>${idx+1}</b>/${total} · Điểm <b>${score}</b>`);
   }
   return {title:'Đào tạo AI',init};
+})();
+
+
+
+/* ========== 41. ĐỐ MINECRAFT ========== */
+games.minecraftQuiz = (()=>{
+  const QUIZ=[
+    // History & Mojang
+    {q:'Minecraft do ai phát triển?',opts:['Mojang Studios','Epic Games','Nintendo','EA'],a:0,
+     ex:'Mojang Studios (Thuỵ Điển), được Microsoft mua lại năm 2014 với giá 2.5 tỷ USD.'},
+    {q:'Người tạo ra Minecraft ban đầu là ai?',opts:['Markus "Notch" Persson','Shigeru Miyamoto','David Baszucki','John Carmack'],a:0,
+     ex:'Notch (Markus Persson) tạo Minecraft năm 2009 và bán quyền cho Microsoft năm 2014.'},
+    {q:'Minecraft phát hành chính thức năm nào?',opts:['2009','2011','2014','2016'],a:1,
+     ex:'Bản alpha ra 2009, chính thức (1.0) phát hành 18/11/2011.'},
+    {q:'Minecraft là game bán chạy nhất mọi thời đại với bao nhiêu bản?',opts:['~100 triệu','~200 triệu','~300 triệu','~500 triệu'],a:2,
+     ex:'Hơn 300 triệu bản bán ra — game bán chạy nhất lịch sử (vượt cả Tetris).'},
+
+    // Gameplay basics
+    {q:'Nhân vật mặc định trong Minecraft tên gì?',opts:['Steve','Mario','Link','Mark'],a:0,
+     ex:'Steve là nhân vật mặc định nam, Alex là nhân vật mặc định nữ.'},
+    {q:'Khối nào KHÔNG tồn tại trong Minecraft?',opts:['Cobblestone','Diamond Ore','Cheese Block','Netherrack'],a:2,
+     ex:'Cheese Block không có. (Có Diamond, Cobblestone, Netherrack...)'},
+    {q:'Vật liệu tốt nhất để làm công cụ (sau Netherite)?',opts:['Wood','Diamond','Iron','Gold'],a:1,
+     ex:'Thứ tự độ bền: Wood < Stone < Iron < Diamond < Netherite. Gold đẹp nhưng nhanh hỏng.'},
+    {q:'Cần bao nhiêu khối Iron Ingot để làm 1 cái pickaxe?',opts:['1','2','3','5'],a:2,
+     ex:'Pickaxe = 3 ingots (đỉnh) + 2 sticks (cán) = 5 mục tổng.'},
+    {q:'Để tạo Diamond Pickaxe cần gì?',opts:['3 Diamond + 2 Stick','5 Diamond','2 Diamond + 1 Iron','3 Iron + 2 Diamond'],a:0,
+     ex:'Công thức: 3 diamond hàng trên + 2 stick ở giữa cột dưới (giống pickaxe khác).'},
+    {q:'Cần đào sâu bao nhiêu để dễ tìm Diamond (bản 1.18+)?',opts:['Y=11','Y=-59','Y=64','Y=0'],a:1,
+     ex:'Sau cập nhật Caves & Cliffs (1.18), Diamond xuất hiện nhiều nhất ở Y=-58 đến -64.'},
+    {q:'Để vào Nether cần xây gì?',opts:['Nether Portal (Obsidian)','End Portal','Iron Door','Beacon'],a:0,
+     ex:'Cần 10-14 khối Obsidian xếp khung chữ nhật, kích hoạt bằng Flint and Steel.'},
+
+    // Mobs
+    {q:'Mob nào KHÔNG hostile (không tấn công người chơi)?',opts:['Zombie','Creeper','Cow','Skeleton'],a:2,
+     ex:'Cow (bò) là mob hiền lành — passive mob. 3 cái còn lại đều tấn công.'},
+    {q:'Creeper nổi tiếng vì điều gì?',opts:['Bay được','Tự nổ khi gần người chơi','Bơi nhanh','Chữa máu'],a:1,
+     ex:'Creeper rít rồi nổ — phá block và làm tổn thương người chơi. "Aww man" 💚'},
+    {q:'Mob nào bắn cung?',opts:['Zombie','Skeleton','Pig','Sheep'],a:1,
+     ex:'Skeleton dùng cung tên. Có biến thể Stray (ở Snowy Biome) bắn cung gây Slowness.'},
+    {q:'Enderman tức giận khi nào?',opts:['Khi bạn ngủ','Khi nhìn thẳng vào mắt nó','Khi đi gần','Lúc nào cũng giận'],a:1,
+     ex:'Nhìn vào đầu Enderman → nó "rage" và tấn công. Có thể né bằng cách đeo Carved Pumpkin.'},
+    {q:'"Boss" cuối cùng trong Minecraft là?',opts:['Wither','Ender Dragon','Warden','Elder Guardian'],a:1,
+     ex:'Ender Dragon ở The End — đánh bại để xem credits. Wither cũng là boss nhưng "phụ".'},
+    {q:'Warden — mob nguy hiểm nhất — xuất hiện ở đâu?',opts:['Nether','Deep Dark biome','Sky','Ocean'],a:1,
+     ex:'Warden xuất hiện ở Deep Dark (sâu trong lòng đất Y=-52). Mù nhưng nghe và đánh hơi cực thính. 1 cú đánh = chết người chơi không giáp.'},
+
+    // Biomes & items
+    {q:'Biome nào KHÔNG có trong Minecraft?',opts:['Desert','Jungle','Volcano','Mushroom Fields'],a:2,
+     ex:'Volcano (núi lửa) không tồn tại như biome. (Nether có dung nham nhưng không gọi là volcano).'},
+    {q:'Enchanting Table cần gì để hoạt động tối đa?',opts:['15 Bookshelf xung quanh','Diamond','Gold','Redstone'],a:0,
+     ex:'15 giá sách cao 1 ô, cách 1 khoảng → mở level 30 enchantment (max).'},
+    {q:'Vật phẩm dùng để bay trong Survival?',opts:['Elytra (cánh)','Trident','Boots','Stick'],a:0,
+     ex:'Elytra tìm thấy trong End City. Kết hợp với Firework Rocket để bay xa.'},
+    {q:'Beacon cần gì để hoạt động?',opts:['Pyramid bằng Iron/Gold/Diamond/Emerald/Netherite','Pin','Lava','Wifi'],a:0,
+     ex:'Cần kim tự tháp 9/34/83/164 khối từ những loại nói trên + Nether Star để craft Beacon.'},
+    {q:'Redstone dùng để làm gì?',opts:['Trang trí thôi','Xây mạch điện logic (đóng/mở cửa, bẫy, máy móc)','Nấu ăn','Bơi'],a:1,
+     ex:'Redstone = "điện" trong Minecraft. Có thể xây cổng AND/OR/NOT, máy đếm, máy giã đá tự động...'},
+    {q:'Đếm máu nhân vật Minecraft tối đa?',opts:['10 (5 hearts)','20 (10 hearts)','30 (15 hearts)','100'],a:1,
+     ex:'10 trái tim = 20 HP. Có thể tăng tạm bằng Golden Apple, Beacon Absorption.'},
+
+    // Modes & Versions
+    {q:'Chế độ nào KHÔNG có trong Minecraft?',opts:['Survival','Creative','Adventure','Battle Royale'],a:3,
+     ex:'Battle Royale không phải chế độ chính thức. Có Survival, Creative, Adventure, Spectator, Hardcore.'},
+    {q:'Hardcore Mode khác Survival ở điểm gì?',opts:['Không khác','Chết là xóa world vĩnh viễn','Có nhiều mob hơn','Không có ngày đêm'],a:1,
+     ex:'Hardcore: chết = world bị khoá vĩnh viễn (chỉ xem được trong spectator). Chỉ có ở Java Edition.'},
+    {q:'Có mấy phiên bản chính của Minecraft?',opts:['1','2 (Java & Bedrock)','3','5'],a:1,
+     ex:'Java Edition (PC, mod nhiều) và Bedrock Edition (mobile, console, Windows 10). Mua 1 lần được cả 2 (PC Bundle).'},
+    {q:'Mod nổi tiếng cho Minecraft chạy trên phiên bản nào?',opts:['Bedrock','Java Edition','Cả 2 như nhau','Không có mod'],a:1,
+     ex:'Java Edition có cộng đồng mod khổng lồ (Forge, Fabric). Bedrock chỉ có Add-ons/Marketplace.'},
+    {q:'Game thủ Minecraft nổi tiếng nhất YouTube là?',opts:['MrBeast','Dream','PewDiePie','Markiplier'],a:1,
+     ex:'Dream nổi tiếng với Minecraft Manhunt và speedrun (gây tranh cãi vì bị kết luận cheat). PewDiePie cũng từng chơi nhiều.'},
+    {q:'Bản cập nhật "Caves & Cliffs" ra năm nào?',opts:['2019','2021','2023','2025'],a:1,
+     ex:'1.17 (giữa 2021) và 1.18 (cuối 2021) — thay đổi lớn về địa hình: hang lớn hơn, núi cao tới Y=320.'}
+  ];
+  return makeQuiz(QUIZ, '🟫', 'Đố Minecraft', 'Minecraft');
+})();
+
+/* ========== 42. ĐỐ ROBLOX ========== */
+games.robloxQuiz = (()=>{
+  const QUIZ=[
+    // History
+    {q:'Roblox do ai sáng lập?',opts:['David Baszucki & Erik Cassel','Notch','Sam Altman','Phil Spencer'],a:0,
+     ex:'David Baszucki (Builderman) và Erik Cassel thành lập Roblox năm 2004, phát hành 2006.'},
+    {q:'Roblox phát hành năm nào?',opts:['2004','2006','2010','2015'],a:1,
+     ex:'Roblox chính thức ra mắt 1/9/2006. Trước đó (2004-2006) là phiên bản beta tên "Dynablocks".'},
+    {q:'Roblox có bao nhiêu người chơi tháng (DAU)?',opts:['10 triệu','50 triệu','100+ triệu','1 tỷ'],a:2,
+     ex:'Roblox có hơn 100 triệu người chơi mỗi ngày (DAU), đa số là trẻ em & teen.'},
+    {q:'Roblox lên sàn chứng khoán năm nào?',opts:['2018','2021','2023','Chưa lên'],a:1,
+     ex:'Roblox lên sàn NYSE ngày 10/3/2021 (mã RBLX), định giá lúc đó ~38 tỷ USD.'},
+
+    // Currency & economy
+    {q:'Đồng tiền trong Roblox tên là gì?',opts:['Robux','Robits','RBucks','Roblo'],a:0,
+     ex:'Robux (R$) — tiền ảo trong Roblox. Người chơi mua bằng tiền thật để mua skin, đồ vật, premium...'},
+    {q:'Người tạo game Roblox có thể đổi Robux thành tiền thật không?',opts:['Không','Có — qua chương trình Developer Exchange (DevEx)','Chỉ Mỹ','Phải 30 tuổi'],a:1,
+     ex:'DevEx cho phép developer đổi Robux ra USD (cần đạt ngưỡng Robux nhất định + tài khoản verified).'},
+    {q:'Game Roblox kiếm tiền nhiều nhất từng được bán cho ai?',opts:['Không bán cho ai','Adopt Me! vẫn của DreamCraft','Game của Notch','Apple'],a:1,
+     ex:'Adopt Me! — game pet sim đỉnh cao của Roblox — vẫn thuộc DreamCraft, kiếm hàng triệu USD/tháng.'},
+
+    // Programming
+    {q:'Ngôn ngữ lập trình trong Roblox Studio là gì?',opts:['JavaScript','Lua (Luau)','Python','C++'],a:1,
+     ex:'Roblox dùng Luau — biến thể của Lua. Cú pháp đơn giản, dễ học, là cửa ngõ vào lập trình cho trẻ em.'},
+    {q:'Roblox Studio là gì?',opts:['Tên kênh YouTube','Phần mềm tạo game Roblox MIỄN PHÍ','Khoá học','Trường học'],a:1,
+     ex:'Roblox Studio — IDE miễn phí của Roblox. Bất kỳ ai cũng tải về để build game, publish lên Roblox.'},
+    {q:'Câu lệnh nào in chữ ra console trong Lua?',opts:['print("hello")','console.log("hello")','printf("hello")','echo "hello"'],a:0,
+     ex:'Lua dùng print(). Trong Roblox Studio, output hiện ở cửa sổ Output (View > Output).'},
+
+    // Popular games
+    {q:'Game Roblox nào nổi tiếng nhất về sống ảo trong nhà?',opts:['Adopt Me!','Brookhaven','MeepCity','Royale High'],a:1,
+     ex:'Brookhaven RP — game roleplay đời thường, hơn 50 tỷ lượt chơi, một trong những game phổ biến nhất Roblox.'},
+    {q:'Tower of Hell là game thể loại gì?',opts:['Tower Defense','Obby (obstacle course)','Sim','Battle Royale'],a:1,
+     ex:'Tower of Hell — game obby kinh điển: leo tháp tránh chướng ngại, không có checkpoint, chết là rơi xuống đầu.'},
+    {q:'Game pet sim nổi tiếng Roblox tên gì?',opts:['Adopt Me!','Among Us','Fortnite','Free Fire'],a:0,
+     ex:'Adopt Me! — chăm pet, đổi pet, build nhà. Đặc biệt phổ biến với trẻ em gái.'},
+    {q:'Blox Fruits là game lấy cảm hứng từ?',opts:['Pokemon','One Piece (Hải Tặc)','Naruto','Dragon Ball'],a:1,
+     ex:'Blox Fruits — game RPG lấy cảm hứng từ One Piece, ăn fruit để có sức mạnh, đánh hải tặc/hải quân.'},
+    {q:'Murder Mystery 2 — bạn cần làm gì khi là Innocent?',opts:['Giết tất cả','Chạy trốn và sống sót','Tìm súng','Đứng yên'],a:1,
+     ex:'MM2 có 3 vai: Innocent (chạy trốn), Sheriff (bắn Murderer), Murderer (giết hết). Mỗi round ~2 phút.'},
+    {q:'Game tycoon là thể loại?',opts:['Xây dựng cơ sở và kiếm tiền tự động','Đua xe','Đánh nhau','Câu cá'],a:0,
+     ex:'Tycoon games (Lumber Tycoon, Theme Park Tycoon, Restaurant Tycoon) — xây cơ sở, máy in tiền, mở rộng dần.'},
+
+    // Avatar & Items
+    {q:'Item Roblox nào đắt nhất từng được bán?',opts:['Valkyrie Helm','Dominus','Glittering Top Hat','Cả 3 đều rất đắt'],a:3,
+     ex:'Dominus series, Valkyrie Helm, Limited items có thể bán hàng triệu Robux. Có item bán >1 tỷ Robux trên thị trường thứ cấp.'},
+    {q:'"Limited" item trong Roblox là?',opts:['Item số lượng giới hạn, có thể bán lại','Item miễn phí','Item hết hạn','Item virus'],a:0,
+     ex:'Limited items: số lượng hữu hạn, sau khi hết bán không còn nữa. Có thể bán lại trên marketplace (cần Premium).'},
+    {q:'Premium thay thế cho cái gì trước đây?',opts:['Builders Club (BC)','BloxBucks','Robux','Avatar Shop'],a:0,
+     ex:'Premium thay BC năm 2019. Có 3 tier: $4.99 (450 R$/tháng), $9.99 (1000), $19.99 (2200).'},
+
+    // Safety & community
+    {q:'Tuổi tối thiểu để tự dùng Roblox không cần phụ huynh?',opts:['13','15','18','Không giới hạn'],a:0,
+     ex:'Roblox khuyến nghị 13+ cho chat tự do. Dưới 13 có Account Restrictions (chat lọc, không trao đổi item).'},
+    {q:'Tính năng nào KHÔNG có sẵn trong Roblox?',opts:['Voice Chat','Tạo game','Mua skin','Đăng video lên TikTok'],a:3,
+     ex:'Voice chat có (cần verify tuổi 13+). Tạo/chơi game và Avatar Shop là core. TikTok không phải tính năng Roblox.'},
+
+    // Misc
+    {q:'Logo Roblox màu gì?',opts:['Đỏ trắng','Xanh dương','Đen vàng','Tím'],a:0,
+     ex:'Logo Roblox màu đen với chữ trắng, các sản phẩm/marketing hay dùng tone đỏ-trắng-xám.'},
+    {q:'Roblox có thể chơi trên những thiết bị nào?',opts:['Chỉ PC','PC, Mobile, Xbox, VR (Quest)','Chỉ Mobile','Chỉ Xbox'],a:1,
+     ex:'Roblox đa nền tảng: Windows, Mac, iOS, Android, Xbox, Meta Quest VR. Không có trên PlayStation lâu, mới ra PS4/PS5 năm 2024.'},
+    {q:'"Bacon Hair" là biệt danh ám chỉ?',opts:['Người chơi mới (avatar default cũ)','Game show','Loại pet','Item đắt'],a:0,
+     ex:'"Bacon Hair" — avatar miễn phí mặc định trước kia có tóc nâu-cam giống thịt xông khói. Thành biểu tượng "noob"/người chơi mới.'},
+    {q:'Roblox kiện đối thủ nào năm 2022?',opts:['Minecraft','Fortnite','YouTube user Ruben Sim','Apple'],a:2,
+     ex:'Roblox kiện Ruben Sim (Benjamin Simon) — YouTuber chuyên drama Roblox — vì gây rối, hủy hoại hình ảnh. Sau đó dàn xếp.'}
+  ];
+  return makeQuiz(QUIZ, '🔴', 'Đố Roblox', 'Roblox');
+})();
+
+/* ========== Helper factory for these quizzes ========== */
+function makeQuiz(QUIZ, emoji, title, label){
+  let pool,idx=0,score=0,total=0,answered=false,picked=-1;
+  function init(){buildPool();render()}
+  function buildPool(){pool=[...QUIZ].sort(()=>Math.random()-0.5);idx=0;score=0;total=pool.length;answered=false;picked=-1}
+  function pick(i){if(answered)return;answered=true;picked=i;if(i===pool[idx].a)score++;render()}
+  function next(){idx++;answered=false;picked=-1;render()}
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    if(idx>=total){
+      const end=document.createElement('div');end.className='quiz-card quiz-end';
+      const pct=Math.round(score*100/total);
+      const stars=pct>=90?'⭐⭐⭐⭐⭐':pct>=75?'⭐⭐⭐⭐':pct>=60?'⭐⭐⭐':pct>=40?'⭐⭐':'⭐';
+      end.innerHTML=`<div style="font-size:48px">${emoji}</div><div class="big">Xong rồi!</div><div class="stars">${stars}</div><div class="summary">Đúng <b style="color:var(--neon-green)">${score}</b>/${total} (${pct}%)</div>`;
+      mArea.appendChild(end);addBtn('Làm lại','warn',()=>{buildPool();render()});setStatus('Hoàn thành!');return;
+    }
+    const q=pool[idx];
+    const card=document.createElement('div');card.className='quiz-card';
+    card.innerHTML=`<div class="quiz-mascot">${emoji}</div><div class="quiz-progress"><span>Câu <b>${idx+1}</b>/${total}</span><span>Điểm: <b>${score}</b></span></div>`;
+    const bar=document.createElement('div');bar.className='quiz-bar';
+    const fill=document.createElement('div');fill.className='quiz-bar-fill';fill.style.width=`${(idx/total)*100}%`;bar.appendChild(fill);card.appendChild(bar);
+    const qd=document.createElement('div');qd.className='quiz-q';qd.textContent=q.q;card.appendChild(qd);
+    const opts=document.createElement('div');opts.className='quiz-opts';
+    q.opts.forEach((o,i)=>{
+      const b=document.createElement('button');b.className='quiz-opt';b.textContent=o;
+      if(answered){b.disabled=true;if(i===q.a)b.classList.add('correct');else if(i===picked)b.classList.add('wrong')}
+      b.onclick=()=>pick(i);opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if(answered){
+      const corr=picked===q.a;
+      const fb=document.createElement('div');fb.className='quiz-feedback '+(corr?'right':'wrong');
+      const msgs=corr?PRAISE:ROAST;
+      fb.innerHTML=`<div class="fb-emoji">${corr?'🎉':'😅'}</div><div class="fb-msg">${msgs[Math.floor(Math.random()*msgs.length)]}</div><div class="quiz-explain">💡 ${q.ex}</div>`;
+      card.appendChild(fb);
+      addBtn('CÂU TIẾP →','warn',next);
+    }
+    mArea.appendChild(card);
+    setStatus(`${emoji} <b>${label}</b> · Câu <b>${idx+1}</b>/${total} · Điểm <b>${score}</b>`);
+  }
+  return {title,init};
+}
+
+/* ========== 43. ĐOÁN CÔNG THỨC CRAFTING (Minecraft) ========== */
+games.crafting = (()=>{
+  // Grid 3x3: each cell shows an emoji/icon. Player guesses what is crafted.
+  // 'W'=wood plank 🟫  'S'=stick 🪵  'I'=iron 🪨  'D'=diamond 💎  'G'=gold 🟡  'C'=cobblestone 🪨
+  // 'O'=obsidian ⬛  'R'=redstone 🔴  'B'=book 📕  'P'=paper 📄  'L'=leather 🟫
+  const ICONS={
+    W:{e:'🟫',n:'Plank'},
+    S:{e:'🪵',n:'Stick'},
+    I:{e:'⬜',n:'Iron'},
+    D:{e:'💎',n:'Diamond'},
+    G:{e:'🟨',n:'Gold'},
+    C:{e:'🪨',n:'Cobblestone'},
+    O:{e:'⬛',n:'Obsidian'},
+    R:{e:'🔴',n:'Redstone'},
+    B:{e:'📕',n:'Book'},
+    P:{e:'📄',n:'Paper'},
+    L:{e:'🟤',n:'Leather'},
+    F:{e:'🔥',n:'Coal'},
+    E:{e:'🥚',n:'Egg'},
+    M:{e:'🌾',n:'Wheat'},
+    U:{e:'🧵',n:'String'}
+  };
+  // Recipes: 3x3 grid (use '.' for empty)
+  const RECIPES=[
+    {name:'Wooden Pickaxe',emoji:'⛏️',grid:['WWW','.S.','.S.'],
+     wrong:['Wooden Axe','Wooden Sword','Crafting Table'],
+     ex:'3 plank trên + 2 stick giữa và dưới = Wooden Pickaxe. Đào đá nhanh hơn tay không.'},
+    {name:'Diamond Sword',emoji:'⚔️',grid:['.D.','.D.','.S.'],
+     wrong:['Diamond Pickaxe','Iron Sword','Wooden Sword'],
+     ex:'2 diamond xếp dọc + 1 stick = Diamond Sword. Vũ khí mạnh thứ 2 (sau Netherite).'},
+    {name:'Iron Pickaxe',emoji:'⛏️',grid:['III','.S.','.S.'],
+     wrong:['Iron Axe','Diamond Pickaxe','Iron Sword'],
+     ex:'3 iron ingot + 2 stick = Iron Pickaxe. Đào được Diamond, Gold, Redstone.'},
+    {name:'Bow (Cung)',emoji:'🏹',grid:['.SU','S.U','.SU'],
+     wrong:['Crossbow','Fishing Rod','Trident'],
+     ex:'3 stick + 3 string xếp chéo = Bow. Bắn tên xa, sạc lâu thì mạnh hơn.'},
+    {name:'Bookshelf (Giá sách)',emoji:'📚',grid:['WWW','BBB','WWW'],
+     wrong:['Crafting Table','Furnace','Chest'],
+     ex:'6 plank + 3 book = Bookshelf. Đặt quanh Enchanting Table để mở enchant cao.'},
+    {name:'Furnace (Lò nung)',emoji:'🔥',grid:['CCC','C.C','CCC'],
+     wrong:['Crafting Table','Chest','Stone Block'],
+     ex:'8 Cobblestone xếp vòng tròn (giữa rỗng) = Furnace. Nung quặng thành ingot.'},
+    {name:'Chest (Rương)',emoji:'📦',grid:['WWW','W.W','WWW'],
+     wrong:['Furnace','Crafting Table','Door'],
+     ex:'8 plank xếp vòng = Chest. Lưu trữ 27 ô đồ. Đặt 2 cái cạnh nhau = Large Chest.'},
+    {name:'Crafting Table',emoji:'🔨',grid:['WW.','WW.','...'],
+     wrong:['Chest','Furnace','Door'],
+     ex:'4 plank vuông góc trên-trái = Crafting Table. Cho phép craft công thức 3x3.'},
+    {name:'Torch (Đuốc)',emoji:'🔦',grid:['.F.','.S.','...'],
+     wrong:['Lantern','Campfire','Stick'],
+     ex:'1 coal trên + 1 stick dưới = 4 Torch. Chiếu sáng + ngăn mob spawn.'},
+    {name:'Diamond Pickaxe',emoji:'⛏️',grid:['DDD','.S.','.S.'],
+     wrong:['Diamond Sword','Iron Pickaxe','Diamond Axe'],
+     ex:'3 diamond + 2 stick = Diamond Pickaxe. Đào được Obsidian (để vào Nether).'},
+    {name:'Nether Portal Igniter — Flint and Steel',emoji:'🔥',grid:['I..','.F.','...'],
+     wrong:['Torch','Iron Sword','Bucket'],
+     ex:'1 iron + 1 flint (đá lửa) = Flint and Steel. Kích hoạt Nether Portal.'},
+    {name:'Cake (Bánh)',emoji:'🎂',grid:['EEE','MEM','MMM'],
+     wrong:['Bread','Cookie','Sugar'],
+     ex:'3 milk + 2 sugar + 1 egg + 3 wheat = Cake. Hồi 14 đói khi ăn nhiều miếng.'}
+  ];
+  let prob,score=0,total=0,streak=0,answered=false,picked=-1;
+  const r=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+  function gen(){
+    const correct=RECIPES[r(0,RECIPES.length-1)];
+    // Build 4 options: 1 correct + 3 wrong (from recipe.wrong array)
+    const opts=[correct.name,...correct.wrong.slice(0,3)];
+    opts.sort(()=>Math.random()-0.5);
+    prob={correct,opts};
+  }
+  function init(){score=0;total=0;streak=0;answered=false;picked=-1;gen();render()}
+  function pick(name){if(answered)return;answered=true;picked=name;total++;if(name===prob.correct.name){score++;streak++}else streak=0;render()}
+  function nextQ(){answered=false;picked=-1;gen();render()}
+  function gridSvg(grid){
+    const SIZE=180;const CELL=SIZE/3;
+    let html=`<div style="display:inline-block;background:#1a0a3d;border:3px solid #b48d65;border-radius:10px;padding:8px;box-shadow:0 4px 20px rgba(180,141,101,.3)">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:${SIZE}px;height:${SIZE}px">`;
+    grid.forEach(row=>{
+      for(const cell of row){
+        const icon=cell==='.'?null:ICONS[cell];
+        html+=`<div style="background:#2a1a4a;border:1px solid rgba(255,255,255,.15);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:${SIZE/6}px;width:100%;height:100%">${icon?icon.e:''}</div>`;
+      }
+    });
+    html+='</div></div>';
+    return html;
+  }
+  function legendHtml(grid){
+    const used=new Set();
+    grid.forEach(row=>{for(const c of row)if(c!=='.')used.add(c)});
+    return [...used].map(c=>`<span style="display:inline-flex;align-items:center;gap:4px;background:rgba(0,0,0,.3);padding:4px 8px;border-radius:6px;margin:2px;font-size:12px"><span style="font-size:16px">${ICONS[c].e}</span><span style="color:var(--muted)">${ICONS[c].n}</span></span>`).join('');
+  }
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const card=document.createElement('div');card.className='quiz-card';
+    card.innerHTML=`<div class="quiz-progress"><span>Đúng <b>${score}</b>/${total}</span><span>🔥 <b>${streak}</b></span></div>
+      <div style="text-align:center;margin:14px 0">${gridSvg(prob.correct.grid)}</div>
+      <div style="text-align:center;margin-bottom:8px;line-height:1.5">${legendHtml(prob.correct.grid)}</div>
+      <div class="quiz-q" style="text-align:center;font-size:15px;margin:12px 0 10px">Công thức này tạo ra gì?</div>`;
+    const opts=document.createElement('div');opts.className='quiz-opts';
+    prob.opts.forEach(name=>{
+      const b=document.createElement('button');b.className='quiz-opt';b.textContent=name;
+      if(answered){b.disabled=true;if(name===prob.correct.name)b.classList.add('correct');else if(name===picked)b.classList.add('wrong')}
+      b.onclick=()=>pick(name);opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if(answered){
+      const corr=picked===prob.correct.name;
+      const fb=document.createElement('div');fb.className='quiz-feedback '+(corr?'right':'wrong');
+      const msgs=corr?PRAISE:ROAST;
+      fb.innerHTML=`<div class="fb-emoji">${corr?'🎉':'😅'}</div><div class="fb-msg">${msgs[r(0,msgs.length-1)]}</div><div class="quiz-explain"><b>${prob.correct.emoji} ${prob.correct.name}</b><br>${prob.correct.ex}</div>`;
+      card.appendChild(fb);
+      addBtn('CÂU TIẾP →','warn',nextQ);
+    }
+    mArea.appendChild(card);
+    setStatus(`⛏️ <b>Crafting</b> · <b>${score}</b>/${total} · 🔥 <b>${streak}</b>`);
+  }
+  return {title:'Đoán công thức Crafting',init};
+})();
+
+/* ========== 44. ĐOÁN GAME QUA MÔ TẢ ========== */
+games.guessGameTitle = (()=>{
+  const GAMES_LIST=[
+    {name:'Minecraft',emoji:'⛏️',clue:'Game khối vuông, sinh tồn, sáng tạo, vào Nether đánh Ender Dragon'},
+    {name:'Roblox',emoji:'🟥',clue:'Nền tảng nhiều game nhỏ, dùng Robux, tạo game bằng Lua'},
+    {name:'Among Us',emoji:'👨‍🚀',clue:'Tàu vũ trụ, có Impostor giết người, họp khẩn cấp bỏ phiếu'},
+    {name:'Fortnite',emoji:'🛡️',clue:'Battle Royale 100 người, xây tường, dance moves nổi tiếng'},
+    {name:'Free Fire',emoji:'🔥',clue:'Battle Royale di động, 50 người, phổ biến Đông Nam Á & Latin'},
+    {name:'PUBG Mobile',emoji:'🪖',clue:'Battle Royale 100 người, nhảy dù xuống đảo, "winner winner chicken dinner"'},
+    {name:'Genshin Impact',emoji:'🗡️',clue:'Game thế giới mở Teyvat, gacha nhân vật, phong-thủy-hỏa-lôi-băng...'},
+    {name:'Mobile Legends',emoji:'⚔️',clue:'MOBA 5v5 di động, có Tigreal, Layla, Fanny... phổ biến Đông Nam Á'},
+    {name:'Liên Quân Mobile',emoji:'👑',clue:'MOBA 5v5 phổ biến nhất Việt Nam, do Garena phát hành'},
+    {name:'League of Legends',emoji:'🏆',clue:'MOBA 5v5 PC nổi tiếng nhất, có CKTG, do Riot Games làm'},
+    {name:'Valorant',emoji:'🔫',clue:'FPS 5v5 chiến thuật, có Agents kỹ năng riêng, do Riot làm'},
+    {name:'Counter-Strike 2',emoji:'💣',clue:'FPS chiến thuật, Terrorist vs Counter-Terrorist, đặt bom A/B'},
+    {name:'Pokemon GO',emoji:'⚡',clue:'Game di động đi ngoài đời thật bắt Pikachu và các Pokemon'},
+    {name:'Geometry Dash',emoji:'⬢',clue:'Vượt chướng ngại theo nhạc, nhảy hình vuông màu sắc'},
+    {name:'Stumble Guys',emoji:'🎯',clue:'Vượt chướng ngại nhiều người cùng lúc, kiểu Fall Guys di động'},
+    {name:'Subway Surfers',emoji:'🚇',clue:'Chạy vô tận trên đường ray xe lửa, né tàu, thu xu'},
+    {name:'Candy Crush',emoji:'🍬',clue:'Match-3 kẹo, ghép 3 viên cùng màu, hàng tỷ lượt tải'},
+    {name:'Wordle',emoji:'🟩',clue:'Đoán từ 5 chữ tiếng Anh trong 6 lần thử, mỗi ngày 1 từ'},
+    {name:'Cờ Vua',emoji:'♟️',clue:'Cờ 8x8, Vua-Hậu-Xe-Mã-Tượng-Tốt, chiếu hết là thắng'},
+    {name:'Super Mario',emoji:'🍄',clue:'Thợ sửa ống nước Ý đội mũ đỏ, nhảy lên đầu rùa Koopa, cứu Công chúa Peach'},
+    {name:'Sonic',emoji:'💨',clue:'Nhím xanh chạy cực nhanh, thu vòng vàng, đánh Dr. Robotnik'},
+    {name:'Zelda: BotW',emoji:'🗡️',clue:'Link cứu công chúa Zelda ở vương quốc Hyrule, thế giới mở Nintendo Switch'},
+    {name:'Animal Crossing',emoji:'🏝️',clue:'Sống trên đảo, dọn dẹp, làm bạn với động vật, vay tiền Tom Nook'},
+    {name:'Stardew Valley',emoji:'🌾',clue:'Game nông trại 2D, trồng cây, nuôi gà, kết hôn với dân làng'}
+  ];
+  let prob,score=0,total=0,streak=0,answered=false,picked=-1;
+  const r=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+  function gen(){
+    const correct=GAMES_LIST[r(0,GAMES_LIST.length-1)];
+    const opts=[correct];
+    let tries=0;
+    while(opts.length<4&&tries<30){tries++;
+      const g=GAMES_LIST[r(0,GAMES_LIST.length-1)];
+      if(!opts.find(x=>x.name===g.name))opts.push(g);
+    }
+    opts.sort(()=>Math.random()-0.5);
+    prob={correct,opts};
+  }
+  function init(){score=0;total=0;streak=0;answered=false;picked=-1;gen();render()}
+  function pick(name){if(answered)return;answered=true;picked=name;total++;if(name===prob.correct.name){score++;streak++}else streak=0;render()}
+  function nextQ(){answered=false;picked=-1;gen();render()}
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const card=document.createElement('div');card.className='quiz-card';
+    card.innerHTML=`<div class="quiz-progress"><span>Đúng <b>${score}</b>/${total}</span><span>🔥 <b>${streak}</b></span></div>
+      <div style="text-align:center;margin:18px 0;padding:18px;background:rgba(0,240,255,.08);border:1px solid rgba(0,240,255,.2);border-radius:14px">
+        <div style="color:var(--muted);font-size:12px;margin-bottom:8px">💡 GỢI Ý</div>
+        <div style="font-size:16px;line-height:1.5;color:var(--text)">${prob.correct.clue}</div>
+      </div>
+      <div class="quiz-q" style="text-align:center;font-size:15px;margin-bottom:10px">Đây là game nào?</div>`;
+    const opts=document.createElement('div');opts.className='quiz-opts';
+    prob.opts.forEach(o=>{
+      const b=document.createElement('button');b.className='quiz-opt';
+      b.innerHTML=`<span style="font-size:1.3em;margin-right:6px">${o.emoji}</span>${o.name}`;
+      if(answered){b.disabled=true;if(o.name===prob.correct.name)b.classList.add('correct');else if(o.name===picked)b.classList.add('wrong')}
+      b.onclick=()=>pick(o.name);opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if(answered){
+      const corr=picked===prob.correct.name;
+      const fb=document.createElement('div');fb.className='quiz-feedback '+(corr?'right':'wrong');
+      const msgs=corr?PRAISE:ROAST;
+      fb.innerHTML=`<div class="fb-emoji">${corr?'🎉':'😅'}</div><div class="fb-msg">${msgs[r(0,msgs.length-1)]}</div><div class="quiz-explain"><b>${prob.correct.emoji} ${prob.correct.name}</b></div>`;
+      card.appendChild(fb);
+      addBtn('CÂU TIẾP →','warn',nextQ);
+    }
+    mArea.appendChild(card);
+    setStatus(`🎮 <b>Đoán game</b> · <b>${score}</b>/${total} · 🔥 <b>${streak}</b>`);
+  }
+  return {title:'Đoán game qua mô tả',init};
+})();
+
+
+
+/* ========== 45. MINECRAFT 2D — Đào & Xây ========== */
+games.mine2d = (()=>{
+  // World: 24 cols x 16 rows. Player digs/places blocks.
+  const COLS=24, ROWS=16;
+  // Block types
+  const B={
+    AIR:0, DIRT:1, GRASS:2, STONE:3, COAL:4, IRON:5, GOLD:6, DIAMOND:7,
+    WOOD:8, LEAVES:9, BEDROCK:10, PLANK:11, CRAFTING:12, TORCH:13
+  };
+  const BLOCK_INFO={
+    [B.AIR]:{name:'Trống',color:null,emoji:'',hardness:0,drop:null},
+    [B.DIRT]:{name:'Đất',color:'#8b5a3c',emoji:'🟫',hardness:1,drop:B.DIRT},
+    [B.GRASS]:{name:'Cỏ',color:'#5cb85c',emoji:'🟩',hardness:1,drop:B.DIRT},
+    [B.STONE]:{name:'Đá',color:'#7a7a7a',emoji:'🪨',hardness:2,drop:B.STONE},
+    [B.COAL]:{name:'Than',color:'#2a2a2a',emoji:'⬛',hardness:3,drop:B.COAL,needPick:1},
+    [B.IRON]:{name:'Sắt',color:'#c89882',emoji:'🟤',hardness:4,drop:B.IRON,needPick:1},
+    [B.GOLD]:{name:'Vàng',color:'#ffd700',emoji:'🟨',hardness:5,drop:B.GOLD,needPick:2},
+    [B.DIAMOND]:{name:'Kim cương',color:'#5ce1e6',emoji:'💎',hardness:6,drop:B.DIAMOND,needPick:2},
+    [B.WOOD]:{name:'Gỗ',color:'#7a5a3a',emoji:'🟫',hardness:1,drop:B.WOOD},
+    [B.LEAVES]:{name:'Lá',color:'#2d8c3c',emoji:'🌿',hardness:0,drop:null},
+    [B.BEDROCK]:{name:'Bedrock',color:'#1a1a1a',emoji:'⬛',hardness:99,drop:null},
+    [B.PLANK]:{name:'Ván',color:'#b48d65',emoji:'🟫',hardness:1,drop:B.PLANK},
+    [B.CRAFTING]:{name:'Bàn craft',color:'#8b5a3c',emoji:'🔨',hardness:1,drop:B.CRAFTING},
+    [B.TORCH]:{name:'Đuốc',color:null,emoji:'🔥',hardness:0,drop:B.TORCH}
+  };
+  // Inventory recipes: cost → result
+  const RECIPES=[
+    {name:'4 Ván',from:{[B.WOOD]:1},to:{[B.PLANK]:4},need:null},
+    {name:'Bàn craft',from:{[B.PLANK]:4},to:{[B.CRAFTING]:1},need:null},
+    {name:'Cuốc gỗ',from:{[B.PLANK]:3,[B.WOOD]:2},to:{'pickWood':1},need:B.CRAFTING},
+    {name:'Cuốc đá',from:{[B.STONE]:3,[B.WOOD]:2},to:{'pickStone':1},need:B.CRAFTING},
+    {name:'Cuốc sắt',from:{[B.IRON]:3,[B.WOOD]:2},to:{'pickIron':1},need:B.CRAFTING},
+    {name:'4 Đuốc',from:{[B.COAL]:1,[B.WOOD]:1},to:{[B.TORCH]:4},need:null}
+  ];
+  let world,player,inventory,selectedBlock,pickLevel,dayTime,seed;
+  let nearCrafting=false;
+  function genWorld(){
+    world=[];
+    for(let y=0;y<ROWS;y++){
+      const row=[];
+      for(let x=0;x<COLS;x++){
+        if(y===ROWS-1)row.push(B.BEDROCK);
+        else if(y===5+Math.floor(Math.sin(x*0.5)*1))row.push(B.GRASS);
+        else if(y<5+Math.floor(Math.sin(x*0.5)*1))row.push(B.AIR);
+        else if(y<8)row.push(B.DIRT);
+        else {
+          // Stone with ore distribution
+          const r=Math.random();
+          if(y>=14&&r<0.04)row.push(B.DIAMOND);
+          else if(y>=12&&r<0.06)row.push(B.GOLD);
+          else if(y>=10&&r<0.10)row.push(B.IRON);
+          else if(r<0.12)row.push(B.COAL);
+          else row.push(B.STONE);
+        }
+      }
+      world.push(row);
+    }
+    // Add 2-3 trees
+    for(let t=0;t<3;t++){
+      const tx=3+Math.floor(Math.random()*(COLS-6));
+      // Find surface
+      let sy=0;while(sy<ROWS&&world[sy][tx]===B.AIR)sy++;
+      if(sy<ROWS&&world[sy][tx]===B.GRASS&&sy>=3){
+        // Trunk
+        for(let h=1;h<=3;h++)world[sy-h][tx]=B.WOOD;
+        // Leaves
+        for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
+          const lx=tx+dx,ly=sy-3+dy;
+          if(ly>=0&&ly<ROWS&&lx>=0&&lx<COLS&&world[ly][lx]===B.AIR)world[ly][lx]=B.LEAVES;
+        }
+      }
+    }
+  }
+  function init(){
+    genWorld();
+    player={x:Math.floor(COLS/2),y:3};
+    inventory={};Object.values(B).forEach(b=>{inventory[b]=0});
+    inventory.pickWood=0;inventory.pickStone=0;inventory.pickIron=0;
+    selectedBlock=null;
+    pickLevel=0; // best pick: 0=hand, 1=wood, 2=stone, 3=iron
+    dayTime=0;
+    render();
+  }
+  function findSurfaceY(x){
+    for(let y=0;y<ROWS;y++)if(world[y][x]!==B.AIR)return y;
+    return ROWS-1;
+  }
+  function getPickLevel(){
+    if(inventory.pickIron>0)return 3;
+    if(inventory.pickStone>0)return 2;
+    if(inventory.pickWood>0)return 1;
+    return 0;
+  }
+  function dig(x,y){
+    if(x<0||x>=COLS||y<0||y>=ROWS)return;
+    const block=world[y][x];
+    if(block===B.AIR)return;
+    const info=BLOCK_INFO[block];
+    if(info.hardness>=99){flash('💎 Bedrock không phá được!');return}
+    pickLevel=getPickLevel();
+    if(info.needPick&&pickLevel<info.needPick){
+      const need=info.needPick===1?'cuốc gỗ trở lên':info.needPick===2?'cuốc đá trở lên':'cuốc sắt';
+      flash(`⛏️ Cần ${need} để phá ${info.name}!`);
+      return;
+    }
+    // Must be adjacent to player (within 2 squares)
+    if(Math.abs(x-player.x)>2||Math.abs(y-player.y)>2){flash('🤚 Quá xa, lại gần hơn!');return}
+    world[y][x]=B.AIR;
+    if(info.drop!==null)inventory[info.drop]=(inventory[info.drop]||0)+1;
+    // Leaves drop nothing usually
+    render();
+  }
+  function place(x,y){
+    if(x<0||x>=COLS||y<0||y>=ROWS)return;
+    if(world[y][x]!==B.AIR){dig(x,y);return}
+    if(!selectedBlock||inventory[selectedBlock]<=0){flash('❌ Không có block để đặt!');return}
+    if(Math.abs(x-player.x)>2||Math.abs(y-player.y)>2){flash('🤚 Quá xa!');return}
+    if(x===player.x&&y===player.y){flash('🚫 Có người chơi ở đó!');return}
+    world[y][x]=parseInt(selectedBlock);
+    inventory[selectedBlock]--;
+    if(inventory[selectedBlock]<=0)selectedBlock=null;
+    render();
+  }
+  function craft(idx){
+    const r=RECIPES[idx];
+    // Check requirement (near crafting table)
+    if(r.need===B.CRAFTING){
+      let found=false;
+      for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){
+        const x=player.x+dx,y=player.y+dy;
+        if(x>=0&&x<COLS&&y>=0&&y<ROWS&&world[y][x]===B.CRAFTING)found=true;
+      }
+      if(!found){flash('🔨 Cần đứng gần Bàn craft!');return}
+    }
+    // Check materials
+    for(const [k,v] of Object.entries(r.from)){
+      if((inventory[k]||0)<v){flash(`❌ Thiếu ${BLOCK_INFO[k]?.name||k}!`);return}
+    }
+    // Consume + produce
+    for(const [k,v] of Object.entries(r.from))inventory[k]-=v;
+    for(const [k,v] of Object.entries(r.to))inventory[k]=(inventory[k]||0)+v;
+    flash(`✨ Crafted: ${r.name}`);
+    render();
+  }
+  let flashMsg='';let flashTimer=null;
+  function flash(msg){flashMsg=msg;render();clearTimeout(flashTimer);flashTimer=setTimeout(()=>{flashMsg='';render()},1400)}
+  function move(dx,dy){
+    const nx=player.x+dx,ny=player.y+dy;
+    if(nx<0||nx>=COLS||ny<0||ny>=ROWS)return;
+    if(world[ny][nx]!==B.AIR&&world[ny][nx]!==B.LEAVES&&world[ny][nx]!==B.TORCH)return; // can't walk into solid
+    player.x=nx;player.y=ny;render();
+  }
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    // Inventory bar
+    const invBar=document.createElement('div');
+    invBar.style.cssText='display:flex;gap:6px;flex-wrap:wrap;justify-content:center;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:8px;margin-bottom:10px';
+    const slots=[];
+    Object.entries(inventory).forEach(([k,v])=>{
+      if(v<=0)return;
+      const isBlock=BLOCK_INFO[k];
+      const isPick=k.startsWith('pick');
+      const slot=document.createElement('button');
+      const isSel=selectedBlock===k;
+      slot.style.cssText=`min-width:46px;height:46px;border-radius:6px;background:${isSel?'rgba(255,230,0,.25)':'rgba(255,255,255,.08)'};border:2px solid ${isSel?'var(--neon-yellow)':'rgba(255,255,255,.15)'};cursor:pointer;font-size:20px;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px;position:relative`;
+      slot.innerHTML=isPick?`⛏️<span style="font-size:9px;color:var(--muted)">${k.slice(4)}</span>`:`${isBlock.emoji||'?'}`;
+      const badge=document.createElement('span');badge.style.cssText='position:absolute;bottom:-2px;right:-2px;background:var(--neon-pink);color:#fff;font-size:10px;font-weight:700;padding:1px 5px;border-radius:8px;line-height:1';badge.textContent=v;
+      slot.appendChild(badge);
+      if(isBlock)slot.onclick=()=>{selectedBlock=(selectedBlock===k?null:k);render()};
+      else slot.onclick=()=>flash(isPick?'⛏️ Cuốc tự dùng — chỉ block mới chọn để đặt':'');
+      slots.push(slot);
+    });
+    if(slots.length===0){
+      const empty=document.createElement('div');empty.style.cssText='color:var(--muted);font-size:13px;font-style:italic;padding:8px';
+      empty.textContent='🎒 Túi trống — đào đất/đá để lấy đồ!';
+      invBar.appendChild(empty);
+    } else slots.forEach(s=>invBar.appendChild(s));
+    mArea.appendChild(invBar);
+
+    // Flash msg
+    if(flashMsg){
+      const fm=document.createElement('div');
+      fm.style.cssText='text-align:center;background:rgba(255,230,0,.15);border:1px solid var(--neon-yellow);color:var(--neon-yellow);padding:6px 12px;border-radius:8px;margin-bottom:8px;font-size:13px;font-weight:600';
+      fm.textContent=flashMsg;mArea.appendChild(fm);
+    }
+
+    // World canvas (SVG for crisp pixel feel)
+    const CELL=24;
+    const W=COLS*CELL, H=ROWS*CELL;
+    const wrap=document.createElement('div');
+    wrap.style.cssText='background:#1a0a3d;border:2px solid rgba(255,255,255,.15);border-radius:10px;padding:6px;overflow-x:auto;-webkit-overflow-scrolling:touch';
+    let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;max-width:none;min-width:${W*0.8}px;background:linear-gradient(180deg,#5fa8ff 0%,#a3d4ff 30%,#1a0a3d 65%)">`;
+    // Draw blocks
+    for(let y=0;y<ROWS;y++){
+      for(let x=0;x<COLS;x++){
+        const b=world[y][x];
+        if(b===B.AIR)continue;
+        const info=BLOCK_INFO[b];
+        const px=x*CELL, py=y*CELL;
+        if(b===B.TORCH){
+          svg+=`<text x="${px+CELL/2}" y="${py+CELL*0.75}" text-anchor="middle" font-size="${CELL*0.7}">🔥</text>`;
+        } else if(b===B.LEAVES){
+          svg+=`<rect x="${px}" y="${py}" width="${CELL}" height="${CELL}" fill="${info.color}" opacity="0.85"/>`;
+          svg+=`<circle cx="${px+CELL*0.3}" cy="${py+CELL*0.3}" r="3" fill="#4caf50"/>`;
+          svg+=`<circle cx="${px+CELL*0.7}" cy="${py+CELL*0.6}" r="3" fill="#388e3c"/>`;
+        } else if(b===B.CRAFTING){
+          svg+=`<rect x="${px}" y="${py}" width="${CELL}" height="${CELL}" fill="#8b5a3c"/>`;
+          svg+=`<rect x="${px+2}" y="${py+2}" width="${CELL-4}" height="${CELL-4}" fill="none" stroke="#5a3a1c" stroke-width="1"/>`;
+          svg+=`<text x="${px+CELL/2}" y="${py+CELL*0.72}" text-anchor="middle" font-size="${CELL*0.55}">🔨</text>`;
+        } else {
+          svg+=`<rect x="${px}" y="${py}" width="${CELL}" height="${CELL}" fill="${info.color}"/>`;
+          // Highlight for ores
+          if(b===B.COAL)svg+=`<circle cx="${px+CELL*0.3}" cy="${py+CELL*0.4}" r="2.5" fill="#000"/><circle cx="${px+CELL*0.7}" cy="${py+CELL*0.6}" r="2" fill="#000"/>`;
+          if(b===B.IRON)svg+=`<circle cx="${px+CELL*0.35}" cy="${py+CELL*0.4}" r="2.5" fill="#e0bda3"/><circle cx="${px+CELL*0.7}" cy="${py+CELL*0.65}" r="2" fill="#e0bda3"/>`;
+          if(b===B.GOLD)svg+=`<circle cx="${px+CELL*0.35}" cy="${py+CELL*0.35}" r="3" fill="#fff6a8"/><circle cx="${px+CELL*0.7}" cy="${py+CELL*0.65}" r="2.5" fill="#fff6a8"/>`;
+          if(b===B.DIAMOND)svg+=`<polygon points="${px+CELL*0.35},${py+CELL*0.3} ${px+CELL*0.65},${py+CELL*0.3} ${px+CELL*0.5},${py+CELL*0.7}" fill="#aaf4ff" stroke="#5ce1e6" stroke-width="1"/>`;
+          if(b===B.GRASS)svg+=`<rect x="${px}" y="${py}" width="${CELL}" height="4" fill="#3a8c3a"/>`;
+          // Block border
+          svg+=`<rect x="${px}" y="${py}" width="${CELL}" height="${CELL}" fill="none" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>`;
+        }
+      }
+    }
+    // Player (Steve)
+    const px=player.x*CELL, py=player.y*CELL;
+    svg+=`<rect x="${px+CELL*0.2}" y="${py+CELL*0.1}" width="${CELL*0.6}" height="${CELL*0.3}" fill="#e0b29f"/>`; // head
+    svg+=`<rect x="${px+CELL*0.3}" y="${py+CELL*0.18}" width="${CELL*0.15}" height="${CELL*0.1}" fill="#fff"/>`; // eye L
+    svg+=`<rect x="${px+CELL*0.55}" y="${py+CELL*0.18}" width="${CELL*0.15}" height="${CELL*0.1}" fill="#fff"/>`; // eye R
+    svg+=`<rect x="${px+CELL*0.2}" y="${py+CELL*0.4}" width="${CELL*0.6}" height="${CELL*0.5}" fill="#3aaef0"/>`; // body
+    svg+=`<rect x="${px+CELL*0.25}" y="${py+CELL*0.42}" width="${CELL*0.5}" height="${CELL*0.06}" fill="#2a8ec0"/>`; // shirt detail
+    svg+=`<rect x="${px}" y="${py+CELL}" width="${CELL}" height="2" fill="rgba(255,230,0,.6)"/>`; // shadow
+
+    // Click overlay (for digging/placing)
+    for(let y=0;y<ROWS;y++){
+      for(let x=0;x<COLS;x++){
+        svg+=`<rect x="${x*CELL}" y="${y*CELL}" width="${CELL}" height="${CELL}" fill="rgba(0,0,0,0.001)" data-x="${x}" data-y="${y}" style="cursor:crosshair"/>`;
+      }
+    }
+    svg+='</svg>';
+    wrap.innerHTML=svg;
+    // Bind click on cells
+    wrap.querySelectorAll('rect[data-x]').forEach(rect=>{
+      rect.onclick=(e)=>{
+        const cx=parseInt(rect.getAttribute('data-x'));
+        const cy=parseInt(rect.getAttribute('data-y'));
+        if(selectedBlock)place(cx,cy);else dig(cx,cy);
+      };
+    });
+    mArea.appendChild(wrap);
+
+    // Control pad
+    const pad=document.createElement('div');
+    pad.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:260px;margin:12px auto 0';
+    const mkBtn=(lbl,fn,col)=>{
+      const b=document.createElement('button');b.textContent=lbl;
+      b.style.cssText=`padding:14px;border-radius:10px;background:rgba(0,240,255,.15);border:2px solid var(--neon-cyan);color:#fff;font-family:inherit;font-size:18px;font-weight:700;cursor:pointer;${col?'grid-column:'+col:''}`;
+      b.onclick=fn;return b;
+    };
+    pad.appendChild(mkBtn('',()=>{},'1'));
+    pad.appendChild(mkBtn('⬆',()=>move(0,-1)));
+    pad.appendChild(mkBtn('',()=>{},'3'));
+    pad.appendChild(mkBtn('⬅',()=>move(-1,0)));
+    pad.appendChild(mkBtn('⬇',()=>move(0,1)));
+    pad.appendChild(mkBtn('➡',()=>move(1,0)));
+    mArea.appendChild(pad);
+
+    // Hint
+    const hint=document.createElement('div');
+    hint.style.cssText='text-align:center;color:var(--muted);font-size:12px;margin-top:10px;line-height:1.5';
+    hint.innerHTML=`💡 Bấm ô để <b style="color:var(--neon-cyan)">đào</b>. Chọn block trong túi rồi bấm ô trống để <b style="color:var(--neon-yellow)">đặt</b>.<br>Cần cuốc gỗ → phá than/sắt; cuốc đá → phá vàng/kim cương`;
+    mArea.appendChild(hint);
+
+    // Recipe buttons
+    addBtn('🔨 CRAFT','warn',openCraft);
+    addBtn('🌍 World mới','alt',()=>{if(confirm('Sinh world mới? Mất toàn bộ tiến trình!'))init()});
+
+    // Status
+    const pickName=inventory.pickIron>0?'Cuốc sắt':inventory.pickStone>0?'Cuốc đá':inventory.pickWood>0?'Cuốc gỗ':'Tay không';
+    setStatus(`🟫 <b>Minecraft 2D</b> · ⛏️ ${pickName} · 💎 ${inventory[B.DIAMOND]||0} · 🟨 ${inventory[B.GOLD]||0} · 🟤 ${inventory[B.IRON]||0}`);
+  }
+  function openCraft(){
+    // Modal-style overlay using mArea
+    const overlay=document.createElement('div');
+    overlay.style.cssText='position:fixed;inset:0;background:rgba(5,2,15,.92);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)';
+    const box=document.createElement('div');
+    box.style.cssText='background:linear-gradient(180deg,rgba(30,10,70,.98),rgba(15,5,40,.98));border:1px solid rgba(255,255,255,.15);border-radius:18px;padding:20px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto';
+    let html=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h3 style="font-family:'Bungee',cursive;color:var(--neon-yellow);font-size:18px;margin:0">🔨 Công thức Craft</h3><button id="closeCraft" style="background:var(--neon-pink);border:none;color:#fff;width:34px;height:34px;border-radius:8px;font-size:16px;cursor:pointer">✕</button></div>`;
+    RECIPES.forEach((r,i)=>{
+      const fromStr=Object.entries(r.from).map(([k,v])=>`${v}× ${BLOCK_INFO[k]?.emoji||''}${BLOCK_INFO[k]?.name||k}`).join(' + ');
+      const toStr=Object.entries(r.to).map(([k,v])=>{
+        const isPick=k.startsWith('pick');
+        return `${v}× ${isPick?'⛏️ Cuốc '+k.slice(4):BLOCK_INFO[k]?.emoji+' '+BLOCK_INFO[k]?.name}`;
+      }).join(' + ');
+      const canCraft=Object.entries(r.from).every(([k,v])=>(inventory[k]||0)>=v);
+      html+=`<button data-craft="${i}" ${canCraft?'':'disabled'} style="display:block;width:100%;text-align:left;padding:12px;margin-bottom:8px;border-radius:10px;background:rgba(255,255,255,.05);border:2px solid ${canCraft?'var(--neon-green)':'rgba(255,255,255,.1)'};color:${canCraft?'var(--text)':'var(--muted)'};font-family:inherit;cursor:${canCraft?'pointer':'not-allowed'}"><div style="font-weight:700;font-size:14px;margin-bottom:4px">${r.name}${r.need?' <span style="color:var(--neon-orange);font-size:11px">(cần bàn craft)</span>':''}</div><div style="font-size:12px;color:var(--muted)">${fromStr} → ${toStr}</div></button>`;
+    });
+    box.innerHTML=html;overlay.appendChild(box);document.body.appendChild(overlay);
+    overlay.onclick=e=>{if(e.target===overlay)overlay.remove()};
+    box.querySelector('#closeCraft').onclick=()=>overlay.remove();
+    box.querySelectorAll('button[data-craft]').forEach(b=>{
+      b.onclick=()=>{craft(parseInt(b.getAttribute('data-craft')));overlay.remove();openCraft()};
+    });
+  }
+  return {title:'Minecraft 2D',init};
+})();
+
+/* ========== 46. ROBLOX-STYLE OBBY (Tower of Hell) ========== */
+games.obby = (()=>{
+  // Side-scrolling 2D platformer. Player jumps over obstacles to reach goal.
+  const W=20, H=10;
+  // Block types
+  const O={EMPTY:0,GROUND:1,LAVA:2,SPIKE:3,GOAL:4,CHECKPOINT:5,JUMP:6,MOVING:7,STAR:8};
+  let levels;
+  let currentLevel=0;
+  let player,vel,onGround,checkpoint;
+  let level,collected,deaths,won;
+  let movingPlats; // for moving platforms
+  let stars; // for collected stars
+  let bestDeaths;
+  let animFrame=null;
+  function makeLevels(){
+    // Each level: array of strings, each string is a row (top to bottom)
+    return [
+      {name:'Khởi đầu',
+       map:[
+         '....................',
+         '....................',
+         '..............S.....',
+         '....................',
+         '....................',
+         '....................',
+         '...........SS.......',
+         '.........GG..GG.GG.G',
+         '....GG..............',
+         'GGGGGGGGLLLGGGGGGGGG'
+       ]},
+      {name:'Nhảy nhót',
+       map:[
+         '....................',
+         '....................',
+         '..............S....G',
+         '...........S......GG',
+         '........S........GGG',
+         '....S..........GGGGG',
+         'GG.GG.GG.GG..GGGGGGG',
+         'GG....GG....G.......',
+         '.................SSG',
+         'GGGLLLLLLGGGLLLLLLGG'
+       ]},
+      {name:'Bay cao',
+       map:[
+         '..............S....G',
+         '..................GG',
+         '...............S.GGG',
+         '....................',
+         '..........S.J.......',
+         '....................',
+         '....GG.J............',
+         'J.................G.',
+         '..................G.',
+         'GGGLLLGGGLLLLGGGGGGG'
+       ]},
+      {name:'Gai nhọn',
+       map:[
+         '....................',
+         '....................',
+         '..S................G',
+         '.................S.G',
+         '............GG.....G',
+         '..........GG......GG',
+         '......GG......S..GGG',
+         'GGG^^^GGG^^^^GGG^GGG',
+         '....................',
+         'GGGGGGGGGGGGGGGGGGGG'
+       ]},
+      {name:'Đỉnh tháp',
+       map:[
+         '..................GG',
+         '.....J.S.........J.G',
+         '....GGG..........GGG',
+         '............J.......',
+         '......S....GG.......',
+         '....GGG......S.....G',
+         '..............GGG.GG',
+         'J.J.................',
+         'GGG.................',
+         'GGGGGLLLLLGGGGLLLLLG'
+       ]}
+    ];
+  }
+  function parseLevel(idx){
+    const lv=levels[idx];
+    level=[];
+    stars=[];
+    let start={x:1,y:7};
+    for(let y=0;y<H;y++){
+      const row=[];
+      const line=lv.map[y]||'';
+      for(let x=0;x<W;x++){
+        const c=line[x]||'.';
+        if(c==='G')row.push(O.GROUND);
+        else if(c==='L')row.push(O.LAVA);
+        else if(c==='^')row.push(O.SPIKE);
+        else if(c==='J')row.push(O.JUMP);
+        else if(c==='S'){row.push(O.EMPTY);stars.push({x,y,got:false})}
+        else row.push(O.EMPTY);
+      }
+      level.push(row);
+    }
+    // Goal = top-right corner area, place if not set
+    // Find safe start: bottom-left first empty cell above ground
+    for(let y=0;y<H-1;y++){
+      if(level[y+1][1]===O.GROUND&&level[y][1]===O.EMPTY){start={x:1,y};break}
+    }
+    return start;
+  }
+  function init(){
+    levels=makeLevels();
+    currentLevel=parseInt(localStorage.getItem('obbyLevel')||'0');
+    if(currentLevel>=levels.length)currentLevel=0;
+    bestDeaths=JSON.parse(localStorage.getItem('obbyBest')||'{}');
+    loadLevel(currentLevel);
+    bindKeys();
+    loop();
+  }
+  function loadLevel(idx){
+    currentLevel=idx;
+    const start=parseLevel(idx);
+    player={x:start.x+0.0,y:start.y+0.0};
+    vel={x:0,y:0};
+    onGround=false;
+    checkpoint={x:start.x,y:start.y};
+    collected=0;deaths=0;won=false;
+    keysHeld={};
+  }
+  let keysHeld={};
+  function bindKeys(){
+    document.onkeydown=e=>{
+      if(['ArrowLeft','a','A'].includes(e.key))keysHeld.left=true;
+      if(['ArrowRight','d','D'].includes(e.key))keysHeld.right=true;
+      if(['ArrowUp','w','W',' '].includes(e.key)){keysHeld.jump=true;e.preventDefault()}
+      if(['r','R'].includes(e.key))respawn();
+    };
+    document.onkeyup=e=>{
+      if(['ArrowLeft','a','A'].includes(e.key))keysHeld.left=false;
+      if(['ArrowRight','d','D'].includes(e.key))keysHeld.right=false;
+      if(['ArrowUp','w','W',' '].includes(e.key))keysHeld.jump=false;
+    };
+  }
+  function isSolid(x,y){
+    const ix=Math.floor(x),iy=Math.floor(y);
+    if(ix<0||ix>=W||iy<0||iy>=H)return true;
+    return level[iy][ix]===O.GROUND;
+  }
+  function cellAt(x,y){
+    const ix=Math.floor(x),iy=Math.floor(y);
+    if(ix<0||ix>=W||iy<0||iy>=H)return O.GROUND;
+    return level[iy][ix];
+  }
+  function respawn(){
+    player.x=checkpoint.x;player.y=checkpoint.y;
+    vel.x=0;vel.y=0;deaths++;
+  }
+  function tick(){
+    if(won)return;
+    // Horizontal movement
+    const speed=0.16;
+    if(keysHeld.left)vel.x=-speed;
+    else if(keysHeld.right)vel.x=speed;
+    else vel.x*=0.7;
+    // Jump
+    if(keysHeld.jump&&onGround){vel.y=-0.42;onGround=false}
+    // Gravity
+    vel.y+=0.024;
+    if(vel.y>0.4)vel.y=0.4;
+    // Horizontal collision
+    let nx=player.x+vel.x;
+    const pw=0.7, ph=0.9;
+    if(vel.x>0){
+      if(isSolid(nx+pw,player.y)||isSolid(nx+pw,player.y+ph-0.1)){nx=Math.floor(nx+pw)-pw;vel.x=0}
+    } else if(vel.x<0){
+      if(isSolid(nx,player.y)||isSolid(nx,player.y+ph-0.1)){nx=Math.floor(nx)+1;vel.x=0}
+    }
+    player.x=nx;
+    // Vertical collision
+    let ny=player.y+vel.y;
+    onGround=false;
+    if(vel.y>0){
+      if(isSolid(player.x,ny+ph)||isSolid(player.x+pw,ny+ph)){
+        ny=Math.floor(ny+ph)-ph;vel.y=0;onGround=true;
+        // Check jump pad below
+        const cellY=Math.floor(ny+ph+0.05);
+        if(cellAt(player.x+pw/2,cellY)===O.JUMP){vel.y=-0.65;onGround=false}
+      }
+    } else if(vel.y<0){
+      if(isSolid(player.x,ny)||isSolid(player.x+pw,ny)){ny=Math.floor(ny)+1;vel.y=0}
+    }
+    player.y=ny;
+    // Hazard check
+    const centerCell=cellAt(player.x+pw/2,player.y+ph/2);
+    const footCell=cellAt(player.x+pw/2,player.y+ph-0.05);
+    if(centerCell===O.LAVA||footCell===O.LAVA||centerCell===O.SPIKE||footCell===O.SPIKE){
+      respawn();return;
+    }
+    // Star collection
+    stars.forEach(s=>{
+      if(s.got)return;
+      const dx=(player.x+pw/2)-(s.x+0.5);
+      const dy=(player.y+ph/2)-(s.y+0.5);
+      if(Math.abs(dx)<0.7&&Math.abs(dy)<0.7){s.got=true;collected++}
+    });
+    // Win check (reach top-right corner)
+    if(player.x>=W-2&&player.y<=2){
+      won=true;
+      const prev=bestDeaths[currentLevel];
+      if(prev===undefined||deaths<prev){bestDeaths[currentLevel]=deaths;localStorage.setItem('obbyBest',JSON.stringify(bestDeaths))}
+    }
+    // Out of bounds
+    if(player.y>H+2)respawn();
+  }
+  function loop(){
+    if(!document.getElementById('obbyCanvas'))return; // game closed
+    tick();
+    drawCanvas();
+    animFrame=requestAnimationFrame(loop);
+  }
+  function drawCanvas(){
+    const canvas=document.getElementById('obbyCanvas');
+    if(!canvas)return;
+    const ctx=canvas.getContext('2d');
+    const CELL=canvas.width/W;
+    ctx.fillStyle='#1a0a3d';ctx.fillRect(0,0,canvas.width,canvas.height);
+    // Sky gradient
+    const grd=ctx.createLinearGradient(0,0,0,canvas.height);
+    grd.addColorStop(0,'#5fa8ff');grd.addColorStop(0.7,'#1a0a3d');
+    ctx.fillStyle=grd;ctx.fillRect(0,0,canvas.width,canvas.height);
+    // Draw blocks
+    for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+      const b=level[y][x];
+      const px=x*CELL,py=y*CELL;
+      if(b===O.GROUND){
+        ctx.fillStyle='#5cb85c';ctx.fillRect(px,py,CELL,CELL);
+        ctx.fillStyle='#3a8c3a';ctx.fillRect(px,py,CELL,4);
+        ctx.fillStyle='#8b5a3c';ctx.fillRect(px,py+4,CELL,CELL-4);
+        ctx.strokeStyle='rgba(0,0,0,0.2)';ctx.strokeRect(px,py,CELL,CELL);
+      } else if(b===O.LAVA){
+        ctx.fillStyle='#ff5722';ctx.fillRect(px,py,CELL,CELL);
+        ctx.fillStyle='#ffeb3b';
+        const wave=Math.sin(Date.now()/200+x)*2;
+        ctx.fillRect(px,py+wave,CELL,3);
+      } else if(b===O.SPIKE){
+        ctx.fillStyle='#9e9e9e';
+        ctx.beginPath();
+        ctx.moveTo(px,py+CELL);ctx.lineTo(px+CELL/2,py+CELL*0.3);ctx.lineTo(px+CELL,py+CELL);ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle='#fff';ctx.stroke();
+      } else if(b===O.JUMP){
+        ctx.fillStyle='#9c27b0';ctx.fillRect(px,py+CELL*0.6,CELL,CELL*0.4);
+        ctx.fillStyle='#e91e63';ctx.fillRect(px,py+CELL*0.6,CELL,4);
+        ctx.fillStyle='#fff';ctx.font=`bold ${CELL*0.5}px sans-serif`;
+        ctx.textAlign='center';ctx.fillText('↑',px+CELL/2,py+CELL*0.95);
+      }
+    }
+    // Stars
+    stars.forEach(s=>{
+      if(s.got)return;
+      const px=s.x*CELL+CELL/2,py=s.y*CELL+CELL/2;
+      const wob=Math.sin(Date.now()/300+s.x)*2;
+      ctx.fillStyle='#ffe600';
+      ctx.font=`${CELL*0.7}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText('⭐',px,py+wob);
+    });
+    // Goal (top-right corner)
+    const gx=(W-1)*CELL,gy=0;
+    ctx.fillStyle='rgba(57,255,127,0.3)';ctx.fillRect(gx-CELL,gy,CELL*2,CELL*2);
+    ctx.strokeStyle='#39ff7f';ctx.lineWidth=2;ctx.strokeRect(gx-CELL,gy,CELL*2,CELL*2);
+    ctx.font=`${CELL}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillStyle='#fff';ctx.fillText('🎯',gx,gy+CELL);
+    // Player (Roblox-style block character)
+    const ppx=player.x*CELL,ppy=player.y*CELL;
+    const pw=0.7*CELL,ph=0.9*CELL;
+    // Body
+    ctx.fillStyle='#ff5722';ctx.fillRect(ppx,ppy+ph*0.4,pw,ph*0.55);
+    // Head
+    ctx.fillStyle='#ffeb3b';ctx.fillRect(ppx,ppy,pw,ph*0.4);
+    // Eyes
+    ctx.fillStyle='#000';ctx.fillRect(ppx+pw*0.2,ppy+ph*0.15,pw*0.15,ph*0.1);
+    ctx.fillRect(ppx+pw*0.65,ppy+ph*0.15,pw*0.15,ph*0.1);
+    // Smile
+    ctx.fillRect(ppx+pw*0.3,ppy+ph*0.3,pw*0.4,ph*0.04);
+    // Win overlay
+    if(won){
+      ctx.fillStyle='rgba(0,0,0,0.7)';ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle='#fff';ctx.font='bold 28px sans-serif';ctx.textAlign='center';
+      ctx.fillText('🎉 HOÀN THÀNH!',canvas.width/2,canvas.height/2-30);
+      ctx.font='18px sans-serif';
+      ctx.fillText(`⭐ ${collected}/${stars.length}  💀 ${deaths} chết`,canvas.width/2,canvas.height/2+5);
+      const best=bestDeaths[currentLevel];
+      if(best!==undefined)ctx.fillText(`🏆 Kỷ lục: ${best} chết`,canvas.width/2,canvas.height/2+30);
+    }
+  }
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    // Header info
+    const info=document.createElement('div');
+    info.style.cssText='display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding:8px 12px;background:rgba(0,0,0,.35);border-radius:10px;flex-wrap:wrap;gap:8px';
+    const best=bestDeaths[currentLevel];
+    info.innerHTML=`<span style="font-weight:700;color:var(--neon-yellow)">📍 ${levels[currentLevel].name} (${currentLevel+1}/${levels.length})</span>
+      <span style="font-size:13px;color:var(--muted)">⭐ <b style="color:var(--neon-yellow)">${collected}</b>/${stars.length} · 💀 <b style="color:var(--neon-pink)">${deaths}</b>${best!==undefined?` · 🏆 <b style="color:var(--neon-green)">${best}</b>`:''}</span>`;
+    mArea.appendChild(info);
+    // Canvas
+    const canvas=document.createElement('canvas');
+    canvas.id='obbyCanvas';canvas.width=640;canvas.height=320;
+    canvas.style.cssText='display:block;width:100%;max-width:640px;height:auto;background:#1a0a3d;border:2px solid rgba(255,255,255,.15);border-radius:10px;margin:0 auto';
+    mArea.appendChild(canvas);
+
+    // Mobile control pad
+    const pad=document.createElement('div');
+    pad.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;max-width:340px;margin:14px auto 0';
+    const mkBtn=(lbl,key,extraCss='')=>{
+      const b=document.createElement('button');b.textContent=lbl;
+      b.style.cssText=`padding:18px;border-radius:12px;background:rgba(0,240,255,.15);border:2px solid var(--neon-cyan);color:#fff;font-size:24px;font-weight:700;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:none;${extraCss}`;
+      b.onpointerdown=e=>{e.preventDefault();keysHeld[key]=true;b.style.background='rgba(0,240,255,.4)'};
+      b.onpointerup=()=>{keysHeld[key]=false;b.style.background='rgba(0,240,255,.15)'};
+      b.onpointerleave=()=>{keysHeld[key]=false;b.style.background='rgba(0,240,255,.15)'};
+      b.onpointercancel=()=>{keysHeld[key]=false;b.style.background='rgba(0,240,255,.15)'};
+      return b;
+    };
+    pad.appendChild(mkBtn('⬅','left'));
+    pad.appendChild(mkBtn('🆙 NHẢY','jump','background:rgba(255,230,0,.15);border-color:var(--neon-yellow)'));
+    pad.appendChild(mkBtn('➡','right'));
+    mArea.appendChild(pad);
+
+    // Level select
+    const lvlBar=document.createElement('div');
+    lvlBar.style.cssText='display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:14px';
+    levels.forEach((lv,i)=>{
+      const b=document.createElement('button');b.textContent=i+1;
+      const cleared=bestDeaths[i]!==undefined;
+      b.style.cssText=`width:38px;height:38px;border-radius:8px;border:2px solid ${i===currentLevel?'var(--neon-cyan)':cleared?'var(--neon-green)':'rgba(255,255,255,.15)'};background:${i===currentLevel?'rgba(0,240,255,.2)':cleared?'rgba(57,255,127,.1)':'rgba(255,255,255,.05)'};color:${i===currentLevel?'var(--neon-cyan)':cleared?'var(--neon-green)':'var(--text)'};font-weight:700;cursor:pointer;font-family:inherit`;
+      b.onclick=()=>{loadLevel(i);localStorage.setItem('obbyLevel',i)};
+      lvlBar.appendChild(b);
+    });
+    mArea.appendChild(lvlBar);
+
+    addBtn('🔄 RESPAWN (R)','warn',respawn);
+    if(won&&currentLevel<levels.length-1)addBtn('➡️ MÀN SAU','alt',()=>{loadLevel(currentLevel+1);localStorage.setItem('obbyLevel',currentLevel)});
+
+    // Hint
+    const hint=document.createElement('div');
+    hint.style.cssText='text-align:center;color:var(--muted);font-size:12px;margin-top:10px;line-height:1.5';
+    hint.innerHTML='💡 ⬅➡ di chuyển, ⬆ nhảy. 🟣 = trampoline. 🔥 lava + 🗡️ gai = chết<br>🎯 Đến góc phải trên để thắng · ⭐ thu sao càng nhiều càng tốt';
+    mArea.appendChild(hint);
+    setStatus(`🔴 <b>Obby</b> · ${levels[currentLevel].name} · ⭐ ${collected}/${stars.length} · 💀 ${deaths}`);
+  }
+  // Override init to start game loop
+  const origInit=init;
+  return {title:'Obby (Roblox-style)',init:()=>{origInit();render()}};
 })();
 
 </script>
