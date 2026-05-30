@@ -333,8 +333,8 @@ canvas{background:#000;border:1px solid rgba(255,255,255,.1);border-radius:8px;m
 .tetris-stat{background:rgba(255,255,255,.05);padding:8px 12px;border-radius:8px;margin-bottom:8px}
 
 /* Flag Quiz */
-.flag-mode{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%;max-width:360px;margin-bottom:8px}
-.flag-mode button{padding:10px 8px;border-radius:10px;background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.12);color:var(--text);font-family:'Be Vietnam Pro',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.flag-mode{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%;max-width:420px;margin-bottom:10px}
+.flag-mode button{padding:11px 8px;border-radius:10px;background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.12);color:var(--text);font-family:'Be Vietnam Pro',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
 .flag-mode button.active{background:linear-gradient(135deg,rgba(255,230,0,.2),rgba(255,138,42,.2));border-color:var(--neon-yellow);color:var(--neon-yellow);box-shadow:0 0 14px rgba(255,230,0,.3)}
 .flag-mode button:not(.active):hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2)}
 .flag-country-name{font-family:'Bungee',cursive;font-size:18px;color:var(--neon-cyan);text-shadow:0 0 12px rgba(0,240,255,.5);text-align:center;margin:4px 0}
@@ -670,12 +670,19 @@ footer b{color:var(--neon-cyan)}
 
 <div class="tab-content" data-tab="learn">
   <div class="grid">
-    <div class="card" data-game="flags" style="--ac:var(--neon-yellow)"><div class="emoji">🌐</div><h3>Đố Cờ / Thủ đô</h3><p>200+ nước & vùng lãnh thổ — 2 chế độ chơi</p></div>
+    <div class="card" data-game="flags" style="--ac:var(--neon-yellow)"><div class="emoji">🌐</div><h3>Đố địa lý</h3><p>Cờ · Thủ đô · Hình quốc gia · Châu lục — 200+ nước</p></div>
     <div class="card" data-game="mental" style="--ac:var(--neon-cyan)"><div class="emoji">🧮</div><h3>Tính nhẩm</h3><p>Cộng-trừ-nhân-chia — câu hỏi vô tận (random)</p></div>
     <div class="card" data-game="hangman" style="--ac:var(--neon-orange)"><div class="emoji">🅰️</div><h3>Đoán chữ tiếng Việt</h3><p>Đố từ về địa danh, ẩm thực, văn hóa Việt</p></div>
     <div class="card" data-game="hangmanEn" style="--ac:var(--neon-pink)"><div class="emoji">🔤</div><h3>Hangman EN</h3><p>Đố từ vựng tiếng Anh — 3 cấp độ</p></div>
     <div class="card" data-game="grammarVn" style="--ac:var(--neon-orange)"><div class="emoji">🇻🇳</div><h3>Ngữ pháp tiếng Việt</h3><p>Trắc nghiệm — Tiểu học / THCS / THPT</p></div>
     <div class="card" data-game="grammarEn" style="--ac:var(--neon-green)"><div class="emoji">📚</div><h3>Ngữ pháp EN</h3><p>Trắc nghiệm tiếng Anh — 3 trình độ</p></div>
+    <div class="card" data-game="clockReader" style="--ac:var(--neon-cyan)"><div class="emoji">🕐</div><h3>Đọc đồng hồ</h3><p>Xem kim chỉ — đoán giờ analog 3 cấp độ</p></div>
+    <div class="card" data-game="multTable" style="--ac:var(--neon-pink)"><div class="emoji">✖️</div><h3>Bảng cửu chương</h3><p>Luyện từng bảng 2-9 hoặc trộn lẫn</p></div>
+<h3>Đố châu lục</h3><p>40+ câu địa lý: lục địa, đại dương, núi sông</p></div>
+    <div class="card" data-game="historyVn" style="--ac:var(--neon-orange)"><div class="emoji">🏛️</div><h3>Sử Việt Nam</h3><p>52 câu — từ Vua Hùng đến hiện đại</p></div>
+    <div class="card" data-game="wordScramble" style="--ac:var(--neon-yellow)"><div class="emoji">🔀</div><h3>Đảo chữ tiếng Anh</h3><p>Sắp xếp lại các chữ — 80+ từ vựng</p></div>
+    <div class="card" data-game="calendarQuiz" style="--ac:var(--neon-purple)"><div class="emoji">📅</div><h3>Lịch &amp; Ngày tháng</h3><p>Tháng, mùa, năm nhuận, ngày lễ Việt</p></div>
+<h3>Đố hình quốc gia</h3><p>Đoán nước qua viền — 15 nước với hình đặc trưng</p></div>
   </div>
 </div>
 
@@ -1916,7 +1923,27 @@ games.flags = (()=>{
 
 
   const DIFF={easy:{c:4,sc:false,lbl:'Dễ'},hard:{c:6,sc:true,lbl:'Khó'},expert:{c:8,sc:true,lbl:'Cực khó'}};
-  const MODES={flag:{lbl:'🚩 Đố cờ'},capital:{lbl:'🏛️ Đố thủ đô'}};
+  const MODES={flag:{lbl:'🚩 Đố cờ'},capital:{lbl:'🏛️ Đố thủ đô'},shape:{lbl:'🗺️ Hình quốc gia'},continent:{lbl:'🌍 Châu lục'}};
+  // Country shapes data (SVG paths normalized to viewBox 0 0 100 100)
+  const SHAPES={
+    vn:'M70,8 L78,14 L74,22 L62,26 L55,22 L42,18 L30,24 L32,32 L40,36 L36,44 L30,52 L34,60 L40,64 L36,72 L40,80 L48,86 L52,92 L38,94 L30,90 L35,84 L42,76 L38,68 L34,60 L40,52 L46,44 L42,36 L48,30 L50,24 L58,28 L66,24 L72,16 Z',
+    it:'M28,18 L42,15 L58,16 L70,20 L74,28 L68,34 L60,38 L54,44 L52,52 L54,60 L60,66 L66,72 L70,78 L74,84 L78,88 L74,92 L66,88 L58,82 L52,76 L48,68 L46,60 L42,56 L36,50 L30,46 L26,40 L24,30 Z',
+    fr:'M40,12 L60,14 L74,22 L82,34 L84,48 L82,62 L74,74 L62,82 L48,84 L34,80 L22,72 L16,58 L18,42 L24,28 L32,18 Z',
+    jp:'M62,10 L74,14 L80,22 L74,28 L64,24 L58,18 Z M40,30 L56,32 L66,38 L72,44 L74,52 L70,60 L62,66 L52,70 L46,66 L44,58 L40,52 L34,48 L30,40 Z M28,72 L40,74 L46,80 L42,86 L34,84 L28,78 Z M18,82 L26,84 L28,90 L20,90 Z',
+    au:'M12,40 L24,32 L40,28 L52,30 L66,28 L78,32 L88,40 L92,50 L88,62 L80,70 L66,74 L52,76 L38,74 L22,68 L12,58 L8,50 Z',
+    gb:'M44,12 L58,14 L66,20 L68,28 L62,34 L56,38 L60,44 L66,48 L70,54 L72,62 L66,70 L58,76 L52,82 L48,86 L42,82 L36,74 L34,66 L40,58 L38,50 L34,44 L40,38 L38,30 L42,22 Z M28,70 L36,72 L34,80 L26,78 Z',
+    in:'M22,18 L36,12 L52,10 L68,12 L78,18 L82,26 L80,38 L74,50 L66,62 L58,74 L52,84 L46,90 L42,84 L36,72 L30,58 L24,44 L20,32 Z',
+    mg:'M44,6 L56,8 L62,16 L66,28 L68,42 L70,56 L68,70 L64,82 L58,90 L50,94 L44,90 L40,80 L38,68 L40,54 L38,40 L40,26 L42,14 Z',
+    cu:'M8,52 L18,46 L32,44 L48,42 L62,44 L76,46 L88,50 L92,54 L88,58 L78,58 L64,58 L48,56 L32,56 L18,54 L10,56 Z',
+    lk:'M50,12 L60,16 L66,28 L68,42 L66,56 L62,68 L56,78 L48,84 L40,78 L36,68 L34,56 L36,42 L40,30 L46,20 Z',
+    is:'M16,42 L28,36 L42,32 L58,34 L72,38 L82,44 L88,52 L84,60 L74,66 L62,70 L48,70 L34,68 L22,62 L14,54 L12,46 Z',
+    nz:'M38,8 L50,12 L58,20 L62,32 L60,44 L52,50 L44,48 L40,38 L36,26 L34,16 Z M48,56 L58,58 L66,66 L72,76 L68,86 L60,92 L52,86 L48,76 L46,66 Z',
+    cl:'M48,4 L56,6 L58,16 L56,28 L58,40 L54,52 L56,64 L52,76 L54,86 L50,94 L44,90 L48,80 L46,68 L50,56 L48,44 L52,32 L48,20 L46,10 Z',
+    br:'M28,14 L48,10 L66,14 L82,22 L88,34 L86,46 L82,58 L74,68 L66,76 L58,82 L50,78 L42,68 L34,58 L26,46 L20,34 L22,22 Z',
+    kr:'M42,14 L54,16 L62,24 L64,36 L60,46 L62,58 L58,68 L52,78 L46,82 L40,76 L38,64 L42,52 L40,40 L38,28 Z'
+  };
+  // Continents list for "continent" mode (one country per continent set)
+  const CONTINENTS=['Châu Á','Châu Âu','Châu Phi','Châu Mỹ','Châu Đại Dương'];
   let current,options,score=0,total=0,streak=0,answered=false;
   let difficulty=localStorage.getItem('flagsDifficulty')||'easy';
   if(!DIFF[difficulty])difficulty='easy';
@@ -1941,9 +1968,27 @@ games.flags = (()=>{
   }
   function next(){
     answered=false;
-    current=COUNTRIES[Math.floor(Math.random()*COUNTRIES.length)];
+    let countryPool = COUNTRIES;
+    // For shape mode, only use countries that have SVG data
+    if(mode==='shape'){
+      countryPool = COUNTRIES.filter(c=>SHAPES[c.c]);
+    }
+    current=countryPool[Math.floor(Math.random()*countryPool.length)];
     const cfg=DIFF[difficulty];
-    const pool=cfg.sc?COUNTRIES.filter(c=>c.con===current.con):COUNTRIES;
+    if(mode==='continent'){
+      // Question = continent of current country. Options = unique continents (including the correct one).
+      const wrong = CONTINENTS.filter(con=>con!==current.con);
+      wrong.sort(()=>Math.random()-0.5);
+      const optionCount = Math.min(cfg.c, CONTINENTS.length);
+      const conOpts = [current.con, ...wrong.slice(0, optionCount-1)];
+      // Remove duplicates just in case
+      const uniqueOpts = [...new Set(conOpts)];
+      uniqueOpts.sort(()=>Math.random()-0.5);
+      options = uniqueOpts.map(con=>({c:'__con_'+con, n:con, cap:con, con:con, _isContinent:true}));
+      render();
+      return;
+    }
+    const pool=cfg.sc?countryPool.filter(c=>c.con===current.con):countryPool;
     const used=new Set([current.c]);
     options=[current];
     while(options.length<cfg.c && used.size<pool.length){
@@ -1951,7 +1996,7 @@ games.flags = (()=>{
       if(!used.has(p.c)){options.push(p);used.add(p.c)}
     }
     while(options.length<cfg.c){
-      const p=COUNTRIES[Math.floor(Math.random()*COUNTRIES.length)];
+      const p=countryPool[Math.floor(Math.random()*countryPool.length)];
       if(!used.has(p.c)){options.push(p);used.add(p.c)}
     }
     options.sort(()=>Math.random()-0.5);
@@ -1960,7 +2005,7 @@ games.flags = (()=>{
   function pick(choice){
     if(answered)return;
     answered=true;total++;
-    const ok=choice.c===current.c;
+    const ok = mode==='continent' ? (choice.con===current.con) : (choice.c===current.c);
     if(ok){
       score++;streak++;
       if(streak>bestStreak){bestStreak=streak;localStorage.setItem('flagsBestStreak',bestStreak)}
@@ -1981,40 +2026,59 @@ games.flags = (()=>{
     });
     mArea.appendChild(mt);
 
-    const img=document.createElement('img');
-    img.className='flag-img';
-    img.src=`https://flagcdn.com/w320/${current.c}.png`;
-    img.alt='Quốc kỳ';
-    img.onerror=()=>{img.style.display='none'};
-    mArea.appendChild(img);
+    // Visual content: flag image OR SVG shape
+    if(mode==='shape'){
+      const wrap=document.createElement('div');
+      wrap.style.cssText='display:flex;justify-content:center;margin:8px 0 14px;background:rgba(0,0,0,.35);border-radius:14px;padding:12px';
+      wrap.innerHTML=`<svg viewBox="0 0 100 100" width="240" height="240" xmlns="http://www.w3.org/2000/svg">
+        <defs><filter id="cglow"><feGaussianBlur stdDeviation="2"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <path d="${SHAPES[current.c]}" fill="#ffe600" stroke="#fff" stroke-width="0.8" filter="url(#cglow)"/>
+      </svg>`;
+      mArea.appendChild(wrap);
+    } else {
+      const img=document.createElement('img');
+      img.className='flag-img';
+      img.src=`https://flagcdn.com/w320/${current.c}.png`;
+      img.alt='Quốc kỳ';
+      img.onerror=()=>{img.style.display='none'};
+      mArea.appendChild(img);
+    }
 
-    if(mode==='capital'){
+    if(mode==='capital' || mode==='continent'){
       const cn=document.createElement('div');cn.className='flag-country-name';
       cn.innerHTML=`🌍 <b>${current.n}</b>`;
       mArea.appendChild(cn);
     }
 
     const q=document.createElement('p');q.className='flag-q';
-    q.innerHTML = mode==='flag'
-      ? 'Đây là cờ của <b>quốc gia / vùng lãnh thổ</b> nào?'
-      : 'Đâu là <b>thủ đô</b> của nước này?';
+    q.innerHTML =
+      mode==='flag'      ? 'Đây là cờ của <b>quốc gia / vùng lãnh thổ</b> nào?' :
+      mode==='capital'   ? 'Đâu là <b>thủ đô</b> của nước này?' :
+      mode==='shape'     ? 'Đây là hình dạng của <b>quốc gia</b> nào?' :
+                           'Quốc gia này thuộc <b>châu lục</b> nào?';
     mArea.appendChild(q);
 
     const opts=document.createElement('div');opts.className='flag-options';
     options.forEach(o=>{
       const b=document.createElement('button');
-      b.textContent = mode==='flag' ? o.n : o.cap;
+      b.textContent =
+        mode==='flag'      ? o.n :
+        mode==='capital'   ? o.cap :
+        mode==='shape'     ? o.n :
+                             o.con;
       if(showFb){
         b.disabled=true;
-        if(o.c===current.c)b.classList.add('correct');
-        else if(picked && o.c===picked.c)b.classList.add('wrong');
+        const isCorrect = mode==='continent' ? (o.con===current.con) : (o.c===current.c);
+        const isPicked = picked && (mode==='continent' ? (o.con===picked.con) : (o.c===picked.c));
+        if(isCorrect)b.classList.add('correct');
+        else if(isPicked)b.classList.add('wrong');
       }
       b.onclick=()=>pick(o);
       opts.appendChild(b);
     });
     mArea.appendChild(opts);
     if(showFb){
-      const correct=picked.c===current.c;
+      const correct = mode==='continent' ? (picked.con===current.con) : (picked.c===current.c);
       const fb=document.createElement('div');fb.className='flag-feedback';
       const msgs=correct?PRAISE:ROAST;
       const v=document.createElement('div');
@@ -2030,9 +2094,11 @@ games.flags = (()=>{
         fb.appendChild(facts);
       } else {
         const info=document.createElement('div');info.className='flag-wrong-info';
-        info.innerHTML = mode==='flag'
-          ? `Đáp án đúng là <b>${current.n}</b> — thủ đô ${current.cap}, ${current.con}.`
-          : `Thủ đô của <b>${current.n}</b> là <b>${current.cap}</b> (${current.con}).`;
+        info.innerHTML =
+          mode==='flag'      ? `Đáp án đúng là <b>${current.n}</b> — thủ đô ${current.cap}, ${current.con}.` :
+          mode==='capital'   ? `Thủ đô của <b>${current.n}</b> là <b>${current.cap}</b> (${current.con}).` :
+          mode==='shape'     ? `Đáp án đúng là <b>${current.n}</b> — thủ đô ${current.cap}, ${current.con}.` :
+                               `<b>${current.n}</b> nằm ở <b>${current.con}</b>.`;
         fb.appendChild(info);
       }
       mArea.appendChild(fb);
@@ -2041,7 +2107,7 @@ games.flags = (()=>{
     setStatus(`<span class="score"><span>Điểm: <b>${score}</b>/${total}</span><span>🔥 Chuỗi: <b>${streak}</b></span><span>🏆 Kỉ lục: <b>${bestStreak}</b></span></span>`);
     if(showFb)setTimeout(()=>{mArea.scrollTop=mArea.scrollHeight},40);
   }
-  return {title:'Đố cờ quốc gia',init};
+  return {title:'Đố địa lý',init};
 })();
 
 
@@ -3067,6 +3133,445 @@ games.chineseFormulas = makeFormulaGame('Công thức Tiếng Trung', {
     ]}
   }
 });
+
+
+
+/* ========== 28. ĐỌC ĐỒNG HỒ ANALOG ========== */
+games.clockReader = (()=>{
+  const LVL={easy:{lbl:'Giờ chẵn',emoji:'🌱'},mid:{lbl:'Giờ + Phút (15-30-45)',emoji:'🌿'},hard:{lbl:'Bất kỳ',emoji:'🌳'}};
+  let level=localStorage.getItem('clockLevel')||'easy';
+  if(!LVL[level])level='easy';
+  let prob,score=0,total=0,streak=0,answered=false,picked=null;
+  const r=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+  function gen(){
+    let h,m;
+    if(level==='easy'){h=r(1,12);m=0}
+    else if(level==='mid'){h=r(1,12);m=[0,15,30,45][r(0,3)]}
+    else {h=r(1,12);m=r(0,11)*5}
+    const fmt=(H,M)=>H+':'+(M<10?'0':'')+M;
+    const correct=fmt(h,m);
+    const opts=[correct];let tries=0;
+    while(opts.length<4&&tries<30){tries++;
+      let h2=r(1,12),m2;
+      if(level==='easy')m2=0;else if(level==='mid')m2=[0,15,30,45][r(0,3)];else m2=r(0,11)*5;
+      const o=fmt(h2,m2);if(!opts.includes(o))opts.push(o);
+    }
+    while(opts.length<4)opts.push(fmt(r(1,12),r(0,55)));
+    opts.sort(()=>Math.random()-0.5);
+    prob={h,m,correct,opts};
+  }
+  function clockSvg(h,m){
+    const hourAng=(h%12+m/60)*30-90, minAng=m*6-90;
+    const hx=100+Math.cos(hourAng*Math.PI/180)*48, hy=100+Math.sin(hourAng*Math.PI/180)*48;
+    const mx=100+Math.cos(minAng*Math.PI/180)*72, my=100+Math.sin(minAng*Math.PI/180)*72;
+    let nums='';
+    for(let i=1;i<=12;i++){
+      const a=i*30-90;
+      const nx=100+Math.cos(a*Math.PI/180)*80;
+      const ny=100+Math.sin(a*Math.PI/180)*80+7;
+      nums+=`<text x="${nx}" y="${ny}" text-anchor="middle" fill="#fff" font-size="18" font-weight="700" font-family="JetBrains Mono">${i}</text>`;
+    }
+    let ticks='';
+    for(let i=0;i<60;i++){
+      const a=i*6-90;
+      const r1=i%5===0?86:90, r2=94;
+      const x1=100+Math.cos(a*Math.PI/180)*r1, y1=100+Math.sin(a*Math.PI/180)*r1;
+      const x2=100+Math.cos(a*Math.PI/180)*r2, y2=100+Math.sin(a*Math.PI/180)*r2;
+      ticks+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="rgba(255,255,255,0.4)" stroke-width="${i%5===0?2:1}"/>`;
+    }
+    return `<svg viewBox="0 0 200 200" width="220" height="220">
+      <circle cx="100" cy="100" r="96" fill="#1a0d3d" stroke="#00f0ff" stroke-width="3"/>
+      ${ticks}${nums}
+      <line x1="100" y1="100" x2="${hx}" y2="${hy}" stroke="#ffe600" stroke-width="6" stroke-linecap="round" style="filter:drop-shadow(0 0 6px #ffe600)"/>
+      <line x1="100" y1="100" x2="${mx}" y2="${my}" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="100" cy="100" r="6" fill="#ff2d95"/>
+    </svg>`;
+  }
+  function init(){score=0;total=0;streak=0;gen();render()}
+  function setLevel(l){if(level===l)return;level=l;localStorage.setItem('clockLevel',l);score=0;total=0;streak=0;gen();render()}
+  function pick(v){if(answered)return;answered=true;picked=v;total++;if(v===prob.correct){score++;streak++}else streak=0;render()}
+  function nextQ(){answered=false;picked=null;gen();render()}
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const w=document.createElement('div');w.className='quiz-wrap';
+    const pk=document.createElement('div');pk.className='quiz-level-pick';
+    Object.keys(LVL).forEach(l=>{
+      const b=document.createElement('button');b.innerHTML=`<span class="lvl-emoji">${LVL[l].emoji}</span>${LVL[l].lbl}`;
+      if(l===level)b.classList.add('active');b.onclick=()=>setLevel(l);pk.appendChild(b);
+    });
+    w.appendChild(pk);
+    const card=document.createElement('div');card.className='quiz-card';
+    card.innerHTML=`<div class="quiz-progress"><span>Đúng <b>${score}</b>/${total}</span><span>🔥 <b>${streak}</b></span></div>
+      <div style="display:flex;justify-content:center;margin:10px 0">${clockSvg(prob.h,prob.m)}</div>
+      <div class="quiz-q" style="text-align:center;font-size:17px;margin-bottom:14px">Đồng hồ chỉ mấy giờ?</div>`;
+    const opts=document.createElement('div');opts.className='mental-opts';
+    prob.opts.forEach(o=>{
+      const b=document.createElement('button');b.textContent=o;
+      if(answered){b.disabled=true;if(o===prob.correct)b.classList.add('correct');else if(o===picked)b.classList.add('wrong')}
+      b.onclick=()=>pick(o);opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if(answered){
+      const corr=picked===prob.correct;
+      const fb=document.createElement('div');fb.className='quiz-feedback '+(corr?'right':'wrong');
+      const msgs=corr?PRAISE:ROAST;
+      fb.innerHTML=`<div class="fb-emoji">${corr?'🎉':'😅'}</div><div class="fb-msg">${msgs[r(0,msgs.length-1)]}</div>`;
+      if(!corr)fb.innerHTML+=`<div class="quiz-explain" style="margin-top:8px"><b>Đáp án đúng:</b> ${prob.correct}</div>`;
+      card.appendChild(fb);
+      addBtn('CÂU TIẾP →','warn',nextQ);
+    }
+    w.appendChild(card);mArea.appendChild(w);
+    setStatus(`🕐 <b>Đồng hồ</b> · ${LVL[level].lbl} · <b>${score}</b>/${total} · 🔥 <b>${streak}</b>`);
+  }
+  return {title:'Đọc đồng hồ',init};
+})();
+
+/* ========== 29. BẢNG CỬU CHƯƠNG ========== */
+games.multTable = (()=>{
+  const LVL={};
+  for(let i=2;i<=9;i++)LVL['t'+i]={lbl:'Bảng '+i,emoji:i.toString()};
+  LVL.mix={lbl:'Trộn 2→9',emoji:'🎲'};
+  let level=localStorage.getItem('multLevel')||'t2';
+  if(!LVL[level])level='t2';
+  let prob,score=0,total=0,streak=0,answered=false,picked=null;
+  const r=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+  function gen(){
+    const a=level==='mix'?r(2,9):parseInt(level.slice(1));
+    const b=r(1,10);const ans=a*b;
+    const opts=[ans];let tries=0;
+    while(opts.length<4&&tries<30){tries++;
+      const o=ans+(r(-9,9)||1);if(o>0&&!opts.includes(o))opts.push(o);
+    }
+    while(opts.length<4)opts.push(ans+opts.length*7);
+    opts.sort(()=>Math.random()-0.5);
+    prob={a,b,ans,opts};
+  }
+  function init(){score=0;total=0;streak=0;gen();render()}
+  function setLevel(l){if(level===l)return;level=l;localStorage.setItem('multLevel',l);score=0;total=0;streak=0;gen();render()}
+  function pick(v){if(answered)return;answered=true;picked=v;total++;if(v===prob.ans){score++;streak++}else streak=0;render()}
+  function nextQ(){answered=false;picked=null;gen();render()}
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const w=document.createElement('div');w.className='quiz-wrap';
+    const pk=document.createElement('div');pk.className='quiz-level-pick';pk.style.flexWrap='wrap';
+    Object.keys(LVL).forEach(l=>{
+      const b=document.createElement('button');b.innerHTML=`<span class="lvl-emoji">${LVL[l].emoji}</span>${LVL[l].lbl}`;
+      if(l===level)b.classList.add('active');b.onclick=()=>setLevel(l);pk.appendChild(b);
+    });
+    w.appendChild(pk);
+    const card=document.createElement('div');card.className='quiz-card';
+    card.innerHTML=`<div class="quiz-mascot">✖️</div>
+      <div class="quiz-progress"><span>Đúng <b>${score}</b>/${total}</span><span>🔥 <b>${streak}</b></span></div>
+      <div class="mental-expr">${prob.a} × ${prob.b} <span class="mental-eq">=</span> <span class="mental-q">?</span></div>`;
+    const opts=document.createElement('div');opts.className='mental-opts';
+    prob.opts.forEach(o=>{
+      const b=document.createElement('button');b.textContent=o;
+      if(answered){b.disabled=true;if(o===prob.ans)b.classList.add('correct');else if(o===picked)b.classList.add('wrong')}
+      b.onclick=()=>pick(o);opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if(answered){
+      const corr=picked===prob.ans;
+      const fb=document.createElement('div');fb.className='quiz-feedback '+(corr?'right':'wrong');
+      const msgs=corr?PRAISE:ROAST;
+      fb.innerHTML=`<div class="fb-emoji">${corr?'🎉':'😅'}</div><div class="fb-msg">${msgs[r(0,msgs.length-1)]}</div>`;
+      if(!corr)fb.innerHTML+=`<div class="quiz-explain" style="margin-top:8px"><b>${prob.a} × ${prob.b} = ${prob.ans}</b></div>`;
+      card.appendChild(fb);
+      addBtn('CÂU TIẾP →','warn',nextQ);
+    }
+    w.appendChild(card);mArea.appendChild(w);
+    setStatus(`✖️ <b>Cửu chương</b> · ${LVL[level].lbl} · <b>${score}</b>/${total} · 🔥 <b>${streak}</b>`);
+  }
+  return {title:'Bảng cửu chương',init};
+})();
+
+/* ========== 31. SỬ VIỆT NAM ========== */
+games.historyVn = (()=>{
+  const QUIZ=[
+    {q:'Vua đầu tiên của Việt Nam (truyền thuyết) là?',opts:['Hùng Vương','Lý Thái Tổ','Lê Lợi','Đinh Tiên Hoàng'],a:0,ex:'Vua Hùng (Hùng Vương) là vua đầu tiên thời Văn Lang — quốc gia đầu tiên của người Việt.'},
+    {q:'Nhà nước đầu tiên của Việt Nam tên là?',opts:['Văn Lang','Âu Lạc','Đại Việt','Đại Cồ Việt'],a:0,ex:'Văn Lang là nhà nước đầu tiên do Hùng Vương dựng nên.'},
+    {q:'Sau Văn Lang là nhà nước nào?',opts:['Âu Lạc','Đại Việt','Đại Cồ Việt','Nam Việt'],a:0,ex:'An Dương Vương lập nước Âu Lạc, đóng đô ở Cổ Loa.'},
+    {q:'Hai Bà Trưng khởi nghĩa năm nào?',opts:['40','41','42','43'],a:0,ex:'Khởi nghĩa Hai Bà Trưng năm 40 (đầu Công Nguyên), chống quân Hán.'},
+    {q:'Hai Bà Trưng đánh đuổi quân xâm lược nào?',opts:['Quân Tống','Quân Hán','Quân Nguyên','Quân Minh'],a:1,ex:'Hai Bà chống Đông Hán (Trung Quốc).'},
+    {q:'Bà Triệu (Triệu Thị Trinh) khởi nghĩa năm nào?',opts:['40','248','938','1010'],a:1,ex:'Năm 248, Bà Triệu khởi nghĩa chống quân Ngô.'},
+    {q:'Ngô Quyền đánh thắng quân Nam Hán trên sông nào?',opts:['Sông Hồng','Sông Đà','Sông Bạch Đằng','Sông Mã'],a:2,ex:'Năm 938, Ngô Quyền dùng kế cọc nhọn trên sông Bạch Đằng.'},
+    {q:'Chiến thắng Bạch Đằng năm 938 có ý nghĩa gì?',opts:['Kết thúc 1000 năm Bắc thuộc','Bắt đầu thời Trần','Lập triều Lý','Đánh quân Nguyên'],a:0,ex:'Chấm dứt hơn 1000 năm Bắc thuộc, mở ra kỷ nguyên độc lập.'},
+    {q:'Đinh Bộ Lĩnh dẹp loạn gì?',opts:['12 sứ quân','Quân Nguyên','Quân Tống','Quân Mông Cổ'],a:0,ex:'Đinh Bộ Lĩnh dẹp loạn 12 sứ quân, lập nhà Đinh (968).'},
+    {q:'Đinh Bộ Lĩnh đặt tên nước là?',opts:['Đại Việt','Đại Cồ Việt','Nam Việt','Văn Lang'],a:1,ex:'Đinh Tiên Hoàng đặt tên nước là Đại Cồ Việt năm 968.'},
+    {q:'Vua nào dời đô từ Hoa Lư về Thăng Long?',opts:['Lý Thái Tổ','Lý Công Uẩn','Cả 2 (cùng người)','Lê Lợi'],a:2,ex:'Lý Công Uẩn (tức Lý Thái Tổ) dời đô năm 1010.'},
+    {q:'Năm nào Lý Thái Tổ dời đô?',opts:['968','1010','1054','1077'],a:1,ex:'Năm 1010, dời đô từ Hoa Lư về Thăng Long (Hà Nội ngày nay).'},
+    {q:'Thăng Long đổi tên thành Hà Nội từ thời vua nào?',opts:['Lê Thái Tổ','Quang Trung','Minh Mạng','Gia Long'],a:2,ex:'Năm 1831, vua Minh Mạng đổi Thăng Long thành Hà Nội.'},
+    {q:'Năm nào nước ta đổi tên thành "Đại Việt"?',opts:['968','1010','1054','1428'],a:2,ex:'Năm 1054, Lý Thánh Tông đổi tên nước thành Đại Việt.'},
+    {q:'Trận thắng quân Tống trên sông Như Nguyệt là của ai?',opts:['Trần Hưng Đạo','Lý Thường Kiệt','Lê Lợi','Trần Quốc Toản'],a:1,ex:'Năm 1077, Lý Thường Kiệt đánh tan quân Tống trên sông Như Nguyệt (sông Cầu).'},
+    {q:'Bài thơ "Nam quốc sơn hà" được cho là của ai?',opts:['Lý Thường Kiệt','Trần Hưng Đạo','Nguyễn Trãi','Lê Lợi'],a:0,ex:'"Nam quốc sơn hà Nam đế cư..." — được cho là của Lý Thường Kiệt, tuyên ngôn độc lập đầu tiên.'},
+    {q:'Trần Hưng Đạo 3 lần đánh thắng quân nào?',opts:['Tống','Nguyên-Mông','Minh','Thanh'],a:1,ex:'Ba lần (1258, 1285, 1288) đánh thắng quân Nguyên-Mông.'},
+    {q:'Trận Bạch Đằng thời Trần (1288) do ai chỉ huy?',opts:['Trần Quốc Toản','Trần Hưng Đạo','Trần Bình Trọng','Trần Nhật Duật'],a:1,ex:'Trần Hưng Đạo tái sử dụng kế cọc nhọn của Ngô Quyền.'},
+    {q:'"Hịch tướng sĩ" là của ai?',opts:['Lý Thường Kiệt','Trần Hưng Đạo','Nguyễn Trãi','Lê Lợi'],a:1,ex:'Trần Hưng Đạo viết để khích lệ tướng sĩ trước cuộc kháng Nguyên thứ 2.'},
+    {q:'Trần Bình Trọng nổi tiếng với câu nói nào?',opts:['Ta thà làm quỷ nước Nam','Đánh nhanh thắng nhanh','Sát Thát','Bệ hạ chém đầu thần trước'],a:0,ex:'"Ta thà làm quỷ nước Nam còn hơn làm vương đất Bắc!"'},
+    {q:'Hội nghị Diên Hồng có ý nghĩa gì?',opts:['Bàn dời đô','Bàn đánh quân Nguyên','Lập triều Trần','Truyền ngôi'],a:1,ex:'Năm 1284, vua Trần hỏi ý các bô lão về việc đánh hay hòa với quân Nguyên — tất cả hô "Đánh!".'},
+    {q:'Lê Lợi khởi nghĩa Lam Sơn chống quân nào?',opts:['Tống','Nguyên','Minh','Thanh'],a:2,ex:'Khởi nghĩa Lam Sơn (1418-1427) chống quân Minh xâm lược.'},
+    {q:'Năm nào Lê Lợi thắng quân Minh?',opts:['1418','1427','1428','1789'],a:1,ex:'Năm 1427, đánh tan quân Minh ở Chi Lăng - Xương Giang.'},
+    {q:'"Bình Ngô đại cáo" do ai viết?',opts:['Lê Lợi','Nguyễn Trãi','Trần Hưng Đạo','Lý Thường Kiệt'],a:1,ex:'Nguyễn Trãi soạn thay Lê Lợi năm 1428 — bản tuyên ngôn độc lập lần 2.'},
+    {q:'Năm 1428 có sự kiện gì?',opts:['Lê Lợi lên ngôi, lập Hậu Lê','Lý Thái Tổ dời đô','Quang Trung đại phá quân Thanh','Ngô Quyền thắng Bạch Đằng'],a:0,ex:'Lê Lợi lên ngôi, lập nhà Hậu Lê, đặt tên nước là Đại Việt.'},
+    {q:'Truyền thuyết "trả gươm thần" gắn với ai?',opts:['Lý Thái Tổ','Lê Lợi','Trần Hưng Đạo','Quang Trung'],a:1,ex:'Lê Lợi trả gươm cho rùa thần ở hồ Tả Vọng → Hồ Hoàn Kiếm.'},
+    {q:'Quang Trung là vương hiệu của ai?',opts:['Nguyễn Nhạc','Nguyễn Lữ','Nguyễn Huệ','Nguyễn Ánh'],a:2,ex:'Nguyễn Huệ lên ngôi hoàng đế lấy hiệu Quang Trung năm 1788.'},
+    {q:'Quang Trung đại phá quân Thanh ở đâu?',opts:['Ngọc Hồi - Đống Đa','Bạch Đằng','Chi Lăng','Cổ Loa'],a:0,ex:'Trận Ngọc Hồi - Đống Đa năm 1789 (mùng 5 Tết) đánh tan 29 vạn quân Thanh.'},
+    {q:'Trận Đống Đa năm bao nhiêu?',opts:['1788','1789','1790','1792'],a:1,ex:'Mùng 5 Tết Kỷ Dậu (30/01/1789) — đại thắng quân Thanh.'},
+    {q:'Vua sáng lập triều Nguyễn là?',opts:['Nguyễn Huệ','Nguyễn Ánh','Minh Mạng','Tự Đức'],a:1,ex:'Nguyễn Ánh lên ngôi năm 1802, hiệu Gia Long, lập nhà Nguyễn.'},
+    {q:'Triều Nguyễn đóng đô ở đâu?',opts:['Thăng Long','Hoa Lư','Huế','Sài Gòn'],a:2,ex:'Triều Nguyễn (1802-1945) đóng đô ở Phú Xuân (Huế).'},
+    {q:'Vua cuối cùng của triều Nguyễn là?',opts:['Tự Đức','Hàm Nghi','Bảo Đại','Khải Định'],a:2,ex:'Vua Bảo Đại thoái vị ngày 30/8/1945.'},
+    {q:'Pháp xâm lược Việt Nam năm nào?',opts:['1858','1862','1884','1945'],a:0,ex:'1/9/1858, Pháp nổ súng tấn công Đà Nẵng — bắt đầu xâm lược VN.'},
+    {q:'Khởi nghĩa Yên Thế do ai lãnh đạo?',opts:['Phan Bội Châu','Hoàng Hoa Thám','Phan Đình Phùng','Trương Định'],a:1,ex:'Hoàng Hoa Thám (Đề Thám) lãnh đạo khởi nghĩa Yên Thế (1884-1913).'},
+    {q:'Ai viết "Văn tế nghĩa sĩ Cần Giuộc"?',opts:['Nguyễn Du','Nguyễn Đình Chiểu','Phan Bội Châu','Tản Đà'],a:1,ex:'Nguyễn Đình Chiểu viết năm 1861 — ca ngợi nông dân chống Pháp.'},
+    {q:'Đảng Cộng sản Việt Nam thành lập năm nào?',opts:['1925','1930','1945','1954'],a:1,ex:'Đảng CSVN thành lập ngày 3/2/1930 do Nguyễn Ái Quốc chủ trì.'},
+    {q:'Bác Hồ đọc Tuyên ngôn Độc lập năm nào?',opts:['1930','1945','1954','1975'],a:1,ex:'Ngày 2/9/1945 tại Quảng trường Ba Đình, Hà Nội — khai sinh nước VNDCCH.'},
+    {q:'Cách mạng tháng Tám diễn ra năm nào?',opts:['1925','1930','1945','1954'],a:2,ex:'Tháng 8/1945, Cách mạng tháng Tám thành công.'},
+    {q:'Chiến dịch Điện Biên Phủ năm nào?',opts:['1945','1954','1968','1975'],a:1,ex:'Chiến thắng Điện Biên Phủ 7/5/1954, kết thúc kháng chiến chống Pháp.'},
+    {q:'Tướng chỉ huy chiến dịch Điện Biên Phủ là?',opts:['Văn Tiến Dũng','Võ Nguyên Giáp','Nguyễn Chí Thanh','Lê Trọng Tấn'],a:1,ex:'Đại tướng Võ Nguyên Giáp là Tổng tư lệnh chiến dịch.'},
+    {q:'Hiệp định Geneva năm 1954 chia VN ở vĩ tuyến nào?',opts:['16','17','18','20'],a:1,ex:'Vĩ tuyến 17 — tạm thời chia 2 miền chờ tổng tuyển cử.'},
+    {q:'Mỹ ném bom miền Bắc bắt đầu năm nào?',opts:['1954','1964','1968','1975'],a:1,ex:'Tháng 8/1964 (Sự kiện vịnh Bắc Bộ), Mỹ leo thang ném bom miền Bắc.'},
+    {q:'Tổng tiến công Tết Mậu Thân năm?',opts:['1965','1968','1972','1975'],a:1,ex:'Đợt 1: 30/1/1968 (Tết Mậu Thân) — đòn quyết định buộc Mỹ vào bàn đàm phán.'},
+    {q:'Chiến thắng "Hà Nội - Điện Biên Phủ trên không" năm?',opts:['1968','1972','1973','1975'],a:1,ex:'12-29/12/1972, miền Bắc bắn rơi 81 máy bay Mỹ, trong đó 34 B52.'},
+    {q:'Hiệp định Paris ký năm nào?',opts:['1968','1972','1973','1975'],a:2,ex:'27/1/1973 — Mỹ rút quân khỏi VN.'},
+    {q:'Ngày giải phóng miền Nam, thống nhất đất nước?',opts:['1/5/1975','30/4/1975','2/9/1975','7/5/1975'],a:1,ex:'Ngày 30/4/1975, xe tăng quân Giải phóng tiến vào Dinh Độc Lập.'},
+    {q:'Việt Nam chính thức thống nhất tên gọi mới năm nào?',opts:['1975','1976','1977','1986'],a:1,ex:'2/7/1976, đổi tên Cộng hòa Xã hội chủ nghĩa Việt Nam.'},
+    {q:'Đổi Mới chính thức bắt đầu năm nào?',opts:['1975','1976','1986','1995'],a:2,ex:'Đại hội VI (1986) khởi xướng công cuộc Đổi Mới.'},
+    {q:'VN gia nhập ASEAN năm nào?',opts:['1991','1995','2000','2007'],a:1,ex:'28/7/1995, VN gia nhập ASEAN.'},
+    {q:'VN gia nhập WTO năm nào?',opts:['2000','2005','2007','2010'],a:2,ex:'11/1/2007, VN chính thức trở thành thành viên WTO.'},
+    {q:'"Truyện Kiều" của ai?',opts:['Nguyễn Du','Nguyễn Trãi','Hồ Xuân Hương','Nguyễn Bỉnh Khiêm'],a:0,ex:'Nguyễn Du (1765-1820) viết Truyện Kiều dựa trên Kim Vân Kiều truyện của TQ.'},
+    {q:'Ai được tôn là "Bà chúa thơ Nôm"?',opts:['Đoàn Thị Điểm','Bà Huyện Thanh Quan','Hồ Xuân Hương','Sương Nguyệt Anh'],a:2,ex:'Hồ Xuân Hương được tôn là Bà chúa thơ Nôm.'},
+    {q:'Quốc ca Việt Nam tên là?',opts:['Tiến quân ca','Diệt phát xít','Lên đàng','Quốc tế ca'],a:0,ex:'"Tiến quân ca" do Văn Cao sáng tác (1944), trở thành Quốc ca từ 1945.'}
+  ];
+  let pool,idx=0,score=0,total=0,answered=false,picked=-1;
+  function init(){buildPool();render()}
+  function buildPool(){pool=[...QUIZ].sort(()=>Math.random()-0.5);idx=0;score=0;total=pool.length;answered=false;picked=-1}
+  function pick(i){if(answered)return;answered=true;picked=i;if(i===pool[idx].a)score++;render()}
+  function next(){idx++;answered=false;picked=-1;render()}
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const w=document.createElement('div');w.className='quiz-wrap';
+    if(idx>=total){
+      const end=document.createElement('div');end.className='quiz-card quiz-end';
+      const pct=Math.round(score*100/total);
+      const stars=pct>=90?'⭐⭐⭐⭐⭐':pct>=75?'⭐⭐⭐⭐':pct>=60?'⭐⭐⭐':pct>=40?'⭐⭐':'⭐';
+      end.innerHTML=`<div style="font-size:48px">🏛️</div><div class="big">Xong rồi!</div><div class="stars">${stars}</div><div class="summary">Đúng <b style="color:var(--neon-green)">${score}</b>/${total} (${pct}%)</div>`;
+      w.appendChild(end);mArea.appendChild(w);addBtn('Làm lại','warn',()=>{buildPool();render()});setStatus('Hoàn thành!');return;
+    }
+    const card=document.createElement('div');card.className='quiz-card';
+    card.innerHTML=`<div class="quiz-mascot">🏛️</div><div class="quiz-progress"><span>Câu <b>${idx+1}</b>/${total}</span><span>Điểm: <b>${score}</b></span></div>`;
+    const bar=document.createElement('div');bar.className='quiz-bar';
+    const fill=document.createElement('div');fill.className='quiz-bar-fill';fill.style.width=`${(idx/total)*100}%`;bar.appendChild(fill);card.appendChild(bar);
+    const q=pool[idx];
+    const qd=document.createElement('div');qd.className='quiz-q';qd.textContent=q.q;card.appendChild(qd);
+    const opts=document.createElement('div');opts.className='quiz-opts';
+    q.opts.forEach((o,i)=>{
+      const b=document.createElement('button');b.className='quiz-opt';b.textContent=o;
+      if(answered){b.disabled=true;if(i===q.a)b.classList.add('correct');else if(i===picked)b.classList.add('wrong')}
+      b.onclick=()=>pick(i);opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if(answered){
+      const corr=picked===q.a;
+      const fb=document.createElement('div');fb.className='quiz-feedback '+(corr?'right':'wrong');
+      const msgs=corr?PRAISE:ROAST;
+      fb.innerHTML=`<div class="fb-emoji">${corr?'🎉':'😅'}</div><div class="fb-msg">${msgs[Math.floor(Math.random()*msgs.length)]}</div><div class="quiz-explain">💡 ${q.ex}</div>`;
+      card.appendChild(fb);
+      addBtn('CÂU TIẾP →','warn',next);
+    }
+    w.appendChild(card);mArea.appendChild(w);
+    setStatus(`🏛️ <b>Sử Việt Nam</b> · Câu <b>${idx+1}</b>/${total} · Điểm <b>${score}</b>`);
+  }
+  return {title:'Sử Việt Nam',init};
+})();
+
+/* ========== 32. ĐẢO CHỮ TIẾNG ANH ========== */
+games.wordScramble = (()=>{
+  const WORDS={
+    easy:[
+      {w:'CAT',m:'mèo'},{w:'DOG',m:'chó'},{w:'SUN',m:'mặt trời'},{w:'RUN',m:'chạy'},{w:'BIG',m:'to'},
+      {w:'RED',m:'màu đỏ'},{w:'BLUE',m:'xanh dương'},{w:'TREE',m:'cây'},{w:'BOOK',m:'sách'},{w:'BIRD',m:'chim'},
+      {w:'FISH',m:'cá'},{w:'STAR',m:'ngôi sao'},{w:'MOON',m:'mặt trăng'},{w:'MILK',m:'sữa'},{w:'CAKE',m:'bánh'},
+      {w:'BALL',m:'quả bóng'},{w:'DOLL',m:'búp bê'},{w:'CAR',m:'ô tô'},{w:'BUS',m:'xe buýt'},{w:'KEY',m:'chìa khóa'},
+      {w:'HAT',m:'mũ'},{w:'BED',m:'giường'},{w:'EGG',m:'trứng'},{w:'CUP',m:'cốc'},{w:'TOY',m:'đồ chơi'}
+    ],
+    mid:[
+      {w:'APPLE',m:'táo'},{w:'HOUSE',m:'ngôi nhà'},{w:'WATER',m:'nước'},{w:'SMILE',m:'nụ cười'},{w:'HAPPY',m:'vui'},
+      {w:'TIGER',m:'hổ'},{w:'ROBOT',m:'rô-bốt'},{w:'PIANO',m:'đàn dương cầm'},{w:'BREAD',m:'bánh mì'},{w:'CLOUD',m:'mây'},
+      {w:'TRAIN',m:'tàu hỏa'},{w:'PLANE',m:'máy bay'},{w:'CHAIR',m:'ghế'},{w:'TABLE',m:'bàn'},{w:'CLOCK',m:'đồng hồ'},
+      {w:'GREEN',m:'xanh lá'},{w:'BLACK',m:'đen'},{w:'WHITE',m:'trắng'},{w:'GHOST',m:'con ma'},{w:'PARTY',m:'tiệc'},
+      {w:'DREAM',m:'giấc mơ'},{w:'SWEET',m:'ngọt'},{w:'NIGHT',m:'đêm'},{w:'MUSIC',m:'âm nhạc'},{w:'OCEAN',m:'đại dương'},
+      {w:'WINDOW',m:'cửa sổ'},{w:'PURPLE',m:'tím'},{w:'FRIEND',m:'bạn bè'},{w:'SCHOOL',m:'trường học'},{w:'GARDEN',m:'khu vườn'},
+      {w:'GUITAR',m:'đàn ghi-ta'},{w:'CASTLE',m:'lâu đài'}
+    ],
+    hard:[
+      {w:'ELEPHANT',m:'voi'},{w:'BEAUTIFUL',m:'xinh đẹp'},{w:'MOUNTAIN',m:'núi'},{w:'COMPUTER',m:'máy tính'},{w:'INTERNET',m:'mạng internet'},
+      {w:'BIRTHDAY',m:'sinh nhật'},{w:'PINEAPPLE',m:'dứa'},{w:'STRAWBERRY',m:'dâu tây'},{w:'DINOSAUR',m:'khủng long'},{w:'BUTTERFLY',m:'bướm'},
+      {w:'CHOCOLATE',m:'sô-cô-la'},{w:'TELEPHONE',m:'điện thoại'},{w:'EXERCISE',m:'tập thể dục'},{w:'KNOWLEDGE',m:'kiến thức'},{w:'ADVENTURE',m:'cuộc phiêu lưu'},
+      {w:'BASKETBALL',m:'bóng rổ'},{w:'KITCHEN',m:'nhà bếp'},{w:'PRINCESS',m:'công chúa'},{w:'TREASURE',m:'kho báu'},{w:'RAINBOW',m:'cầu vồng'},
+      {w:'PARACHUTE',m:'cái dù'},{w:'TRIANGLE',m:'tam giác'},{w:'WONDERFUL',m:'tuyệt vời'},{w:'CALENDAR',m:'lịch'},{w:'BICYCLE',m:'xe đạp'}
+    ]
+  };
+  const LVL={easy:{lbl:'Dễ (3-4 chữ)',emoji:'🌱'},mid:{lbl:'Vừa (5-6 chữ)',emoji:'🌿'},hard:{lbl:'Khó (7+ chữ)',emoji:'🌳'}};
+  let level=localStorage.getItem('scrambleLevel')||'easy';
+  if(!LVL[level])level='easy';
+  let prob,score=0,total=0,streak=0,answered=false,picked=-1;
+  const r=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+  function shuffle(w){
+    let s=w.split('');
+    do{s.sort(()=>Math.random()-0.5)} while(s.join('')===w&&w.length>1);
+    return s.join('');
+  }
+  function gen(){
+    const pool=WORDS[level];
+    const item=pool[r(0,pool.length-1)];
+    const correct=item.w;
+    const scrambled=shuffle(correct);
+    // 4 options: 1 correct + 3 random wrong from same level
+    const opts=[correct];
+    let tries=0;
+    while(opts.length<4&&tries<30){
+      tries++;
+      const w=pool[r(0,pool.length-1)].w;
+      if(!opts.includes(w))opts.push(w);
+    }
+    opts.sort(()=>Math.random()-0.5);
+    prob={correct,scrambled,meaning:item.m,opts};
+  }
+  function init(){score=0;total=0;streak=0;gen();render()}
+  function setLevel(l){if(level===l)return;level=l;localStorage.setItem('scrambleLevel',l);score=0;total=0;streak=0;gen();render()}
+  function pick(v){if(answered)return;answered=true;picked=v;total++;if(v===prob.correct){score++;streak++}else streak=0;render()}
+  function nextQ(){answered=false;picked=-1;gen();render()}
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const w=document.createElement('div');w.className='quiz-wrap';
+    const pk=document.createElement('div');pk.className='quiz-level-pick';
+    Object.keys(LVL).forEach(l=>{
+      const b=document.createElement('button');b.innerHTML=`<span class="lvl-emoji">${LVL[l].emoji}</span>${LVL[l].lbl}`;
+      if(l===level)b.classList.add('active');b.onclick=()=>setLevel(l);pk.appendChild(b);
+    });
+    w.appendChild(pk);
+    const card=document.createElement('div');card.className='quiz-card';
+    card.innerHTML=`<div class="quiz-mascot">🔀</div>
+      <div class="quiz-progress"><span>Đúng <b>${score}</b>/${total}</span><span>🔥 <b>${streak}</b></span></div>
+      <div style="text-align:center;margin:18px 0">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:36px;color:var(--neon-yellow);letter-spacing:8px;font-weight:700;text-shadow:0 0 16px rgba(255,230,0,.5);margin-bottom:8px">${prob.scrambled}</div>
+        <div style="color:var(--muted);font-size:13px;font-style:italic">Nghĩa: ${prob.meaning}</div>
+      </div>
+      <div class="quiz-q" style="text-align:center;font-size:15px;margin-bottom:10px">Sắp xếp các chữ thành từ đúng:</div>`;
+    const opts=document.createElement('div');opts.className='quiz-opts';
+    prob.opts.forEach(o=>{
+      const b=document.createElement('button');b.className='quiz-opt';b.textContent=o;
+      if(answered){b.disabled=true;if(o===prob.correct)b.classList.add('correct');else if(o===picked)b.classList.add('wrong')}
+      b.onclick=()=>pick(o);opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if(answered){
+      const corr=picked===prob.correct;
+      const fb=document.createElement('div');fb.className='quiz-feedback '+(corr?'right':'wrong');
+      const msgs=corr?PRAISE:ROAST;
+      fb.innerHTML=`<div class="fb-emoji">${corr?'🎉':'😅'}</div><div class="fb-msg">${msgs[r(0,msgs.length-1)]}</div>`;
+      if(!corr)fb.innerHTML+=`<div class="quiz-explain" style="margin-top:8px"><b>${prob.correct}</b> — ${prob.meaning}</div>`;
+      card.appendChild(fb);
+      addBtn('CÂU TIẾP →','warn',nextQ);
+    }
+    w.appendChild(card);mArea.appendChild(w);
+    setStatus(`🔀 <b>Đảo chữ</b> · ${LVL[level].lbl} · <b>${score}</b>/${total} · 🔥 <b>${streak}</b>`);
+  }
+  return {title:'Đảo chữ tiếng Anh',init};
+})();
+
+/* ========== 33. LỊCH & NGÀY THÁNG ========== */
+games.calendarQuiz = (()=>{
+  const QUIZ=[
+    {q:'Một năm có bao nhiêu tháng?',opts:['10','11','12','13'],a:2,ex:'12 tháng: từ tháng 1 đến tháng 12.'},
+    {q:'Một tuần có bao nhiêu ngày?',opts:['5','6','7','8'],a:2,ex:'7 ngày: thứ 2 → chủ nhật.'},
+    {q:'Một năm có bao nhiêu ngày (năm thường)?',opts:['360','364','365','366'],a:2,ex:'Năm thường: 365 ngày. Năm nhuận: 366 ngày.'},
+    {q:'Tháng nào có 28 hoặc 29 ngày?',opts:['Tháng 1','Tháng 2','Tháng 3','Tháng 4'],a:1,ex:'Tháng 2 có 28 ngày (thường) hoặc 29 ngày (năm nhuận).'},
+    {q:'Tháng nào có 31 ngày?',opts:['Tháng 4','Tháng 6','Tháng 7','Tháng 11'],a:2,ex:'Tháng 1, 3, 5, 7, 8, 10, 12 có 31 ngày.'},
+    {q:'Tháng nào có 30 ngày?',opts:['Tháng 1','Tháng 4','Tháng 8','Tháng 12'],a:1,ex:'Tháng 4, 6, 9, 11 có 30 ngày.'},
+    {q:'Mỗi mùa trong năm dài khoảng bao nhiêu tháng?',opts:['2','3','4','5'],a:1,ex:'4 mùa × 3 tháng = 12 tháng.'},
+    {q:'Mùa xuân ở miền Bắc Việt Nam thường vào tháng nào?',opts:['1-3','4-6','7-9','10-12'],a:0,ex:'Mùa xuân: tháng 1-3 (Tết Nguyên Đán thường tháng 1-2).'},
+    {q:'Mùa hè ở Việt Nam thường vào tháng nào?',opts:['1-3','4-6','7-9','10-12'],a:1,ex:'Mùa hè: tháng 4-6 (nóng nhất).'},
+    {q:'Năm nhuận có thêm ngày nào?',opts:['1 tháng 1','29 tháng 2','29 tháng 12','31 tháng 6'],a:1,ex:'Năm nhuận có ngày 29/2 (366 ngày tổng).'},
+    {q:'Năm 2024 là năm nhuận hay không?',opts:['Năm nhuận','Năm thường'],a:0,ex:'2024 chia hết cho 4 → năm nhuận.'},
+    {q:'Năm nhuận xảy ra mỗi mấy năm?',opts:['2','3','4','5'],a:2,ex:'Mỗi 4 năm có 1 năm nhuận (chia hết cho 4). Trừ năm tròn 100 nhưng không chia hết cho 400.'},
+    {q:'Sau thứ 2 là thứ mấy?',opts:['Thứ 3','Thứ 4','Thứ 5','Chủ nhật'],a:0,ex:'Thứ 2 → Thứ 3.'},
+    {q:'Trước thứ 7 là thứ mấy?',opts:['Thứ 5','Thứ 6','Chủ nhật','Thứ 2'],a:1,ex:'Thứ 6 → Thứ 7.'},
+    {q:'Sau chủ nhật là thứ mấy?',opts:['Thứ 2','Thứ 3','Thứ 7','Chủ nhật'],a:0,ex:'Tuần mới bắt đầu thứ 2.'},
+    {q:'Hôm nay là thứ 3. Sau 5 ngày nữa là thứ mấy?',opts:['Thứ 7','Chủ nhật','Thứ 2','Thứ 6'],a:1,ex:'Thứ 3 + 5 ngày = Chủ nhật (4: thứ 4, 5: thứ 5, 6: thứ 6, 7: thứ 7, CN).'},
+    {q:'Hôm nay 15/3, một tuần sau là ngày mấy?',opts:['20/3','21/3','22/3','23/3'],a:2,ex:'15 + 7 = 22 (cùng tháng).'},
+    {q:'Hôm nay 30/4. Ngày mai là ngày mấy?',opts:['31/4','1/5','30/5','1/4'],a:1,ex:'Tháng 4 chỉ có 30 ngày → 1/5.'},
+    {q:'2 tuần bằng bao nhiêu ngày?',opts:['10','12','14','15'],a:2,ex:'2 × 7 = 14 ngày.'},
+    {q:'Quý 1 gồm các tháng nào?',opts:['1-3','2-4','3-5','4-6'],a:0,ex:'Quý 1: tháng 1, 2, 3.'},
+    {q:'Quý 4 gồm các tháng nào?',opts:['7-9','9-11','10-12','11-12'],a:2,ex:'Quý 4: tháng 10, 11, 12.'},
+    {q:'1 thập kỷ bằng bao nhiêu năm?',opts:['5','10','100','1000'],a:1,ex:'Thập kỷ = 10 năm.'},
+    {q:'1 thế kỷ bằng bao nhiêu năm?',opts:['10','50','100','1000'],a:2,ex:'Thế kỷ = 100 năm.'},
+    {q:'1 thiên niên kỷ bằng bao nhiêu năm?',opts:['100','500','1000','10000'],a:2,ex:'Thiên niên kỷ = 1000 năm.'},
+    {q:'Năm 2026 thuộc thế kỷ nào?',opts:['Thế kỷ 19','Thế kỷ 20','Thế kỷ 21','Thế kỷ 22'],a:2,ex:'Thế kỷ 21 = 2001-2100.'},
+    {q:'Ngày Tết Nguyên Đán Việt Nam là ngày nào?',opts:['1/1 Dương lịch','1/1 Âm lịch','15/8 Âm lịch','30/4 Dương lịch'],a:1,ex:'Tết Nguyên Đán = mùng 1 tháng Giêng âm lịch.'},
+    {q:'Quốc Khánh Việt Nam là ngày nào?',opts:['30/4','19/5','2/9','22/12'],a:2,ex:'2/9/1945 — Bác Hồ đọc Tuyên ngôn Độc lập.'},
+    {q:'Ngày Nhà giáo Việt Nam là?',opts:['20/10','20/11','8/3','22/12'],a:1,ex:'20/11 — Ngày Nhà giáo Việt Nam.'},
+    {q:'Ngày Quốc tế Phụ nữ là?',opts:['20/10','8/3','20/11','22/12'],a:1,ex:'8/3 — Quốc tế Phụ nữ.'},
+    {q:'Ngày Phụ nữ Việt Nam là?',opts:['8/3','20/10','20/11','19/5'],a:1,ex:'20/10 — Ngày Phụ nữ Việt Nam.'},
+    {q:'Ngày Quốc tế Thiếu nhi là?',opts:['1/5','1/6','1/9','15/8'],a:1,ex:'1/6 — Quốc tế Thiếu nhi.'},
+    {q:'Trung Thu (Tết Trông Trăng) ngày nào âm lịch?',opts:['15/7','15/8','15/9','30/8'],a:1,ex:'Rằm tháng 8 âm lịch (15/8) là Tết Trung Thu.'},
+    {q:'Sinh nhật Bác Hồ ngày nào?',opts:['2/9','19/5','22/12','30/4'],a:1,ex:'19/5/1890 — sinh nhật Chủ tịch Hồ Chí Minh.'},
+    {q:'Ngày thành lập QĐND Việt Nam là?',opts:['2/9','30/4','22/12','7/5'],a:2,ex:'22/12/1944 — thành lập đội Việt Nam Tuyên truyền Giải phóng quân.'},
+    {q:'Ngày giải phóng miền Nam là?',opts:['30/4','1/5','2/9','7/5'],a:0,ex:'30/4/1975 — Sài Gòn được giải phóng.'},
+    {q:'Sau tháng 12 là tháng nào (sang năm mới)?',opts:['Tháng 12','Tháng 13','Tháng 1','Tháng 11'],a:2,ex:'Tháng 12 → tháng 1 năm sau.'},
+    {q:'Năm nhuận tiếp theo sau 2024 là?',opts:['2025','2026','2027','2028'],a:3,ex:'2024 + 4 = 2028 (mỗi 4 năm có 1 nhuận).'},
+    {q:'Một tháng có bao nhiêu tuần (khoảng)?',opts:['2','3','4','5'],a:2,ex:'4 tuần × 7 = 28 ngày; tháng có 30-31 ngày nên hơn 4 tuần một chút.'},
+    {q:'Câu vè "Ba mươi tháng có ngày..." nói về tháng nào có 30 ngày?',opts:['1,3,5,7','2,4,6,8','4,6,9,11','5,7,9,11'],a:2,ex:'Tháng 4, 6, 9, 11 có 30 ngày.'},
+    {q:'AM trong giờ là viết tắt của?',opts:['Sáng','Chiều','Tối','Đêm'],a:0,ex:'AM (Ante Meridiem) = trước giờ trưa = từ 0h đến 12h trưa.'},
+    {q:'PM trong giờ là viết tắt của?',opts:['Sáng','Sau trưa','Tối','Đêm khuya'],a:1,ex:'PM (Post Meridiem) = sau giờ trưa = từ 12h trưa đến 24h.'},
+    {q:'6:00 AM là?',opts:['6h sáng','6h tối','12h trưa','Nửa đêm'],a:0,ex:'6 AM = 6 giờ sáng.'},
+    {q:'9:00 PM là?',opts:['9h sáng','9h tối','12h trưa','Nửa đêm'],a:1,ex:'9 PM = 9 giờ tối = 21:00.'},
+    {q:'12 giờ trưa được gọi là?',opts:['12 AM','12 PM','24 AM','0 PM'],a:1,ex:'12 PM = 12h trưa. 12 AM = nửa đêm (00:00).'},
+    {q:'Năm có 4 mùa rõ rệt ở miền nào của Việt Nam?',opts:['Miền Bắc','Miền Nam','Miền Trung','Cả 3 miền'],a:0,ex:'Miền Bắc có 4 mùa rõ rệt; miền Nam chỉ có 2 mùa (mưa & khô).'}
+  ];
+  let pool,idx=0,score=0,total=0,answered=false,picked=-1;
+  function init(){buildPool();render()}
+  function buildPool(){pool=[...QUIZ].sort(()=>Math.random()-0.5);idx=0;score=0;total=pool.length;answered=false;picked=-1}
+  function pick(i){if(answered)return;answered=true;picked=i;if(i===pool[idx].a)score++;render()}
+  function next(){idx++;answered=false;picked=-1;render()}
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const w=document.createElement('div');w.className='quiz-wrap';
+    if(idx>=total){
+      const end=document.createElement('div');end.className='quiz-card quiz-end';
+      const pct=Math.round(score*100/total);
+      const stars=pct>=90?'⭐⭐⭐⭐⭐':pct>=75?'⭐⭐⭐⭐':pct>=60?'⭐⭐⭐':pct>=40?'⭐⭐':'⭐';
+      end.innerHTML=`<div style="font-size:48px">📅</div><div class="big">Xong rồi!</div><div class="stars">${stars}</div><div class="summary">Đúng <b style="color:var(--neon-green)">${score}</b>/${total} (${pct}%)</div>`;
+      w.appendChild(end);mArea.appendChild(w);addBtn('Làm lại','warn',()=>{buildPool();render()});setStatus('Hoàn thành!');return;
+    }
+    const card=document.createElement('div');card.className='quiz-card';
+    card.innerHTML=`<div class="quiz-mascot">📅</div><div class="quiz-progress"><span>Câu <b>${idx+1}</b>/${total}</span><span>Điểm: <b>${score}</b></span></div>`;
+    const bar=document.createElement('div');bar.className='quiz-bar';
+    const fill=document.createElement('div');fill.className='quiz-bar-fill';fill.style.width=`${(idx/total)*100}%`;bar.appendChild(fill);card.appendChild(bar);
+    const q=pool[idx];
+    const qd=document.createElement('div');qd.className='quiz-q';qd.textContent=q.q;card.appendChild(qd);
+    const opts=document.createElement('div');opts.className='quiz-opts';
+    q.opts.forEach((o,i)=>{
+      const b=document.createElement('button');b.className='quiz-opt';b.textContent=o;
+      if(answered){b.disabled=true;if(i===q.a)b.classList.add('correct');else if(i===picked)b.classList.add('wrong')}
+      b.onclick=()=>pick(i);opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if(answered){
+      const corr=picked===q.a;
+      const fb=document.createElement('div');fb.className='quiz-feedback '+(corr?'right':'wrong');
+      const msgs=corr?PRAISE:ROAST;
+      fb.innerHTML=`<div class="fb-emoji">${corr?'🎉':'😅'}</div><div class="fb-msg">${msgs[Math.floor(Math.random()*msgs.length)]}</div><div class="quiz-explain">💡 ${q.ex}</div>`;
+      card.appendChild(fb);
+      addBtn('CÂU TIẾP →','warn',next);
+    }
+    w.appendChild(card);mArea.appendChild(w);
+    setStatus(`📅 <b>Lịch & Ngày tháng</b> · Câu <b>${idx+1}</b>/${total} · Điểm <b>${score}</b>`);
+  }
+  return {title:'Lịch & Ngày tháng',init};
+})();
+
+
 
 
 </script>
