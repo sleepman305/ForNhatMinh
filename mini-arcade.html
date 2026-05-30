@@ -50,7 +50,7 @@ body::after{
   background:repeating-linear-gradient(0deg,rgba(0,0,0,.15) 0,rgba(0,0,0,.15) 1px,transparent 1px,transparent 3px);
   mix-blend-mode:multiply;
 }
-.shell{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:32px 24px 80px}
+.shell{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:32px 24px calc(80px + env(safe-area-inset-bottom,0px))}
 header{text-align:center;margin-bottom:48px;position:relative}
 .mascot{
   display:block;margin:0 auto 14px;
@@ -148,7 +148,7 @@ header{text-align:center;margin-bottom:48px;position:relative}
   background:linear-gradient(180deg,rgba(30,10,70,.95) 0%,rgba(15,5,40,.98) 100%);
   border:none;border-radius:0;
   max-width:none;width:100%;height:100vh;max-height:100vh;
-  padding:18px 16px 12px;position:relative;
+  padding:18px 16px calc(40px + env(safe-area-inset-bottom,0px));position:relative;
   box-shadow:none;
   margin:0;
   display:flex;flex-direction:column;
@@ -169,7 +169,7 @@ header{text-align:center;margin-bottom:48px;position:relative}
 }
 .score{display:inline-flex;gap:14px;font-family:'JetBrains Mono',monospace;font-size:13px}
 .score b{color:var(--neon-yellow)}
-.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;padding-top:10px;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px));border-top:1px solid rgba(255,255,255,.06);flex-shrink:0}
 .btn{
   font-family:'Bungee',cursive;font-size:12px;letter-spacing:.05em;
   padding:10px 16px;border-radius:10px;cursor:pointer;
@@ -580,7 +580,7 @@ footer b{color:var(--neon-cyan)}
 @media (max-width:520px){
   .shell{padding:20px 16px 60px}
   .modal{padding:10px 6px}
-  .modal-content{padding:14px 14px;max-height:96vh}
+  .modal-content{padding:14px 14px calc(36px + env(safe-area-inset-bottom,0px));max-height:100vh}
   .modal-head h2{font-size:17px}
   .modal-head{margin-bottom:10px}
   .status{padding:8px 12px;font-size:13px;min-height:36px;margin-bottom:10px}
@@ -5209,7 +5209,6 @@ games.obby = (()=>{
     bestDeaths=JSON.parse(localStorage.getItem('obbyBest')||'{}');
     loadLevel(currentLevel);
     bindKeys();
-    loop();
   }
   function loadLevel(idx){
     currentLevel=idx;
@@ -5441,9 +5440,9 @@ games.obby = (()=>{
     mArea.appendChild(hint);
     setStatus(`🔴 <b>Obby</b> · ${levels[currentLevel].name} · ⭐ ${collected}/${stars.length} · 💀 ${deaths}`);
   }
-  // Override init to start game loop
   const origInit=init;
-  return {title:'Obby (Roblox-style)',init:()=>{origInit();render()}};
+  // Override init to start game loop AFTER render creates the canvas
+  return {title:'Obby (Roblox-style)',init:()=>{origInit();render();loop()}};
 })();
 
 </script>
