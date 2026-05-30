@@ -687,6 +687,7 @@ footer b{color:var(--neon-cyan)}
     <div class="card" data-game="turtleLogo" style="--ac:var(--neon-yellow)"><div class="emoji">🐢</div><h3>Lập trình rùa</h3><p>Logo — viết lệnh F/L/R để đi tới đích, 6 bài</p></div>
     <div class="card" data-game="guessOutput" style="--ac:var(--neon-orange)"><div class="emoji">🎯</div><h3>Đoán output code</h3><p>Python — 40 câu từ in số đến hàm</p></div>
     <div class="card" data-game="itTerms" style="--ac:var(--neon-purple)"><div class="emoji">💻</div><h3>Đố thuật ngữ IT</h3><p>40 câu — HTML, bug, RAM, AI, Bill Gates...</p></div>
+    <div class="card" data-game="aiQuiz" style="--ac:var(--neon-cyan)"><div class="emoji">🤖</div><h3>Đào tạo AI</h3><p>50 câu — AI là gì, ví dụ thực tế, ChatGPT, Claude, deepfake...</p></div>
   </div>
 </div>
 
@@ -4190,6 +4191,161 @@ games.itTerms = (()=>{
     setStatus(`💻 <b>Thuật ngữ IT</b> · Câu <b>${idx+1}</b>/${total} · Điểm <b>${score}</b>`);
   }
   return {title:'Đố thuật ngữ IT',init};
+})();
+
+
+
+/* ========== 40. ĐÀO TẠO AI — CƠ BẢN ĐẾN NÂNG CAO ========== */
+games.aiQuiz = (()=>{
+  const QUIZ=[
+    // === PHẦN 1: AI LÀ GÌ? KHÁI NIỆM CƠ BẢN (15 câu) ===
+    {q:'AI viết tắt của từ gì?',opts:['Auto Internet','Artificial Intelligence (Trí tuệ nhân tạo)','Active Index','Application Image'],a:1,
+     ex:'AI = Artificial Intelligence = Trí tuệ nhân tạo. Máy mô phỏng khả năng học và suy nghĩ của con người.'},
+    {q:'AI có thể làm việc gì sau đây?',opts:['Chỉ tính toán','Hiểu ngôn ngữ, nhận hình ảnh, dự đoán, sáng tạo','Chỉ phát nhạc','Chỉ in tài liệu'],a:1,
+     ex:'AI hiện đại có thể: dịch ngôn ngữ, nhận diện khuôn mặt, dự báo thời tiết, vẽ tranh, viết văn, chơi cờ, lái xe...'},
+    {q:'Ví dụ về AI trong đời sống hàng ngày?',opts:['Đèn pin','Siri/Google Assistant trên điện thoại','Cái cốc','Bàn ghế'],a:1,
+     ex:'Trợ lý ảo (Siri, Google Assistant, Alexa) là AI quen thuộc. Còn có: gợi ý video YouTube, tag bạn bè trên ảnh Facebook, dịch Google Translate, bộ lọc Instagram...'},
+    {q:'AI khác máy tính thông thường ở điểm gì?',opts:['Không khác gì','AI có thể "học" từ dữ liệu, máy tính thường chỉ làm theo lệnh','AI nhỏ hơn','AI không cần điện'],a:1,
+     ex:'Máy tính thường: làm chính xác việc bạn lập trình. AI: học từ ví dụ, cải thiện qua thời gian, xử lý tình huống mới mà chưa được lập trình cụ thể.'},
+    {q:'AI hiểu được cảm xúc con người không?',opts:['Hoàn toàn hiểu như người','Có thể nhận biết qua tín hiệu (giọng, biểu cảm) nhưng không cảm nhận thật','Không bao giờ','Chỉ hiểu vui'],a:1,
+     ex:'AI có thể PHÂN TÍCH cảm xúc qua giọng nói, nét mặt, văn bản — nhưng không thực sự "cảm thấy" như con người. Đây là một trong những giới hạn lớn.'},
+    {q:'AI có thông minh hơn con người không?',opts:['Luôn thông minh hơn','Thông minh ở vài việc cụ thể, nhưng kém ở nhiều việc khác','Luôn kém hơn','Bằng nhau hoàn toàn'],a:1,
+     ex:'AI giỏi việc cụ thể (cờ vây, dịch, nhận ảnh), nhưng kém con người ở: sự sáng tạo thực sự, lập luận tổng quát, hiểu biết về thế giới, đạo đức, đồng cảm.'},
+    {q:'AI có suy nghĩ độc lập như con người không?',opts:['Hoàn toàn có','Chưa — AI hiện tại chỉ tính xác suất dựa trên dữ liệu đã học','Sẽ có vào tuần sau','Có nhưng phải sạc pin'],a:1,
+     ex:'AI hiện tại (kể cả ChatGPT, Claude) là "predictive" — dự đoán phản hồi hợp lý dựa trên patterns. Chưa có ý thức, mong muốn, hay mục tiêu riêng.'},
+    {q:'Robot và AI có giống nhau không?',opts:['Hoàn toàn giống','Khác — robot có thân thể, AI là phần mềm (có thể có/không có thân thể)','Robot to hơn AI','Không liên quan'],a:1,
+     ex:'Robot = phần cứng + có thể có AI bên trong. AI = phần mềm/trí tuệ. ChatGPT là AI nhưng không phải robot. Robot hút bụi có thể có AI nhỏ bên trong.'},
+    {q:'Thuật ngữ "Machine Learning" (ML) là gì?',opts:['Học máy — AI học từ dữ liệu','Máy may quần áo','Máy phát nhạc','Máy in 3D'],a:0,
+     ex:'Machine Learning = Học máy = nhánh của AI. Thay vì lập trình cứng từng quy tắc, ta cho máy "học" từ nhiều ví dụ → nó tự rút ra quy luật.'},
+    {q:'Deep Learning là gì?',opts:['Học sâu — ML dùng mạng neuron nhiều lớp, mô phỏng não bộ','Đào hố sâu','Học vào ban đêm','Học dưới biển'],a:0,
+     ex:'Deep Learning = nhánh con của ML, dùng "neural networks" nhiều tầng (deep = sâu). Đây là kỹ thuật chính đằng sau ChatGPT, nhận diện ảnh, xe tự lái.'},
+    {q:'Mối quan hệ giữa AI, ML, Deep Learning?',opts:['3 cái độc lập','AI ⊃ ML ⊃ Deep Learning (lồng vào nhau)','ML ⊃ AI ⊃ DL','Không có liên quan'],a:1,
+     ex:'AI là khái niệm bao trùm. ML là 1 cách làm AI (qua học). Deep Learning là 1 loại ML mạnh nhất hiện nay (dùng mạng neuron sâu).'},
+    {q:'Neural Network (mạng neuron) mô phỏng cái gì?',opts:['Máy tính','Cách neuron trong não con người kết nối','Mạng wifi','Dây điện'],a:1,
+     ex:'Neural network lấy cảm hứng từ não: các "neuron" nhân tạo kết nối qua trọng số (weights). Học = điều chỉnh trọng số để dự đoán đúng.'},
+    {q:'AI cần gì để "học" được?',opts:['Cần dữ liệu (data), càng nhiều càng tốt','Chỉ cần điện','Chỉ cần wifi','Chỉ cần một câu lệnh duy nhất'],a:0,
+     ex:'Dữ liệu là "thức ăn" của AI. Muốn dạy AI nhận chó/mèo → cần nhiều ngàn ảnh chó mèo. ChatGPT/Claude học từ hàng tỷ trang văn bản trên internet.'},
+    {q:'"Training" (huấn luyện) AI là gì?',opts:['Cho AI tập gym','Quá trình AI học từ dữ liệu để rút ra quy luật','Bật/tắt máy','Sửa lỗi'],a:1,
+     ex:'Training = giai đoạn AI xem hàng triệu ví dụ và điều chỉnh các tham số bên trong. Có thể tốn ngày/tuần/tháng và rất nhiều điện.'},
+    {q:'"Prompt" trong AI nghĩa là gì?',opts:['Mật khẩu','Câu lệnh/yêu cầu mà người dùng nhập cho AI','Tên máy','Lỗi'],a:1,
+     ex:'Prompt = câu hỏi/yêu cầu bạn gõ cho AI. Vd: "Viết bài thơ về mùa thu". Cách viết prompt tốt = nghệ thuật gọi là "prompt engineering".'},
+
+    // === PHẦN 2: VÍ DỤ THỰC TẾ (15 câu) ===
+    {q:'YouTube gợi ý video tiếp theo dùng AI loại nào?',opts:['Không dùng AI','Recommendation system (hệ thống đề xuất)','Robot','Máy in'],a:1,
+     ex:'YouTube dùng AI phân tích lịch sử xem của bạn + người dùng tương tự để dự đoán video bạn sẽ thích. Netflix, Spotify, TikTok đều dùng tương tự.'},
+    {q:'Khi camera điện thoại tự nhận diện khuôn mặt là dùng gì?',opts:['Phép màu','AI nhận dạng ảnh (Computer Vision)','Bàn tính','Đèn flash'],a:1,
+     ex:'Computer Vision = thị giác máy tính. AI học từ hàng triệu ảnh để nhận: mặt người, mèo, chó, biển báo giao thông... Đây là nền tảng cho xe tự lái.'},
+    {q:'Google Translate dịch ngôn ngữ dùng gì?',opts:['Người ngồi dịch online','AI dịch máy (Neural Machine Translation)','Từ điển giấy','Magic'],a:1,
+     ex:'Google Translate dùng AI học từ hàng tỷ cặp câu song ngữ. Trước 2016 dịch máy còn khô cứng; sau khi dùng neural network, chất lượng cải thiện vượt bậc.'},
+    {q:'Xe tự lái (Tesla, Waymo) dùng AI để làm gì?',opts:['Phát nhạc','Nhận đường, biển báo, người đi bộ và ra quyết định lái','Mở cửa','Bật điều hòa'],a:1,
+     ex:'Xe tự lái có nhiều camera + radar + LIDAR. AI xử lý real-time hàng nghìn lần/giây: phát hiện vật cản, dự đoán hành vi, lái xe an toàn.'},
+    {q:'ChatGPT thuộc loại AI nào?',opts:['Mô hình ngôn ngữ lớn (LLM — Large Language Model)','Máy in','Trợ lý vật lý','Robot có chân'],a:0,
+     ex:'ChatGPT của OpenAI là một LLM — học hàng tỷ từ văn bản, có thể trò chuyện, viết, lập trình, dịch. Claude (mình), Gemini, Llama cũng là LLM.'},
+    {q:'AI vẽ tranh từ mô tả (Midjourney, DALL-E) gọi là gì?',opts:['Text-to-Image (chuyển văn bản thành ảnh)','Máy ảnh','Bút vẽ','Robot'],a:0,
+     ex:'Text-to-image AI: nhập "con mèo đeo kính trên sao Hỏa" → AI tạo ra ảnh. Dùng kỹ thuật "diffusion": từ noise ngẫu nhiên dần thành ảnh có ý nghĩa.'},
+    {q:'AlphaGo nổi tiếng vì điều gì?',opts:['Bán hàng online','Đánh bại nhà vô địch thế giới cờ vây Lee Sedol (2016)','Lái xe','Hát hay'],a:1,
+     ex:'AlphaGo (Google DeepMind) thắng Lee Sedol 4-1 năm 2016 — cột mốc lịch sử AI. Cờ vây phức tạp hơn cờ vua nhiều lần, trước đó tưởng máy không thể thắng.'},
+    {q:'AI trong y tế có thể làm gì?',opts:['Không làm gì','Phân tích X-quang/MRI, phát hiện ung thư sớm, đề xuất chẩn đoán','Chỉ pha thuốc','Chỉ đo nhiệt độ'],a:1,
+     ex:'AI y tế phân tích ảnh y khoa nhanh hơn bác sĩ trong một số việc. Phát hiện ung thư da, võng mạc, ung thư phổi sớm. Hỗ trợ chứ không thay bác sĩ.'},
+    {q:'Spam email được lọc bằng gì?',opts:['Người ngồi đọc từng email','AI/ML phân loại văn bản tự động','Đèn báo','Mạng wifi'],a:1,
+     ex:'Gmail dùng AI lọc spam: học từ những email bạn đánh dấu spam → tự động phát hiện đặc điểm (từ ngữ, người gửi, link...) → chặn email tương tự.'},
+    {q:'Trợ lý ảo Siri/Alexa hiểu giọng nói nhờ gì?',opts:['Tai người','Speech Recognition (nhận dạng giọng nói) + NLP','Cảm biến nhiệt','Máy ảnh'],a:1,
+     ex:'2 bước: (1) Speech-to-text: chuyển âm thanh → văn bản. (2) NLP (Natural Language Processing): hiểu ý nghĩa câu, rồi trả lời.'},
+    {q:'Facebook tự gắn tag bạn bè trong ảnh là dùng AI gì?',opts:['Face Recognition (nhận diện khuôn mặt)','GPS','Bàn phím','Loa'],a:0,
+     ex:'Face Recognition học khuôn mặt từ ảnh cũ → nhận ra cùng người trong ảnh mới. Công nghệ này cũng dùng mở khoá điện thoại (Face ID), an ninh sân bay.'},
+    {q:'Bộ lọc Snapchat/Instagram (đeo tai mèo, đổi mặt) dùng AI gì?',opts:['Computer Vision + Face Tracking','Ngôn ngữ','Đo tốc độ','In ấn'],a:0,
+     ex:'AI tìm các điểm trên mặt (mắt, mũi, miệng) realtime → gắn hiệu ứng theo. Đây là computer vision + augmented reality (AR).'},
+    {q:'Robot hút bụi tự né đồ đạc dùng AI gì?',opts:['Cảm biến + path planning (lên kế hoạch đường đi)','Bùa chú','Pin lithium','Bluetooth'],a:0,
+     ex:'Robot hút bụi có camera/LIDAR → vẽ bản đồ phòng. AI lên kế hoạch đường đi tối ưu, tránh chướng ngại, biết chỗ đã hút rồi.'},
+    {q:'AI có thể viết code (lập trình) không?',opts:['Không bao giờ','Có — GitHub Copilot, ChatGPT, Claude đều viết code được','Chỉ viết HTML','Chỉ tô màu'],a:1,
+     ex:'AI hiện đại viết code rất tốt cho các tác vụ phổ biến. Lập trình viên dùng AI như "đồng nghiệp" để gợi ý code, sửa bug, giải thích thuật toán.'},
+    {q:'AI nông nghiệp giúp gì?',opts:['Không liên quan','Phân tích ảnh drone xem cây bệnh, tưới nước thông minh, dự đoán mùa vụ','Chỉ trồng cây','Chỉ thu hoạch'],a:1,
+     ex:'AI giúp "Smart Farming": drone bay chụp đồng, AI phát hiện cây bị bệnh/thiếu nước → tưới chỉ chỗ cần, tiết kiệm nước & phân bón.'},
+
+    // === PHẦN 3: GIỚI HẠN & ĐẠO ĐỨC AI (10 câu) ===
+    {q:'AI có thể bị sai không?',opts:['Không bao giờ sai','Có thể sai — đặc biệt khi gặp việc lạ hoặc dữ liệu kém','Chỉ sai vào thứ 7','Chỉ sai khi mưa'],a:1,
+     ex:'AI có thể: nhận sai ảnh, dịch sai, "ảo giác" (hallucinate) ra thông tin không có thật. Luôn cần kiểm tra lại quan trọng — không tin AI 100%.'},
+    {q:'"Hallucination" (ảo giác) trong AI là gì?',opts:['AI mơ ngủ','AI tự tin bịa thông tin không có thật','Lỗi màn hình','Pin yếu'],a:1,
+     ex:'LLM có thể "bịa" tên người, sự kiện, công thức không tồn tại — nhưng nói rất tự tin. Đây là lý do KHÔNG nên tin AI tuyệt đối, nhất là chuyện y tế/luật/lịch sử.'},
+    {q:'AI có thiên kiến (bias) không?',opts:['Hoàn toàn công bằng','Có thể — vì học từ dữ liệu con người tạo (cũng có bias)','Chỉ thiên kiến với chó','Không, AI là máy'],a:1,
+     ex:'AI học từ dữ liệu → nếu dữ liệu có bias (về giới, chủng tộc, văn hoá), AI sẽ học theo. Ví dụ: AI tuyển dụng từng bị phát hiện ưu ái nam giới.'},
+    {q:'Deepfake là gì?',opts:['Bánh giả','Video/ảnh giả tạo bởi AI, nhìn rất giống thật','Trang web đăng ký','Loại pin'],a:1,
+     ex:'Deepfake: AI ghép mặt người này lên thân người khác, hoặc tạo video phát ngôn giả. Nguy hiểm: tin giả, lừa đảo, bôi nhọ danh dự.'},
+    {q:'Làm sao bảo vệ trước AI lừa đảo?',opts:['Tin mọi thứ thấy trên mạng','Kiểm tra nguồn, gọi xác nhận, cảnh giác với video/giọng nói quá hoàn hảo','Tắt internet vĩnh viễn','Không xài điện thoại'],a:1,
+     ex:'Kẻ xấu dùng AI giả giọng người thân để lừa tiền. Quy tắc: nghi ngờ → gọi lại số chính thức, hỏi câu chỉ người thật biết, không chuyển tiền vội.'},
+    {q:'AI có thay thế hoàn toàn con người không?',opts:['Sẽ thay hết trong 1 năm','Thay được một số việc lặp lại, nhưng nhiều việc vẫn cần con người','Không thay được bất cứ gì','Chỉ thay vào ban đêm'],a:1,
+     ex:'AI tốt cho việc lặp đi lặp lại có dữ liệu. Nhưng cần con người cho: sáng tạo gốc, đạo đức, đồng cảm, ra quyết định phức tạp, công việc đòi hỏi sự tin cậy.'},
+    {q:'AI có ý thức (consciousness) không?',opts:['Có ý thức như người','Không — AI hiện tại không có ý thức/cảm xúc thực sự','Có nhưng giấu','Sẽ có vào năm sau'],a:1,
+     ex:'AI có thể MÔ TẢ về cảm xúc và phản hồi như có cảm xúc, nhưng các nhà khoa học đồng thuận: chưa có bằng chứng AI có ý thức thực sự. Đây là chủ đề triết học mở.'},
+    {q:'Khi dùng ChatGPT/Claude, nên làm gì?',opts:['Tin tất cả không hỏi lại','Kiểm tra thông tin quan trọng, không chia sẻ thông tin nhạy cảm','Đóng cửa sổ','Reboot máy'],a:1,
+     ex:'AI có thể sai. Với thông tin quan trọng (sức khoẻ, học tập, công việc) → kiểm tra nguồn. KHÔNG nhập mật khẩu, số thẻ, thông tin cá nhân nhạy cảm.'},
+    {q:'AI sẽ giúp gì cho tương lai của Đậu?',opts:['Không giúp gì','Trợ lý học tập, sáng tạo, giải quyết vấn đề — nếu biết dùng đúng','Chỉ chơi game','Chỉ làm bài tập'],a:1,
+     ex:'AI là công cụ mạnh — như bút, máy tính, internet. Quan trọng là HỌC CÁCH DÙNG: hỏi đúng, kiểm tra kết quả, tư duy phản biện. Người biết dùng AI sẽ có lợi thế lớn.'},
+    {q:'Câu nào ĐÚNG về tương lai AI?',opts:['AI sẽ chiếm thế giới như phim','AI sẽ ngày càng mạnh, ta cần học cách sống chung & dùng AI có đạo đức','AI sẽ biến mất','AI chỉ là trào lưu nhất thời'],a:1,
+     ex:'AI sẽ thay đổi cách ta làm việc, học, sáng tạo. Cần học: dùng AI đúng cách, hiểu giới hạn, không phụ thuộc hoàn toàn, giữ tư duy độc lập.'},
+
+    // === PHẦN 4: NHÂN VẬT & CÔNG TY AI (10 câu) ===
+    {q:'Ai được coi là "cha đẻ" của AI?',opts:['Bill Gates','Alan Turing (đề xuất "Turing Test" 1950)','Steve Jobs','Mark Zuckerberg'],a:1,
+     ex:'Alan Turing — nhà toán học Anh — đề xuất ý tưởng máy có thể "suy nghĩ" trong bài báo 1950, đề xuất Turing Test để kiểm tra trí thông minh máy.'},
+    {q:'"Turing Test" là gì?',opts:['Đếm máy','Bài kiểm tra xem máy có thông minh như người không qua đối thoại','Test pin','Test mạng'],a:1,
+     ex:'Người chấm trò chuyện với cả người và máy qua chat. Nếu không phân biệt được → máy "vượt Turing Test". ChatGPT đã vượt được trong nhiều trường hợp.'},
+    {q:'OpenAI làm ra sản phẩm nổi tiếng nào?',opts:['Windows','ChatGPT','iPhone','Tesla'],a:1,
+     ex:'OpenAI (thành lập 2015 bởi Sam Altman, Elon Musk và những người khác) tạo ra ChatGPT (2022) và GPT-4. Đây là cú nổ AI khiến cả thế giới chú ý.'},
+    {q:'Anthropic làm ra AI nào?',opts:['Gemini','Claude (chính là tôi đây!)','Llama','Copilot'],a:1,
+     ex:'Anthropic được sáng lập 2021 bởi Dario & Daniela Amodei (cựu OpenAI). Anthropic làm ra Claude — đặt trọng tâm an toàn và đạo đức AI.'},
+    {q:'Google có AI nào nổi tiếng?',opts:['Không có','Gemini (trước đây gọi là Bard)','Photoshop','Excel'],a:1,
+     ex:'Google tạo Bard (2023), đổi tên thành Gemini (2024). Google DeepMind cũng làm AlphaGo, AlphaFold (giải mã cấu trúc protein).'},
+    {q:'Meta (Facebook) có AI nào?',opts:['Llama (mô hình mở)','Word','TikTok','Zoom'],a:0,
+     ex:'Meta phát hành Llama — LLM mã nguồn mở. Ai cũng tải về dùng/sửa được. Khác với GPT/Claude là sản phẩm đóng (chỉ dùng qua API).'},
+    {q:'AI nào do Trung Quốc phát triển?',opts:['ChatGPT','DeepSeek, Qwen, ERNIE','Claude','Gemini'],a:1,
+     ex:'Trung Quốc có nhiều LLM mạnh: DeepSeek (gây sốt 2025 vì rẻ và mạnh), Qwen của Alibaba, ERNIE của Baidu, Doubao của ByteDance.'},
+    {q:'NVIDIA nổi tiếng vì gì trong AI?',opts:['Bán cà phê','Sản xuất GPU chip dùng để train AI — chip H100 rất đắt và khan hiếm','Làm phim','Bán nước'],a:1,
+     ex:'NVIDIA độc quyền chip GPU để train AI. Vốn hoá NVIDIA tăng vọt 2023-2024 nhờ cơn sốt AI, từng vượt 3000 tỷ USD trở thành công ty giá trị nhất thế giới.'},
+    {q:'"Singularity" trong AI là gì?',opts:['Một loại virus','Lý thuyết: AI vượt qua trí tuệ con người và tự cải tiến vô hạn','Tên một robot','Phép trừ'],a:1,
+     ex:'Singularity = "điểm kỳ dị" — giả thuyết tương lai khi AI thông minh hơn con người ở mọi mặt. Một số chuyên gia (Kurzweil) dự đoán quanh 2045, người khác hoài nghi.'},
+    {q:'Yann LeCun, Geoffrey Hinton, Yoshua Bengio nổi tiếng vì?',opts:['Đoạt giải Turing 2018 — "3 bố già" của Deep Learning','Phát minh máy bay','Sáng tác nhạc','Vẽ tranh'],a:0,
+     ex:'3 nhà khoa học này đoạt giải Turing 2018 (Nobel của ngành CS) vì công trình tiên phong về Deep Learning. Hinton năm 2024 còn được Nobel Vật lý.'}
+  ];
+  let pool,idx=0,score=0,total=0,answered=false,picked=-1;
+  function init(){buildPool();render()}
+  function buildPool(){pool=[...QUIZ].sort(()=>Math.random()-0.5);idx=0;score=0;total=pool.length;answered=false;picked=-1}
+  function pick(i){if(answered)return;answered=true;picked=i;if(i===pool[idx].a)score++;render()}
+  function next(){idx++;answered=false;picked=-1;render()}
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    if(idx>=total){
+      const end=document.createElement('div');end.className='quiz-card quiz-end';
+      const pct=Math.round(score*100/total);
+      const stars=pct>=90?'⭐⭐⭐⭐⭐':pct>=75?'⭐⭐⭐⭐':pct>=60?'⭐⭐⭐':pct>=40?'⭐⭐':'⭐';
+      const title=pct>=90?'🤖 Chuyên gia AI!':pct>=75?'🧠 Hiểu sâu AI':pct>=60?'📚 Khá ổn về AI':'🌱 Mới bắt đầu';
+      end.innerHTML=`<div style="font-size:48px">🤖</div><div class="big">${title}</div><div class="stars">${stars}</div><div class="summary">Đúng <b style="color:var(--neon-green)">${score}</b>/${total} (${pct}%)</div>`;
+      mArea.appendChild(end);addBtn('Làm lại','warn',()=>{buildPool();render()});setStatus('Hoàn thành!');return;
+    }
+    const q=pool[idx];
+    const card=document.createElement('div');card.className='quiz-card';
+    card.innerHTML=`<div class="quiz-mascot">🤖</div><div class="quiz-progress"><span>Câu <b>${idx+1}</b>/${total}</span><span>Điểm: <b>${score}</b></span></div>`;
+    const bar=document.createElement('div');bar.className='quiz-bar';
+    const fill=document.createElement('div');fill.className='quiz-bar-fill';fill.style.width=`${(idx/total)*100}%`;bar.appendChild(fill);card.appendChild(bar);
+    const qd=document.createElement('div');qd.className='quiz-q';qd.textContent=q.q;card.appendChild(qd);
+    const opts=document.createElement('div');opts.className='quiz-opts';
+    q.opts.forEach((o,i)=>{
+      const b=document.createElement('button');b.className='quiz-opt';b.textContent=o;
+      if(answered){b.disabled=true;if(i===q.a)b.classList.add('correct');else if(i===picked)b.classList.add('wrong')}
+      b.onclick=()=>pick(i);opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if(answered){
+      const corr=picked===q.a;
+      const fb=document.createElement('div');fb.className='quiz-feedback '+(corr?'right':'wrong');
+      const msgs=corr?PRAISE:ROAST;
+      fb.innerHTML=`<div class="fb-emoji">${corr?'🎉':'😅'}</div><div class="fb-msg">${msgs[Math.floor(Math.random()*msgs.length)]}</div><div class="quiz-explain">💡 ${q.ex}</div>`;
+      card.appendChild(fb);
+      addBtn('CÂU TIẾP →','warn',next);
+    }
+    mArea.appendChild(card);
+    setStatus(`🤖 <b>Đào tạo AI</b> · Câu <b>${idx+1}</b>/${total} · Điểm <b>${score}</b>`);
+  }
+  return {title:'Đào tạo AI',init};
 })();
 
 </script>
