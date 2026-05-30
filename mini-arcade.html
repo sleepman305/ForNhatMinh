@@ -681,6 +681,12 @@ footer b{color:var(--neon-cyan)}
     <div class="card" data-game="historyVn" style="--ac:var(--neon-orange)"><div class="emoji">🏛️</div><h3>Sử Việt Nam</h3><p>52 câu — từ Vua Hùng đến hiện đại</p></div>
     <div class="card" data-game="wordScramble" style="--ac:var(--neon-yellow)"><div class="emoji">🔀</div><h3>Đảo chữ tiếng Anh</h3><p>Sắp xếp lại các chữ — 80+ từ vựng</p></div>
     <div class="card" data-game="calendarQuiz" style="--ac:var(--neon-purple)"><div class="emoji">📅</div><h3>Lịch &amp; Ngày tháng</h3><p>Tháng, mùa, năm nhuận, ngày lễ Việt</p></div>
+    <div class="card" data-game="piano" style="--ac:var(--neon-cyan)"><div class="emoji">🎹</div><h3>Piano</h3><p>Bấm phím + đố tai — Đô Rê Mi Fa Sol La Si</p></div>
+    <div class="card" data-game="guessSong" style="--ac:var(--neon-pink)"><div class="emoji">🎶</div><h3>Đoán bài hát</h3><p>Nghe giai điệu — 15 bài Việt &amp; quốc tế</p></div>
+    <div class="card" data-game="simonSays" style="--ac:var(--neon-green)"><div class="emoji">🥁</div><h3>Trí nhớ</h3><p>Simon Says — nhớ &amp; lặp lại chuỗi nhạc</p></div>
+    <div class="card" data-game="turtleLogo" style="--ac:var(--neon-yellow)"><div class="emoji">🐢</div><h3>Lập trình rùa</h3><p>Logo — viết lệnh F/L/R để đi tới đích, 6 bài</p></div>
+    <div class="card" data-game="guessOutput" style="--ac:var(--neon-orange)"><div class="emoji">🎯</div><h3>Đoán output code</h3><p>Python — 40 câu từ in số đến hàm</p></div>
+    <div class="card" data-game="itTerms" style="--ac:var(--neon-purple)"><div class="emoji">💻</div><h3>Đố thuật ngữ IT</h3><p>40 câu — HTML, bug, RAM, AI, Bill Gates...</p></div>
   </div>
 </div>
 
@@ -3571,6 +3577,620 @@ games.calendarQuiz = (()=>{
 
 
 
+
+
+
+/* ============== AUDIO HELPER (shared by music games) ============== */
+let _audioCtx=null;
+function getAudioCtx(){
+  if(!_audioCtx){
+    try{_audioCtx=new(window.AudioContext||window.webkitAudioContext)()}
+    catch(e){console.warn('AudioContext unavailable',e);return null}
+  }
+  if(_audioCtx.state==='suspended')_audioCtx.resume();
+  return _audioCtx;
+}
+// Frequency (Hz) for each note name across octaves 3-5
+const NOTE_FREQ={
+  'C3':130.81,'C#3':138.59,'D3':146.83,'D#3':155.56,'E3':164.81,'F3':174.61,
+  'F#3':185.00,'G3':196.00,'G#3':207.65,'A3':220.00,'A#3':233.08,'B3':246.94,
+  'C4':261.63,'C#4':277.18,'D4':293.66,'D#4':311.13,'E4':329.63,'F4':349.23,
+  'F#4':369.99,'G4':392.00,'G#4':415.30,'A4':440.00,'A#4':466.16,'B4':493.88,
+  'C5':523.25,'C#5':554.37,'D5':587.33,'D#5':622.25,'E5':659.25,'F5':698.46,
+  'F#5':739.99,'G5':783.99,'G#5':830.61,'A5':880.00,'A#5':932.33,'B5':987.77,
+  'C6':1046.50
+};
+function playNote(noteName,duration=0.4,gain=0.3){
+  const ctx=getAudioCtx();if(!ctx)return;
+  const f=NOTE_FREQ[noteName];if(!f)return;
+  const t=ctx.currentTime;
+  const osc=ctx.createOscillator();const g=ctx.createGain();
+  osc.type='triangle';osc.frequency.value=f;
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(gain,t+0.01);
+  g.gain.exponentialRampToValueAtTime(0.001,t+duration);
+  osc.connect(g);g.connect(ctx.destination);
+  osc.start(t);osc.stop(t+duration+0.05);
+}
+async function playSequence(notes,noteDur=0.4,gap=0.05){
+  for(const n of notes){
+    playNote(n,noteDur);
+    await new Promise(r=>setTimeout(r,(noteDur+gap)*1000));
+  }
+}
+
+/* ========== 34. PIANO BẤM PHÍM ========== */
+games.piano = (()=>{
+  // White keys C4..B5 and black keys positioned between
+  const WHITE=['C4','D4','E4','F4','G4','A4','B4','C5','D5','E5','F5','G5','A5','B5'];
+  const BLACK={C4:'C#4',D4:'D#4',F4:'F#4',G4:'G#4',A4:'A#4',C5:'C#5',D5:'D#5',F5:'F#5',G5:'G#5',A5:'A#5'};
+  const SOLFEGE={C:'Đô',D:'Rê',E:'Mi',F:'Fa',G:'Sol',A:'La',B:'Si'};
+  let mode='free'; // 'free' | 'ear'
+  let earTarget=null,earAnswered=false,earCorrect=0,earTotal=0;
+  function init(){mode='free';earTarget=null;render()}
+  function setMode(m){mode=m;earTarget=null;earAnswered=false;render();if(m==='ear')newEarQuestion()}
+  function newEarQuestion(){
+    const choices=WHITE.slice(0,7); // C4..B4 only for ear training
+    earTarget=choices[Math.floor(Math.random()*choices.length)];
+    earAnswered=false;
+    setTimeout(()=>playNote(earTarget,0.8,0.35),250);
+    render();
+  }
+  function pressKey(note){
+    playNote(note,0.5);
+    if(mode==='ear'&&!earAnswered){
+      earAnswered=true;earTotal++;
+      const ok=note===earTarget;
+      if(ok)earCorrect++;
+      render(ok?'right':'wrong',note);
+    }
+  }
+  function render(feedback=null,picked=null){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    // Mode toggle
+    const tg=document.createElement('div');tg.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:380px;margin-bottom:14px';
+    [['free','🎹 Tự do'],['ear','👂 Đố tai']].forEach(([k,lbl])=>{
+      const b=document.createElement('button');b.textContent=lbl;
+      b.style.cssText='padding:11px;border-radius:10px;border:2px solid '+(k===mode?'var(--neon-yellow)':'rgba(255,255,255,.12)')+';background:'+(k===mode?'rgba(255,230,0,.15)':'rgba(255,255,255,.05)')+';color:'+(k===mode?'var(--neon-yellow)':'var(--text)')+';font-family:inherit;font-weight:600;cursor:pointer;font-size:14px';
+      b.onclick=()=>setMode(k);tg.appendChild(b);
+    });
+    mArea.appendChild(tg);
+
+    if(mode==='ear'){
+      const info=document.createElement('div');
+      info.style.cssText='text-align:center;margin-bottom:12px;color:var(--muted);font-size:14px';
+      info.innerHTML=`Đúng <b style="color:var(--neon-green)">${earCorrect}</b>/${earTotal} · Nghe nốt, bấm phím tương ứng`;
+      mArea.appendChild(info);
+      if(feedback){
+        const fb=document.createElement('div');
+        fb.style.cssText='text-align:center;padding:14px;border-radius:12px;margin-bottom:14px;font-weight:600;background:'+(feedback==='right'?'rgba(57,255,127,.15)':'rgba(255,45,149,.15)')+';border:1px solid '+(feedback==='right'?'var(--neon-green)':'var(--neon-pink)');
+        const note=earTarget.replace(/\d/,'');
+        fb.innerHTML=feedback==='right'?`🎉 ${PRAISE[Math.floor(Math.random()*PRAISE.length)]}<br><span style="font-size:13px;color:var(--muted);font-weight:400">Đó là nốt <b style="color:var(--neon-yellow)">${SOLFEGE[note]} (${note})</b></span>`:`😅 ${ROAST[Math.floor(Math.random()*ROAST.length)]}<br><span style="font-size:13px;color:var(--muted);font-weight:400">Đáp án: <b style="color:var(--neon-green)">${SOLFEGE[note]} (${note})</b></span>`;
+        mArea.appendChild(fb);
+      }
+      const ctrl=document.createElement('div');ctrl.style.cssText='display:flex;gap:8px;justify-content:center;margin-bottom:14px;flex-wrap:wrap';
+      const replay=document.createElement('button');replay.className='btn alt';replay.textContent='🔊 Nghe lại';
+      replay.onclick=()=>playNote(earTarget,0.8,0.35);
+      ctrl.appendChild(replay);
+      if(feedback){
+        const next=document.createElement('button');next.className='btn warn';next.textContent='Câu tiếp →';
+        next.onclick=newEarQuestion;ctrl.appendChild(next);
+      }
+      mArea.appendChild(ctrl);
+    }
+    // Piano keyboard
+    const kb=document.createElement('div');
+    kb.style.cssText='position:relative;background:#1a0a3d;border:2px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 10px;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch';
+    const inner=document.createElement('div');
+    inner.style.cssText='position:relative;display:flex;height:200px;min-width:560px;margin:0 auto';
+    WHITE.forEach((note,i)=>{
+      const wk=document.createElement('button');
+      wk.style.cssText='flex:1 1 0;min-width:40px;height:100%;background:linear-gradient(180deg,#fff 0%,#f0f0f0 90%,#d0d0d0 100%);border:1px solid #888;border-radius:0 0 8px 8px;cursor:pointer;font-family:inherit;font-size:11px;color:#444;font-weight:600;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;transition:all .08s';
+      if(i!==0)wk.style.borderLeft='none';
+      const letter=note.replace(/\d/,'');
+      wk.innerHTML=`<div style="text-align:center"><div style="font-size:13px;color:var(--neon-pink)">${SOLFEGE[letter]}</div><div style="font-size:9px;opacity:.6">${note}</div></div>`;
+      wk.onpointerdown=e=>{e.preventDefault();wk.style.background='linear-gradient(180deg,#ffe600 0%,#ffa500 100%)';pressKey(note)};
+      wk.onpointerup=()=>{wk.style.background='linear-gradient(180deg,#fff 0%,#f0f0f0 90%,#d0d0d0 100%)'};
+      wk.onpointerleave=()=>{wk.style.background='linear-gradient(180deg,#fff 0%,#f0f0f0 90%,#d0d0d0 100%)'};
+      inner.appendChild(wk);
+    });
+    // Black keys overlay
+    const blackLayer=document.createElement('div');
+    blackLayer.style.cssText='position:absolute;top:12px;left:0;right:0;height:120px;pointer-events:none';
+    WHITE.forEach((note,i)=>{
+      if(BLACK[note]){
+        const bk=document.createElement('button');
+        const widthPct=100/WHITE.length;
+        bk.style.cssText=`position:absolute;top:0;left:calc(${(i+1)*widthPct}% - ${widthPct*0.3}%);width:${widthPct*0.6}%;height:100%;background:linear-gradient(180deg,#222 0%,#000 100%);border:1px solid #000;border-radius:0 0 5px 5px;cursor:pointer;pointer-events:auto;font-family:inherit;font-size:9px;color:#fff;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;transition:all .08s;z-index:2`;
+        bk.textContent=BLACK[note].replace('#','♯');
+        const blackNote=BLACK[note];
+        bk.onpointerdown=e=>{e.preventDefault();bk.style.background='linear-gradient(180deg,#ff8a2a 0%,#c04848 100%)';pressKey(blackNote)};
+        bk.onpointerup=()=>{bk.style.background='linear-gradient(180deg,#222 0%,#000 100%)'};
+        bk.onpointerleave=()=>{bk.style.background='linear-gradient(180deg,#222 0%,#000 100%)'};
+        blackLayer.appendChild(bk);
+      }
+    });
+    inner.appendChild(blackLayer);
+    kb.appendChild(inner);
+    mArea.appendChild(kb);
+    if(mode==='free'){
+      const hint=document.createElement('div');hint.style.cssText='text-align:center;margin-top:14px;color:var(--muted);font-size:13px;line-height:1.6';
+      hint.innerHTML='🎹 Bấm phím trắng và đen tự do<br><span style="font-size:12px;opacity:.7">Đô · Rê · Mi · Fa · Sol · La · Si</span>';
+      mArea.appendChild(hint);
+    }
+    setStatus(mode==='ear'?`🎹 <b>Piano</b> · 👂 Đố tai · <b>${earCorrect}</b>/${earTotal}`:`🎹 <b>Piano</b> · Tự do · Đô-Rê-Mi-Fa-Sol-La-Si`);
+  }
+  return {title:'Piano',init};
+})();
+
+/* ========== 35. ĐOÁN BÀI HÁT QUA GIAI ĐIỆU ========== */
+games.guessSong = (()=>{
+  // Each song: {name, notes (4-8 leading notes), composer or origin}
+  const SONGS=[
+    {name:'Twinkle Twinkle Little Star',notes:['C4','C4','G4','G4','A4','A4','G4'],info:'Bài hát thiếu nhi Anh — giai điệu từ bài "Ah! vous dirai-je, maman" của Pháp'},
+    {name:'Happy Birthday',notes:['C4','C4','D4','C4','F4','E4'],info:'Bài chúc mừng sinh nhật phổ biến toàn thế giới'},
+    {name:'Cháu Yêu Bà',notes:['G4','E4','G4','E4','G4','A4','G4'],info:'Bài hát thiếu nhi Việt — Xuân Giao sáng tác'},
+    {name:'Đêm Qua Em Mơ Gặp Bác Hồ',notes:['C4','E4','G4','E4','C4','D4','E4'],info:'Bài hát thiếu nhi nổi tiếng — Xuân Giao sáng tác'},
+    {name:'Bắc Kim Thang',notes:['G4','E4','G4','A4','G4','E4','D4'],info:'Đồng dao Việt Nam, miền Nam'},
+    {name:'Em Yêu Trường Em',notes:['C4','D4','E4','C4','E4','D4'],info:'Bài hát thiếu nhi Việt — Hoàng Vân sáng tác'},
+    {name:'Cả Nhà Thương Nhau',notes:['G4','G4','A4','G4','E4','G4'],info:'Bài hát gia đình thiếu nhi Việt — Phan Văn Minh'},
+    {name:'Jingle Bells',notes:['E4','E4','E4','E4','E4','E4','E4','G4'],info:'Bài hát Giáng Sinh — James Lord Pierpont (1857)'},
+    {name:'Mary Had a Little Lamb',notes:['E4','D4','C4','D4','E4','E4','E4'],info:'Bài đồng dao tiếng Anh — Sarah Hale (1830)'},
+    {name:'Ode to Joy (Beethoven)',notes:['E4','E4','F4','G4','G4','F4','E4','D4'],info:'Symphony No.9 — Ludwig van Beethoven (1824)'},
+    {name:'Tiến Quân Ca (Quốc ca VN)',notes:['G4','G4','G4','C5','D5','E5'],info:'Quốc ca Việt Nam — Văn Cao sáng tác năm 1944'},
+    {name:'Für Elise (Beethoven)',notes:['E5','D#5','E5','D#5','E5','B4','D5','C5'],info:'Bagatelle "Für Elise" — Beethoven sáng tác cho học trò'},
+    {name:'Old MacDonald',notes:['G4','G4','G4','D4','E4','E4','D4'],info:'Bài đồng dao về nông trại — phổ biến trong giáo dục'},
+    {name:'Row Row Row Your Boat',notes:['C4','C4','C4','D4','E4'],info:'Bài hát ru thuyền tiếng Anh — thường hát canon'},
+    {name:'London Bridge',notes:['G4','A4','G4','F4','E4','F4','G4'],info:'Bài đồng dao tiếng Anh nổi tiếng từ thế kỷ 17'}
+  ];
+  let prob,score=0,total=0,streak=0,answered=false,picked=-1;
+  const r=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+  function gen(){
+    const correct=SONGS[r(0,SONGS.length-1)];
+    const opts=[correct];
+    let tries=0;
+    while(opts.length<4&&tries<30){tries++;
+      const s=SONGS[r(0,SONGS.length-1)];
+      if(!opts.find(x=>x.name===s.name))opts.push(s);
+    }
+    opts.sort(()=>Math.random()-0.5);
+    prob={correct,opts};
+    setTimeout(()=>playMelody(),300);
+  }
+  function playMelody(){playSequence(prob.correct.notes,0.4,0.05)}
+  function init(){score=0;total=0;streak=0;answered=false;picked=-1;gen();render()}
+  function pick(name){if(answered)return;answered=true;picked=name;total++;if(name===prob.correct.name){score++;streak++}else streak=0;render()}
+  function nextQ(){answered=false;picked=-1;gen();render()}
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const card=document.createElement('div');card.className='quiz-card';
+    card.innerHTML=`<div class="quiz-mascot">🎶</div>
+      <div class="quiz-progress"><span>Đúng <b>${score}</b>/${total}</span><span>🔥 <b>${streak}</b></span></div>
+      <div style="text-align:center;margin:10px 0">
+        <button class="btn alt" id="replayBtn" style="font-size:16px;padding:14px 24px">🔊 Nghe giai điệu</button>
+      </div>
+      <div class="quiz-q" style="text-align:center;font-size:15px;margin-bottom:12px">Đây là bài hát nào?</div>`;
+    const opts=document.createElement('div');opts.className='quiz-opts';
+    prob.opts.forEach(o=>{
+      const b=document.createElement('button');b.className='quiz-opt';b.textContent=o.name;
+      if(answered){b.disabled=true;if(o.name===prob.correct.name)b.classList.add('correct');else if(o.name===picked)b.classList.add('wrong')}
+      b.onclick=()=>pick(o.name);opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if(answered){
+      const corr=picked===prob.correct.name;
+      const fb=document.createElement('div');fb.className='quiz-feedback '+(corr?'right':'wrong');
+      const msgs=corr?PRAISE:ROAST;
+      fb.innerHTML=`<div class="fb-emoji">${corr?'🎉':'😅'}</div><div class="fb-msg">${msgs[r(0,msgs.length-1)]}</div><div class="quiz-explain"><b>🎵 ${prob.correct.name}</b><br>${prob.correct.info}</div>`;
+      card.appendChild(fb);
+      addBtn('CÂU TIẾP →','warn',nextQ);
+    }
+    mArea.appendChild(card);
+    // Wire replay button (after appending)
+    document.getElementById('replayBtn').onclick=playMelody;
+    setStatus(`🎶 <b>Đoán bài hát</b> · <b>${score}</b>/${total} · 🔥 <b>${streak}</b>`);
+  }
+  return {title:'Đoán bài hát qua giai điệu',init};
+})();
+
+/* ========== 36. TRÍ NHỚ (Simon Says nhạc) ========== */
+games.simonSays = (()=>{
+  const COLORS=[
+    {bg:'#39ff7f',glow:'rgba(57,255,127,.8)',note:'C4'},
+    {bg:'#ffe600',glow:'rgba(255,230,0,.8)',note:'E4'},
+    {bg:'#ff2d95',glow:'rgba(255,45,149,.8)',note:'G4'},
+    {bg:'#00f0ff',glow:'rgba(0,240,255,.8)',note:'C5'}
+  ];
+  let sequence=[];let playerIdx=0;let isPlaying=false;let gameOver=false;
+  let best=parseInt(localStorage.getItem('simonBest')||'0');
+  let activeIdx=-1;
+  function init(){sequence=[];playerIdx=0;isPlaying=false;gameOver=false;activeIdx=-1;newRound()}
+  function newRound(){
+    sequence.push(Math.floor(Math.random()*4));
+    playerIdx=0;
+    render();
+    setTimeout(playSequenceForUser,600);
+  }
+  async function playSequenceForUser(){
+    isPlaying=true;render();
+    for(const idx of sequence){
+      activeIdx=idx;render();
+      playNote(COLORS[idx].note,0.4);
+      await new Promise(r=>setTimeout(r,520));
+      activeIdx=-1;render();
+      await new Promise(r=>setTimeout(r,140));
+    }
+    isPlaying=false;render();
+  }
+  function press(idx){
+    if(isPlaying||gameOver)return;
+    activeIdx=idx;render();
+    playNote(COLORS[idx].note,0.3);
+    setTimeout(()=>{activeIdx=-1;render()},200);
+    if(idx===sequence[playerIdx]){
+      playerIdx++;
+      if(playerIdx===sequence.length){
+        if(sequence.length>best){best=sequence.length;localStorage.setItem('simonBest',best)}
+        setTimeout(newRound,700);
+      }
+    }else{
+      gameOver=true;render();
+    }
+  }
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const info=document.createElement('div');
+    info.style.cssText='text-align:center;margin-bottom:18px';
+    info.innerHTML=`<div style="font-family:'Bungee',cursive;font-size:24px;color:var(--neon-cyan);text-shadow:0 0 16px rgba(0,240,255,.4)">Vòng ${sequence.length}</div>
+      <div style="color:var(--muted);font-size:13px;margin-top:6px">${isPlaying?'👀 Xem và nhớ thứ tự...':gameOver?'💥 Game over!':playerIdx===0?'🎯 Bấm lại đúng thứ tự':`✓ Đã bấm ${playerIdx}/${sequence.length}`}</div>
+      <div style="margin-top:8px;color:var(--neon-yellow);font-size:14px">🏆 Kỷ lục: <b>${best}</b> vòng</div>`;
+    mArea.appendChild(info);
+    const grid=document.createElement('div');
+    grid.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:380px;margin:0 auto;aspect-ratio:1';
+    COLORS.forEach((c,i)=>{
+      const pad=document.createElement('button');
+      const isActive=activeIdx===i;
+      pad.style.cssText=`border:none;border-radius:18px;background:${c.bg};cursor:pointer;transition:all .1s;${isActive?`box-shadow:0 0 60px ${c.glow},inset 0 0 30px rgba(255,255,255,.6);transform:scale(.96)`:`box-shadow:0 4px 14px rgba(0,0,0,.4);filter:brightness(.6)`};aspect-ratio:1;font-size:28px;color:#fff;font-weight:700`;
+      pad.onpointerdown=e=>{e.preventDefault();press(i)};
+      grid.appendChild(pad);
+    });
+    mArea.appendChild(grid);
+    if(gameOver){
+      addBtn('CHƠI LẠI','warn',init);
+    }
+    setStatus(`🥁 <b>Trí nhớ</b> · Vòng <b>${sequence.length}</b> · 🏆 <b>${best}</b>`);
+  }
+  return {title:'Trí nhớ (Simon Says)',init};
+})();
+
+/* ========== 37. LẬP TRÌNH RÙA (Logo-style) ========== */
+games.turtleLogo = (()=>{
+  // Puzzles: turtle starts at gridStart facing dirStart, must reach goal
+  // Grid is 8x8. Commands: F (forward), R (right turn), L (left turn)
+  const PUZZLES=[
+    {name:'Đi thẳng tới đích',start:{x:1,y:1,dir:0},goal:{x:4,y:1},obstacles:[],hint:'Dùng F (tiến) 3 lần'},
+    {name:'Quẹo phải',start:{x:1,y:1,dir:0},goal:{x:3,y:3},obstacles:[],hint:'Tiến, quẹo phải, tiến'},
+    {name:'Vẽ hình chữ L',start:{x:1,y:1,dir:0},goal:{x:4,y:4},obstacles:[],hint:'F x3, R, F x3'},
+    {name:'Né chướng ngại',start:{x:1,y:1,dir:0},goal:{x:5,y:1},obstacles:[{x:3,y:1}],hint:'Đi vòng qua khối đỏ'},
+    {name:'Đường zigzag',start:{x:1,y:1,dir:0},goal:{x:5,y:3},obstacles:[{x:3,y:1},{x:3,y:3}],hint:'Phải né 2 chướng ngại'},
+    {name:'Vẽ hình vuông',start:{x:1,y:1,dir:0},goal:{x:1,y:1},obstacles:[],hint:'Đi vòng quanh: F,F,R,F,F,R,F,F,R,F,F (về điểm đầu)',isLoop:true,minSteps:8}
+  ];
+  let puzzleIdx=0;let commands=[];let result=null;let pathDrawn=[];
+  function init(){puzzleIdx=0;commands=[];result=null;pathDrawn=[];render()}
+  function setPuzzle(i){puzzleIdx=i;commands=[];result=null;pathDrawn=[];render()}
+  function addCmd(c){if(result)return;commands.push(c);render()}
+  function undo(){if(result)return;commands.pop();render()}
+  function reset(){commands=[];result=null;pathDrawn=[];render()}
+  function run(){
+    const p=PUZZLES[puzzleIdx];
+    let x=p.start.x,y=p.start.y,dir=p.start.dir;
+    pathDrawn=[{x,y}];
+    let crashed=false;
+    for(const c of commands){
+      if(c==='F'){
+        const dx=[1,0,-1,0][dir],dy=[0,1,0,-1][dir];
+        const nx=x+dx,ny=y+dy;
+        if(nx<0||nx>=8||ny<0||ny>=8){crashed=true;break}
+        if(p.obstacles.some(o=>o.x===nx&&o.y===ny)){crashed=true;break}
+        x=nx;y=ny;pathDrawn.push({x,y});
+      } else if(c==='R'){dir=(dir+1)%4}
+      else if(c==='L'){dir=(dir+3)%4}
+    }
+    const atGoal=x===p.goal.x&&y===p.goal.y;
+    if(crashed) result={ok:false,msg:'💥 Rùa đụng tường/chướng ngại rồi! Thử lại nhé.'};
+    else if(!atGoal) result={ok:false,msg:`📍 Rùa dừng ở (${x},${y}), chưa tới đích (${p.goal.x},${p.goal.y}).`};
+    else result={ok:true,msg:`🎉 ${PRAISE[Math.floor(Math.random()*PRAISE.length)]} Hoàn thành với ${commands.length} lệnh!`};
+    render();
+  }
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const p=PUZZLES[puzzleIdx];
+    // Puzzle picker
+    const pk=document.createElement('div');
+    pk.style.cssText='display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:14px';
+    PUZZLES.forEach((pz,i)=>{
+      const b=document.createElement('button');b.textContent=`${i+1}`;
+      b.style.cssText=`width:38px;height:38px;border-radius:10px;border:2px solid ${i===puzzleIdx?'var(--neon-cyan)':'rgba(255,255,255,.12)'};background:${i===puzzleIdx?'rgba(0,240,255,.15)':'rgba(255,255,255,.05)'};color:${i===puzzleIdx?'var(--neon-cyan)':'var(--text)'};font-weight:700;font-family:inherit;cursor:pointer`;
+      b.onclick=()=>setPuzzle(i);pk.appendChild(b);
+    });
+    mArea.appendChild(pk);
+    // Title + hint
+    const ttl=document.createElement('div');ttl.style.cssText='text-align:center;margin-bottom:10px';
+    ttl.innerHTML=`<div style="font-family:'Bungee',cursive;font-size:17px;color:var(--neon-yellow)">Bài ${puzzleIdx+1}: ${p.name}</div>
+      <div style="color:var(--muted);font-size:13px;margin-top:4px">💡 ${p.hint}</div>`;
+    mArea.appendChild(ttl);
+    // Grid SVG (8x8)
+    const SIZE=320;const CELL=SIZE/8;
+    let svg=`<svg viewBox="0 0 ${SIZE} ${SIZE}" width="${SIZE}" height="${SIZE}" style="background:rgba(0,0,0,.4);border-radius:14px;border:1px solid rgba(255,255,255,.1)">`;
+    // Grid lines
+    for(let i=0;i<=8;i++){
+      svg+=`<line x1="${i*CELL}" y1="0" x2="${i*CELL}" y2="${SIZE}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
+      svg+=`<line x1="0" y1="${i*CELL}" x2="${SIZE}" y2="${i*CELL}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
+    }
+    // Obstacles
+    p.obstacles.forEach(o=>{svg+=`<rect x="${o.x*CELL+4}" y="${o.y*CELL+4}" width="${CELL-8}" height="${CELL-8}" fill="rgba(255,45,149,.7)" rx="6"/>`});
+    // Goal
+    svg+=`<rect x="${p.goal.x*CELL+4}" y="${p.goal.y*CELL+4}" width="${CELL-8}" height="${CELL-8}" fill="rgba(57,255,127,.3)" stroke="var(--neon-green)" stroke-width="2" rx="6"/>
+      <text x="${p.goal.x*CELL+CELL/2}" y="${p.goal.y*CELL+CELL/2+8}" text-anchor="middle" font-size="20">🎯</text>`;
+    // Path (run result)
+    if(pathDrawn.length>1){
+      const pts=pathDrawn.map(pt=>`${pt.x*CELL+CELL/2},${pt.y*CELL+CELL/2}`).join(' ');
+      svg+=`<polyline points="${pts}" fill="none" stroke="var(--neon-cyan)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>`;
+    }
+    // Turtle (final position if ran, else start position)
+    const turtle = pathDrawn.length>0 ? pathDrawn[pathDrawn.length-1] : {x:p.start.x,y:p.start.y};
+    const finalDir = (() => {
+      let d=p.start.dir;
+      for(const c of commands){
+        if(c==='R')d=(d+1)%4;
+        else if(c==='L')d=(d+3)%4;
+      }
+      return d;
+    })();
+    const arrowAngle=[0,90,180,270][finalDir];
+    svg+=`<g transform="translate(${turtle.x*CELL+CELL/2},${turtle.y*CELL+CELL/2}) rotate(${arrowAngle})">
+      <circle cx="0" cy="0" r="${CELL*0.32}" fill="rgba(57,255,127,.9)" stroke="#fff" stroke-width="2"/>
+      <polygon points="0,-${CELL*0.18} ${CELL*0.12},${CELL*0.1} -${CELL*0.12},${CELL*0.1}" fill="#0a1f0e"/>
+    </g>`;
+    svg+='</svg>';
+    const gridWrap=document.createElement('div');gridWrap.style.cssText='display:flex;justify-content:center;margin-bottom:12px';
+    gridWrap.innerHTML=svg;mArea.appendChild(gridWrap);
+    // Command sequence display
+    const cmdView=document.createElement('div');
+    cmdView.style.cssText='background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px;margin-bottom:10px;min-height:48px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:center';
+    if(commands.length===0){
+      cmdView.innerHTML='<span style="color:var(--muted);font-size:13px;font-style:italic">Chọn lệnh bên dưới để lập trình rùa...</span>';
+    } else {
+      commands.forEach(c=>{
+        const span=document.createElement('span');
+        const color=c==='F'?'var(--neon-green)':c==='R'?'var(--neon-yellow)':'var(--neon-pink)';
+        span.style.cssText=`background:${color};color:#0a1f0e;padding:6px 10px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px`;
+        span.textContent=c==='F'?'↑ F':c==='R'?'↻ R':'↺ L';
+        cmdView.appendChild(span);
+      });
+    }
+    mArea.appendChild(cmdView);
+    // Command buttons
+    const cmdBtns=document.createElement('div');
+    cmdBtns.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px';
+    [
+      {c:'F',lbl:'↑ Tiến (F)',color:'var(--neon-green)'},
+      {c:'L',lbl:'↺ Trái (L)',color:'var(--neon-pink)'},
+      {c:'R',lbl:'↻ Phải (R)',color:'var(--neon-yellow)'}
+    ].forEach(({c,lbl,color})=>{
+      const b=document.createElement('button');b.textContent=lbl;
+      b.style.cssText=`padding:14px 8px;border-radius:10px;background:rgba(255,255,255,.05);border:2px solid ${color};color:${color};font-family:inherit;font-weight:700;cursor:pointer;font-size:14px`;
+      b.onclick=()=>addCmd(c);
+      cmdBtns.appendChild(b);
+    });
+    mArea.appendChild(cmdBtns);
+    // Result
+    if(result){
+      const fb=document.createElement('div');
+      fb.style.cssText=`padding:12px;border-radius:10px;text-align:center;font-weight:600;margin-bottom:8px;background:${result.ok?'rgba(57,255,127,.15)':'rgba(255,45,149,.15)'};border:1px solid ${result.ok?'var(--neon-green)':'var(--neon-pink)'}`;
+      fb.textContent=result.msg;mArea.appendChild(fb);
+    }
+    // Action buttons
+    addBtn('▶ CHẠY','warn',run);
+    addBtn('↩ Xoá lệnh cuối','alt',undo);
+    addBtn('🔄 Reset','alt',reset);
+    setStatus(`🐢 <b>Lập trình rùa</b> · Bài ${puzzleIdx+1}/${PUZZLES.length} · ${commands.length} lệnh`);
+  }
+  return {title:'Lập trình rùa',init};
+})();
+
+/* ========== 38. ĐOÁN OUTPUT CODE ========== */
+games.guessOutput = (()=>{
+  const QUIZ=[
+    {code:'print(2 + 3)',out:'5',ex:'Phép cộng: 2 + 3 = 5'},
+    {code:'print(10 - 7)',out:'3',ex:'Phép trừ: 10 - 7 = 3'},
+    {code:'print(4 * 5)',out:'20',ex:'Phép nhân: 4 × 5 = 20'},
+    {code:'print(20 / 4)',out:'5',ex:'Phép chia: 20 / 4 = 5'},
+    {code:'print(2 ** 3)',out:'8',ex:'Lũy thừa: 2³ = 8 (** là toán tử lũy thừa trong Python)'},
+    {code:'print(10 % 3)',out:'1',ex:'% là phép chia lấy dư: 10 chia 3 dư 1'},
+    {code:'print(len("hello"))',out:'5',ex:'len() đếm số ký tự: "hello" có 5 chữ'},
+    {code:'print("Hi" + " " + "Đậu")',out:'Hi Đậu',ex:'Toán tử + nối chuỗi với nhau'},
+    {code:'print("ab" * 3)',out:'ababab',ex:'Chuỗi × số → lặp lại chuỗi đó N lần'},
+    {code:'print("HELLO".lower())',out:'hello',ex:'.lower() chuyển tất cả về chữ thường'},
+    {code:'print("hello".upper())',out:'HELLO',ex:'.upper() chuyển tất cả về CHỮ HOA'},
+    {code:'print([1,2,3][0])',out:'1',ex:'List[0] = phần tử đầu tiên (index bắt đầu từ 0)'},
+    {code:'print([1,2,3][-1])',out:'3',ex:'List[-1] = phần tử cuối cùng (index âm tính từ cuối)'},
+    {code:'print(len([1,2,3,4]))',out:'4',ex:'len(list) đếm số phần tử trong list'},
+    {code:'x = 5\nx = x + 3\nprint(x)',out:'8',ex:'Gán x = 5, sau đó x = x+3 = 5+3 = 8'},
+    {code:'a, b = 3, 7\nprint(a + b)',out:'10',ex:'Gán a=3, b=7 cùng lúc, tổng a+b = 10'},
+    {code:'a, b = 1, 2\na, b = b, a\nprint(a)',out:'2',ex:'Hoán đổi: sau khi a,b = b,a → a có giá trị cũ của b (2)'},
+    {code:'for i in range(3):\n  print(i)',out:'0\n1\n2',ex:'range(3) tạo dãy 0,1,2 (KHÔNG có 3). Loop in lần lượt.'},
+    {code:'for i in range(1, 4):\n  print(i)',out:'1\n2\n3',ex:'range(1,4) tạo dãy 1,2,3 (không có 4)'},
+    {code:'total = 0\nfor i in range(1, 4):\n  total = total + i\nprint(total)',out:'6',ex:'Cộng 1+2+3 = 6'},
+    {code:'if 5 > 3:\n  print("Yes")\nelse:\n  print("No")',out:'Yes',ex:'5 > 3 là TRUE → in "Yes"'},
+    {code:'if 2 > 5:\n  print("A")\nelse:\n  print("B")',out:'B',ex:'2 > 5 là FALSE → chạy else → in "B"'},
+    {code:'x = 10\nif x > 5 and x < 20:\n  print("OK")',out:'OK',ex:'10>5 (TRUE) VÀ 10<20 (TRUE) → in "OK"'},
+    {code:'print(True and False)',out:'False',ex:'AND: cả 2 phải True mới True. Có 1 False → kết quả False.'},
+    {code:'print(True or False)',out:'True',ex:'OR: chỉ cần 1 cái True là True. True OR bất kỳ = True.'},
+    {code:'print(not True)',out:'False',ex:'NOT đảo ngược: not True = False'},
+    {code:'print(7 == 7)',out:'True',ex:'== so sánh bằng. 7 bằng 7 → True'},
+    {code:'print(5 != 5)',out:'False',ex:'!= là KHÁC. 5 không khác 5 → False'},
+    {code:'def f(x):\n  return x * 2\nprint(f(5))',out:'10',ex:'Hàm f nhân đôi tham số. f(5) = 5×2 = 10.'},
+    {code:'def add(a, b):\n  return a + b\nprint(add(3, 4))',out:'7',ex:'Hàm add cộng 2 tham số. add(3,4) = 7.'},
+    {code:'nums = [1, 2, 3]\nnums.append(4)\nprint(nums)',out:'[1, 2, 3, 4]',ex:'.append() thêm phần tử vào cuối list'},
+    {code:'s = "Đậu"\nprint(s[0])',out:'Đ',ex:'String[0] = ký tự đầu tiên'},
+    {code:'print(int("42"))',out:'42',ex:'int() chuyển chuỗi thành số nguyên'},
+    {code:'print(str(123))',out:'123',ex:'str() chuyển số thành chuỗi. Output trông giống số.'},
+    {code:'print(abs(-7))',out:'7',ex:'abs() = giá trị tuyệt đối. |-7| = 7'},
+    {code:'print(max(3, 7, 5))',out:'7',ex:'max() trả về số lớn nhất'},
+    {code:'print(min(3, 7, 5))',out:'3',ex:'min() trả về số nhỏ nhất'},
+    {code:'print(sum([1, 2, 3, 4]))',out:'10',ex:'sum() cộng tất cả phần tử list: 1+2+3+4 = 10'},
+    {code:'x = 5\ny = x\nx = 10\nprint(y)',out:'5',ex:'y gán bằng giá trị cũ của x (5), x đổi nhưng y giữ nguyên'},
+    {code:'print(list(range(5)))',out:'[0, 1, 2, 3, 4]',ex:'range(5) = 0,1,2,3,4 (5 số). list() chuyển thành list.'}
+  ];
+  let pool,idx=0,score=0,total=0,answered=false,picked=-1;
+  const r=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+  function init(){buildPool();render()}
+  function buildPool(){pool=[...QUIZ].sort(()=>Math.random()-0.5);idx=0;score=0;total=pool.length;answered=false;picked=-1}
+  function genOpts(q){
+    const opts=[q.out];
+    const wrongs=[
+      // common off-by-one and typos
+      q.out.replace(/\d+/,m=>String(parseInt(m)+1)),
+      q.out.replace(/\d+/,m=>String(Math.max(0,parseInt(m)-1))),
+      q.out==='True'?'False':q.out==='False'?'True':q.out+'0',
+      q.out.toLowerCase()===q.out?q.out.toUpperCase():q.out.toLowerCase()
+    ];
+    for(const w of wrongs){if(opts.length>=4)break;if(w&&!opts.includes(w))opts.push(w)}
+    while(opts.length<4){opts.push('Error_'+opts.length)}
+    return opts.slice(0,4).sort(()=>Math.random()-0.5);
+  }
+  function pick(o){if(answered)return;answered=true;picked=o;if(o===pool[idx].out)score++;render()}
+  function next(){idx++;answered=false;picked=-1;render()}
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    if(idx>=total){
+      const end=document.createElement('div');end.className='quiz-card quiz-end';
+      const pct=Math.round(score*100/total);
+      const stars=pct>=90?'⭐⭐⭐⭐⭐':pct>=75?'⭐⭐⭐⭐':pct>=60?'⭐⭐⭐':pct>=40?'⭐⭐':'⭐';
+      end.innerHTML=`<div style="font-size:48px">🎯</div><div class="big">Xong rồi!</div><div class="stars">${stars}</div><div class="summary">Đúng <b style="color:var(--neon-green)">${score}</b>/${total} (${pct}%)</div>`;
+      mArea.appendChild(end);addBtn('Làm lại','warn',()=>{buildPool();render()});setStatus('Hoàn thành!');return;
+    }
+    const q=pool[idx];
+    if(!q._opts)q._opts=genOpts(q);
+    const card=document.createElement('div');card.className='quiz-card';
+    card.innerHTML=`<div class="quiz-mascot">🎯</div>
+      <div class="quiz-progress"><span>Câu <b>${idx+1}</b>/${total}</span><span>Điểm: <b>${score}</b></span></div>`;
+    const bar=document.createElement('div');bar.className='quiz-bar';
+    const fill=document.createElement('div');fill.className='quiz-bar-fill';fill.style.width=`${(idx/total)*100}%`;bar.appendChild(fill);card.appendChild(bar);
+    const codeBlock=document.createElement('pre');
+    codeBlock.style.cssText='background:#0a0a1f;border:1px solid rgba(0,240,255,.3);border-radius:10px;padding:14px;font-family:"JetBrains Mono",monospace;font-size:14px;color:#e0e0ff;margin:10px 0;text-align:left;white-space:pre-wrap;line-height:1.6;overflow-x:auto';
+    codeBlock.textContent=q.code;
+    card.appendChild(codeBlock);
+    const qd=document.createElement('div');qd.className='quiz-q';qd.style.textAlign='center';qd.textContent='Code này in ra gì?';card.appendChild(qd);
+    const opts=document.createElement('div');opts.className='quiz-opts';
+    q._opts.forEach(o=>{
+      const b=document.createElement('button');b.className='quiz-opt';
+      b.style.fontFamily='"JetBrains Mono",monospace';
+      b.textContent=o;
+      if(answered){b.disabled=true;if(o===q.out)b.classList.add('correct');else if(o===picked)b.classList.add('wrong')}
+      b.onclick=()=>pick(o);opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if(answered){
+      const corr=picked===q.out;
+      const fb=document.createElement('div');fb.className='quiz-feedback '+(corr?'right':'wrong');
+      const msgs=corr?PRAISE:ROAST;
+      fb.innerHTML=`<div class="fb-emoji">${corr?'🎉':'😅'}</div><div class="fb-msg">${msgs[r(0,msgs.length-1)]}</div><div class="quiz-explain">💡 ${q.ex}</div>`;
+      card.appendChild(fb);
+      addBtn('CÂU TIẾP →','warn',next);
+    }
+    mArea.appendChild(card);
+    setStatus(`🎯 <b>Đoán output</b> · Câu <b>${idx+1}</b>/${total} · Điểm <b>${score}</b>`);
+  }
+  return {title:'Đoán output code',init};
+})();
+
+/* ========== 39. ĐỐ THUẬT NGỮ IT ========== */
+games.itTerms = (()=>{
+  const QUIZ=[
+    {q:'HTML là viết tắt của gì?',opts:['HyperText Markup Language','High Tech Modern Language','Home Tool Markup Language','Hyper Text Modern Layout'],a:0,ex:'HTML = HyperText Markup Language — ngôn ngữ đánh dấu để tạo trang web.'},
+    {q:'CSS dùng để làm gì?',opts:['Lập trình logic','Trang trí giao diện web','Quản lý cơ sở dữ liệu','Chạy server'],a:1,ex:'CSS (Cascading Style Sheets) để định dạng/trang trí trang HTML: màu, font, layout...'},
+    {q:'JavaScript chạy ở đâu là chính?',opts:['Server','Trình duyệt','Hệ điều hành','Máy in'],a:1,ex:'JS chạy chủ yếu trong trình duyệt để tương tác động với người dùng. (Node.js cũng chạy server-side).'},
+    {q:'Bug trong lập trình nghĩa là gì?',opts:['Côn trùng thật','Lỗi trong chương trình','Một tính năng mới','Tên một ngôn ngữ'],a:1,ex:'Bug = lỗi/sai sót trong code. Truyền thuyết: 1947, Grace Hopper phát hiện con bướm đêm kẹt trong máy tính Mark II.'},
+    {q:'CPU là gì?',opts:['Bộ xử lý trung tâm','Màn hình','Bộ nhớ tạm','Cáp mạng'],a:0,ex:'CPU = Central Processing Unit — bộ não của máy tính, thực hiện các phép tính.'},
+    {q:'RAM dùng để làm gì?',opts:['Lưu trữ vĩnh viễn','Bộ nhớ tạm khi đang chạy','Kết nối Internet','Hiển thị hình ảnh'],a:1,ex:'RAM (Random Access Memory) là bộ nhớ tạm — mất hết dữ liệu khi tắt máy.'},
+    {q:'Ổ cứng SSD nhanh hơn HDD vì sao?',opts:['Không có bộ phận quay','Dùng pin','Có quạt','Có wifi'],a:0,ex:'SSD dùng chip nhớ flash, không có đĩa quay như HDD → nhanh hơn nhiều lần.'},
+    {q:'URL là gì?',opts:['Địa chỉ web','Tên file','Lệnh máy tính','Mật khẩu'],a:0,ex:'URL = Uniform Resource Locator — địa chỉ của 1 tài nguyên trên web (vd: https://google.com).'},
+    {q:'Wi-Fi truyền dữ liệu bằng gì?',opts:['Dây đồng','Sóng vô tuyến','Ánh sáng','Sợi quang'],a:1,ex:'Wi-Fi dùng sóng radio (2.4GHz hoặc 5GHz) để truyền dữ liệu không dây.'},
+    {q:'IP address là gì?',opts:['Tên máy tính','Địa chỉ trên mạng','Loại CPU','Cổng USB'],a:1,ex:'IP (Internet Protocol) address = "địa chỉ nhà" của thiết bị trên mạng (vd: 192.168.1.1).'},
+    {q:'Ai phát minh ra World Wide Web?',opts:['Bill Gates','Tim Berners-Lee','Steve Jobs','Mark Zuckerberg'],a:1,ex:'Tim Berners-Lee phát minh WWW năm 1989 khi làm việc tại CERN (Thụy Sĩ).'},
+    {q:'Ai sáng lập Microsoft?',opts:['Steve Jobs','Bill Gates','Larry Page','Mark Zuckerberg'],a:1,ex:'Bill Gates (cùng Paul Allen) sáng lập Microsoft năm 1975.'},
+    {q:'Ai sáng lập Apple?',opts:['Bill Gates','Steve Jobs','Linus Torvalds','Tim Berners-Lee'],a:1,ex:'Steve Jobs cùng Steve Wozniak và Ronald Wayne sáng lập Apple năm 1976.'},
+    {q:'Ai phát minh ngôn ngữ Linux?',opts:['Linus Torvalds','Bjarne Stroustrup','Guido van Rossum','James Gosling'],a:0,ex:'Linus Torvalds phát triển nhân Linux năm 1991 khi còn là sinh viên ở Phần Lan.'},
+    {q:'Ai tạo ra ngôn ngữ Python?',opts:['Guido van Rossum','Larry Wall','Yukihiro Matsumoto','Brendan Eich'],a:0,ex:'Guido van Rossum tạo Python năm 1991. Tên đặt theo nhóm hài Monty Python.'},
+    {q:'Ai tạo ra C++?',opts:['Dennis Ritchie','Bjarne Stroustrup','Brendan Eich','James Gosling'],a:1,ex:'Bjarne Stroustrup tạo C++ năm 1979 tại Bell Labs (mở rộng từ C).'},
+    {q:'Ai tạo ra Java?',opts:['James Gosling','Brendan Eich','Guido van Rossum','Anders Hejlsberg'],a:0,ex:'James Gosling (Sun Microsystems) tạo Java năm 1995. Logo cốc cà phê tượng trưng cho cà phê Java.'},
+    {q:'Ai tạo ra JavaScript?',opts:['James Gosling','Brendan Eich','Guido van Rossum','Larry Wall'],a:1,ex:'Brendan Eich tạo JavaScript năm 1995 ở Netscape — viết trong 10 ngày!'},
+    {q:'Algorithm là gì?',opts:['Loại virus','Thuật toán','Tên hãng máy','Ngôn ngữ lập trình'],a:1,ex:'Algorithm = thuật toán = chuỗi các bước có thứ tự để giải quyết bài toán.'},
+    {q:'Variable trong lập trình là gì?',opts:['Hằng số','Biến (chứa dữ liệu)','Phép tính','Loại file'],a:1,ex:'Variable = biến — "hộp đựng" giá trị có thể thay đổi trong chương trình.'},
+    {q:'Loop là gì?',opts:['Vòng lặp','Lỗi','Tệp','Mạng'],a:0,ex:'Loop = vòng lặp — lặp lại 1 đoạn code nhiều lần. Có for-loop, while-loop...'},
+    {q:'Function trong lập trình là gì?',opts:['Hàm — đoạn code tái sử dụng','Lỗi','File','Cửa sổ'],a:0,ex:'Function = hàm — đoạn code có tên, có thể gọi lại nhiều lần, tránh viết trùng lặp.'},
+    {q:'Array là gì?',opts:['Lỗi','Mảng/danh sách','Mạng','File ảnh'],a:1,ex:'Array = mảng — chứa nhiều phần tử cùng kiểu, truy cập qua chỉ số (index).'},
+    {q:'Database là gì?',opts:['Cơ sở dữ liệu','Bàn phím','Hệ điều hành','Trình duyệt'],a:0,ex:'Database = nơi lưu trữ và quản lý dữ liệu (SQL, MongoDB...).'},
+    {q:'SQL dùng để làm gì?',opts:['Tạo giao diện','Truy vấn cơ sở dữ liệu','Vẽ hình','Gửi email'],a:1,ex:'SQL (Structured Query Language) = ngôn ngữ truy vấn database: SELECT, INSERT, UPDATE...'},
+    {q:'API là gì?',opts:['App Programming Interface','Application Program Image','Auto Push Internet','App Power Index'],a:0,ex:'API = Application Programming Interface — "cửa giao tiếp" giữa các ứng dụng/dịch vụ.'},
+    {q:'Open source nghĩa là gì?',opts:['Phần mềm trả phí','Mã nguồn mở (công khai)','Phần mềm độc quyền','Phần mềm có virus'],a:1,ex:'Open source = mã nguồn được công khai, ai cũng có thể đọc/sửa/dùng. VD: Linux, Firefox, Python...'},
+    {q:'GitHub là gì?',opts:['Nền tảng chia sẻ code','Mạng xã hội','Trò chơi','Hãng máy tính'],a:0,ex:'GitHub là nền tảng host source code (dựa trên Git), nơi lập trình viên cộng tác toàn cầu.'},
+    {q:'AI trong công nghệ viết tắt của?',opts:['Auto Internet','Artificial Intelligence','Active Index','Application Image'],a:1,ex:'AI = Artificial Intelligence = trí tuệ nhân tạo (như Claude là 1 AI 🤖).'},
+    {q:'Cookie trên web để làm gì?',opts:['Tải nhạc','Lưu thông tin nhỏ trên trình duyệt','Đăng ảnh','Bắt virus'],a:1,ex:'Cookie = file nhỏ lưu trên trình duyệt giúp web nhớ bạn (đăng nhập, ngôn ngữ...).'},
+    {q:'Firewall (tường lửa) làm gì?',opts:['Chặn truy cập trái phép','Lưu trữ dữ liệu','Phát Wi-Fi','Xem ảnh'],a:0,ex:'Firewall chặn/lọc các kết nối mạng nguy hiểm vào máy bạn.'},
+    {q:'VPN dùng để làm gì?',opts:['Tạo mạng riêng ảo','Tăng tốc CPU','Sửa lỗi RAM','Vẽ ảnh'],a:0,ex:'VPN = Virtual Private Network — tạo kết nối mã hóa qua mạng riêng ảo, ẩn IP thật.'},
+    {q:'404 error nghĩa là gì?',opts:['Lỗi máy chủ','Không tìm thấy trang','Mất mạng','Sai mật khẩu'],a:1,ex:'404 Not Found = trang/tài nguyên không tồn tại trên máy chủ.'},
+    {q:'Phím tắt Ctrl+C để làm gì?',opts:['Cắt','Sao chép','Dán','Đóng'],a:1,ex:'Ctrl+C = Copy (sao chép). Ctrl+X = Cắt. Ctrl+V = Dán.'},
+    {q:'Phím tắt Ctrl+Z dùng để?',opts:['Sao chép','Hoàn tác','Zoom','Lưu file'],a:1,ex:'Ctrl+Z = Undo (hoàn tác bước vừa làm). Ctrl+Y = Redo.'},
+    {q:'GPU dùng để làm gì chính?',opts:['Xử lý đồ họa','Lưu file','Phát loa','Đo nhiệt'],a:0,ex:'GPU = Graphics Processing Unit — chuyên xử lý đồ họa, ngày nay còn dùng cho AI/máy học.'},
+    {q:'1 byte có bao nhiêu bit?',opts:['4','8','16','64'],a:1,ex:'1 byte = 8 bit. 1 bit là 0 hoặc 1.'},
+    {q:'1 KB bằng bao nhiêu byte (xấp xỉ)?',opts:['100','1000','1024','10000'],a:2,ex:'1 KB = 1024 byte (chính xác trong IT) hoặc 1000 byte (thập phân).'},
+    {q:'Browser nào sau đây thuộc Google?',opts:['Firefox','Safari','Chrome','Edge'],a:2,ex:'Google Chrome ra đời năm 2008, hiện là trình duyệt phổ biến nhất thế giới.'},
+    {q:'Mật khẩu mạnh nên có gì?',opts:['Tên + ngày sinh','Chữ hoa, chữ thường, số, ký tự đặc biệt','Chỉ chữ thường','1 ký tự'],a:1,ex:'Pass mạnh: dài 12+ ký tự, kết hợp hoa/thường/số/ký tự đặc biệt, không dùng từ thông dụng.'},
+    {q:'Phishing là gì?',opts:['Câu cá thật','Lừa đảo qua email/web giả','Tăng tốc mạng','Sửa máy'],a:1,ex:'Phishing = lừa lấy thông tin (mật khẩu, thẻ tín dụng...) qua trang/email giả mạo.'}
+  ];
+  let pool,idx=0,score=0,total=0,answered=false,picked=-1;
+  function init(){buildPool();render()}
+  function buildPool(){pool=[...QUIZ].sort(()=>Math.random()-0.5);idx=0;score=0;total=pool.length;answered=false;picked=-1}
+  function pick(i){if(answered)return;answered=true;picked=i;if(i===pool[idx].a)score++;render()}
+  function next(){idx++;answered=false;picked=-1;render()}
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    if(idx>=total){
+      const end=document.createElement('div');end.className='quiz-card quiz-end';
+      const pct=Math.round(score*100/total);
+      const stars=pct>=90?'⭐⭐⭐⭐⭐':pct>=75?'⭐⭐⭐⭐':pct>=60?'⭐⭐⭐':pct>=40?'⭐⭐':'⭐';
+      end.innerHTML=`<div style="font-size:48px">💻</div><div class="big">Xong rồi!</div><div class="stars">${stars}</div><div class="summary">Đúng <b style="color:var(--neon-green)">${score}</b>/${total} (${pct}%)</div>`;
+      mArea.appendChild(end);addBtn('Làm lại','warn',()=>{buildPool();render()});setStatus('Hoàn thành!');return;
+    }
+    const q=pool[idx];
+    const card=document.createElement('div');card.className='quiz-card';
+    card.innerHTML=`<div class="quiz-mascot">💻</div><div class="quiz-progress"><span>Câu <b>${idx+1}</b>/${total}</span><span>Điểm: <b>${score}</b></span></div>`;
+    const bar=document.createElement('div');bar.className='quiz-bar';
+    const fill=document.createElement('div');fill.className='quiz-bar-fill';fill.style.width=`${(idx/total)*100}%`;bar.appendChild(fill);card.appendChild(bar);
+    const qd=document.createElement('div');qd.className='quiz-q';qd.textContent=q.q;card.appendChild(qd);
+    const opts=document.createElement('div');opts.className='quiz-opts';
+    q.opts.forEach((o,i)=>{
+      const b=document.createElement('button');b.className='quiz-opt';b.textContent=o;
+      if(answered){b.disabled=true;if(i===q.a)b.classList.add('correct');else if(i===picked)b.classList.add('wrong')}
+      b.onclick=()=>pick(i);opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if(answered){
+      const corr=picked===q.a;
+      const fb=document.createElement('div');fb.className='quiz-feedback '+(corr?'right':'wrong');
+      const msgs=corr?PRAISE:ROAST;
+      fb.innerHTML=`<div class="fb-emoji">${corr?'🎉':'😅'}</div><div class="fb-msg">${msgs[Math.floor(Math.random()*msgs.length)]}</div><div class="quiz-explain">💡 ${q.ex}</div>`;
+      card.appendChild(fb);
+      addBtn('CÂU TIẾP →','warn',next);
+    }
+    mArea.appendChild(card);
+    setStatus(`💻 <b>Thuật ngữ IT</b> · Câu <b>${idx+1}</b>/${total} · Điểm <b>${score}</b>`);
+  }
+  return {title:'Đố thuật ngữ IT',init};
+})();
 
 </script>
 
