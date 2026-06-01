@@ -669,6 +669,11 @@ footer b{color:var(--neon-cyan)}
     <div class="card" data-game="darts" style="--ac:var(--neon-yellow)"><div class="emoji">🎯</div><h3>Ném phi tiêu</h3><p>10 phi tiêu vào hồng tâm — tính điểm</p></div>
     <div class="card" data-game="mine2d" style="--ac:var(--neon-green)"><div class="emoji">🟫</div><h3>Minecraft 2D</h3><p>Đào - xây - craft. Tìm kim cương!</p></div>
     <div class="card" data-game="obby" style="--ac:var(--neon-pink)"><div class="emoji">🔴</div><h3>Obby</h3><p>Roblox-style — nhảy né lava, thu sao, 5 màn</p></div>
+    <div class="card" data-game="woodBlock" style="--ac:var(--neon-orange)"><div class="emoji">🪵</div><h3>Khối gỗ</h3><p>Wood Block — lấp hàng/cột để xoá &amp; ghi điểm</p></div>
+    <div class="card" data-game="yatzy" style="--ac:var(--neon-cyan)"><div class="emoji">🎲</div><h3>Yatzy</h3><p>5 xí ngầu — 13 ô điểm, full house, yatzy 50đ</p></div>
+    <div class="card" data-game="reversi" style="--ac:var(--neon-green)"><div class="emoji">⚫</div><h3>Reversi</h3><p>Othello 8×8 — kẹp quân để lật, đấu Bot/2 người</p></div>
+    <div class="card" data-game="archery" style="--ac:var(--neon-yellow)"><div class="emoji">🏹</div><h3>Bắn cung</h3><p>Ngắm góc, canh gió, 10 tên/ván — hồng tâm 100đ</p></div>
+    <div class="card" data-game="seaBattle" style="--ac:var(--neon-cyan)"><div class="emoji">⚓</div><h3>Sea Battle</h3><p>Battleship cổ điển 10×10 — đặt 5 tàu, đấu AI</p></div>
   </div>
 </div>
 
@@ -696,6 +701,9 @@ footer b{color:var(--neon-cyan)}
     <div class="card" data-game="crafting" style="--ac:var(--neon-orange)"><div class="emoji">⛏️</div><h3>Crafting Minecraft</h3><p>Nhìn ô 3×3 — đoán item được tạo (12 công thức)</p></div>
     <div class="card" data-game="robloxQuiz" style="--ac:var(--neon-pink)"><div class="emoji">🔴</div><h3>Đố Roblox</h3><p>27 câu — Robux, Lua, Adopt Me, Blox Fruits, Bacon Hair...</p></div>
     <div class="card" data-game="guessGameTitle" style="--ac:var(--neon-yellow)"><div class="emoji">🎮</div><h3>Đoán game qua mô tả</h3><p>24 game phổ biến — Minecraft, Roblox, Liên Quân, Free Fire...</p></div>
+    <div class="card" data-game="readingRoll" style="--ac:var(--neon-cyan)"><div class="emoji">📜</div><h3>Đọc cuộn</h3><p>7 sách self-help: Atomic Habits, Đắc Nhân Tâm, Sapiens, Tony, Stoic, 7 Habits, Jobs (EN)</p></div>
+    <div class="card" data-game="quotes" style="--ac:var(--neon-yellow)"><div class="emoji">💡</div><h3>Danh ngôn</h3><p>31 câu nói hay — Jobs, Gandhi, Lão Tử, Socrates kèm ý nghĩa</p></div>
+    <div class="card" data-game="englishListen" style="--ac:var(--neon-pink)"><div class="emoji">🎧</div><h3>Luyện nghe tiếng Anh</h3><p>30 câu — TTS đọc, đoán nghĩa tiếng Việt (3 cấp độ)</p></div>
   </div>
 </div>
 
@@ -5443,6 +5451,1555 @@ games.obby = (()=>{
   const origInit=init;
   // Override init to start game loop AFTER render creates the canvas
   return {title:'Obby (Roblox-style)',init:()=>{origInit();render();loop()}};
+})();
+
+
+
+/* ========== 47. WOOD BLOCK PUZZLE — Khối gỗ ========== */
+games.woodBlock = (()=>{
+  const SIZE=8;
+  const SHAPES=[
+    // single
+    [[1]],
+    // 2 cell
+    [[1,1]],[[1],[1]],
+    // 3 cell
+    [[1,1,1]],[[1],[1],[1]],[[1,1],[1,0]],[[1,1],[0,1]],[[1,0],[1,1]],[[0,1],[1,1]],
+    // square 2x2
+    [[1,1],[1,1]],
+    // L shapes
+    [[1,0],[1,0],[1,1]],[[0,1],[0,1],[1,1]],[[1,1],[1,0],[1,0]],[[1,1],[0,1],[0,1]],
+    // line 4
+    [[1,1,1,1]],[[1],[1],[1],[1]],
+    // line 5
+    [[1,1,1,1,1]],[[1],[1],[1],[1],[1]]
+  ];
+  const COLORS=['#ff5722','#ffe600','#39ff7f','#00f0ff','#b14bff','#ff2d95','#ff8a2a'];
+  let grid,tray,score,best,gameOver;
+  function init(){
+    best=parseInt(localStorage.getItem('woodBest')||'0');
+    grid=Array(SIZE).fill().map(()=>Array(SIZE).fill(null));
+    score=0;gameOver=false;
+    newTray();
+    render();
+  }
+  function newTray(){
+    tray=[];
+    for(let i=0;i<3;i++){
+      const s=SHAPES[Math.floor(Math.random()*SHAPES.length)];
+      const c=COLORS[Math.floor(Math.random()*COLORS.length)];
+      tray.push({shape:s,color:c,used:false});
+    }
+  }
+  function canFit(shape,gx,gy){
+    for(let r=0;r<shape.length;r++)for(let c=0;c<shape[r].length;c++){
+      if(!shape[r][c])continue;
+      const x=gx+c,y=gy+r;
+      if(x<0||x>=SIZE||y<0||y>=SIZE)return false;
+      if(grid[y][x]!==null)return false;
+    }
+    return true;
+  }
+  function canFitAnywhere(shape){
+    for(let y=0;y<SIZE;y++)for(let x=0;x<SIZE;x++)if(canFit(shape,x,y))return true;
+    return false;
+  }
+  function place(idx,gx,gy){
+    const piece=tray[idx];
+    if(piece.used||!canFit(piece.shape,gx,gy))return false;
+    for(let r=0;r<piece.shape.length;r++)for(let c=0;c<piece.shape[r].length;c++){
+      if(piece.shape[r][c])grid[gy+r][gx+c]=piece.color;
+    }
+    const cellCount=piece.shape.flat().filter(v=>v).length;
+    score+=cellCount;
+    piece.used=true;
+    // Clear full rows/cols
+    let cleared=0;
+    const rowsToClear=[],colsToClear=[];
+    for(let y=0;y<SIZE;y++)if(grid[y].every(v=>v!==null))rowsToClear.push(y);
+    for(let x=0;x<SIZE;x++){
+      let full=true;for(let y=0;y<SIZE;y++)if(grid[y][x]===null){full=false;break}
+      if(full)colsToClear.push(x);
+    }
+    rowsToClear.forEach(y=>{for(let x=0;x<SIZE;x++)grid[y][x]=null;cleared++});
+    colsToClear.forEach(x=>{for(let y=0;y<SIZE;y++)grid[y][x]=null;cleared++});
+    if(cleared>0)score+=cleared*10*cleared;
+    if(score>best){best=score;localStorage.setItem('woodBest',best)}
+    // New tray if all used
+    if(tray.every(p=>p.used))newTray();
+    // Check game over
+    const remaining=tray.filter(p=>!p.used);
+    if(remaining.length>0&&!remaining.some(p=>canFitAnywhere(p.shape)))gameOver=true;
+    render();
+    return true;
+  }
+  let selected=null;
+  function selectPiece(idx){
+    if(tray[idx].used)return;
+    selected=selected===idx?null:idx;
+    render();
+  }
+  function tapCell(gx,gy){
+    if(selected===null){flash('👆 Chọn khối ở dưới trước!');return}
+    if(!place(selected,gx,gy))flash('❌ Không đặt được ở đây!');
+    else selected=null;
+  }
+  let flashMsg='';
+  function flash(m){flashMsg=m;render();setTimeout(()=>{flashMsg='';render()},1200)}
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    // Header
+    const head=document.createElement('div');
+    head.style.cssText='display:flex;justify-content:space-around;background:rgba(0,0,0,.35);border-radius:10px;padding:10px;margin-bottom:12px;font-weight:700';
+    head.innerHTML=`<span>Điểm: <b style="color:var(--neon-yellow)">${score}</b></span>
+      <span>🏆 <b style="color:var(--neon-green)">${best}</b></span>`;
+    mArea.appendChild(head);
+    if(flashMsg){
+      const f=document.createElement('div');
+      f.style.cssText='text-align:center;background:rgba(255,230,0,.15);border:1px solid var(--neon-yellow);color:var(--neon-yellow);padding:6px 12px;border-radius:8px;margin-bottom:10px;font-size:13px';
+      f.textContent=flashMsg;mArea.appendChild(f);
+    }
+    // Grid
+    const board=document.createElement('div');
+    const CELL=Math.min(38,Math.floor((Math.min(window.innerWidth,420)-40)/SIZE));
+    board.style.cssText=`display:grid;grid-template-columns:repeat(${SIZE},${CELL}px);grid-template-rows:repeat(${SIZE},${CELL}px);gap:2px;margin:0 auto 14px;padding:6px;background:rgba(120,80,40,.35);border:2px solid rgba(180,141,101,.5);border-radius:10px;width:fit-content`;
+    for(let y=0;y<SIZE;y++)for(let x=0;x<SIZE;x++){
+      const c=document.createElement('div');
+      const v=grid[y][x];
+      c.style.cssText=`background:${v||'rgba(255,255,255,.04)'};border-radius:4px;cursor:pointer;border:1px solid rgba(0,0,0,.2);touch-action:manipulation`;
+      if(v)c.style.boxShadow='inset 0 -2px 4px rgba(0,0,0,.3),inset 0 2px 3px rgba(255,255,255,.2)';
+      c.onclick=()=>tapCell(x,y);
+      board.appendChild(c);
+    }
+    mArea.appendChild(board);
+    // Tray
+    const trayDiv=document.createElement('div');
+    trayDiv.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:380px;margin:0 auto';
+    tray.forEach((piece,idx)=>{
+      const slot=document.createElement('div');
+      const isSel=selected===idx;
+      slot.style.cssText=`background:${isSel?'rgba(255,230,0,.18)':'rgba(255,255,255,.05)'};border:2px solid ${isSel?'var(--neon-yellow)':piece.used?'rgba(255,255,255,.05)':'rgba(255,255,255,.15)'};border-radius:10px;padding:8px;display:flex;align-items:center;justify-content:center;min-height:80px;opacity:${piece.used?'0.25':'1'};cursor:${piece.used?'default':'pointer'};touch-action:manipulation`;
+      if(!piece.used)slot.onclick=()=>selectPiece(idx);
+      // Render mini shape
+      const mini=document.createElement('div');
+      const rows=piece.shape.length,cols=piece.shape[0].length;
+      const SZ=Math.min(14,Math.floor(60/Math.max(rows,cols)));
+      mini.style.cssText=`display:grid;grid-template-columns:repeat(${cols},${SZ}px);grid-template-rows:repeat(${rows},${SZ}px);gap:1px`;
+      for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+        const cell=document.createElement('div');
+        if(piece.shape[r][c]){
+          cell.style.cssText=`background:${piece.color};border-radius:3px;box-shadow:inset 0 -1px 2px rgba(0,0,0,.3),inset 0 1px 2px rgba(255,255,255,.2)`;
+        }
+        mini.appendChild(cell);
+      }
+      slot.appendChild(mini);
+      trayDiv.appendChild(slot);
+    });
+    mArea.appendChild(trayDiv);
+    const hint=document.createElement('div');
+    hint.style.cssText='text-align:center;color:var(--muted);font-size:12px;margin-top:12px;line-height:1.5';
+    hint.innerHTML='💡 Bấm khối ở dưới → bấm vào ô trong lưới để đặt<br>Lấp đầy hàng/cột để xoá và ghi điểm!';
+    mArea.appendChild(hint);
+    if(gameOver){
+      const go=document.createElement('div');
+      go.style.cssText='text-align:center;background:rgba(255,45,149,.15);border:1px solid var(--neon-pink);color:var(--neon-pink);padding:14px;border-radius:12px;margin-top:14px;font-weight:700';
+      go.innerHTML=`💥 GAME OVER!<br><span style="font-size:13px;font-weight:400;color:var(--text)">Điểm: <b style="color:var(--neon-yellow)">${score}</b></span>`;
+      mArea.appendChild(go);
+    }
+    addBtn('🔄 Ván mới','warn',init);
+    setStatus(`🪵 <b>Khối gỗ</b> · Điểm <b>${score}</b> · 🏆 <b>${best}</b>${gameOver?' · 💥 GAME OVER':''}`);
+  }
+  return {title:'Khối gỗ (Wood Block)',init};
+})();
+
+/* ========== 48. YATZY — 5 xí ngầu ========== */
+games.yatzy = (()=>{
+  const CATS=[
+    {key:'ones',name:'1️⃣ Số 1',score:(d)=>d.filter(x=>x===1).reduce((a,b)=>a+b,0)},
+    {key:'twos',name:'2️⃣ Số 2',score:(d)=>d.filter(x=>x===2).reduce((a,b)=>a+b,0)},
+    {key:'threes',name:'3️⃣ Số 3',score:(d)=>d.filter(x=>x===3).reduce((a,b)=>a+b,0)},
+    {key:'fours',name:'4️⃣ Số 4',score:(d)=>d.filter(x=>x===4).reduce((a,b)=>a+b,0)},
+    {key:'fives',name:'5️⃣ Số 5',score:(d)=>d.filter(x=>x===5).reduce((a,b)=>a+b,0)},
+    {key:'sixes',name:'6️⃣ Số 6',score:(d)=>d.filter(x=>x===6).reduce((a,b)=>a+b,0)},
+    {key:'threek',name:'3 cùng',score:(d)=>{const c={};d.forEach(x=>c[x]=(c[x]||0)+1);return Object.values(c).some(v=>v>=3)?d.reduce((a,b)=>a+b,0):0}},
+    {key:'fourk',name:'4 cùng',score:(d)=>{const c={};d.forEach(x=>c[x]=(c[x]||0)+1);return Object.values(c).some(v=>v>=4)?d.reduce((a,b)=>a+b,0):0}},
+    {key:'fullh',name:'Full House',score:(d)=>{const c={};d.forEach(x=>c[x]=(c[x]||0)+1);const v=Object.values(c).sort((a,b)=>b-a);return (v[0]===3&&v[1]===2)?25:0}},
+    {key:'sstr',name:'Sảnh nhỏ (4 liên)',score:(d)=>{const u=[...new Set(d)].sort((a,b)=>a-b);for(let i=0;i<=u.length-4;i++)if(u[i+3]-u[i]===3)return 30;return 0}},
+    {key:'lstr',name:'Sảnh lớn (5 liên)',score:(d)=>{const u=[...new Set(d)].sort((a,b)=>a-b);if(u.length===5&&u[4]-u[0]===4)return 40;return 0}},
+    {key:'yatzy',name:'⭐ YATZY (5 cùng)',score:(d)=>d.every(x=>x===d[0])?50:0},
+    {key:'chance',name:'Tự do (Chance)',score:(d)=>d.reduce((a,b)=>a+b,0)}
+  ];
+  let dice,kept,rollsLeft,scores,turn,gameOver;
+  function init(){
+    dice=[1,1,1,1,1];kept=[false,false,false,false,false];
+    rollsLeft=3;scores={};turn=1;gameOver=false;
+    render();
+  }
+  function roll(){
+    if(rollsLeft<=0||gameOver)return;
+    for(let i=0;i<5;i++)if(!kept[i])dice[i]=1+Math.floor(Math.random()*6);
+    rollsLeft--;
+    render();
+  }
+  function toggleKeep(i){
+    if(rollsLeft===3||gameOver)return; // Must roll once first
+    kept[i]=!kept[i];render();
+  }
+  function pickCategory(key){
+    if(scores[key]!==undefined||rollsLeft===3||gameOver)return;
+    const cat=CATS.find(c=>c.key===key);
+    scores[key]=cat.score(dice);
+    turn++;
+    if(Object.keys(scores).length>=CATS.length){gameOver=true;
+      const total=Object.values(scores).reduce((a,b)=>a+b,0);
+      const best=parseInt(localStorage.getItem('yatzyBest')||'0');
+      if(total>best)localStorage.setItem('yatzyBest',total);
+    } else {
+      dice=[1,1,1,1,1];kept=[false,false,false,false,false];rollsLeft=3;
+    }
+    render();
+  }
+  function dieFace(n){
+    const dots={
+      1:'<circle cx="20" cy="20" r="3.5" fill="#000"/>',
+      2:'<circle cx="10" cy="10" r="3.5" fill="#000"/><circle cx="30" cy="30" r="3.5" fill="#000"/>',
+      3:'<circle cx="10" cy="10" r="3.5" fill="#000"/><circle cx="20" cy="20" r="3.5" fill="#000"/><circle cx="30" cy="30" r="3.5" fill="#000"/>',
+      4:'<circle cx="10" cy="10" r="3.5" fill="#000"/><circle cx="30" cy="10" r="3.5" fill="#000"/><circle cx="10" cy="30" r="3.5" fill="#000"/><circle cx="30" cy="30" r="3.5" fill="#000"/>',
+      5:'<circle cx="10" cy="10" r="3.5" fill="#000"/><circle cx="30" cy="10" r="3.5" fill="#000"/><circle cx="20" cy="20" r="3.5" fill="#000"/><circle cx="10" cy="30" r="3.5" fill="#000"/><circle cx="30" cy="30" r="3.5" fill="#000"/>',
+      6:'<circle cx="10" cy="10" r="3.5" fill="#000"/><circle cx="30" cy="10" r="3.5" fill="#000"/><circle cx="10" cy="20" r="3.5" fill="#000"/><circle cx="30" cy="20" r="3.5" fill="#000"/><circle cx="10" cy="30" r="3.5" fill="#000"/><circle cx="30" cy="30" r="3.5" fill="#000"/>'
+    };
+    return `<svg viewBox="0 0 40 40" width="50" height="50"><rect x="2" y="2" width="36" height="36" rx="6" fill="#fff" stroke="#888" stroke-width="1.5"/>${dots[n]}</svg>`;
+  }
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const total=Object.values(scores).reduce((a,b)=>a+b,0);
+    // Header
+    const head=document.createElement('div');
+    head.style.cssText='text-align:center;margin-bottom:12px';
+    head.innerHTML=`<div style="font-family:'Bungee',cursive;font-size:22px;color:var(--neon-yellow)">🎲 ${total}</div>
+      <div style="color:var(--muted);font-size:13px">Lượt ${turn}/${CATS.length} · Tung còn: <b style="color:${rollsLeft>0?'var(--neon-cyan)':'var(--neon-pink)'}">${rollsLeft}</b></div>`;
+    mArea.appendChild(head);
+    // Dice
+    const diceWrap=document.createElement('div');
+    diceWrap.style.cssText='display:flex;gap:8px;justify-content:center;margin-bottom:12px;flex-wrap:wrap';
+    dice.forEach((d,i)=>{
+      const die=document.createElement('button');
+      die.style.cssText=`background:transparent;border:none;padding:0;cursor:pointer;transition:transform .15s;${kept[i]?'transform:translateY(8px);filter:drop-shadow(0 0 8px var(--neon-yellow))':''};touch-action:manipulation`;
+      die.innerHTML=dieFace(d);
+      die.onclick=()=>toggleKeep(i);
+      const wrap=document.createElement('div');
+      wrap.style.cssText='display:flex;flex-direction:column;align-items:center;gap:2px';
+      wrap.appendChild(die);
+      const lbl=document.createElement('div');
+      lbl.style.cssText='font-size:10px;color:'+(kept[i]?'var(--neon-yellow)':'var(--muted)');
+      lbl.textContent=kept[i]?'🔒 GIỮ':'tap để giữ';
+      wrap.appendChild(lbl);
+      diceWrap.appendChild(wrap);
+    });
+    mArea.appendChild(diceWrap);
+    // Roll button
+    const rollBtn=document.createElement('button');
+    rollBtn.style.cssText=`display:block;margin:0 auto 14px;padding:14px 32px;background:linear-gradient(135deg,var(--neon-cyan),var(--neon-purple));border:none;color:#fff;font-family:'Bungee',cursive;font-size:16px;border-radius:12px;cursor:pointer;${rollsLeft<=0||gameOver?'opacity:0.3;cursor:not-allowed':''}`;
+    rollBtn.textContent=`🎲 TUNG (${rollsLeft})`;
+    if(rollsLeft>0&&!gameOver)rollBtn.onclick=roll;
+    mArea.appendChild(rollBtn);
+    // Category list
+    const list=document.createElement('div');
+    list.style.cssText='display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px';
+    CATS.forEach(cat=>{
+      const taken=scores[cat.key]!==undefined;
+      const possible=cat.score(dice);
+      const canPick=!taken&&rollsLeft<3&&!gameOver;
+      const btn=document.createElement('button');
+      btn.style.cssText=`padding:8px 6px;border-radius:8px;background:${taken?'rgba(57,255,127,.1)':canPick&&possible>0?'rgba(255,230,0,.1)':'rgba(255,255,255,.04)'};border:1.5px solid ${taken?'rgba(57,255,127,.4)':canPick?'var(--neon-yellow)':'rgba(255,255,255,.1)'};color:${taken?'var(--neon-green)':'var(--text)'};font-family:inherit;font-size:11px;text-align:left;cursor:${canPick?'pointer':'default'};display:flex;justify-content:space-between;align-items:center`;
+      btn.innerHTML=`<span>${cat.name}</span><b style="color:${taken?'var(--neon-green)':possible>0&&canPick?'var(--neon-yellow)':'var(--muted)'}">${taken?scores[cat.key]:possible}</b>`;
+      if(canPick)btn.onclick=()=>pickCategory(cat.key);
+      list.appendChild(btn);
+    });
+    mArea.appendChild(list);
+    if(gameOver){
+      const go=document.createElement('div');
+      const best=parseInt(localStorage.getItem('yatzyBest')||'0');
+      go.style.cssText='text-align:center;background:rgba(255,230,0,.12);border:1px solid var(--neon-yellow);padding:14px;border-radius:12px;margin-top:14px';
+      go.innerHTML=`🏆 KẾT THÚC<br><div style="font-family:'Bungee',cursive;font-size:24px;color:var(--neon-yellow);margin:8px 0">${total} điểm</div><div style="font-size:12px;color:var(--muted)">Kỷ lục: ${best}</div>`;
+      mArea.appendChild(go);
+    }
+    addBtn('🔄 Ván mới','warn',init);
+    setStatus(`🎲 <b>Yatzy</b> · Lượt ${turn}/${CATS.length} · Điểm <b>${total}</b>`);
+  }
+  return {title:'Yatzy (xí ngầu)',init};
+})();
+
+/* ========== 49. REVERSI / OTHELLO 8x8 ========== */
+games.reversi = (()=>{
+  const SZ=8;
+  const B=1,W=2;
+  let board,turn,gameOver,vsBot=true,playerSide=B;
+  function init(){
+    board=Array(SZ).fill().map(()=>Array(SZ).fill(0));
+    board[3][3]=W;board[3][4]=B;board[4][3]=B;board[4][4]=W;
+    turn=B;gameOver=false;
+    render();
+  }
+  function inB(x,y){return x>=0&&x<SZ&&y>=0&&y<SZ}
+  function flipsForMove(x,y,p){
+    if(board[y][x]!==0)return [];
+    const opp=p===B?W:B;
+    const dirs=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+    const allFlips=[];
+    for(const[dx,dy]of dirs){
+      const line=[];
+      let nx=x+dx,ny=y+dy;
+      while(inB(nx,ny)&&board[ny][nx]===opp){line.push([nx,ny]);nx+=dx;ny+=dy}
+      if(line.length>0&&inB(nx,ny)&&board[ny][nx]===p)allFlips.push(...line);
+    }
+    return allFlips;
+  }
+  function legalMoves(p){
+    const m=[];
+    for(let y=0;y<SZ;y++)for(let x=0;x<SZ;x++){
+      if(flipsForMove(x,y,p).length>0)m.push({x,y});
+    }
+    return m;
+  }
+  function play(x,y){
+    if(gameOver||turn!==playerSide&&vsBot)return;
+    const flips=flipsForMove(x,y,turn);
+    if(flips.length===0)return;
+    board[y][x]=turn;flips.forEach(([fx,fy])=>board[fy][fx]=turn);
+    turn=turn===B?W:B;
+    checkEnd();
+    render();
+    if(!gameOver&&vsBot&&turn!==playerSide)setTimeout(botMove,500);
+  }
+  function botMove(){
+    const moves=legalMoves(turn);
+    if(moves.length===0){turn=turn===B?W:B;checkEnd();render();return}
+    // Greedy: corners > edges > most flips
+    const corner=[[0,0],[0,7],[7,0],[7,7]];
+    let best=moves[0],bestScore=-Infinity;
+    for(const m of moves){
+      const flips=flipsForMove(m.x,m.y,turn).length;
+      let s=flips;
+      if(corner.some(([cx,cy])=>cx===m.x&&cy===m.y))s+=20;
+      else if(m.x===0||m.x===7||m.y===0||m.y===7)s+=3;
+      if(s>bestScore){bestScore=s;best=m}
+    }
+    play(best.x,best.y);
+  }
+  function checkEnd(){
+    const m1=legalMoves(B).length,m2=legalMoves(W).length;
+    if(m1===0&&m2===0)gameOver=true;
+    else if(legalMoves(turn).length===0){turn=turn===B?W:B;if(legalMoves(turn).length===0)gameOver=true}
+  }
+  function count(){
+    let b=0,w=0;
+    for(let y=0;y<SZ;y++)for(let x=0;x<SZ;x++){if(board[y][x]===B)b++;else if(board[y][x]===W)w++}
+    return {b,w};
+  }
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const {b,w}=count();
+    const head=document.createElement('div');
+    head.style.cssText='display:flex;justify-content:space-around;background:rgba(0,0,0,.35);padding:10px;border-radius:10px;margin-bottom:12px;align-items:center';
+    head.innerHTML=`<span style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#4a4a4a 0%,#0a0a0a 60%,#000 100%);box-shadow:0 0 6px rgba(0,0,0,.8),0 0 0 1.5px rgba(255,255,255,.5)"></span><b style="${turn===B&&!gameOver?'color:var(--neon-yellow);text-shadow:0 0 8px var(--neon-yellow)':''}">${b}</b></span>
+      <span style="font-size:13px;color:var(--muted)">${gameOver?(b>w?'⚫ Đen thắng!':w>b?'⚪ Trắng thắng!':'🤝 Hoà'):(turn===B?'Lượt: Đen':'Lượt: Trắng')}</span>
+      <span style="display:flex;align-items:center;gap:6px"><b style="${turn===W&&!gameOver?'color:var(--neon-yellow);text-shadow:0 0 8px var(--neon-yellow)':''}">${w}</b><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#e8e8e8 60%,#c8c8c8 100%);box-shadow:0 0 8px rgba(255,255,255,.5)"></span></span>`;
+    mArea.appendChild(head);
+    // Board
+    const CELL=Math.min(40,Math.floor((Math.min(window.innerWidth,420)-40)/SZ));
+    const moves=!gameOver&&turn===playerSide?legalMoves(turn):[];
+    const board_el=document.createElement('div');
+    board_el.style.cssText=`display:grid;grid-template-columns:repeat(${SZ},${CELL}px);grid-template-rows:repeat(${SZ},${CELL}px);gap:2px;margin:0 auto;padding:6px;background:#0a4d2a;border:3px solid #5a3a1c;border-radius:8px;width:fit-content`;
+    for(let y=0;y<SZ;y++)for(let x=0;x<SZ;x++){
+      const cell=document.createElement('div');
+      const v=board[y][x];
+      const isLegal=moves.some(m=>m.x===x&&m.y===y);
+      cell.style.cssText=`background:#0a6038;border:1px solid rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;cursor:${isLegal?'pointer':'default'};touch-action:manipulation;position:relative`;
+      if(v===B)cell.innerHTML=`<div style="width:80%;height:80%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#4a4a4a 0%,#0a0a0a 60%,#000 100%);box-shadow:0 0 4px rgba(0,0,0,.8),0 0 0 1.5px rgba(255,255,255,.4),inset 0 -2px 3px rgba(255,255,255,.08)"></div>`;
+      else if(v===W)cell.innerHTML=`<div style="width:80%;height:80%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#e8e8e8 60%,#c8c8c8 100%);box-shadow:0 0 6px rgba(255,255,255,.4),inset 0 -2px 3px rgba(0,0,0,.15)"></div>`;
+      else if(isLegal)cell.innerHTML='<div style="width:30%;height:30%;border-radius:50%;background:rgba(255,230,0,.4);box-shadow:0 0 8px rgba(255,230,0,.6)"></div>';
+      cell.onclick=()=>{if(isLegal)play(x,y)};
+      board_el.appendChild(cell);
+    }
+    mArea.appendChild(board_el);
+    const hint=document.createElement('div');
+    hint.style.cssText='text-align:center;color:var(--muted);font-size:12px;margin-top:10px;line-height:1.5';
+    hint.innerHTML='💡 Đặt quân kẹp quân đối phương theo hàng/cột/chéo → lật chúng thành quân mình.<br>🟡 = nước đi hợp lệ · Đếm quân cuối ván — nhiều hơn thắng!';
+    mArea.appendChild(hint);
+    addBtn('🔄 Ván mới','warn',init);
+    addBtn(vsBot?'👤 Chế độ 2 người':'🤖 Chế độ vs Bot','alt',()=>{vsBot=!vsBot;init()});
+    setStatus(`⚫⚪ <b>Reversi</b> · ${b} - ${w}${gameOver?(b>w?' · ⚫ Đen thắng':w>b?' · ⚪ Trắng thắng':' · Hoà'):''}`);
+  }
+  return {title:'Reversi / Othello',init};
+})();
+
+/* ========== 50. BẮN CUNG (Archery) ========== */
+games.archery = (()=>{
+  let canvas,ctx,W=360,H=320;
+  let arrows=10,score=0,best=0;
+  let shotArrows=[]; // {x,y,vx,vy,stuck:bool, finalX, finalY}
+  let aimAngle=0; // degrees
+  let aimPower=70;
+  let chargingPower=false,powerDir=1;
+  let chargeAnim=null;
+  let gameOver=false;
+  // Wind effect
+  let wind=0; // -1..1
+  function newGame(){
+    arrows=10;score=0;shotArrows=[];gameOver=false;
+    randomWind();
+    best=parseInt(localStorage.getItem('archeryBest')||'0');
+    render();
+  }
+  function randomWind(){wind=(Math.random()-0.5)*0.06}
+  function init(){newGame()}
+  function startCharge(){
+    if(gameOver||arrows<=0)return;
+    chargingPower=true;aimPower=10;powerDir=1;
+    cancelAnimationFrame(chargeAnim);
+    const tick=()=>{
+      if(!chargingPower){return}
+      aimPower+=powerDir*2;
+      if(aimPower>=100){aimPower=100;powerDir=-1}
+      else if(aimPower<=10){aimPower=10;powerDir=1}
+      drawAim();
+      chargeAnim=requestAnimationFrame(tick);
+    };
+    tick();
+  }
+  function release(){
+    if(!chargingPower)return;
+    chargingPower=false;
+    cancelAnimationFrame(chargeAnim);
+    fire();
+  }
+  function fire(){
+    const rad=aimAngle*Math.PI/180;
+    const speed=aimPower*0.18;
+    const vx=Math.cos(rad)*speed;
+    const vy=-Math.sin(rad)*speed;
+    const arrow={x:40,y:H-50,vx,vy,stuck:false};
+    shotArrows.push(arrow);
+    arrows--;
+    animateArrow(arrow);
+  }
+  function animateArrow(arrow){
+    const step=()=>{
+      if(arrow.stuck){drawScene();return}
+      arrow.vy+=0.18; // gravity
+      arrow.vx+=wind;
+      arrow.x+=arrow.vx;
+      arrow.y+=arrow.vy;
+      // Target: bullseye at right side
+      const tx=W-50,ty=160,tr=60;
+      const dist=Math.hypot(arrow.x-tx,arrow.y-ty);
+      if(dist<tr){
+        arrow.stuck=true;arrow.finalX=arrow.x;arrow.finalY=arrow.y;
+        const pts = dist<10?100:dist<20?50:dist<30?25:dist<45?10:5;
+        arrow.points=pts;
+        score+=pts;
+        if(score>best){best=score;localStorage.setItem('archeryBest',best)}
+        flash(`+${pts} điểm!`);
+        randomWind();
+        drawScene();
+      } else if(arrow.x>W||arrow.y>H||arrow.x<0){
+        arrow.stuck=true;arrow.finalX=arrow.x;arrow.finalY=arrow.y;
+        arrow.missed=true;
+        randomWind();
+        drawScene();
+      } else {
+        drawScene();
+        requestAnimationFrame(step);
+      }
+    };
+    step();
+    if(arrows<=0&&!gameOver){
+      setTimeout(()=>{if(shotArrows.every(a=>a.stuck))gameOver=true;render()},1000);
+    }
+  }
+  let flashMsg='';
+  function flash(m){flashMsg=m;setTimeout(()=>{flashMsg='';drawScene()},900)}
+  function drawScene(){
+    if(!ctx)return;
+    // Sky gradient
+    const grd=ctx.createLinearGradient(0,0,0,H);
+    grd.addColorStop(0,'#5fa8ff');grd.addColorStop(0.7,'#a3d4ff');grd.addColorStop(1,'#5cb85c');
+    ctx.fillStyle=grd;ctx.fillRect(0,0,W,H);
+    // Ground
+    ctx.fillStyle='#3a8c3a';ctx.fillRect(0,H-30,W,30);
+    // Target on right
+    const tx=W-50,ty=160;
+    const colors=['#fff','#fff','#000','#000','#3aaef0','#3aaef0','#ff5722','#ff5722','#ffe600','#ffe600'];
+    [60,52,44,36,28,20,12].forEach((r,i)=>{
+      const colorIdx=i*2;
+      ctx.fillStyle=i===0?'#fff':i===1?'#000':i===2?'#3aaef0':i===3?'#ff5722':'#ffe600';
+      ctx.beginPath();ctx.arc(tx,ty,r,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='#000';ctx.lineWidth=1;ctx.stroke();
+    });
+    // Stand
+    ctx.fillStyle='#5a3a1c';ctx.fillRect(tx-3,ty+60,6,H-30-ty-60);
+    // Bow + archer position
+    const px=40,py=H-50;
+    ctx.fillStyle='#5a3a1c';
+    ctx.beginPath();ctx.arc(px-5,py-10,4,0,Math.PI*2);ctx.fill(); // head
+    ctx.fillRect(px-7,py-6,4,14); // body
+    // Bow
+    ctx.strokeStyle='#5a3a1c';ctx.lineWidth=3;
+    ctx.beginPath();
+    ctx.arc(px,py-2,18,-Math.PI/2-0.8,-Math.PI/2+0.8);
+    ctx.stroke();
+    // Drawn arrows on target
+    shotArrows.forEach(a=>{
+      if(!a.stuck)return;
+      ctx.strokeStyle='#5a3a1c';ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(a.finalX-15,a.finalY+3);ctx.lineTo(a.finalX,a.finalY);ctx.stroke();
+      ctx.fillStyle='#5a3a1c';
+      ctx.beginPath();ctx.moveTo(a.finalX,a.finalY);ctx.lineTo(a.finalX-4,a.finalY-3);ctx.lineTo(a.finalX-4,a.finalY+3);ctx.closePath();ctx.fill();
+      // Feathers
+      ctx.fillStyle='#ff2d95';
+      ctx.fillRect(a.finalX-18,a.finalY+1,4,3);
+    });
+    // Flying arrow
+    shotArrows.forEach(a=>{
+      if(a.stuck)return;
+      ctx.save();
+      ctx.translate(a.x,a.y);
+      ctx.rotate(Math.atan2(a.vy,a.vx));
+      ctx.strokeStyle='#5a3a1c';ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(-12,0);ctx.lineTo(0,0);ctx.stroke();
+      ctx.fillStyle='#5a3a1c';
+      ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(-4,-3);ctx.lineTo(-4,3);ctx.closePath();ctx.fill();
+      ctx.fillStyle='#ff2d95';ctx.fillRect(-15,-2,4,4);
+      ctx.restore();
+    });
+    // Wind indicator
+    ctx.fillStyle='rgba(0,0,0,0.4)';ctx.fillRect(W/2-50,8,100,18);
+    ctx.fillStyle='#fff';ctx.font='11px sans-serif';ctx.textAlign='center';
+    ctx.fillText('💨 Gió: '+(wind>0?'→':wind<0?'←':'-')+' '+Math.abs(wind*100).toFixed(0),W/2,20);
+    if(flashMsg){
+      ctx.fillStyle='rgba(0,0,0,0.7)';ctx.fillRect(W/2-50,H/2-15,100,30);
+      ctx.fillStyle='#ffe600';ctx.font='bold 18px sans-serif';ctx.textAlign='center';
+      ctx.fillText(flashMsg,W/2,H/2+6);
+    }
+  }
+  function drawAim(){
+    drawScene();
+    // Aim line
+    const px=40,py=H-50;
+    const rad=aimAngle*Math.PI/180;
+    const len=aimPower*1.6;
+    ctx.strokeStyle='rgba(255,230,0,0.8)';ctx.lineWidth=2;ctx.setLineDash([4,4]);
+    ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px+Math.cos(rad)*len,py-Math.sin(rad)*len);
+    ctx.stroke();ctx.setLineDash([]);
+    // Power bar
+    ctx.fillStyle='rgba(0,0,0,0.5)';ctx.fillRect(10,H-20,W-20,8);
+    ctx.fillStyle=`hsl(${120-aimPower*1.2},80%,55%)`;
+    ctx.fillRect(10,H-20,(W-20)*aimPower/100,8);
+  }
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const head=document.createElement('div');
+    head.style.cssText='display:flex;justify-content:space-around;background:rgba(0,0,0,.35);padding:10px;border-radius:10px;margin-bottom:10px';
+    head.innerHTML=`<span>🏹 <b style="color:var(--neon-yellow)">${arrows}</b> tên</span>
+      <span>Điểm: <b style="color:var(--neon-green)">${score}</b></span>
+      <span>🏆 <b style="color:var(--neon-cyan)">${best}</b></span>`;
+    mArea.appendChild(head);
+    canvas=document.createElement('canvas');
+    canvas.width=W;canvas.height=H;
+    canvas.style.cssText='display:block;margin:0 auto;width:100%;max-width:'+W+'px;height:auto;background:#5fa8ff;border:2px solid rgba(255,255,255,.15);border-radius:10px';
+    mArea.appendChild(canvas);
+    ctx=canvas.getContext('2d');
+    drawScene();
+    // Angle slider
+    const ctrl=document.createElement('div');
+    ctrl.style.cssText='margin:14px 0';
+    ctrl.innerHTML=`<label style="display:flex;align-items:center;gap:10px;color:var(--text);font-size:13px;margin-bottom:8px">
+      <span style="min-width:60px">🎯 Góc:</span>
+      <input type="range" id="angleSlider" min="0" max="85" value="${aimAngle}" style="flex:1;accent-color:var(--neon-cyan)">
+      <b id="angleVal" style="color:var(--neon-cyan);min-width:34px;text-align:right">${aimAngle}°</b>
+    </label>`;
+    mArea.appendChild(ctrl);
+    const slider=document.getElementById('angleSlider');
+    slider.oninput=()=>{aimAngle=parseInt(slider.value);document.getElementById('angleVal').textContent=aimAngle+'°';drawScene()};
+    // Shoot button (hold to charge, release to fire)
+    const fireBtn=document.createElement('button');
+    fireBtn.style.cssText='display:block;width:100%;max-width:300px;margin:0 auto;padding:18px;background:linear-gradient(135deg,var(--neon-pink),var(--neon-orange));border:none;color:#fff;font-family:"Bungee",cursive;font-size:18px;border-radius:14px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation';
+    fireBtn.textContent=arrows<=0?(gameOver?'🏁 HẾT TÊN':'...'):'🏹 GIỮ ĐỂ NGẮM → THẢ ĐỂ BẮN';
+    if(arrows>0&&!gameOver){
+      fireBtn.onpointerdown=(e)=>{e.preventDefault();startCharge();fireBtn.style.background='linear-gradient(135deg,var(--neon-yellow),var(--neon-orange))'};
+      fireBtn.onpointerup=(e)=>{e.preventDefault();release();fireBtn.style.background='linear-gradient(135deg,var(--neon-pink),var(--neon-orange))'};
+      fireBtn.onpointerleave=(e)=>{if(chargingPower){release();fireBtn.style.background='linear-gradient(135deg,var(--neon-pink),var(--neon-orange))'}};
+    }
+    mArea.appendChild(fireBtn);
+    if(gameOver){
+      const go=document.createElement('div');
+      go.style.cssText='text-align:center;background:rgba(255,230,0,.12);border:1px solid var(--neon-yellow);padding:14px;border-radius:12px;margin-top:14px';
+      go.innerHTML=`🏁 KẾT THÚC<br><div style="font-family:'Bungee',cursive;font-size:24px;color:var(--neon-yellow);margin:8px 0">${score} điểm</div>`;
+      mArea.appendChild(go);
+    }
+    const hint=document.createElement('div');
+    hint.style.cssText='text-align:center;color:var(--muted);font-size:12px;margin-top:10px;line-height:1.5';
+    hint.innerHTML='💡 Hồng tâm 100đ · Vòng đỏ 50đ · Vòng xanh 25đ · Đen 10đ · Trắng 5đ<br>Coi gió để ngắm — 10 tên/ván';
+    mArea.appendChild(hint);
+    addBtn('🔄 Ván mới','warn',newGame);
+    setStatus(`🏹 <b>Bắn cung</b> · ${arrows} tên · Điểm <b>${score}</b> · 🏆 <b>${best}</b>`);
+  }
+  return {title:'Bắn cung',init};
+})();
+
+
+
+/* ========== 51. SEA BATTLE (Battleship) ========== */
+games.seaBattle = (()=>{
+  const SZ=10;
+  const SHIPS=[
+    {name:'Carrier',len:5,emoji:'🚢'},
+    {name:'Battleship',len:4,emoji:'⛴️'},
+    {name:'Cruiser',len:3,emoji:'🛥️'},
+    {name:'Submarine',len:3,emoji:'🚤'},
+    {name:'Destroyer',len:2,emoji:'⛵'}
+  ];
+  // mode: 'bot' | '2p'
+  // phase: 'menu' | 'deploy' | 'handoff' | 'play' | 'over'
+  // active: 1 | 2 (whose turn — for deploy & play)
+  let mode='bot';
+  let phase='menu';
+  let active=1;
+  // p1 = human in bot mode, P1 in 2p mode. p2 = bot OR human2
+  let p1Ships=[],p2Ships=[];
+  let p1Shots=Array(SZ*SZ).fill(0); // p1's shots AT p2 board
+  let p2Shots=Array(SZ*SZ).fill(0);
+  let currentShipIdx=0;
+  let deployOrientation='h';
+  let winner=null;
+  let botMemory={hits:[]};
+  let nextActiveAfterHandoff=1;
+
+  function init(){
+    phase='menu';
+    p1Ships=[];p2Ships=[];
+    p1Shots=Array(SZ*SZ).fill(0);
+    p2Shots=Array(SZ*SZ).fill(0);
+    currentShipIdx=0;
+    deployOrientation='h';
+    winner=null;active=1;
+    botMemory={hits:[]};
+    render();
+  }
+  function chooseMode(m){
+    mode=m;active=1;currentShipIdx=0;
+    if(m==='bot'){
+      placeShipsRandom(p2Ships); // bot places auto
+      phase='deploy';
+    } else {
+      phase='handoff';
+      nextActiveAfterHandoff=1; // P1 deploys first
+    }
+    render();
+  }
+  function canPlace(ships,x,y,len,horizontal){
+    for(let i=0;i<len;i++){
+      const cx=horizontal?x+i:x, cy=horizontal?y:y+i;
+      if(cx<0||cx>=SZ||cy<0||cy>=SZ)return false;
+      for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
+        const nx=cx+dx,ny=cy+dy;
+        if(nx<0||nx>=SZ||ny<0||ny>=SZ)continue;
+        if(ships.some(s=>s.cells.some(([sx,sy])=>sx===nx&&sy===ny)))return false;
+      }
+    }
+    return true;
+  }
+  function placeShip(ships,shipDef,x,y,horizontal){
+    const cells=[];
+    for(let i=0;i<shipDef.len;i++)cells.push([horizontal?x+i:x, horizontal?y:y+i]);
+    ships.push({name:shipDef.name,len:shipDef.len,cells,hits:new Set(),sunk:false,horizontal});
+  }
+  function placeShipsRandom(ships){
+    ships.length=0;
+    for(const ship of SHIPS){
+      let placed=false,tries=0;
+      while(!placed&&tries<500){
+        tries++;
+        const h=Math.random()<0.5;
+        const x=Math.floor(Math.random()*SZ),y=Math.floor(Math.random()*SZ);
+        if(canPlace(ships,x,y,ship.len,h)){placeShip(ships,ship,x,y,h);placed=true}
+      }
+    }
+  }
+  function getCurrentDeployShips(){return active===1?p1Ships:p2Ships}
+  function tryPlace(x,y){
+    if(phase!=='deploy'||currentShipIdx>=SHIPS.length)return;
+    const ships=getCurrentDeployShips();
+    const ship=SHIPS[currentShipIdx];
+    const h=deployOrientation==='h';
+    if(canPlace(ships,x,y,ship.len,h)){
+      placeShip(ships,ship,x,y,h);
+      currentShipIdx++;
+      if(currentShipIdx>=SHIPS.length){
+        if(mode==='bot'){phase='play';active=1}
+        else if(active===1){
+          // P1 done, hand off to P2
+          active=2;currentShipIdx=0;
+          phase='handoff';nextActiveAfterHandoff=2;
+        } else {
+          // P2 done, start play
+          phase='handoff';active=1;nextActiveAfterHandoff=1;
+        }
+      }
+      render();
+    } else {
+      flash('❌ Không đặt được ở đây');
+    }
+  }
+  function randomDeploy(){
+    const ships=getCurrentDeployShips();
+    placeShipsRandom(ships);
+    currentShipIdx=SHIPS.length;
+    if(mode==='bot'){phase='play';active=1}
+    else if(active===1){active=2;currentShipIdx=0;phase='handoff';nextActiveAfterHandoff=2}
+    else {phase='handoff';active=1;nextActiveAfterHandoff=1}
+    render();
+  }
+  function resetDeploy(){getCurrentDeployShips().length=0;currentShipIdx=0;render()}
+  function continueFromHandoff(){
+    active=nextActiveAfterHandoff;
+    if(currentShipIdx<SHIPS.length||(active===2&&p2Ships.length<SHIPS.length))phase='deploy';
+    else phase='play';
+    render();
+  }
+
+  function shoot(x,y){
+    if(phase!=='play'||winner)return;
+    const targetShips=active===1?p2Ships:p1Ships;
+    const shots=active===1?p1Shots:p2Shots;
+    const idx=y*SZ+x;
+    if(shots[idx]!==0)return;
+    let hit=false,sunkShip=null;
+    for(const ship of targetShips){
+      const c=ship.cells.find(([sx,sy])=>sx===x&&sy===y);
+      if(c){
+        ship.hits.add(`${x},${y}`);shots[idx]=2;hit=true;
+        if(ship.hits.size>=ship.len){ship.sunk=true;sunkShip=ship}
+        break;
+      }
+    }
+    if(!hit)shots[idx]=1;
+    if(targetShips.every(s=>s.sunk)){winner=active;phase='over';render();return}
+    if(sunkShip)flash(`💥 Chìm ${sunkShip.name}!`);
+    else if(hit)flash('🎯 Trúng!');
+    else flash('💧 Trượt');
+    render();
+    if(!hit){
+      // Switch turn
+      if(mode==='bot'){
+        if(active===1){active=2;setTimeout(botShoot,800)}
+        else active=1;
+      } else {
+        // 2p: handoff between turns (to hide last shot result before opponent sees their board)
+        active = active===1?2:1;
+        phase='handoff';
+        nextActiveAfterHandoff=active;
+        render();
+      }
+    } else {
+      // Same player goes again
+      if(mode==='bot'&&active===2)setTimeout(botShoot,800);
+    }
+  }
+  function botShoot(){
+    if(winner||phase!=='play'||active!==2)return;
+    const M=botMemory;
+    let x,y;
+    function valid(xx,yy){return xx>=0&&xx<SZ&&yy>=0&&yy<SZ&&p2Shots[yy*SZ+xx]===0}
+    if(M.hits.length>0){
+      const last=M.hits[M.hits.length-1];
+      const dirs=[[1,0],[-1,0],[0,1],[0,-1]];
+      let found=false;
+      if(M.hits.length>=2){
+        const prev=M.hits[M.hits.length-2];
+        const dx=last[0]-prev[0],dy=last[1]-prev[1];
+        let nx=last[0]+dx,ny=last[1]+dy;
+        if(valid(nx,ny)){x=nx;y=ny;found=true}
+        else {
+          const first=M.hits[0];
+          nx=first[0]-dx;ny=first[1]-dy;
+          if(valid(nx,ny)){x=nx;y=ny;found=true}
+        }
+      }
+      if(!found){
+        const opts=dirs.map(([dx,dy])=>[last[0]+dx,last[1]+dy]).filter(([nx,ny])=>valid(nx,ny));
+        if(opts.length>0){[x,y]=opts[Math.floor(Math.random()*opts.length)];found=true}
+      }
+      if(!found){M.hits=[];return botShoot()}
+    } else {
+      const cands=[];
+      for(let yy=0;yy<SZ;yy++)for(let xx=0;xx<SZ;xx++){
+        if(p2Shots[yy*SZ+xx]===0&&(xx+yy)%2===0)cands.push([xx,yy]);
+      }
+      if(cands.length===0){
+        for(let yy=0;yy<SZ;yy++)for(let xx=0;xx<SZ;xx++){
+          if(p2Shots[yy*SZ+xx]===0)cands.push([xx,yy]);
+        }
+      }
+      [x,y]=cands[Math.floor(Math.random()*cands.length)];
+    }
+    const idx=y*SZ+x;
+    let hit=false,sunkShip=null;
+    for(const ship of p1Ships){
+      const c=ship.cells.find(([sx,sy])=>sx===x&&sy===y);
+      if(c){
+        ship.hits.add(`${x},${y}`);p2Shots[idx]=2;hit=true;
+        if(ship.hits.size>=ship.len){ship.sunk=true;sunkShip=ship;M.hits=[]}
+        else M.hits.push([x,y]);
+        break;
+      }
+    }
+    if(!hit)p2Shots[idx]=1;
+    if(p1Ships.every(s=>s.sunk)){winner=2;phase='over';render();return}
+    if(sunkShip)flash(`💀 Địch chìm ${sunkShip.name} của bạn!`);
+    else if(hit)flash('💥 Địch trúng!');
+    else flash('💧 Địch trượt');
+    render();
+    if(hit){setTimeout(botShoot,800)} else {active=1}
+  }
+  let flashMsg='';let flashT=null;
+  function flash(m){flashMsg=m;render();clearTimeout(flashT);flashT=setTimeout(()=>{flashMsg='';render()},1300)}
+
+  function gridSvg(ships,shots,showShips,interactive,previewCells=null,previewValid=true){
+    const CELL=Math.min(32,Math.floor((Math.min(window.innerWidth,440)-32)/SZ));
+    let html=`<div style="display:inline-block;background:#1a3a5a;border:3px solid #0a2a4a;border-radius:10px;padding:6px"><div style="display:grid;grid-template-columns:repeat(${SZ},${CELL}px);grid-template-rows:repeat(${SZ},${CELL}px);gap:1px;background:rgba(0,0,0,.4)">`;
+    for(let y=0;y<SZ;y++)for(let x=0;x<SZ;x++){
+      const idx=y*SZ+x;
+      const shot=shots[idx];
+      const onShip=ships.some(s=>s.cells.some(([sx,sy])=>sx===x&&sy===y));
+      const onSunkShip=ships.some(s=>s.sunk&&s.cells.some(([sx,sy])=>sx===x&&sy===y));
+      const isPreview=previewCells&&previewCells.some(([px,py])=>px===x&&py===y);
+      let bg='#3aa2d8';
+      if(showShips&&onShip)bg='#ff5722';
+      if(onSunkShip)bg='#5a1a0a';
+      if(isPreview)bg=previewValid?'rgba(57,255,127,.7)':'rgba(255,45,149,.7)';
+      let content='';
+      if(shot===2)content='<div style="width:60%;height:60%;border-radius:50%;background:radial-gradient(circle,#ff2d95,#5a1a0a);box-shadow:0 0 6px #ff2d95"></div>';
+      else if(shot===1)content='<div style="width:35%;height:35%;border-radius:50%;background:rgba(255,255,255,.6)"></div>';
+      html+=`<div data-x="${x}" data-y="${y}" style="background:${bg};display:flex;align-items:center;justify-content:center;cursor:${interactive?'pointer':'default'};touch-action:manipulation;transition:background .1s">${content}</div>`;
+    }
+    html+='</div></div>';
+    return html;
+  }
+
+  function renderMenu(){
+    const wrap=document.createElement('div');
+    wrap.style.cssText='text-align:center;padding:20px 0';
+    wrap.innerHTML=`<div style="font-size:64px;margin-bottom:10px">⚓</div>
+      <div style="font-family:'Bungee',cursive;font-size:24px;color:var(--neon-yellow);margin-bottom:8px">SEA BATTLE</div>
+      <div style="color:var(--muted);font-size:13px;margin-bottom:30px">Chọn chế độ chơi</div>`;
+    mArea.appendChild(wrap);
+    const opts=document.createElement('div');
+    opts.style.cssText='display:flex;flex-direction:column;gap:12px;max-width:340px;margin:0 auto';
+    const btn1=document.createElement('button');
+    btn1.style.cssText='padding:20px;border-radius:14px;background:linear-gradient(135deg,var(--neon-cyan),var(--neon-purple));border:none;color:#fff;font-family:"Bungee",cursive;font-size:16px;cursor:pointer;touch-action:manipulation';
+    btn1.innerHTML='🤖 ĐẤU AI BOT<div style="font-size:11px;font-weight:400;margin-top:4px;opacity:.85">1 người chơi vs máy</div>';
+    btn1.onclick=()=>chooseMode('bot');
+    opts.appendChild(btn1);
+    const btn2=document.createElement('button');
+    btn2.style.cssText='padding:20px;border-radius:14px;background:linear-gradient(135deg,var(--neon-pink),var(--neon-orange));border:none;color:#fff;font-family:"Bungee",cursive;font-size:16px;cursor:pointer;touch-action:manipulation';
+    btn2.innerHTML='👥 2 NGƯỜI CHƠI<div style="font-size:11px;font-weight:400;margin-top:4px;opacity:.85">Truyền máy — đặt tàu xen kẽ</div>';
+    btn2.onclick=()=>chooseMode('2p');
+    opts.appendChild(btn2);
+    mArea.appendChild(opts);
+    setStatus('⚓ <b>Sea Battle</b> · Chọn chế độ');
+  }
+
+  function renderHandoff(){
+    const wrap=document.createElement('div');
+    wrap.style.cssText='text-align:center;padding:30px 20px';
+    const isP1=nextActiveAfterHandoff===1;
+    const isDeploy = (nextActiveAfterHandoff===1 && p1Ships.length<SHIPS.length) || (nextActiveAfterHandoff===2 && p2Ships.length<SHIPS.length);
+    const action = isDeploy?'đặt tàu':'tấn công';
+    wrap.innerHTML=`<div style="font-size:80px;margin-bottom:14px">${isP1?'🔵':'🔴'}</div>
+      <div style="font-family:'Bungee',cursive;font-size:26px;color:${isP1?'var(--neon-cyan)':'var(--neon-pink)'};margin-bottom:10px">NGƯỜI CHƠI ${nextActiveAfterHandoff}</div>
+      <div style="color:var(--text);font-size:15px;margin-bottom:8px">Đến lượt bạn ${action}</div>
+      <div style="color:var(--muted);font-size:12px;margin-bottom:30px">⚠️ Đảm bảo đối thủ KHÔNG nhìn màn hình<br>trước khi bấm SẴN SÀNG</div>`;
+    mArea.appendChild(wrap);
+    const btn=document.createElement('button');
+    btn.style.cssText=`display:block;margin:0 auto;padding:18px 40px;background:linear-gradient(135deg,${isP1?'var(--neon-cyan),var(--neon-purple)':'var(--neon-pink),var(--neon-orange)'});border:none;color:#fff;font-family:'Bungee',cursive;font-size:18px;border-radius:14px;cursor:pointer;touch-action:manipulation`;
+    btn.textContent='✅ SẴN SÀNG';
+    btn.onclick=continueFromHandoff;
+    mArea.appendChild(btn);
+    addBtn('🔄 Menu chính','alt',init);
+    setStatus(`⚓ <b>Sea Battle</b> · Chuyển lượt cho Người chơi ${nextActiveAfterHandoff}`);
+  }
+
+  function renderDeploy(){
+    const ships=getCurrentDeployShips();
+    const playerLabel = mode==='2p'?`Người chơi ${active}`:'Bạn';
+    const head=document.createElement('div');
+    head.style.cssText='text-align:center;margin-bottom:10px';
+    if(currentShipIdx<SHIPS.length){
+      const ship=SHIPS[currentShipIdx];
+      head.innerHTML=`<div style="font-family:'Bungee',cursive;font-size:16px;color:${active===1?'var(--neon-cyan)':'var(--neon-pink)'}">⚓ ${playerLabel} đặt tàu (${currentShipIdx+1}/${SHIPS.length})</div>
+        <div style="color:var(--muted);font-size:13px;margin-top:4px">${ship.emoji} <b>${ship.name}</b> — ${ship.len} ô · <b style="color:var(--neon-yellow)">${deployOrientation==='h'?'Ngang ─':'Dọc │'}</b></div>`;
+    } else {
+      head.innerHTML=`<div style="font-family:'Bungee',cursive;font-size:18px;color:var(--neon-green)">✅ Đã đặt xong!</div>`;
+    }
+    mArea.appendChild(head);
+    const wrap=document.createElement('div');
+    wrap.style.cssText='display:flex;justify-content:center;margin-bottom:12px';
+    wrap.innerHTML=gridSvg(ships,Array(SZ*SZ).fill(0),true,currentShipIdx<SHIPS.length,null);
+    mArea.appendChild(wrap);
+    if(currentShipIdx<SHIPS.length){
+      const ship=SHIPS[currentShipIdx];
+      wrap.querySelectorAll('[data-x]').forEach(c=>{
+        const x=parseInt(c.dataset.x),y=parseInt(c.dataset.y);
+        c.onpointerenter=()=>{
+          const h=deployOrientation==='h';
+          const preview=[];
+          for(let i=0;i<ship.len;i++)preview.push([h?x+i:x, h?y:y+i]);
+          const valid=canPlace(ships,x,y,ship.len,h);
+          wrap.innerHTML=gridSvg(ships,Array(SZ*SZ).fill(0),true,true,preview,valid);
+          wrap.querySelectorAll('[data-x]').forEach(cc=>{
+            const cx=parseInt(cc.dataset.x),cy=parseInt(cc.dataset.y);
+            cc.onclick=()=>tryPlace(cx,cy);
+          });
+        };
+        c.onclick=()=>tryPlace(x,y);
+      });
+    }
+    addBtn(deployOrientation==='h'?'🔄 Xoay DỌC':'🔄 Xoay NGANG','alt',()=>{deployOrientation=deployOrientation==='h'?'v':'h';render()});
+    addBtn('🎲 RANDOM','alt',randomDeploy);
+    addBtn('🔄 Đặt lại','alt',resetDeploy);
+    setStatus(`⚓ <b>Sea Battle</b> · ${playerLabel} đặt tàu (${currentShipIdx}/${SHIPS.length})`);
+  }
+
+  function renderPlay(){
+    const head=document.createElement('div');
+    head.style.cssText='text-align:center;margin-bottom:10px';
+    let whoTurn;
+    if(mode==='bot') whoTurn = active===1?'🎯 Lượt BẠN':'🤖 Lượt ĐỊCH';
+    else whoTurn = `${active===1?'🔵':'🔴'} Lượt Người chơi ${active}`;
+    if(phase==='over'){
+      const txt = mode==='bot' ? (winner===1?'🏆 BẠN THẮNG!':'💀 BẠN THUA') : `🏆 NGƯỜI CHƠI ${winner} THẮNG!`;
+      head.innerHTML=`<div style="font-family:'Bungee',cursive;font-size:22px;color:${winner===1?'var(--neon-green)':'var(--neon-pink)'}">${txt}</div>`;
+    } else {
+      head.innerHTML=`<div style="font-family:'Bungee',cursive;font-size:16px;color:var(--neon-yellow)">${whoTurn}</div>`;
+    }
+    mArea.appendChild(head);
+    // Determine which board to attack & which is mine
+    const myShips = active===1?p1Ships:p2Ships;
+    const enemyShips = active===1?p2Ships:p1Ships;
+    const myShots = active===1?p1Shots:p2Shots;
+    const enemyShots = active===1?p2Shots:p1Shots;
+    const enemyLabel = mode==='bot'?(active===1?'BIỂN ĐỊCH':'TÀU BẠN (Bot đang bắn)'):`BIỂN Người chơi ${active===1?2:1}`;
+    const myLabel = mode==='bot'?(active===1?'TÀU BẠN':'TÀU BOT'):`TÀU Người chơi ${active}`;
+    // Enemy board (attack target)
+    const enLbl=document.createElement('div');
+    enLbl.style.cssText='text-align:center;color:var(--neon-pink);font-weight:700;margin-bottom:4px;font-size:13px';
+    const enemyShipsLeft=enemyShips.filter(s=>!s.sunk).length;
+    enLbl.textContent=`🎯 ${enemyLabel} (${enemyShipsLeft}/${enemyShips.length} tàu)`;
+    mArea.appendChild(enLbl);
+    const enWrap=document.createElement('div');
+    enWrap.style.cssText='display:flex;justify-content:center;margin-bottom:14px';
+    // Show enemy ships only when game is over
+    enWrap.innerHTML=gridSvg(enemyShips,myShots,phase==='over',phase==='play'&&!winner);
+    mArea.appendChild(enWrap);
+    if(phase==='play'&&!winner){
+      enWrap.querySelectorAll('[data-x]').forEach(c=>{
+        const x=parseInt(c.dataset.x),y=parseInt(c.dataset.y);
+        c.onclick=()=>shoot(x,y);
+      });
+    }
+    // Own board (smaller, just info)
+    const myLbl=document.createElement('div');
+    myLbl.style.cssText='text-align:center;color:var(--neon-cyan);font-weight:700;margin-bottom:4px;font-size:13px';
+    const myShipsLeft=myShips.filter(s=>!s.sunk).length;
+    myLbl.textContent=`⚓ ${myLabel} (${myShipsLeft}/${myShips.length})`;
+    mArea.appendChild(myLbl);
+    const myWrap=document.createElement('div');
+    myWrap.style.cssText='display:flex;justify-content:center';
+    myWrap.innerHTML=gridSvg(myShips,enemyShots,true,false);
+    mArea.appendChild(myWrap);
+    addBtn('🔄 Ván mới','warn',init);
+    setStatus(`⚓ <b>Sea Battle</b>${mode==='2p'?' · 👥 2 người':' · 🤖 Bot'} · ${whoTurn.replace(/[🎯🤖🔵🔴]/g,'').trim()}${winner?(' · '+(mode==='bot'?(winner===1?'🏆 THẮNG':'💀 THUA'):`P${winner} thắng`)):''}`);
+  }
+
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    if(flashMsg){
+      const f=document.createElement('div');
+      f.style.cssText='text-align:center;background:rgba(255,230,0,.15);border:1px solid var(--neon-yellow);color:var(--neon-yellow);padding:8px 14px;border-radius:8px;margin-bottom:10px;font-weight:600';
+      f.textContent=flashMsg;mArea.appendChild(f);
+    }
+    if(phase==='menu')renderMenu();
+    else if(phase==='handoff')renderHandoff();
+    else if(phase==='deploy')renderDeploy();
+    else renderPlay();
+  }
+  return {title:'Sea Battle',init};
+})();
+
+
+
+
+/* ========== 52. ĐỌC CUỘN (Reading Roll) — chữ chạy dưới lên ========== */
+games.readingRoll = (()=>{
+  // Self-help / inspirational passages
+  const BOOKS=[
+    {
+      id:'atomic',title:'Atomic Habits',author:'James Clear',lang:'vi',emoji:'⚛️',
+      content:`Bạn không phụ thuộc vào mức độ động lực của mình, mà phụ thuộc vào hệ thống của bạn.
+
+Mỗi hành động bạn làm là một phiếu bầu cho người bạn muốn trở thành. Không một khoảnh khắc nào tạo nên sự thay đổi, mà chính là hàng nghìn lần lặp lại tích lũy theo thời gian.
+
+Quy luật 1%: Tốt hơn 1% mỗi ngày trong 1 năm, bạn sẽ giỏi hơn 37 lần. Tệ đi 1% mỗi ngày, bạn sẽ trở về gần như con số 0.
+
+Đừng tập trung vào mục tiêu. Hãy tập trung vào hệ thống. Mục tiêu xác định điều bạn muốn đạt được; hệ thống xác định quá trình dẫn bạn đến đó.
+
+Thói quen tốt làm thời gian trở thành đồng minh. Thói quen xấu làm thời gian trở thành kẻ thù.
+
+4 quy luật của thay đổi hành vi:
+• Làm cho nó dễ thấy
+• Làm cho nó hấp dẫn
+• Làm cho nó dễ làm
+• Làm cho nó thoả mãn
+
+Bạn không vươn tới mức độ của mục tiêu. Bạn rơi xuống mức độ của hệ thống của mình.`,
+      questions:[
+        {q:'Theo James Clear, để thành công ta cần tập trung vào điều gì?',opts:['Mục tiêu','Hệ thống','Động lực','Thiên tài'],a:1},
+        {q:'Tốt hơn 1% mỗi ngày trong 1 năm, bạn sẽ giỏi hơn bao nhiêu lần?',opts:['10','20','37','100'],a:2},
+        {q:'Mỗi hành động bạn làm là?',opts:['Lãng phí thời gian','Một phiếu bầu cho con người bạn muốn trở thành','Không quan trọng','Tốn năng lượng'],a:1}
+      ]
+    },
+    {
+      id:'dale',title:'Đắc Nhân Tâm',author:'Dale Carnegie',lang:'vi',emoji:'🤝',
+      content:`Hãy quan tâm chân thành đến người khác. Bạn sẽ có thêm nhiều bạn trong 2 tháng bằng cách quan tâm đến người khác, hơn là trong 2 năm cố làm cho người khác quan tâm đến mình.
+
+Nụ cười không tốn kém gì nhưng đem lại nhiều điều. Nó làm giàu người nhận mà không làm nghèo người cho. Nó nhanh chóng nhưng để lại ấn tượng mãi mãi.
+
+Hãy nhớ tên của một người là âm thanh ngọt ngào và quan trọng nhất với họ trong mọi ngôn ngữ.
+
+Lắng nghe nhiều hơn nói. Đặt câu hỏi mà người khác sẽ thích thú trả lời. Khuyến khích họ nói về bản thân và những thành tựu của họ.
+
+Làm cho người khác cảm thấy quan trọng — và hãy làm điều đó chân thành.
+
+Không bao giờ chỉ trích, lên án hay than phiền. Khi đối mặt với con người, hãy nhớ rằng ta không đối mặt với những sinh vật của lý trí, mà với những sinh vật của cảm xúc.
+
+Cách duy nhất để có được lợi thế tốt nhất trong một cuộc tranh luận là tránh nó.`,
+      questions:[
+        {q:'Theo Dale Carnegie, cách tốt nhất để có nhiều bạn là gì?',opts:['Nổi tiếng','Quan tâm chân thành đến người khác','Giàu có','Đẹp trai'],a:1},
+        {q:'Âm thanh ngọt ngào và quan trọng nhất với 1 người là gì?',opts:['Tiếng cười','Tên của họ','Lời khen','Âm nhạc'],a:1},
+        {q:'Cách tốt nhất để thắng tranh luận là?',opts:['Hét to','Tránh nó','Đe doạ','Bỏ đi'],a:1}
+      ]
+    },
+    {
+      id:'stoic',title:'Suy Tưởng',author:'Marcus Aurelius',lang:'vi',emoji:'🏛️',
+      content:`Bạn có quyền với tâm trí của mình — không phải với các sự kiện bên ngoài. Nhận ra điều này và bạn sẽ tìm thấy sức mạnh.
+
+Hạnh phúc của đời bạn phụ thuộc vào chất lượng những suy nghĩ của bạn.
+
+Hôm nay tôi đã trốn thoát khỏi mọi lo lắng. Hay đúng hơn, tôi đã ném chúng ra ngoài. Vì chúng không ở bên ngoài tôi — chúng ở bên trong, trong nhận thức của tôi.
+
+Hãy nhớ rằng không có gì xảy ra với một người mà không phải là điều người đó được sinh ra để chịu đựng.
+
+Sức mạnh tốt nhất là biết khi nào không cần thể hiện sức mạnh.
+
+Mỗi sáng khi thức dậy, hãy nghĩ thế này: Hôm nay tôi sẽ gặp những người ích kỷ, thiếu trung thực, kiêu ngạo, ghen tị... Nhưng tôi không thể tức giận với họ. Vì họ làm vậy do thiếu hiểu biết về điều thiện và ác.
+
+Vũ trụ là thay đổi; cuộc sống là quan điểm. Sự bình yên đến không phải từ việc thoát khỏi bão tố, mà từ việc tìm thấy sự yên tĩnh trong bão.`,
+      questions:[
+        {q:'Bạn có quyền với điều gì?',opts:['Mọi thứ','Tâm trí của mình','Sự kiện bên ngoài','Người khác'],a:1},
+        {q:'Hạnh phúc đời bạn phụ thuộc vào?',opts:['May mắn','Tiền bạc','Chất lượng suy nghĩ của bạn','Sức khoẻ'],a:2},
+        {q:'Sức mạnh tốt nhất là?',opts:['Đánh thắng mọi đối thủ','Biết khi nào không cần thể hiện sức mạnh','Có nhiều tiền','Nói to'],a:1}
+      ]
+    },
+    {
+      id:'tony',title:'Trên đường băng',author:'Tony Buổi Sáng',lang:'vi',emoji:'☀️',
+      content:`Khi bạn còn trẻ, hãy đi nhiều, đọc nhiều, gặp nhiều người. Đừng để 30 tuổi mới nhận ra cuộc đời quá ngắn để làm những gì người khác muốn bạn làm.
+
+Tiếng Anh không phải là chìa khoá vạn năng — nhưng nó là chìa khoá mở rất nhiều cánh cửa. Học đi, đừng đợi.
+
+Đừng so sánh chương 1 của bạn với chương 20 của người khác. Mỗi người có timeline riêng.
+
+Sống tử tế. Tử tế không phải là yếu đuối. Tử tế là chọn cách cư xử đúng đắn dù người khác không xứng đáng.
+
+Ăn sáng đầy đủ. Ngủ đủ giấc. Tập thể dục. Đọc sách. Đi du lịch. Học một kỹ năng mới mỗi năm. Đây là những thứ "boring" nhưng là nền tảng cho mọi thành công.
+
+Đừng tin vào sự nghiệp "làm giàu nhanh". Mọi thứ có giá trị đều cần thời gian.
+
+Khi mệt mỏi, nhớ rằng: ai cũng có lúc khó khăn. Sự khác biệt là người mạnh mẽ vẫn bước tiếp.`,
+      questions:[
+        {q:'Khi còn trẻ ta nên làm gì?',opts:['Ngủ nhiều','Đi nhiều, đọc nhiều, gặp nhiều người','Chỉ làm việc','Không có lời khuyên'],a:1},
+        {q:'Tiếng Anh được Tony ví là?',opts:['Vô dụng','Chìa khoá mở nhiều cánh cửa','Quá khó','Không cần thiết'],a:1},
+        {q:'Sự khác biệt giữa người mạnh mẽ và yếu đuối là?',opts:['Sức khoẻ','Vẫn bước tiếp khi mệt mỏi','Tiền bạc','May mắn'],a:1}
+      ]
+    },
+    {
+      id:'sapiens',title:'Sapiens',author:'Yuval Noah Harari',lang:'vi',emoji:'🌍',
+      content:`Lý do duy nhất khiến Homo Sapiens thống trị Trái Đất không phải vì chúng ta khoẻ hơn hay thông minh hơn cá nhân, mà vì chúng ta có thể hợp tác linh hoạt với số lượng RẤT LỚN.
+
+Sức mạnh đó đến từ khả năng tin vào những "hư cấu chung": tiền, quốc gia, công ty, tôn giáo, nhân quyền — không có gì trong số này tồn tại vật chất, chúng chỉ tồn tại trong câu chuyện chúng ta cùng kể.
+
+Cách mạng Nông nghiệp 12.000 năm trước có thể là lừa đảo lớn nhất lịch sử: con người trở thành nô lệ của lúa mì, chứ không phải ngược lại.
+
+Tiền là hệ thống tin cậy phổ quát mạnh nhất loài người từng nghĩ ra. Người ta có thể không tin cùng tôn giáo, nhưng đều tin tờ giấy in số.
+
+Hạnh phúc không đến từ tích luỹ trải nghiệm bên ngoài, mà từ việc đồng bộ giữa kỳ vọng và thực tế.
+
+Tương lai chúng ta không còn là Homo Sapiens — chúng ta đang trở thành Homo Deus, sinh vật được tăng cường bởi công nghệ.`,
+      questions:[
+        {q:'Lý do Homo Sapiens thống trị Trái Đất là gì?',opts:['Khoẻ hơn','Thông minh hơn cá nhân','Hợp tác linh hoạt với số lượng lớn','May mắn'],a:2},
+        {q:'Tiền, quốc gia, công ty được Harari gọi là?',opts:['Vật chất','Hư cấu chung','Thiên nhiên','Khoa học'],a:1},
+        {q:'Cách mạng Nông nghiệp được mô tả thế nào?',opts:['Thành tựu lớn','Lừa đảo lớn nhất lịch sử','Bình thường','Không quan trọng'],a:1}
+      ]
+    },
+    {
+      id:'7habits',title:'7 Habits',author:'Stephen Covey',lang:'vi',emoji:'🔑',
+      content:`Thói quen 1: Chủ động. Giữa kích thích và phản ứng có 1 khoảng trống — trong khoảng đó là quyền tự do và sức mạnh của bạn để chọn phản ứng.
+
+Thói quen 2: Bắt đầu với mục đích cuối cùng trong tâm trí. Hãy hình dung đám tang của chính mình — bạn muốn người ta nói gì về bạn?
+
+Thói quen 3: Đặt ưu tiên cho việc quan trọng, không chỉ việc khẩn cấp. Đừng để cuộc sống của bạn bị điều khiển bởi báo động.
+
+Thói quen 4: Tư duy thắng-thắng. Cuộc sống không phải là cuộc thi tổng-bằng-không. Khi cả hai bên đều có lợi, đó mới là quan hệ bền vững.
+
+Thói quen 5: Hiểu trước, rồi mới được hiểu. Hầu hết người ta không lắng nghe để hiểu — họ lắng nghe để trả lời.
+
+Thói quen 6: Hợp lực. Tổng lớn hơn các phần cộng lại. 1+1 có thể bằng 3, 10 hoặc 100.
+
+Thói quen 7: Mài giũa lưỡi cưa. Đầu tư vào 4 chiều của bản thân: thể chất, tinh thần, lý trí, xã hội/cảm xúc.
+
+Sự trưởng thành đi qua 3 giai đoạn: phụ thuộc → độc lập → phụ thuộc lẫn nhau.`,
+      questions:[
+        {q:'Giữa kích thích và phản ứng có gì?',opts:['Không gì cả','Một khoảng trống — sức mạnh để chọn phản ứng','Bản năng','Tiền'],a:1},
+        {q:'Thói quen 7 — Mài giũa lưỡi cưa nghĩa là?',opts:['Đầu tư vào 4 chiều bản thân','Cắt cỏ','Mua đồ mới','Học tiếng Anh'],a:0},
+        {q:'Sự trưởng thành đi qua mấy giai đoạn?',opts:['1','2','3','5'],a:2}
+      ]
+    }
+  ];
+  // English bonus (1 short)
+  BOOKS.push({
+    id:'jobs',title:'Stay Hungry, Stay Foolish',author:'Steve Jobs (Stanford 2005)',lang:'en',emoji:'🍎',
+    content:`Your time is limited, so don't waste it living someone else's life.
+
+Don't be trapped by dogma — which is living with the results of other people's thinking.
+
+Don't let the noise of others' opinions drown out your own inner voice.
+
+And most important, have the courage to follow your heart and intuition. They somehow already know what you truly want to become. Everything else is secondary.
+
+You can't connect the dots looking forward; you can only connect them looking backwards. So you have to trust that the dots will somehow connect in your future.
+
+The only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle.
+
+Stay hungry. Stay foolish.`,
+    questions:[
+      {q:'According to Jobs, your time is limited so don\'t waste it...',opts:['making money','living someone else\'s life','reading','sleeping'],a:1},
+      {q:'You can\'t connect the dots looking...',opts:['forward','backwards','sideways','down'],a:0},
+      {q:'The only way to do great work is to...',opts:['be smart','work hard','love what you do','make money'],a:2}
+    ]
+  });
+
+  let currentBook=null;
+  let mode='menu'; // 'menu' | 'reading' | 'quiz' | 'result'
+  let scrollY=0;
+  let speed=parseFloat(localStorage.getItem('rrSpeed')||'2.0'); // px per frame
+  let paused=false;
+  let animFrame=null;
+  let quizIdx=0,quizScore=0,quizPicked=-1,quizAnswered=false;
+
+  function init(){
+    mode='menu';currentBook=null;scrollY=0;paused=false;
+    speed=parseFloat(localStorage.getItem('rrSpeed')||'2.0');
+    cancelAnimationFrame(animFrame);
+    render();
+  }
+  function pickBook(book){
+    currentBook=book;mode='reading';scrollY=0;paused=false;
+    render();
+    startScroll();
+  }
+  function startScroll(){
+    cancelAnimationFrame(animFrame);
+    const tick=()=>{
+      if(mode!=='reading'){return}
+      if(!paused){
+        const inner=document.getElementById('rrInner');
+        if(inner){
+          const sh=inner.scrollHeight;
+          // Only advance and check end if element is laid out (scrollHeight > 100)
+          if(sh>100){
+            scrollY+=speed;
+            inner.style.transform=`translateY(${-scrollY}px)`;
+            // End: when text has scrolled past the top viewport
+            if(scrollY>sh+200){
+              mode='quiz';quizIdx=0;quizScore=0;quizPicked=-1;quizAnswered=false;
+              render();return;
+            }
+          }
+        }
+      }
+      animFrame=requestAnimationFrame(tick);
+    };
+    animFrame=requestAnimationFrame(tick);
+  }
+  function setSpeed(s){speed=s;localStorage.setItem('rrSpeed',s);render()}
+  function togglePause(){paused=!paused;render()}
+  function quizPick(i){
+    if(quizAnswered)return;
+    quizAnswered=true;quizPicked=i;
+    if(i===currentBook.questions[quizIdx].a)quizScore++;
+    render();
+  }
+  function quizNext(){
+    quizIdx++;quizPicked=-1;quizAnswered=false;
+    if(quizIdx>=currentBook.questions.length)mode='result';
+    render();
+  }
+  function backToMenu(){
+    cancelAnimationFrame(animFrame);
+    mode='menu';currentBook=null;
+    render();
+  }
+
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    if(mode==='menu')return renderMenu();
+    if(mode==='reading')return renderReading();
+    if(mode==='quiz')return renderQuiz();
+    if(mode==='result')return renderResult();
+  }
+  function renderMenu(){
+    const head=document.createElement('div');
+    head.style.cssText='text-align:center;margin-bottom:18px';
+    head.innerHTML=`<div style="font-size:54px">📜</div>
+      <div style="font-family:'Bungee',cursive;font-size:20px;color:var(--neon-cyan);margin:6px 0">Đọc cuộn (Reading Roll)</div>
+      <div style="color:var(--muted);font-size:13px;line-height:1.5;max-width:340px;margin:0 auto">Chữ chạy chậm từ dưới lên — chọn cuốn sách yêu thích<br>Sau khi đọc xong có câu hỏi để kiểm tra</div>`;
+    mArea.appendChild(head);
+    const list=document.createElement('div');
+    list.style.cssText='display:flex;flex-direction:column;gap:10px;max-width:420px;margin:0 auto';
+    BOOKS.forEach(b=>{
+      const btn=document.createElement('button');
+      btn.style.cssText=`display:flex;align-items:center;gap:12px;padding:14px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--text);font-family:inherit;text-align:left;cursor:pointer;touch-action:manipulation;transition:all .15s`;
+      btn.onmouseenter=()=>{btn.style.background='rgba(255,255,255,.1)';btn.style.borderColor='var(--neon-cyan)'};
+      btn.onmouseleave=()=>{btn.style.background='rgba(255,255,255,.05)';btn.style.borderColor='rgba(255,255,255,.1)'};
+      btn.innerHTML=`<div style="font-size:36px;flex-shrink:0">${b.emoji}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700;font-size:15px;color:${b.lang==='en'?'var(--neon-yellow)':'var(--text)'}">${b.title} ${b.lang==='en'?'<span style="font-size:10px;background:var(--neon-yellow);color:#000;padding:2px 6px;border-radius:4px;margin-left:4px">EN</span>':''}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">${b.author}</div>
+        </div>
+        <div style="color:var(--muted);font-size:18px;flex-shrink:0">→</div>`;
+      btn.onclick=()=>pickBook(b);
+      list.appendChild(btn);
+    });
+    mArea.appendChild(list);
+    setStatus('📜 <b>Đọc cuộn</b> · Chọn sách để đọc');
+  }
+  function renderReading(){
+    const head=document.createElement('div');
+    head.style.cssText='text-align:center;margin-bottom:10px';
+    head.innerHTML=`<div style="font-family:'Bungee',cursive;font-size:15px;color:var(--neon-cyan)">${currentBook.emoji} ${currentBook.title}</div>
+      <div style="color:var(--muted);font-size:11px;margin-top:2px">— ${currentBook.author} —</div>`;
+    mArea.appendChild(head);
+    // Speed control
+    const speedRow=document.createElement('div');
+    speedRow.style.cssText='display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:10px;font-size:12px;color:var(--muted)';
+    speedRow.innerHTML=`<span>🐢</span>
+      <input type="range" id="rrSpeed" min="0.5" max="6" step="0.1" value="${speed}" style="flex:1;max-width:200px;accent-color:var(--neon-cyan)">
+      <span>🐇</span>
+      <b id="rrSpeedLabel" style="color:var(--neon-cyan);min-width:36px;text-align:right">${speed.toFixed(1)}x</b>`;
+    mArea.appendChild(speedRow);
+    // Reading window
+    const wrap=document.createElement('div');
+    wrap.id='rrWrap';
+    wrap.style.cssText='position:relative;height:60vh;max-height:480px;background:linear-gradient(180deg,rgba(10,5,20,.95) 0%,rgba(20,10,40,.9) 100%);border:2px solid rgba(0,240,255,.25);border-radius:14px;overflow:hidden;margin-bottom:12px';
+    // Gradient masks at top + bottom
+    const fadeTop=document.createElement('div');
+    fadeTop.style.cssText='position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(180deg,rgba(20,8,48,1),transparent);z-index:2;pointer-events:none';
+    wrap.appendChild(fadeTop);
+    const fadeBot=document.createElement('div');
+    fadeBot.style.cssText='position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(0deg,rgba(15,5,30,1),transparent);z-index:2;pointer-events:none';
+    wrap.appendChild(fadeBot);
+    // Scrolling text container
+    const inner=document.createElement('div');
+    inner.id='rrInner';
+    inner.style.cssText=`position:absolute;left:0;right:0;top:0;padding:80px 22px 80px;font-size:18px;line-height:1.9;color:#f0f0f8;font-family:'Be Vietnam Pro',sans-serif;white-space:pre-wrap;text-align:center;will-change:transform;transform:translateY(${-scrollY}px)`;
+    inner.textContent=currentBook.content;
+    wrap.appendChild(inner);
+    mArea.appendChild(wrap);
+    // Wire speed slider — don't re-render (would recreate DOM and lose scroll)
+    document.getElementById('rrSpeed').oninput=(e)=>{
+      speed=parseFloat(e.target.value);
+      localStorage.setItem('rrSpeed',speed);
+      const sl=document.querySelector('#rrSpeedLabel');
+      if(sl)sl.textContent=speed.toFixed(1)+'x';
+    };
+    // Buttons
+    addBtn(paused?'▶️ Tiếp tục':'⏸️ Tạm dừng','warn',togglePause);
+    addBtn('⏮️ Đầu trang','alt',()=>{scrollY=0});
+    addBtn('⏭️ Skip → Quiz','alt',()=>{mode='quiz';quizIdx=0;quizScore=0;quizPicked=-1;quizAnswered=false;cancelAnimationFrame(animFrame);render()});
+    addBtn('← Menu','alt',backToMenu);
+    setStatus(`📜 <b>${currentBook.title}</b> · ${speed.toFixed(1)}x ${paused?'⏸️ Dừng':''}`);
+  }
+  function renderQuiz(){
+    const q=currentBook.questions[quizIdx];
+    const card=document.createElement('div');card.className='quiz-card';
+    card.innerHTML=`<div class="quiz-mascot">${currentBook.emoji}</div>
+      <div style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:6px">${currentBook.title}</div>
+      <div class="quiz-progress"><span>Câu <b>${quizIdx+1}</b>/${currentBook.questions.length}</span><span>Điểm: <b>${quizScore}</b></span></div>
+      <div class="quiz-q">${q.q}</div>`;
+    const opts=document.createElement('div');opts.className='quiz-opts';
+    q.opts.forEach((o,i)=>{
+      const b=document.createElement('button');b.className='quiz-opt';b.textContent=o;
+      if(quizAnswered){b.disabled=true;if(i===q.a)b.classList.add('correct');else if(i===quizPicked)b.classList.add('wrong')}
+      b.onclick=()=>quizPick(i);
+      opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if(quizAnswered){
+      const corr=quizPicked===q.a;
+      const fb=document.createElement('div');fb.className='quiz-feedback '+(corr?'right':'wrong');
+      const msgs=corr?PRAISE:ROAST;
+      fb.innerHTML=`<div class="fb-emoji">${corr?'🎉':'😅'}</div><div class="fb-msg">${msgs[Math.floor(Math.random()*msgs.length)]}</div>`;
+      card.appendChild(fb);
+      addBtn(quizIdx>=currentBook.questions.length-1?'XEM KẾT QUẢ →':'CÂU TIẾP →','warn',quizNext);
+    }
+    mArea.appendChild(card);
+    setStatus(`📜 <b>Quiz</b> · ${currentBook.title} · Câu ${quizIdx+1}/${currentBook.questions.length}`);
+  }
+  function renderResult(){
+    const total=currentBook.questions.length;
+    const pct=Math.round(quizScore*100/total);
+    const stars=pct>=90?'⭐⭐⭐⭐⭐':pct>=70?'⭐⭐⭐⭐':pct>=50?'⭐⭐⭐':pct>=30?'⭐⭐':'⭐';
+    const lbl=pct>=90?'🌟 Đọc kỹ!':pct>=70?'📚 Tốt':pct>=50?'🌱 Tạm được':'💤 Cần đọc lại';
+    const end=document.createElement('div');end.className='quiz-card quiz-end';
+    end.innerHTML=`<div style="font-size:54px">${currentBook.emoji}</div>
+      <div class="big">${lbl}</div>
+      <div class="stars">${stars}</div>
+      <div class="summary">Đúng <b style="color:var(--neon-green)">${quizScore}</b>/${total} (${pct}%)</div>
+      <div style="color:var(--muted);font-size:12px;margin-top:14px;line-height:1.5">📖 ${currentBook.title}<br>— ${currentBook.author} —</div>`;
+    mArea.appendChild(end);
+    addBtn('📜 Đọc lại','alt',()=>pickBook(currentBook));
+    addBtn('📚 Chọn sách khác','warn',backToMenu);
+    setStatus(`📜 <b>Hoàn thành</b> · ${quizScore}/${total} (${pct}%)`);
+  }
+  return {title:'Đọc cuộn',init};
+})();
+
+/* ========== 53. CÂU DANH NGÔN MỖI NGÀY ========== */
+games.quotes = (()=>{
+  const QUOTES=[
+    {q:'Thời gian là vàng. Vàng có giá nhưng thời gian thì vô giá.',by:'Khuyết danh',ex:'Tiền mất đi có thể kiếm lại được, nhưng thời gian đã trôi qua thì không bao giờ quay trở lại. Hãy dùng từng phút của cuộc đời cho điều đáng giá.'},
+    {q:'Hãy đói khát. Hãy ngu ngốc. (Stay hungry. Stay foolish.)',by:'Steve Jobs',ex:'Đói khát: luôn khao khát học hỏi và phát triển. Ngu ngốc: không sợ thử cái mới, không sợ thất bại. Đây là câu Jobs nói trong bài phát biểu Stanford 2005.'},
+    {q:'Tôi không thất bại 10.000 lần. Tôi tìm ra 10.000 cách không hoạt động.',by:'Thomas Edison',ex:'Người phát minh bóng đèn đã thử hàng ngàn vật liệu trước khi thành công. Thất bại không phải kết thúc — đó là dữ liệu cho bước tiếp theo.'},
+    {q:'Người duy nhất bạn nên cố vượt qua là chính bạn ngày hôm qua.',by:'Khuyết danh',ex:'Đừng so sánh với người khác — họ có hành trình khác. Hãy so sánh với phiên bản của chính bạn hôm qua. Tiến bộ 1% mỗi ngày = phép màu.'},
+    {q:'Sống như thể bạn sẽ chết ngày mai. Học như thể bạn sẽ sống mãi mãi.',by:'Mahatma Gandhi',ex:'2 vế: sống trọn vẹn từng khoảnh khắc + không ngừng học hỏi. Cuộc đời quý giá nhưng tri thức vô hạn — đừng lãng phí cả 2.'},
+    {q:'Cách tốt nhất để dự đoán tương lai là tạo ra nó.',by:'Peter Drucker',ex:'Đừng đợi tương lai đến. Hãy hành động hôm nay để định hình ngày mai. Tương lai không phải nơi ta đi tới — đó là nơi ta xây dựng.'},
+    {q:'Hành trình ngàn dặm bắt đầu bằng một bước chân.',by:'Lão Tử',ex:'Mọi thành tựu lớn đều bắt đầu từ hành động nhỏ. Đừng bị choáng ngợp bởi mục tiêu cuối — chỉ cần bắt đầu bước đầu tiên hôm nay.'},
+    {q:'Hãy là sự thay đổi mà bạn muốn thấy trên thế giới.',by:'Mahatma Gandhi',ex:'Đừng chỉ trích phê phán xã hội mà không hành động. Muốn thấy tử tế? Hãy tử tế trước. Muốn thấy hòa bình? Bắt đầu từ chính mình.'},
+    {q:'Hai điều quan trọng nhất trong đời: ngày bạn sinh ra, và ngày bạn hiểu vì sao.',by:'Mark Twain',ex:'Sinh ra là sự kiện. Tìm ra mục đích sống mới là sự thức tỉnh thật sự. Hãy tự hỏi: tôi đang sống vì điều gì?'},
+    {q:'Người không biết nhưng biết là mình không biết — hãy dạy họ.',by:'Khổng Tử',ex:'Triết lý 4 loại người: biết-biết (thầy), biết-không-biết (đáng tránh), không-biết-biết (học sinh), không-biết-không-biết (nguy hiểm). Tự nhận thức là khởi đầu của tri thức.'},
+    {q:'Hạnh phúc không phải là việc có nhiều hơn, mà là muốn ít hơn.',by:'Socrates',ex:'Xã hội dạy ta theo đuổi nhiều hơn. Triết học cổ dạy: giảm ham muốn = tăng tự do. Người giàu nhất là người ít cần nhất.'},
+    {q:'Đừng đếm những ngày đã sống. Hãy làm cho những ngày đáng đếm.',by:'Muhammad Ali',ex:'Đời không tính bằng thời gian mà bằng giá trị. Một ngày trọn vẹn còn hơn một tháng vô nghĩa.'},
+    {q:'Tôi suy nghĩ, vậy tôi tồn tại.',by:'René Descartes',ex:'Câu nói nổi tiếng nhất triết học phương Tây. Khi mọi thứ có thể bị nghi ngờ, chính việc tôi đang nghi ngờ chứng minh rằng tôi đang tồn tại.'},
+    {q:'Đầu tư vào kiến thức trả lãi suất cao nhất.',by:'Benjamin Franklin',ex:'Tài sản vật chất có thể mất, nhưng kiến thức không ai lấy được. 1 cuốn sách hay = 1 lần thay đổi cách nghĩ = giá trị cả đời.'},
+    {q:'Không có gì là bất biến ngoại trừ sự thay đổi.',by:'Heraclitus',ex:'Sống là thay đổi. Người ngồi lại không phải vì thế giới dừng, mà vì họ từ chối trôi cùng nó. Hãy thích nghi, đừng kháng cự.'},
+    {q:'Nếu bạn muốn đi nhanh — đi một mình. Nếu muốn đi xa — đi cùng nhau.',by:'Tục ngữ châu Phi',ex:'Một mình có thể nhanh nhưng đơn độc và giới hạn. Cùng người khác chậm hơn nhưng đi xa hơn, làm được điều lớn hơn.'},
+    {q:'Sách là nơi ẩn trú khi tất cả các nơi khác đều đóng cửa.',by:'Charlie Tremendous Jones',ex:'Buồn? Đọc sách. Cô đơn? Đọc sách. Không biết làm gì? Đọc sách. Sách không bao giờ bỏ rơi ai biết tìm đến nó.'},
+    {q:'Người ta nói tiền không mua được hạnh phúc — họ chưa đếm đủ tiền.',by:'Marilyn Monroe (hài hước)',ex:'Câu đùa nổi tiếng. Thực tế: tiền giải quyết các vấn đề liên quan đến tiền, nhưng những vấn đề lớn nhất đời người (cô đơn, ý nghĩa, tình yêu) tiền không mua được.'},
+    {q:'Tha thứ không phải cho người khác — mà cho chính bạn.',by:'Khuyết danh',ex:'Mang theo hận thù giống như tự uống thuốc độc rồi mong người khác chết. Tha thứ là giải phóng chính mình khỏi gánh nặng quá khứ.'},
+    {q:'Mỗi sáng thức dậy, bạn có 2 lựa chọn: ngủ tiếp với giấc mơ, hoặc tỉnh dậy và đuổi theo giấc mơ.',by:'Khuyết danh',ex:'Giấc mơ trong khi ngủ chỉ là ảo. Giấc mơ thật là điều bạn theo đuổi khi tỉnh táo. Tỉnh dậy không có nghĩa là rời giường — có nghĩa là rời khỏi sự thờ ơ.'},
+    {q:'Hãy tử tế, vì mọi người bạn gặp đều đang đấu tranh với điều gì đó bạn không biết.',by:'Plato',ex:'Người cáu kỉnh có thể đang đau khổ. Người im lặng có thể đang gánh nặng. Tử tế không tốn gì — nhưng có thể cứu một ngày của ai đó.'},
+    {q:'Cuộc đời không phải đếm số nhịp thở, mà đếm những khoảnh khắc làm ta nín thở.',by:'Maya Angelou',ex:'Sống là ấn tượng, là kỷ niệm, là tình yêu — không phải số năm. Một khoảnh khắc kỳ diệu có giá hơn một thập kỷ tẻ nhạt.'},
+    {q:'Có công mài sắt, có ngày nên kim.',by:'Tục ngữ Việt Nam',ex:'Kiên trì là chìa khoá. Không có thiên tài nào không qua khổ luyện. Mỗi ngày tiến 1 chút — 1 năm sau khác hẳn.'},
+    {q:'Không thầy đố mày làm nên.',by:'Tục ngữ Việt Nam',ex:'Ai cũng cần người dẫn đường. Đừng ngại học hỏi từ người đi trước. Thầy không chỉ ở trường — có thể là sách, là cuộc đời, là người trẻ hơn bạn.'},
+    {q:'Học, học nữa, học mãi.',by:'V. I. Lenin',ex:'Học không có điểm dừng. Trong thế giới thay đổi nhanh chóng, người ngừng học là người tụt hậu. Tốt nghiệp không phải là kết thúc — chỉ là khởi đầu.'},
+    {q:'Nơi nào có ý chí, nơi đó có con đường.',by:'Khuyết danh',ex:'Nếu thực sự muốn, bạn sẽ tìm ra cách. Nếu không, bạn sẽ tìm ra lý do. Sự khác biệt giữa thành công và thất bại nằm ở quyết tâm.'},
+    {q:'Đừng chờ cơ hội. Hãy tạo ra cơ hội.',by:'George Bernard Shaw',ex:'Cơ hội hiếm khi đến tự nhiên. Người thành công không chờ — họ chủ động: hỏi, làm, học, kết nối, thử nghiệm.'},
+    {q:'Nỗi sợ lớn nhất trong đời không phải là chết — mà là sống mà chưa từng thực sự sống.',by:'Henry David Thoreau',ex:'Nhiều người tồn tại nhưng không sống. Sống thật sự là yêu, là sai, là thử, là phát triển. Đừng để cuối đời mới nuối tiếc.'},
+    {q:'Bạn không thể luôn kiểm soát điều xảy đến với mình, nhưng bạn có thể kiểm soát cách phản ứng.',by:'Epictetus',ex:'Triết lý Khắc Kỷ cốt lõi. Mưa rơi không phải lỗi của bạn — nhưng bạn chọn che ô hay đứng dầm. Phản ứng là quyền lực thực sự của bạn.'},
+    {q:'Khôn ngoan thực sự là biết mình không biết gì.',by:'Socrates',ex:'Người càng học càng nhận ra mình biết quá ít. Người ngu si lại tự tin nhất. Đây là "hiệu ứng Dunning-Kruger" mà Socrates đã thấy 2400 năm trước.'},
+    {q:'Hôm qua đã là lịch sử. Ngày mai là bí ẩn. Hôm nay là món quà — đó là lý do nó được gọi là "present" (hiện tại / quà tặng).',by:'Eleanor Roosevelt',ex:'Tiếng Anh "present" vừa có nghĩa "hiện tại" vừa có nghĩa "món quà". Sống ở hiện tại = nhận món quà cuộc đời.'}
+  ];
+  let idx=0,saved={};
+  function init(){
+    idx=parseInt(localStorage.getItem('quoteIdx')||'0')%QUOTES.length;
+    saved=JSON.parse(localStorage.getItem('quoteSaved')||'{}');
+    render();
+  }
+  function next(){idx=(idx+1)%QUOTES.length;localStorage.setItem('quoteIdx',idx);render()}
+  function prev(){idx=(idx-1+QUOTES.length)%QUOTES.length;localStorage.setItem('quoteIdx',idx);render()}
+  function random(){idx=Math.floor(Math.random()*QUOTES.length);localStorage.setItem('quoteIdx',idx);render()}
+  function toggleSave(){
+    if(saved[idx])delete saved[idx];else saved[idx]=Date.now();
+    localStorage.setItem('quoteSaved',JSON.stringify(saved));
+    render();
+  }
+  // Swipe support
+  let swipeStart=null;
+  function onTouchStart(e){const t=e.touches?e.touches[0]:e;swipeStart={x:t.clientX,y:t.clientY}}
+  function onTouchEnd(e){
+    if(!swipeStart)return;
+    const t=e.changedTouches?e.changedTouches[0]:e;
+    const dx=t.clientX-swipeStart.x;
+    swipeStart=null;
+    if(Math.abs(dx)>50){if(dx>0)prev();else next()}
+  }
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const q=QUOTES[idx];
+    const head=document.createElement('div');
+    head.style.cssText='text-align:center;margin-bottom:10px;color:var(--muted);font-size:13px';
+    head.innerHTML=`💡 Câu <b>${idx+1}</b>/${QUOTES.length}${saved[idx]?' · <span style="color:var(--neon-yellow)">⭐ Đã lưu</span>':''}`;
+    mArea.appendChild(head);
+    const card=document.createElement('div');
+    card.style.cssText='background:linear-gradient(135deg,rgba(0,240,255,.08),rgba(177,75,255,.08));border:1px solid rgba(0,240,255,.3);border-radius:18px;padding:30px 22px;text-align:center;margin-bottom:14px';
+    card.innerHTML=`<div style="font-size:36px;color:var(--neon-cyan);font-family:Georgia,serif;line-height:0;height:18px">"</div>
+      <div style="font-size:17px;line-height:1.7;color:var(--text);font-style:italic;margin:14px 0;font-family:Georgia,serif">${q.q}</div>
+      <div style="font-size:13px;color:var(--neon-yellow);font-weight:600;margin-top:14px">— ${q.by} —</div>`;
+    card.ontouchstart=onTouchStart;card.ontouchend=onTouchEnd;
+    mArea.appendChild(card);
+    const ex=document.createElement('div');
+    ex.style.cssText='background:rgba(255,255,255,.04);border-left:3px solid var(--neon-yellow);padding:14px 16px;border-radius:6px;font-size:14px;line-height:1.7;color:var(--text);margin-bottom:14px';
+    ex.innerHTML='<div style="font-size:11px;color:var(--neon-yellow);font-weight:700;margin-bottom:6px">💡 Ý NGHĨA</div>'+q.ex;
+    mArea.appendChild(ex);
+    const navRow=document.createElement('div');
+    navRow.style.cssText='display:flex;gap:8px;justify-content:center;margin-top:6px';
+    const mkBtn=(lbl,fn,style='')=>{const b=document.createElement('button');b.textContent=lbl;b.style.cssText='padding:14px 20px;border-radius:12px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:var(--text);font-family:inherit;font-weight:700;cursor:pointer;font-size:14px;touch-action:manipulation;'+style;b.onclick=fn;return b};
+    navRow.appendChild(mkBtn('←',prev));
+    navRow.appendChild(mkBtn(saved[idx]?'⭐ Đã lưu':'🤍 Lưu',toggleSave,saved[idx]?'border-color:var(--neon-yellow);color:var(--neon-yellow)':''));
+    navRow.appendChild(mkBtn('🎲',random));
+    navRow.appendChild(mkBtn('→',next));
+    mArea.appendChild(navRow);
+    const hint=document.createElement('div');
+    hint.style.cssText='text-align:center;color:var(--muted);font-size:11px;margin-top:12px';
+    hint.innerHTML='💡 Vuốt trái/phải để chuyển câu';
+    mArea.appendChild(hint);
+    setStatus(`💡 <b>Danh ngôn</b> · Câu <b>${idx+1}</b>/${QUOTES.length}${Object.keys(saved).length>0?` · ⭐ <b>${Object.keys(saved).length}</b> đã lưu`:''}`);
+  }
+  return {title:'Câu danh ngôn',init};
+})();
+
+/* ========== 54. LUYỆN NGHE TIẾNG ANH — Đoán nghĩa ========== */
+games.englishListen = (()=>{
+  const PHRASES={
+    easy:[
+      {en:'Hello, how are you?',vi:'Xin chào, bạn khoẻ không?',wrong:['Tạm biệt nhé!','Bạn ăn cơm chưa?','Trời mưa rồi.']},
+      {en:'I love you.',vi:'Tôi yêu bạn.',wrong:['Tôi ghét bạn.','Tôi mệt mỏi.','Tôi đói rồi.']},
+      {en:'Good morning!',vi:'Chào buổi sáng!',wrong:['Chào buổi tối!','Chào buổi chiều!','Ngủ ngon nhé!']},
+      {en:'Thank you very much.',vi:'Cảm ơn bạn rất nhiều.',wrong:['Xin lỗi nhiều.','Tạm biệt nhé.','Chào mừng bạn.']},
+      {en:'What is your name?',vi:'Tên bạn là gì?',wrong:['Bạn bao nhiêu tuổi?','Bạn ở đâu?','Bạn làm gì?']},
+      {en:'I am hungry.',vi:'Tôi đói.',wrong:['Tôi mệt.','Tôi khát.','Tôi vui.']},
+      {en:'The weather is nice today.',vi:'Hôm nay thời tiết đẹp.',wrong:['Hôm nay trời mưa.','Hôm qua tuyết rơi.','Tôi thích trời nắng.']},
+      {en:'I like to read books.',vi:'Tôi thích đọc sách.',wrong:['Tôi thích xem phim.','Tôi thích nghe nhạc.','Tôi thích nấu ăn.']},
+      {en:'How old are you?',vi:'Bạn bao nhiêu tuổi?',wrong:['Bạn tên gì?','Bạn ở đâu?','Bạn khoẻ không?']},
+      {en:'I am from Vietnam.',vi:'Tôi đến từ Việt Nam.',wrong:['Tôi sống ở Mỹ.','Tôi đi du lịch Nhật.','Tôi học tiếng Pháp.']},
+      {en:'Where are you going?',vi:'Bạn đang đi đâu?',wrong:['Bạn đến từ đâu?','Bạn đang làm gì?','Bạn ăn gì?']},
+      {en:'I am a student.',vi:'Tôi là học sinh.',wrong:['Tôi là giáo viên.','Tôi là bác sĩ.','Tôi là kỹ sư.']}
+    ],
+    mid:[
+      {en:'Could you please speak more slowly?',vi:'Bạn có thể nói chậm hơn được không?',wrong:['Bạn có thể nói to hơn không?','Bạn có thể đứng dậy không?','Bạn có thể đi nhanh hơn không?']},
+      {en:'I have been living here for five years.',vi:'Tôi đã sống ở đây được năm năm rồi.',wrong:['Tôi sẽ chuyển đến đây năm năm nữa.','Tôi từng sống ở đây nhưng đã rời đi.','Tôi mới đến đây tuần trước.']},
+      {en:'What do you do for a living?',vi:'Bạn làm nghề gì để kiếm sống?',wrong:['Bạn ăn gì hôm nay?','Bạn sống ở đâu?','Bạn bao nhiêu tuổi?']},
+      {en:'I would like a cup of coffee, please.',vi:'Tôi muốn một tách cà phê, làm ơn.',wrong:['Tôi muốn một cốc trà.','Tôi đang đói.','Tôi cần nước nóng.']},
+      {en:'Could you help me with this problem?',vi:'Bạn có thể giúp tôi giải bài này được không?',wrong:['Bạn có thể đứng lên không?','Bạn có thể nói lại không?','Bạn có thể đi cùng tôi không?']},
+      {en:'I think it is going to rain later.',vi:'Tôi nghĩ lát nữa trời sẽ mưa.',wrong:['Trời đang nắng to.','Tôi muốn đi dã ngoại.','Trời lạnh quá.']},
+      {en:'My favourite hobby is playing music.',vi:'Sở thích yêu thích của tôi là chơi nhạc.',wrong:['Tôi không thích chơi nhạc.','Tôi học nhạc ở trường.','Tôi thích nhảy múa.']},
+      {en:'I usually wake up at six in the morning.',vi:'Tôi thường thức dậy lúc 6 giờ sáng.',wrong:['Tôi đi ngủ lúc 6 giờ tối.','Tôi ngủ trưa hàng ngày.','Tôi không bao giờ ngủ sớm.']},
+      {en:'The restaurant is across the street.',vi:'Nhà hàng ở bên kia đường.',wrong:['Nhà hàng đóng cửa rồi.','Đồ ăn rất ngon.','Tôi đang tìm nhà hàng.']},
+      {en:'I forgot to bring my umbrella today.',vi:'Hôm nay tôi quên mang ô.',wrong:['Tôi mất ô tuần trước.','Trời không mưa hôm nay.','Tôi mua một cái ô mới.']}
+    ],
+    hard:[
+      {en:'I should have studied harder for the exam.',vi:'Đáng lẽ tôi nên học chăm chỉ hơn cho kỳ thi.',wrong:['Tôi đã học rất chăm chỉ cho kỳ thi.','Tôi sẽ học cho kỳ thi tiếp theo.','Kỳ thi quá dễ với tôi.']},
+      {en:'If I were you, I would take the job.',vi:'Nếu tôi là bạn, tôi sẽ nhận công việc đó.',wrong:['Tôi đã nhận công việc đó.','Bạn nên từ chối công việc đó.','Tôi không muốn làm việc.']},
+      {en:'Despite the rain, we enjoyed the trip.',vi:'Dù trời mưa, chúng tôi vẫn thấy chuyến đi vui.',wrong:['Chuyến đi bị huỷ vì mưa.','Trời nắng đẹp suốt chuyến đi.','Chúng tôi không thích chuyến đi.']},
+      {en:'She has been working on this project for months.',vi:'Cô ấy đã làm dự án này suốt nhiều tháng.',wrong:['Cô ấy sắp bắt đầu dự án.','Cô ấy đã từ bỏ dự án.','Cô ấy mới được giao dự án hôm nay.']},
+      {en:'I wish I could speak English fluently.',vi:'Tôi ước gì có thể nói tiếng Anh trôi chảy.',wrong:['Tôi nói tiếng Anh rất tốt.','Tôi không cần học tiếng Anh.','Tiếng Anh dễ học.']},
+      {en:'You should have told me earlier.',vi:'Đáng lẽ bạn nên nói với tôi sớm hơn.',wrong:['Tôi sẽ nói với bạn sau.','Bạn đã nói với tôi rồi.','Đừng nói với tôi.']},
+      {en:'It is no use crying over spilled milk.',vi:'Khóc vì sữa đổ thì cũng vô ích.',wrong:['Đừng làm đổ sữa.','Tôi không thích uống sữa.','Hãy lau sữa đi.']},
+      {en:'Time flies when you are having fun.',vi:'Thời gian trôi nhanh khi bạn đang vui vẻ.',wrong:['Thời gian rất quý báu.','Tôi không có thời gian vui chơi.','Cuộc vui kết thúc rồi.']}
+    ]
+  };
+  const LVL={easy:{lbl:'Dễ — Câu đơn giản',emoji:'🌱'},mid:{lbl:'Vừa — Câu thường ngày',emoji:'🌿'},hard:{lbl:'Khó — Câu phức',emoji:'🌳'}};
+  let level=localStorage.getItem('listenLevel')||'easy';
+  if(!LVL[level])level='easy';
+  let prob,score=0,total=0,streak=0,answered=false,picked=-1;
+  let voice=null;
+  function pickVoice(){
+    if(!window.speechSynthesis)return null;
+    const voices=speechSynthesis.getVoices();
+    return voices.find(v=>/en-(US|GB|AU)/.test(v.lang))||voices.find(v=>v.lang.startsWith('en'))||voices[0];
+  }
+  function speak(text){
+    if(!window.speechSynthesis){flash('⚠️ Trình duyệt không hỗ trợ TTS');return}
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    voice=voice||pickVoice();
+    if(voice)u.voice=voice;
+    u.rate=0.85;u.pitch=1;u.lang='en-US';
+    speechSynthesis.speak(u);
+  }
+  function gen(){
+    const pool=PHRASES[level];
+    const r=pool[Math.floor(Math.random()*pool.length)];
+    const opts=[r.vi, ...r.wrong].slice(0,4).sort(()=>Math.random()-0.5);
+    prob={en:r.en,vi:r.vi,opts};
+  }
+  function init(){
+    score=0;total=0;streak=0;answered=false;picked=-1;
+    // Wait for voices to load
+    if(window.speechSynthesis&&speechSynthesis.getVoices().length===0){
+      speechSynthesis.onvoiceschanged=()=>{voice=pickVoice()};
+    } else if(window.speechSynthesis){
+      voice=pickVoice();
+    }
+    gen();render();
+    setTimeout(()=>speak(prob.en),400);
+  }
+  function setLevel(l){if(level===l)return;level=l;localStorage.setItem('listenLevel',l);score=0;total=0;streak=0;answered=false;picked=-1;gen();render();setTimeout(()=>speak(prob.en),300)}
+  function pick(v){if(answered)return;answered=true;picked=v;total++;if(v===prob.vi){score++;streak++}else streak=0;render()}
+  function nextQ(){answered=false;picked=-1;gen();render();setTimeout(()=>speak(prob.en),300)}
+  let flashMsg='';
+  function flash(m){flashMsg=m;render();setTimeout(()=>{flashMsg='';render()},1500)}
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const pk=document.createElement('div');pk.className='quiz-level-pick';
+    Object.keys(LVL).forEach(l=>{
+      const b=document.createElement('button');b.innerHTML=`<span class="lvl-emoji">${LVL[l].emoji}</span>${LVL[l].lbl}`;
+      if(l===level)b.classList.add('active');b.onclick=()=>setLevel(l);pk.appendChild(b);
+    });
+    mArea.appendChild(pk);
+    if(flashMsg){
+      const f=document.createElement('div');
+      f.style.cssText='text-align:center;background:rgba(255,230,0,.15);border:1px solid var(--neon-yellow);color:var(--neon-yellow);padding:8px;border-radius:8px;margin-bottom:10px';
+      f.textContent=flashMsg;mArea.appendChild(f);
+    }
+    const card=document.createElement('div');card.className='quiz-card';
+    card.innerHTML=`<div class="quiz-mascot">🎧</div>
+      <div class="quiz-progress"><span>Đúng <b>${score}</b>/${total}</span><span>🔥 <b>${streak}</b></span></div>
+      <div style="text-align:center;margin:16px 0">
+        <button id="playBtn" style="background:linear-gradient(135deg,var(--neon-cyan),var(--neon-purple));border:none;color:#fff;padding:18px 28px;border-radius:14px;font-family:'Bungee',cursive;font-size:16px;cursor:pointer;touch-action:manipulation">🔊 NGHE LẠI</button>
+      </div>
+      <div class="quiz-q" style="text-align:center;font-size:15px;margin-bottom:10px">Câu trên có nghĩa là gì?</div>`;
+    const opts=document.createElement('div');opts.className='quiz-opts';
+    prob.opts.forEach(o=>{
+      const b=document.createElement('button');b.className='quiz-opt';b.textContent=o;
+      if(answered){b.disabled=true;if(o===prob.vi)b.classList.add('correct');else if(o===picked)b.classList.add('wrong')}
+      b.onclick=()=>pick(o);opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if(answered){
+      const corr=picked===prob.vi;
+      const fb=document.createElement('div');fb.className='quiz-feedback '+(corr?'right':'wrong');
+      const msgs=corr?PRAISE:ROAST;
+      fb.innerHTML=`<div class="fb-emoji">${corr?'🎉':'😅'}</div><div class="fb-msg">${msgs[Math.floor(Math.random()*msgs.length)]}</div><div class="quiz-explain"><b>🇬🇧 ${prob.en}</b><br>🇻🇳 ${prob.vi}</div>`;
+      card.appendChild(fb);
+      addBtn('CÂU TIẾP →','warn',nextQ);
+    }
+    mArea.appendChild(card);
+    document.getElementById('playBtn').onclick=()=>speak(prob.en);
+    setStatus(`🎧 <b>Luyện nghe</b> · ${LVL[level].lbl} · <b>${score}</b>/${total} · 🔥 <b>${streak}</b>`);
+  }
+  return {title:'Luyện nghe tiếng Anh',init};
 })();
 
 </script>
