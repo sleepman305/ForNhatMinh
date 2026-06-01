@@ -90,6 +90,10 @@ header{text-align:center;margin-bottom:48px;position:relative}
   animation:pulse 1.4s ease-in-out infinite;
 }
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+@keyframes rrScroll{
+  0%{transform:translateY(0)}
+  100%{transform:translateY(var(--rr-end,-2000px))}
+}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 .tagline{
   margin-top:14px;font-size:15px;letter-spacing:.08em;
@@ -6614,36 +6618,53 @@ Stay hungry. Stay foolish.`,
     render();
   }
   function pickBook(book){
-    currentBook=book;mode='reading';scrollY=0;paused=false;
+    currentBook=book;mode='reading';paused=false;
     render();
-    startScroll();
   }
-  function startScroll(){
-    cancelAnimationFrame(animFrame);
-    const tick=()=>{
-      if(mode!=='reading'){return}
-      if(!paused){
-        const inner=document.getElementById('rrInner');
-        if(inner){
-          const sh=inner.scrollHeight;
-          // Only advance and check end if element is laid out (scrollHeight > 100)
-          if(sh>100){
-            scrollY+=speed;
-            inner.style.transform=`translateY(${-scrollY}px)`;
-            // End: when text has scrolled past the top viewport
-            if(scrollY>sh+200){
-              mode='quiz';quizIdx=0;quizScore=0;quizPicked=-1;quizAnswered=false;
-              render();return;
-            }
-          }
-        }
-      }
-      animFrame=requestAnimationFrame(tick);
-    };
-    animFrame=requestAnimationFrame(tick);
+  function setSpeed(s){
+    speed=s;localStorage.setItem('rrSpeed',s);
+    applyAnimation();
+    const sl=document.querySelector('#rrSpeedLabel');
+    if(sl)sl.textContent=speed.toFixed(1)+'x';
   }
-  function setSpeed(s){speed=s;localStorage.setItem('rrSpeed',s);render()}
-  function togglePause(){paused=!paused;render()}
+  function togglePause(){
+    paused=!paused;
+    const inner=document.getElementById('rrInner');
+    if(inner)inner.style.animationPlayState=paused?'paused':'running';
+    // Update button text
+    const btn=document.querySelector('#rrPauseBtn');
+    if(btn)btn.textContent=paused?'▶️ Tiếp tục':'⏸️ Tạm dừng';
+  }
+  function restartFromTop(){
+    const inner=document.getElementById('rrInner');
+    if(!inner)return;
+    // Force restart animation
+    inner.style.animation='none';
+    inner.offsetHeight; // reflow
+    applyAnimation();
+  }
+  function applyAnimation(){
+    const inner=document.getElementById('rrInner');
+    const wrap=document.getElementById('rrWrap');
+    if(!inner||!wrap)return;
+    const sh=inner.scrollHeight||1000;
+    const wh=wrap.clientHeight||400;
+    // Distance: scroll text fully off the top
+    // Text starts with margin-top 60vh (~60% of wrap height) so it's BELOW the visible area at start.
+    // Need to translate up by: (text height + initial margin) so text exits top.
+    const distance = sh + wh; // total vertical movement
+    inner.style.setProperty('--rr-end', `-${distance}px`);
+    const pxPerSec=speed*60;
+    const durationSec=Math.max(8,distance/pxPerSec);
+    inner.style.animation='none';
+    inner.offsetHeight; // force reflow
+    inner.style.animation=`rrScroll ${durationSec}s linear forwards`;
+    inner.style.animationPlayState=paused?'paused':'running';
+  }
+  function goToQuiz(){
+    mode='quiz';quizIdx=0;quizScore=0;quizPicked=-1;quizAnswered=false;
+    render();
+  }
   function quizPick(i){
     if(quizAnswered)return;
     quizAnswered=true;quizPicked=i;
@@ -6719,26 +6740,30 @@ Stay hungry. Stay foolish.`,
     const fadeBot=document.createElement('div');
     fadeBot.style.cssText='position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(0deg,rgba(15,5,30,1),transparent);z-index:2;pointer-events:none';
     wrap.appendChild(fadeBot);
-    // Scrolling text container
+    // Scrolling text container — relative position, starts at bottom of wrap
     const inner=document.createElement('div');
     inner.id='rrInner';
-    inner.style.cssText=`position:absolute;left:0;right:0;top:0;padding:80px 22px 80px;font-size:18px;line-height:1.9;color:#f0f0f8;font-family:'Be Vietnam Pro',sans-serif;white-space:pre-wrap;text-align:center;will-change:transform;transform:translateY(${-scrollY}px)`;
+    inner.style.cssText=`position:relative;padding:0 22px;font-size:18px;line-height:1.9;color:#f0f0f8;font-family:'Be Vietnam Pro',sans-serif;white-space:pre-wrap;text-align:center;will-change:transform;margin-top:300px`;
     inner.textContent=currentBook.content;
     wrap.appendChild(inner);
     mArea.appendChild(wrap);
-    // Wire speed slider — don't re-render (would recreate DOM and lose scroll)
+    // Wire speed slider — don't re-render
     document.getElementById('rrSpeed').oninput=(e)=>{
-      speed=parseFloat(e.target.value);
-      localStorage.setItem('rrSpeed',speed);
-      const sl=document.querySelector('#rrSpeedLabel');
-      if(sl)sl.textContent=speed.toFixed(1)+'x';
+      setSpeed(parseFloat(e.target.value));
     };
+    // Start animation after DOM is laid out
+    setTimeout(()=>applyAnimation(),50);
+    // Detect animation end
+    inner.addEventListener('animationend',()=>{
+      if(mode==='reading')goToQuiz();
+    });
     // Buttons
-    addBtn(paused?'▶️ Tiếp tục':'⏸️ Tạm dừng','warn',togglePause);
-    addBtn('⏮️ Đầu trang','alt',()=>{scrollY=0});
-    addBtn('⏭️ Skip → Quiz','alt',()=>{mode='quiz';quizIdx=0;quizScore=0;quizPicked=-1;quizAnswered=false;cancelAnimationFrame(animFrame);render()});
+    const pauseBtn=addBtn(paused?'▶️ Tiếp tục':'⏸️ Tạm dừng','warn',togglePause);
+    if(pauseBtn)pauseBtn.id='rrPauseBtn';
+    addBtn('⏮️ Đầu trang','alt',restartFromTop);
+    addBtn('⏭️ Skip → Quiz','alt',goToQuiz);
     addBtn('← Menu','alt',backToMenu);
-    setStatus(`📜 <b>${currentBook.title}</b> · ${speed.toFixed(1)}x ${paused?'⏸️ Dừng':''}`);
+    setStatus(`📜 <b>${currentBook.title}</b> · ${speed.toFixed(1)}x`);
   }
   function renderQuiz(){
     const q=currentBook.questions[quizIdx];
