@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Góc Chơi và học của bạn Đậu</title>
+<!-- PWA / iOS Home Screen -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Đậu Arcade">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0f0524">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMDBmMGZmIi8+PHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiNiMTRiZmYiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZjJkOTUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgcng9IjQwIiBmaWxsPSIjMGYwNTI0Ii8+PHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTYwIiBoZWlnaHQ9IjE2MCIgcng9IjMyIiBmaWxsPSJ1cmwoI2cpIiBvcGFjaXR5PSIuMTUiLz48dGV4dCB4PSI5MCIgeT0iMTEwIiBmb250LXNpemU9IjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ1cmwoI2cpIj7wn46uPC90ZXh0Pjx0ZXh0IHg9IjkwIiB5PSIxNTUiIGZvbnQtc2l6ZT0iMjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmZmYiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCI+xJDhuq11PC90ZXh0Pjwvc3ZnPg==">
+<link rel="manifest" href='data:application/manifest+json;charset=utf-8,{"name":"Góc Chơi và học của bạn Đậu","short_name":"Đậu Arcade","start_url":".","display":"standalone","orientation":"portrait","background_color":"%230f0524","theme_color":"%230f0524","icons":[{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgZmlsbD0iIzBmMDUyNCIvPjx0ZXh0IHg9IjkwIiB5PSIxMTAiIGZvbnQtc2l6ZT0iODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPvCfjq48L3RleHQ+PC9zdmc+","sizes":"180x180","type":"image/svg+xml"}]}'>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -89,6 +97,90 @@ header{text-align:center;margin-bottom:48px;position:relative}
   text-shadow:0 0 12px #ff2d95,0 0 24px rgba(255,45,149,.7);
   animation:pulse 1.4s ease-in-out infinite;
 }
+
+/* === Top bar (Today + Profile) === */
+.top-bar{display:flex;gap:8px;justify-content:flex-end;margin-bottom:18px;flex-wrap:wrap}
+.top-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(20,8,48,.6);border:1px solid rgba(255,255,255,.12);border-radius:12px;color:var(--text);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;transition:all .15s}
+.top-btn:hover{background:rgba(255,255,255,.08);border-color:var(--neon-cyan)}
+.top-btn .tb-emoji{font-size:18px}
+.top-btn .tb-badge{background:var(--neon-pink);color:#fff;font-size:10px;padding:2px 6px;border-radius:8px;line-height:1}
+.top-btn .tb-streak{color:var(--neon-yellow);font-size:12px}
+
+/* === Toast notifications === */
+.toast{position:fixed;top:80px;left:50%;transform:translate(-50%,-20px);background:linear-gradient(135deg,rgba(30,10,70,.98),rgba(15,5,40,.98));border:1px solid var(--neon-yellow);border-radius:14px;padding:14px 22px;color:var(--text);font-size:14px;z-index:1000;opacity:0;transition:all .3s ease;backdrop-filter:blur(12px);box-shadow:0 8px 32px rgba(255,230,0,.3);max-width:90%;text-align:center;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast-row{display:flex;align-items:center;gap:8px;justify-content:center;line-height:1.4}
+.toast-big{font-family:'Bungee',cursive;font-size:18px;color:var(--neon-yellow);margin-bottom:6px}
+.toast-emoji{font-size:24px}
+
+/* === Profile dashboard === */
+.profile-wrap{max-width:580px;margin:0 auto}
+.profile-hero{text-align:center;padding:20px;background:linear-gradient(135deg,rgba(0,240,255,.12),rgba(177,75,255,.12));border:1px solid rgba(0,240,255,.25);border-radius:18px;margin-bottom:14px}
+.profile-avatar{font-size:72px;margin-bottom:6px;animation:bounce 2s ease-in-out infinite}
+.profile-name{font-family:'Bungee',cursive;font-size:22px;color:var(--neon-cyan)}
+.profile-title{color:var(--muted);font-size:13px;margin:2px 0 12px}
+.profile-level{display:flex;justify-content:center;gap:20px;font-size:14px;margin-bottom:14px}
+.profile-level b{color:var(--neon-yellow);font-size:18px}
+.profile-streak{color:var(--neon-pink)}
+.xp-bar{position:relative;height:22px;background:rgba(0,0,0,.4);border-radius:11px;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--neon-cyan),var(--neon-yellow),var(--neon-pink));border-radius:11px;transition:width .8s ease;box-shadow:0 0 12px rgba(255,230,0,.5)}
+.xp-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;text-shadow:0 0 4px #000}
+
+.profile-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+.stat-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:14px;text-align:center}
+.stat-num{font-family:'Bungee',cursive;font-size:22px;color:var(--neon-yellow)}
+.stat-lbl{font-size:11px;color:var(--muted);margin-top:4px}
+@media(min-width:480px){.profile-stats{grid-template-columns:repeat(4,1fr)}}
+
+.profile-section{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;margin-bottom:12px}
+.profile-section h4{margin:0 0 10px;font-family:'Bungee',cursive;font-size:14px;color:var(--neon-cyan);font-weight:400}
+.box-section{background:linear-gradient(135deg,rgba(255,230,0,.08),rgba(255,45,149,.08));border-color:var(--neon-yellow)}
+
+.heatmap{display:grid;grid-template-columns:repeat(10,1fr);gap:3px}
+.heat-cell{aspect-ratio:1;border-radius:3px;background:rgba(255,255,255,.04)}
+.heat-0{background:rgba(255,255,255,.04)}
+.heat-1{background:rgba(57,255,127,.25)}
+.heat-2{background:rgba(57,255,127,.5)}
+.heat-3{background:rgba(57,255,127,.75)}
+.heat-4{background:rgba(57,255,127,1);box-shadow:0 0 6px rgba(57,255,127,.6)}
+
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:8px}
+.ach-card{padding:10px 6px;text-align:center;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);transition:all .2s}
+.ach-card.unlocked{background:linear-gradient(135deg,rgba(255,230,0,.12),rgba(255,45,149,.08));border-color:var(--neon-yellow);box-shadow:0 2px 12px rgba(255,230,0,.15)}
+.ach-card.locked{opacity:.45}
+.ach-emoji{font-size:28px}
+.ach-name{font-size:11px;font-weight:700;margin-top:4px}
+.ach-desc{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.3}
+
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.box-anim{font-size:120px;animation:boxShake .6s ease-in-out 3,bounce 1s ease-in-out infinite}
+@keyframes boxShake{0%,100%{transform:rotate(0)}25%{transform:rotate(-15deg)}75%{transform:rotate(15deg)}}
+
+/* === Today screen === */
+.today-wrap{max-width:580px;margin:0 auto}
+.today-hero{text-align:center;margin-bottom:18px;padding:16px;background:linear-gradient(135deg,rgba(0,240,255,.1),rgba(255,230,0,.05));border-radius:14px;border:1px solid rgba(0,240,255,.2)}
+.today-greet{font-family:'Bungee',cursive;font-size:20px;color:var(--neon-yellow)}
+.today-sub{color:var(--muted);font-size:13px;margin-top:4px}
+.today-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px;margin-bottom:12px}
+.today-card h3{margin:0 0 6px;font-size:15px;color:var(--text)}
+.today-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.quest-prog{font-size:13px;color:var(--neon-yellow);font-weight:700;background:rgba(255,230,0,.1);padding:4px 10px;border-radius:10px}
+.quest-item{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(0,0,0,.2);border-radius:8px;margin-top:6px;transition:all .2s}
+.quest-item.done{background:rgba(57,255,127,.08);opacity:.8}
+.quest-item.done .quest-desc{text-decoration:line-through;color:var(--muted)}
+.quest-check{font-size:20px}
+.quest-info{flex:1;min-width:0}
+.quest-desc{font-size:13px;font-weight:600;color:var(--text)}
+.quest-bar{height:5px;background:rgba(0,0,0,.4);border-radius:3px;overflow:hidden;margin-top:5px}
+.quest-fill{height:100%;background:linear-gradient(90deg,var(--neon-cyan),var(--neon-yellow));border-radius:3px;transition:width .4s ease}
+.quest-xp{color:var(--neon-yellow);font-weight:700;font-size:13px;flex-shrink:0}
+
+/* Bedtime mode */
+body.bedtime{filter:brightness(.6) saturate(.7)}
+body.bedtime .card.bedtime-hidden{display:none}
+body.bedtime .top-btn{opacity:.7}
+
+@keyframes storyScrollAnim{from{transform:translateY(0)}to{transform:translateY(var(--scrollEnd,-1000px))}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
 @keyframes rrScroll{
   0%{transform:translateY(0)}
@@ -648,6 +740,19 @@ footer b{color:var(--neon-cyan)}
   <p class="tagline">Made by <b>Bố Chin</b> with love <span class="tagline-heart">♥</span></p>
 </header>
 
+<div class="top-bar">
+  <button class="top-btn" onclick="openTodayScreen()" title="Hôm nay">
+    <span class="tb-emoji">✨</span>
+    <span>Hôm nay</span>
+    <span class="tb-streak" id="streakBadge">🔥 0</span>
+  </button>
+  <button class="top-btn" onclick="openProfile()" title="Hồ sơ Đậu">
+    <span class="tb-emoji" id="avatarBadge">🥚</span>
+    <span>Đậu Lv<b id="levelBadge">1</b></span>
+    <span class="tb-badge" id="boxBadge" style="display:none">🎁 0</span>
+  </button>
+</div>
+
 <div class="tabs">
   <button class="tab active" data-tab="game"><span class="tab-emoji">🎮</span>Game</button>
   <button class="tab" data-tab="learn"><span class="tab-emoji">📚</span>Học mà chơi</button>
@@ -705,7 +810,8 @@ footer b{color:var(--neon-cyan)}
     <div class="card" data-game="crafting" style="--ac:var(--neon-orange)"><div class="emoji">⛏️</div><h3>Crafting Minecraft</h3><p>Nhìn ô 3×3 — đoán item được tạo (12 công thức)</p></div>
     <div class="card" data-game="robloxQuiz" style="--ac:var(--neon-pink)"><div class="emoji">🔴</div><h3>Đố Roblox</h3><p>27 câu — Robux, Lua, Adopt Me, Blox Fruits, Bacon Hair...</p></div>
     <div class="card" data-game="guessGameTitle" style="--ac:var(--neon-yellow)"><div class="emoji">🎮</div><h3>Đoán game qua mô tả</h3><p>24 game phổ biến — Minecraft, Roblox, Liên Quân, Free Fire...</p></div>
-    <div class="card" data-game="readingRoll" style="--ac:var(--neon-cyan)"><div class="emoji">📜</div><h3>Đọc cuộn</h3><p>7 sách self-help: Atomic Habits, Đắc Nhân Tâm, Sapiens, Tony, Stoic, 7 Habits, Jobs (EN)</p></div>
+    <div class="card" data-game="stories" style="--ac:var(--neon-yellow)"><div class="emoji">📖</div><h3>Đọc truyện</h3><p>51 truyện full: thiền, tâm linh, self-help, trẻ em — nghe audiobook hoặc đọc cuộn</p></div>
+<div class="card" data-game="readingRoll" style="--ac:var(--neon-cyan)"><div class="emoji">📜</div><h3>Đọc cuộn</h3><p>7 sách self-help: Atomic Habits, Đắc Nhân Tâm, Sapiens, Tony, Stoic, 7 Habits, Jobs (EN)</p></div>
     <div class="card" data-game="quotes" style="--ac:var(--neon-yellow)"><div class="emoji">💡</div><h3>Danh ngôn</h3><p>31 câu nói hay — Jobs, Gandhi, Lão Tử, Socrates kèm ý nghĩa</p></div>
     <div class="card" data-game="englishListen" style="--ac:var(--neon-pink)"><div class="emoji">🎧</div><h3>Luyện nghe tiếng Anh</h3><p>30 câu — TTS đọc, đoán nghĩa tiếng Việt (3 cấp độ)</p></div>
   </div>
@@ -750,6 +856,650 @@ const games={};
 // === Global khen/chê (từ trò đố quốc kỳ) ===
 const PRAISE = ['Đỉnh cao!','Kinh đấy!','Quá khủng!','Awesome!','Tuyệt vời!','Đậu xịn quá!','Quá đỉnh!','Bậc thầy!'];
 const ROAST  = ['Cùi bắp man!','Lêu lêu sai rồi!','Đậu cùi bắp!','Sai bét nhè!'];
+
+/* ============== PLAYER SYSTEM (XP / Level / Streak / Achievements) ============== */
+const Player = (()=>{
+  const KEY='playerData';
+  const TODAY = ()=> new Date().toISOString().slice(0,10); // YYYY-MM-DD
+  
+  // XP needed: level n requires n*100 XP (level 1→2 = 100, level 5→6 = 500)
+  const xpForLevel = (lv)=> lv*100;
+  
+  // Avatar evolution by level
+  const AVATARS = [
+    {min:1,emoji:'🥚',name:'Trứng'},
+    {min:3,emoji:'🐣',name:'Mầm Đậu'},
+    {min:6,emoji:'🐤',name:'Đậu Con'},
+    {min:10,emoji:'🐥',name:'Đậu Trẻ'},
+    {min:15,emoji:'🦆',name:'Đậu Bay'},
+    {min:20,emoji:'🦅',name:'Đậu Đại Bàng'},
+    {min:30,emoji:'🐉',name:'Đậu Rồng'},
+    {min:50,emoji:'🥷',name:'Đậu Ninja'},
+    {min:75,emoji:'🧙',name:'Đậu Phù Thuỷ'},
+    {min:100,emoji:'👑',name:'Đậu Vương'}
+  ];
+  
+  function getAvatar(level){
+    let result=AVATARS[0];
+    for(const a of AVATARS) if(level>=a.min) result=a;
+    return result;
+  }
+  
+  // Default data
+  const DEFAULT = {
+    name:'Đậu',
+    xp:0,
+    level:1,
+    streak:0,
+    lastPlayDate:null,
+    totalGames:0,
+    totalTime:0,
+    gameStats:{},        // {gameId: {plays, wins, bestScore, lastPlayed}}
+    achievements:[],     // [achId, ...]
+    achievementProgress:{}, // {achId: count}
+    dailyHistory:{},     // {date: {games:N, xpGained:N}}
+    questsCompleted:[],  // [date_qid, ...]
+    questDate:null,
+    boxesEarned:0,
+    bedtimeMode:false,
+  };
+  
+  function load(){
+    try {
+      const raw=localStorage.getItem(KEY);
+      if(!raw)return {...DEFAULT};
+      const data=JSON.parse(raw);
+      return {...DEFAULT, ...data};
+    } catch(e){return {...DEFAULT}}
+  }
+  function save(data){localStorage.setItem(KEY,JSON.stringify(data))}
+  
+  let data = load();
+  
+  function get(){return data}
+  function reset(){data={...DEFAULT};save(data)}
+  
+  // Add XP, check level up, returns {leveledUp, newLevel, xpGained}
+  function addXP(amount, gameId){
+    if(amount<=0)return {leveledUp:false};
+    const oldLevel=data.level;
+    data.xp += amount;
+    // Level up calculation (cumulative XP needed)
+    let totalNeeded = 0;
+    let lv = 1;
+    while(true){
+      const needed = xpForLevel(lv);
+      if(data.xp < totalNeeded + needed) break;
+      totalNeeded += needed;
+      lv++;
+    }
+    data.level=lv;
+    // Track daily
+    const t=TODAY();
+    if(!data.dailyHistory[t])data.dailyHistory[t]={games:0,xpGained:0};
+    data.dailyHistory[t].xpGained += amount;
+    save(data);
+    return {leveledUp: lv>oldLevel, newLevel: lv, oldLevel, xpGained: amount};
+  }
+  
+  // Update streak — call on app open
+  function checkStreak(){
+    const t=TODAY();
+    if(data.lastPlayDate===t)return data.streak; // already counted today
+    if(!data.lastPlayDate){data.streak=1}
+    else {
+      const last=new Date(data.lastPlayDate);
+      const now=new Date(t);
+      const diffDays=Math.round((now-last)/(1000*60*60*24));
+      if(diffDays===1)data.streak++;
+      else if(diffDays>1)data.streak=1; // streak broken
+    }
+    data.lastPlayDate=t;
+    save(data);
+    return data.streak;
+  }
+  
+  // Record game play
+  function recordPlay(gameId, result={}){
+    if(!data.gameStats[gameId])data.gameStats[gameId]={plays:0,wins:0,bestScore:0,lastPlayed:null};
+    const s=data.gameStats[gameId];
+    s.plays++;
+    s.lastPlayed=Date.now();
+    if(result.win)s.wins++;
+    if(result.score!==undefined&&result.score>s.bestScore)s.bestScore=result.score;
+    data.totalGames++;
+    const t=TODAY();
+    if(!data.dailyHistory[t])data.dailyHistory[t]={games:0,xpGained:0};
+    data.dailyHistory[t].games++;
+    save(data);
+  }
+  
+  // XP calculator based on game result
+  function calculateXP(result){
+    let xp=5; // baseline for playing
+    if(result.win)xp+=20;
+    if(result.score){
+      if(result.score>=100)xp+=10;
+      if(result.score>=500)xp+=20;
+    }
+    if(result.streak)xp+=Math.min(result.streak*2, 20);
+    if(result.perfect)xp+=30;
+    if(result.newRecord)xp+=15;
+    return xp;
+  }
+  
+  // === ACHIEVEMENTS ===
+  const ACHIEVEMENTS = [
+    // Progression
+    {id:'first_play',name:'Khởi đầu',desc:'Chơi trò đầu tiên',emoji:'🎬',check:d=>d.totalGames>=1},
+    {id:'play_10',name:'Newbie',desc:'Chơi 10 ván',emoji:'🌱',check:d=>d.totalGames>=10},
+    {id:'play_50',name:'Người chơi',desc:'Chơi 50 ván',emoji:'🎮',check:d=>d.totalGames>=50},
+    {id:'play_100',name:'Cuồng game',desc:'Chơi 100 ván',emoji:'🔥',check:d=>d.totalGames>=100},
+    {id:'play_500',name:'Bậc thầy',desc:'Chơi 500 ván',emoji:'👑',check:d=>d.totalGames>=500},
+    
+    // Level
+    {id:'level_5',name:'Cấp 5',desc:'Đạt level 5',emoji:'⭐',check:d=>d.level>=5},
+    {id:'level_10',name:'Cấp 10',desc:'Đạt level 10',emoji:'🌟',check:d=>d.level>=10},
+    {id:'level_25',name:'Cấp 25',desc:'Đạt level 25',emoji:'💫',check:d=>d.level>=25},
+    {id:'level_50',name:'Cấp 50',desc:'Đạt level 50',emoji:'🏆',check:d=>d.level>=50},
+    
+    // Streaks
+    {id:'streak_3',name:'Bền bỉ',desc:'Chuỗi 3 ngày',emoji:'🔥',check:d=>d.streak>=3},
+    {id:'streak_7',name:'1 Tuần',desc:'Chuỗi 7 ngày',emoji:'🔥',check:d=>d.streak>=7},
+    {id:'streak_30',name:'1 Tháng',desc:'Chuỗi 30 ngày',emoji:'💎',check:d=>d.streak>=30},
+    {id:'streak_100',name:'100 Ngày',desc:'Chuỗi 100 ngày',emoji:'🏅',check:d=>d.streak>=100},
+    
+    // Game-specific
+    {id:'ttt_5wins',name:'Caro Master',desc:'Thắng 5 ván Caro',emoji:'❌',check:d=>(d.gameStats.ttt?.wins||0)>=5},
+    {id:'snake_50',name:'Snake 50',desc:'Snake đạt 50 điểm',emoji:'🐍',check:d=>(d.gameStats.snake?.bestScore||0)>=50},
+    {id:'g2048_1024',name:'1024',desc:'2048 đạt khối 1024',emoji:'🔢',check:d=>(d.gameStats.g2048?.bestScore||0)>=10000},
+    {id:'g2048_2048',name:'2048!',desc:'2048 đạt khối 2048',emoji:'🎯',check:d=>(d.gameStats.g2048?.bestScore||0)>=20000},
+    {id:'mine_diamond',name:'Thợ Kim Cương',desc:'Mine2D đào kim cương',emoji:'💎',check:d=>(d.achievementProgress.mineDiamond||0)>=1},
+    {id:'obby_complete',name:'Tower of Hell',desc:'Hoàn thành Obby màn 5',emoji:'🔴',check:d=>(d.achievementProgress.obbyMax||0)>=5},
+    {id:'archery_bullseye',name:'Hồng tâm',desc:'Bắn cung 100 điểm 1 phát',emoji:'🎯',check:d=>(d.achievementProgress.archeryBull||0)>=1},
+    {id:'yatzy_50',name:'YATZY!',desc:'Đạt YATZY 50 điểm',emoji:'🎲',check:d=>(d.achievementProgress.yatzy50||0)>=1},
+    {id:'wood_500',name:'Wood Master',desc:'Wood Block 500 điểm',emoji:'🪵',check:d=>(d.gameStats.woodBlock?.bestScore||0)>=500},
+    {id:'seabattle_win',name:'Đô đốc',desc:'Thắng 1 ván Sea Battle',emoji:'⚓',check:d=>(d.gameStats.seaBattle?.wins||0)>=1},
+    {id:'reversi_win',name:'Chiến lược gia',desc:'Thắng 1 ván Reversi',emoji:'⚫',check:d=>(d.gameStats.reversi?.wins||0)>=1},
+    
+    // Quiz/Learn
+    {id:'quiz_perfect',name:'Học giỏi',desc:'Quiz đạt 100% 1 lần',emoji:'🎓',check:d=>(d.achievementProgress.perfectQuiz||0)>=1},
+    {id:'quiz_perfect_5',name:'Học sinh giỏi',desc:'5 quiz hoàn hảo',emoji:'📚',check:d=>(d.achievementProgress.perfectQuiz||0)>=5},
+    {id:'read_1book',name:'Đọc Sách',desc:'Đọc xong 1 cuốn (Đọc cuộn)',emoji:'📖',check:d=>(d.achievementProgress.booksRead||0)>=1},
+    {id:'read_5books',name:'Mọt sách',desc:'Đọc xong 5 cuốn',emoji:'📚',check:d=>(d.achievementProgress.booksRead||0)>=5},
+    {id:'quote_save_10',name:'Sưu tầm',desc:'Lưu 10 câu danh ngôn',emoji:'💡',check:d=>(d.achievementProgress.quotesSaved||0)>=10},
+    
+    // Time-based
+    {id:'early_bird',name:'Người dậy sớm',desc:'Chơi trước 7h sáng',emoji:'🌅',check:d=>(d.achievementProgress.earlyBird||0)>=1},
+    {id:'night_owl',name:'Cú đêm',desc:'Chơi sau 22h',emoji:'🦉',check:d=>(d.achievementProgress.nightOwl||0)>=1},
+    
+    // Special
+    {id:'all_tabs',name:'Khám phá đủ',desc:'Mở cả 3 tab',emoji:'🗺️',check:d=>(d.achievementProgress.tabsVisited||0)>=3},
+    {id:'try_10_games',name:'Tò mò',desc:'Thử 10 trò khác nhau',emoji:'🎲',check:d=>Object.keys(d.gameStats).length>=10},
+    {id:'try_20_games',name:'Đa năng',desc:'Thử 20 trò khác nhau',emoji:'🌟',check:d=>Object.keys(d.gameStats).length>=20},
+    {id:'try_all',name:'Đã chơi tất cả',desc:'Thử mọi trò trong app',emoji:'🏆',check:d=>Object.keys(d.gameStats).length>=50},
+    {id:'box_open',name:'Mở hộp',desc:'Mở reward box đầu tiên',emoji:'🎁',check:d=>(d.achievementProgress.boxesOpened||0)>=1},
+    {id:'quest_1',name:'Quest đầu tiên',desc:'Hoàn thành quest hàng ngày',emoji:'🎯',check:d=>d.questsCompleted.length>=1},
+    {id:'quest_10',name:'Quest Master',desc:'Hoàn thành 10 quest',emoji:'⚔️',check:d=>d.questsCompleted.length>=10},
+    {id:'bedtime',name:'Bé ngoan đi ngủ',desc:'Dùng chế độ trước giờ ngủ',emoji:'🌙',check:d=>(d.achievementProgress.bedtimeUsed||0)>=1},
+  ];
+  
+  function checkAchievements(){
+    const newly=[];
+    ACHIEVEMENTS.forEach(a=>{
+      if(!data.achievements.includes(a.id) && a.check(data)){
+        data.achievements.push(a.id);
+        newly.push(a);
+      }
+    });
+    if(newly.length>0)save(data);
+    return newly;
+  }
+  
+  function bumpProgress(key, by=1){
+    data.achievementProgress[key]=(data.achievementProgress[key]||0)+by;
+    save(data);
+  }
+  
+  // Main entry: called by games after they finish/score
+  function gameComplete(gameId, result={}){
+    const xpGained=calculateXP(result);
+    recordPlay(gameId,result);
+    const xpRes=addXP(xpGained,gameId);
+    
+    // Track special progress
+    const h=new Date().getHours();
+    if(h<7)bumpProgress('earlyBird');
+    if(h>=22)bumpProgress('nightOwl');
+    
+    if(result.perfectQuiz)bumpProgress('perfectQuiz');
+    if(result.bookFinished)bumpProgress('booksRead');
+    if(result.mineDiamond)bumpProgress('mineDiamond');
+    if(result.archeryBull)bumpProgress('archeryBull');
+    if(result.yatzy50)bumpProgress('yatzy50');
+    if(result.obbyLevel)data.achievementProgress.obbyMax=Math.max(data.achievementProgress.obbyMax||0,result.obbyLevel);
+    
+    const newAchievements=checkAchievements();
+    return {...xpRes, newAchievements};
+  }
+  
+  // === DAILY QUESTS ===
+  const QUEST_POOL=[
+    {id:'play3',desc:'Chơi 3 ván',target:3,type:'games',xp:30},
+    {id:'play5',desc:'Chơi 5 ván',target:5,type:'games',xp:50},
+    {id:'quiz_correct',desc:'Trả lời đúng 10 câu quiz',target:10,type:'quizCorrect',xp:40},
+    {id:'try_new',desc:'Thử 2 trò mới (khác nhau)',target:2,type:'newGames',xp:60},
+    {id:'win3',desc:'Thắng 3 ván',target:3,type:'wins',xp:50},
+    {id:'read',desc:'Đọc xong 1 cuốn sách',target:1,type:'bookRead',xp:80},
+    {id:'mine',desc:'Đào 5 khối trong Mine2D',target:5,type:'minedBlocks',xp:30},
+  ];
+  
+  function getDailyQuests(){
+    const t=TODAY();
+    if(data.questDate!==t){
+      // Generate new quests for today
+      const shuffled=[...QUEST_POOL].sort(()=>Math.random()-0.5);
+      data.dailyQuests=shuffled.slice(0,3).map(q=>({...q,progress:0,done:false}));
+      data.questDate=t;
+      save(data);
+    }
+    return data.dailyQuests||[];
+  }
+  
+  function bumpQuest(type, by=1){
+    const quests=getDailyQuests();
+    let updated=false;
+    quests.forEach(q=>{
+      if(q.type===type && !q.done){
+        q.progress=Math.min(q.target,q.progress+by);
+        if(q.progress>=q.target){
+          q.done=true;
+          data.questsCompleted.push(TODAY()+'_'+q.id);
+          addXP(q.xp);
+          updated=true;
+        }
+      }
+    });
+    if(updated)save(data);
+    return updated;
+  }
+  
+  return {
+    get,reset,
+    addXP, recordPlay, gameComplete,
+    checkStreak, checkAchievements, bumpProgress,
+    getAvatar:()=>getAvatar(data.level),
+    xpProgress:()=>{
+      // Returns {current, needed, total}
+      let totalNeeded=0,lv=1;
+      while(lv<data.level){totalNeeded+=xpForLevel(lv);lv++}
+      const current=data.xp-totalNeeded;
+      const needed=xpForLevel(data.level);
+      return {current,needed,total:data.xp};
+    },
+    ACHIEVEMENTS, AVATARS,
+    getDailyQuests, bumpQuest,
+    setName:(n)=>{data.name=n;save(data)},
+    setBedtimeMode:(v)=>{data.bedtimeMode=v;if(v)bumpProgress('bedtimeUsed');save(data)},
+    addBox:()=>{data.boxesEarned++;save(data)},
+    spendBox:()=>{if(data.boxesEarned>0){data.boxesEarned--;save(data);bumpProgress('boxesOpened');return true}return false},
+  };
+})();
+
+// === TOAST notifications ===
+function showToast(html, duration=3000){
+  const existing=document.querySelectorAll('.toast');
+  existing.forEach(e=>e.remove());
+  const t=document.createElement('div');
+  t.className='toast';
+  t.innerHTML=html;
+  document.body.appendChild(t);
+  setTimeout(()=>t.classList.add('show'),50);
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),400)},duration);
+}
+
+// === Helper called by games when they finish ===
+function reportGameResult(gameId, result={}){
+  if(typeof Player==='undefined')return;
+  const res=Player.gameComplete(gameId,result);
+  // Quest tracking
+  Player.bumpQuest('games');
+  if(result.win)Player.bumpQuest('wins');
+  // Check if new game (first time playing)
+  const stats=Player.get().gameStats[gameId];
+  if(stats && stats.plays===1)Player.bumpQuest('newGames');
+  if(result.perfectQuiz)Player.bumpQuest('quizCorrect',10);
+  if(result.bookFinished)Player.bumpQuest('bookRead');
+  if(result.minedBlocks)Player.bumpQuest('minedBlocks',result.minedBlocks);
+  
+  // Show toast
+  let msg=`<div class="toast-row"><span class="toast-emoji">⭐</span><span>+${res.xpGained} XP</span></div>`;
+  if(res.leveledUp){
+    msg=`<div class="toast-big">🎉 LEVEL UP!</div><div class="toast-row">Level ${res.oldLevel} → <b>${res.newLevel}</b></div>`+msg;
+    if(typeof SFX!=='undefined')SFX.bonus();
+  }
+  if(res.newAchievements&&res.newAchievements.length>0){
+    res.newAchievements.forEach((a,i)=>{
+      setTimeout(()=>{
+        showToast(`<div class="toast-big">🏆 Huy hiệu mới!</div><div class="toast-row"><span class="toast-emoji">${a.emoji}</span><b>${a.name}</b></div><div class="toast-row" style="font-size:11px;color:var(--muted)">${a.desc}</div>`,4000);
+        if(typeof SFX!=='undefined')SFX.bonus();
+      },(i+1)*500);
+    });
+    // Earn reward box every 3 achievements
+    if(Player.get().achievements.length%3===0){
+      Player.addBox();
+      setTimeout(()=>showToast(`<div class="toast-big">🎁 Có hộp quà mới!</div><div class="toast-row">Mở trong Hồ sơ →</div>`,3500),(res.newAchievements.length+1)*500);
+    }
+  }
+  showToast(msg, 2500);
+}
+
+/* ============== PROFILE DASHBOARD ============== */
+function openProfile(){
+  const data=Player.get();
+  const xpProg=Player.xpProgress();
+  const avatar=Player.getAvatar();
+  
+  modal.classList.add('open');
+  mTitle.textContent='Hồ sơ Đậu';
+  mArea.innerHTML='';mCtrls.innerHTML='';
+  currentGame=null;
+  if(typeof SFX!=='undefined')SFX.open();
+  
+  const wrap=document.createElement('div');
+  wrap.className='profile-wrap';
+  
+  // Hero card
+  const hero=document.createElement('div');
+  hero.className='profile-hero';
+  hero.innerHTML=`
+    <div class="profile-avatar">${avatar.emoji}</div>
+    <div class="profile-name" id="profileName">${data.name}</div>
+    <div class="profile-title">${avatar.name}</div>
+    <div class="profile-level">
+      <span>Level <b>${data.level}</b></span>
+      <span class="profile-streak">🔥 ${data.streak} ngày</span>
+    </div>
+    <div class="xp-bar">
+      <div class="xp-fill" style="width:${(xpProg.current/xpProg.needed*100).toFixed(1)}%"></div>
+      <div class="xp-text">${xpProg.current} / ${xpProg.needed} XP</div>
+    </div>`;
+  wrap.appendChild(hero);
+  
+  // Stats grid
+  const stats=document.createElement('div');
+  stats.className='profile-stats';
+  const totalGamesUnique=Object.keys(data.gameStats).length;
+  const totalAchievements=data.achievements.length;
+  stats.innerHTML=`
+    <div class="stat-card"><div class="stat-num">${data.totalGames}</div><div class="stat-lbl">🎮 Lượt chơi</div></div>
+    <div class="stat-card"><div class="stat-num">${totalGamesUnique}</div><div class="stat-lbl">🎯 Trò đã thử</div></div>
+    <div class="stat-card"><div class="stat-num">${totalAchievements}/${Player.ACHIEVEMENTS.length}</div><div class="stat-lbl">🏆 Huy hiệu</div></div>
+    <div class="stat-card"><div class="stat-num">${data.boxesEarned}</div><div class="stat-lbl">🎁 Hộp quà</div></div>`;
+  wrap.appendChild(stats);
+  
+  // Activity heatmap (last 30 days)
+  const heatmap=document.createElement('div');
+  heatmap.className='profile-section';
+  heatmap.innerHTML='<h4>📅 Hoạt động 30 ngày</h4>';
+  const grid=document.createElement('div');
+  grid.className='heatmap';
+  const now=new Date();
+  for(let i=29;i>=0;i--){
+    const d=new Date(now);d.setDate(d.getDate()-i);
+    const ds=d.toISOString().slice(0,10);
+    const day=data.dailyHistory[ds];
+    const count=day?day.games:0;
+    const lvl=count===0?0:count<3?1:count<6?2:count<10?3:4;
+    const cell=document.createElement('div');
+    cell.className='heat-cell heat-'+lvl;
+    cell.title=`${ds}: ${count} ván`;
+    grid.appendChild(cell);
+  }
+  heatmap.appendChild(grid);
+  wrap.appendChild(heatmap);
+  
+  // Reward boxes section
+  if(data.boxesEarned>0){
+    const boxSection=document.createElement('div');
+    boxSection.className='profile-section box-section';
+    boxSection.innerHTML=`<h4>🎁 Hộp quà của bạn: <b>${data.boxesEarned}</b></h4>`;
+    const openBox=document.createElement('button');
+    openBox.className='btn warn';
+    openBox.textContent='🎁 MỞ HỘP QUÀ';
+    openBox.style.cssText='margin-top:10px;font-size:14px';
+    openBox.onclick=()=>openRewardBox();
+    boxSection.appendChild(openBox);
+    wrap.appendChild(boxSection);
+  }
+  
+  // Achievements
+  const achSection=document.createElement('div');
+  achSection.className='profile-section';
+  achSection.innerHTML=`<h4>🏆 Huy hiệu (${data.achievements.length}/${Player.ACHIEVEMENTS.length})</h4>`;
+  const achGrid=document.createElement('div');
+  achGrid.className='ach-grid';
+  Player.ACHIEVEMENTS.forEach(a=>{
+    const unlocked=data.achievements.includes(a.id);
+    const card=document.createElement('div');
+    card.className='ach-card'+(unlocked?' unlocked':' locked');
+    card.innerHTML=`<div class="ach-emoji">${unlocked?a.emoji:'🔒'}</div>
+      <div class="ach-name">${a.name}</div>
+      <div class="ach-desc">${a.desc}</div>`;
+    achGrid.appendChild(card);
+  });
+  achSection.appendChild(achGrid);
+  wrap.appendChild(achSection);
+  
+  // Top games (most played)
+  const sortedGames=Object.entries(data.gameStats).sort(([,a],[,b])=>b.plays-a.plays).slice(0,5);
+  if(sortedGames.length>0){
+    const topSection=document.createElement('div');
+    topSection.className='profile-section';
+    topSection.innerHTML='<h4>🌟 Trò chơi yêu thích</h4>';
+    const list=document.createElement('div');list.style.cssText='display:flex;flex-direction:column;gap:6px';
+    sortedGames.forEach(([id,s])=>{
+      const card=games[id];
+      if(!card)return;
+      const row=document.createElement('div');
+      row.style.cssText='display:flex;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:8px;font-size:13px';
+      row.innerHTML=`<span>${card.title}</span><span style="color:var(--muted)">${s.plays} ván · ${s.wins?s.wins+' W · ':''}${s.bestScore?'🏆 '+s.bestScore:''}</span>`;
+      list.appendChild(row);
+    });
+    topSection.appendChild(list);
+    wrap.appendChild(topSection);
+  }
+  
+  mArea.appendChild(wrap);
+  
+  // Rename button
+  addBtn('✏️ Đổi tên','alt',()=>{
+    const newName=prompt('Tên mới của Đậu:',data.name);
+    if(newName&&newName.trim()){Player.setName(newName.trim());openProfile()}
+  });
+  addBtn('← Đóng','alt',closeModal);
+  setStatus(`⭐ Level ${data.level} · 🔥 ${data.streak} ngày · ${avatar.emoji} ${avatar.name}`);
+}
+
+/* ============== REWARD BOX ============== */
+function openRewardBox(){
+  if(!Player.spendBox()){showToast('❌ Không còn hộp quà',1500);return}
+  if(typeof SFX!=='undefined')SFX.bonus();
+  
+  // Random rewards
+  const rewards=[
+    {emoji:'⭐',name:'+100 XP',action:()=>{Player.addXP(100)}},
+    {emoji:'💎',name:'+250 XP',action:()=>{Player.addXP(250)},rare:true},
+    {emoji:'🌟',name:'+500 XP',action:()=>{Player.addXP(500)},superRare:true},
+    {emoji:'🎉',name:'+50 XP',action:()=>{Player.addXP(50)}},
+    {emoji:'🔥',name:'+1 ngày streak',action:()=>{const d=Player.get();d.streak++;Player.checkAchievements()}},
+    {emoji:'💡',name:'Câu danh ngôn hay',quote:true},
+  ];
+  // Weighted: common 60%, rare 30%, superRare 10%
+  const r=Math.random();
+  let pool;
+  if(r<0.1)pool=rewards.filter(x=>x.superRare);
+  else if(r<0.4)pool=rewards.filter(x=>x.rare);
+  else pool=rewards.filter(x=>!x.rare&&!x.superRare);
+  const reward=pool[Math.floor(Math.random()*pool.length)];
+  if(reward.action)reward.action();
+  
+  // Show animation overlay
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(5,2,15,.95);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(8px)';
+  overlay.innerHTML=`
+    <div class="box-anim">🎁</div>
+    <div style="font-family:'Bungee',cursive;font-size:32px;color:var(--neon-yellow);margin:20px 0;animation:bounce .8s ease-out">${reward.emoji}</div>
+    <div style="font-size:20px;color:var(--text);margin-bottom:30px;font-weight:700">${reward.name}</div>
+    <button id="closeBoxBtn" style="padding:14px 32px;background:linear-gradient(135deg,var(--neon-cyan),var(--neon-purple));border:none;color:#fff;font-family:'Bungee',cursive;font-size:16px;border-radius:12px;cursor:pointer;touch-action:manipulation">TUYỆT VỜI!</button>`;
+  document.body.appendChild(overlay);
+  document.getElementById('closeBoxBtn').onclick=()=>{overlay.remove();openProfile()};
+}
+
+/* ============== TODAY SCREEN ============== */
+function openTodayScreen(){
+  modal.classList.add('open');
+  mTitle.textContent='Hôm nay';
+  mArea.innerHTML='';mCtrls.innerHTML='';
+  currentGame=null;
+  if(typeof SFX!=='undefined')SFX.open();
+  
+  const data=Player.get();
+  const quests=Player.getDailyQuests();
+  const avatar=Player.getAvatar();
+  
+  const wrap=document.createElement('div');
+  wrap.className='today-wrap';
+  
+  // Greeting
+  const h=new Date().getHours();
+  const greeting=h<11?'☀️ Chào buổi sáng':h<14?'🌞 Chào buổi trưa':h<18?'⛅ Chào buổi chiều':h<22?'🌆 Chào buổi tối':'🌙 Khuya rồi nhỉ';
+  
+  const hero=document.createElement('div');
+  hero.className='today-hero';
+  hero.innerHTML=`
+    <div class="today-greet">${greeting}, ${data.name}!</div>
+    <div class="today-sub">${avatar.emoji} Level ${data.level} · 🔥 ${data.streak} ngày liên tục</div>`;
+  wrap.appendChild(hero);
+  
+  // Daily quests
+  const questSection=document.createElement('div');
+  questSection.className='today-card';
+  const doneCount=quests.filter(q=>q.done).length;
+  questSection.innerHTML=`<div class="today-card-head"><h3>🎯 Quest hôm nay</h3><span class="quest-prog">${doneCount}/${quests.length}</span></div>`;
+  quests.forEach(q=>{
+    const item=document.createElement('div');
+    item.className='quest-item'+(q.done?' done':'');
+    item.innerHTML=`
+      <div class="quest-check">${q.done?'✅':'⬜'}</div>
+      <div class="quest-info">
+        <div class="quest-desc">${q.desc}</div>
+        <div class="quest-bar"><div class="quest-fill" style="width:${q.progress/q.target*100}%"></div></div>
+      </div>
+      <div class="quest-xp">+${q.xp}</div>`;
+    questSection.appendChild(item);
+  });
+  wrap.appendChild(questSection);
+  
+  // Continue reading
+  if(data.gameStats.readingRoll||data.gameStats.quotes){
+    const reading=document.createElement('div');
+    reading.className='today-card';
+    reading.innerHTML='<h3>📚 Đọc gì hôm nay?</h3>';
+    const buttons=document.createElement('div');buttons.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin-top:10px';
+    [
+      {id:'readingRoll',label:'📜 Đọc cuộn',sub:'7 sách self-help'},
+      {id:'quotes',label:'💡 Câu danh ngôn',sub:'31 câu nói hay'}
+    ].forEach(g=>{
+      const b=document.createElement('button');
+      b.style.cssText='flex:1;min-width:140px;padding:12px;background:rgba(255,230,0,.08);border:1px solid rgba(255,230,0,.25);border-radius:10px;color:var(--text);font-family:inherit;cursor:pointer;touch-action:manipulation;text-align:left';
+      b.innerHTML=`<div style="font-weight:700;font-size:14px">${g.label}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${g.sub}</div>`;
+      b.onclick=()=>{closeModal();setTimeout(()=>openGame(g.id),200)};
+      buttons.appendChild(b);
+    });
+    reading.appendChild(buttons);
+    wrap.appendChild(reading);
+  }
+  
+  // Suggested game (random)
+  const suggested=document.createElement('div');
+  suggested.className='today-card';
+  // Pick a game not played today or random
+  const allIds=Object.keys(games);
+  const today=new Date().toISOString().slice(0,10);
+  const notPlayedToday=allIds.filter(id=>{
+    const s=data.gameStats[id];
+    if(!s||!s.lastPlayed)return true;
+    const ld=new Date(s.lastPlayed).toISOString().slice(0,10);
+    return ld!==today;
+  });
+  const pickFrom=notPlayedToday.length>0?notPlayedToday:allIds;
+  const suggestId=pickFrom[Math.floor(Math.random()*pickFrom.length)];
+  const sg=games[suggestId];
+  if(sg){
+    suggested.innerHTML=`<h3>🎲 Thử trò này hôm nay</h3>
+      <button id="sugBtn" style="display:block;width:100%;margin-top:10px;padding:16px;background:linear-gradient(135deg,var(--neon-cyan),var(--neon-purple));border:none;color:#fff;font-family:'Bungee',cursive;font-size:16px;border-radius:12px;cursor:pointer;touch-action:manipulation">${sg.title}</button>`;
+    wrap.appendChild(suggested);
+    setTimeout(()=>{
+      const sugBtn=document.getElementById('sugBtn');
+      if(sugBtn)sugBtn.onclick=()=>{closeModal();setTimeout(()=>openGame(suggestId),200)};
+    },50);
+  }
+  
+  // Bedtime toggle
+  const bedtimeCard=document.createElement('div');
+  bedtimeCard.className='today-card';
+  const isBed=data.bedtimeMode;
+  bedtimeCard.innerHTML=`<div class="today-card-head"><h3>🌙 Chế độ trước giờ ngủ</h3></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5">Chỉ hiện trò nhẹ (đọc cuộn, danh ngôn, luyện nghe). Tắt âm thanh ồn.</div>
+    <button id="bedtimeBtn" style="padding:10px 18px;border-radius:10px;border:2px solid ${isBed?'var(--neon-yellow)':'rgba(255,255,255,.15)'};background:${isBed?'rgba(255,230,0,.15)':'rgba(255,255,255,.05)'};color:${isBed?'var(--neon-yellow)':'var(--text)'};font-family:inherit;font-weight:700;cursor:pointer;touch-action:manipulation">${isBed?'✅ ĐANG BẬT':'🌙 BẬT CHẾ ĐỘ'}</button>`;
+  wrap.appendChild(bedtimeCard);
+  
+  // Profile shortcut
+  const profCard=document.createElement('div');
+  profCard.className='today-card';
+  profCard.style.cursor='pointer';
+  profCard.onclick=()=>{closeModal();setTimeout(openProfile,200)};
+  profCard.innerHTML=`<div style="display:flex;align-items:center;gap:12px">
+    <div style="font-size:36px">${avatar.emoji}</div>
+    <div style="flex:1">
+      <h3 style="margin:0">📊 Hồ sơ Đậu</h3>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px">${data.achievements.length} huy hiệu · ${data.totalGames} ván</div>
+    </div>
+    <div style="color:var(--muted);font-size:20px">→</div>
+  </div>`;
+  wrap.appendChild(profCard);
+  
+  mArea.appendChild(wrap);
+  
+  setTimeout(()=>{
+    const bbBtn=document.getElementById('bedtimeBtn');
+    if(bbBtn)bbBtn.onclick=()=>{
+      const isOn=!data.bedtimeMode;
+      Player.setBedtimeMode(isOn);
+      if(typeof SFX!=='undefined')setMuted(isOn);
+      applyBedtimeMode();
+      openTodayScreen();
+    };
+  },50);
+  
+  addBtn('← Đóng','alt',closeModal);
+  setStatus(`✨ Hôm nay · Level ${data.level} · Quest: ${doneCount}/${quests.length}`);
+}
+
+function applyBedtimeMode(){
+  const data=Player.get();
+  document.body.classList.toggle('bedtime',data.bedtimeMode);
+  if(data.bedtimeMode){
+    // Hide non-bedtime games
+    const allowed=['readingRoll','quotes','englishListen','piano','aiQuiz','historyVn','calendarQuiz'];
+    document.querySelectorAll('.card[data-game]').forEach(c=>{
+      c.classList.toggle('bedtime-hidden', !allowed.includes(c.dataset.game));
+    });
+  } else {
+    document.querySelectorAll('.card[data-game]').forEach(c=>c.classList.remove('bedtime-hidden'));
+  }
+}
 function openGame(id){
   const g=games[id];if(!g)return;
   mTitle.textContent=g.title;
@@ -757,6 +1507,13 @@ function openGame(id){
   modal.classList.add('open');
   currentGame=id;
   if(typeof SFX!=='undefined')SFX.open();
+  // Auto-record play (lightweight - just tracks plays count, no XP)
+  if(typeof Player!=='undefined'){
+    Player.recordPlay(id,{});
+    Player.bumpQuest('games');
+    const stats=Player.get().gameStats[id];
+    if(stats && stats.plays===1)Player.bumpQuest('newGames');
+  }
   g.init();
 }
 function closeModal(){
@@ -767,6 +1524,25 @@ function closeModal(){
 }
 $('#close-btn').onclick=closeModal;
 modal.onclick=e=>{if(e.target===modal)closeModal()};
+
+// === Init Player system ===
+Player.checkStreak();
+function updateTopBar(){
+  const d=Player.get();
+  const av=Player.getAvatar();
+  const sb=document.getElementById('streakBadge');if(sb)sb.textContent='🔥 '+d.streak;
+  const lb=document.getElementById('levelBadge');if(lb)lb.textContent=d.level;
+  const ab=document.getElementById('avatarBadge');if(ab)ab.textContent=av.emoji;
+  const bb=document.getElementById('boxBadge');
+  if(bb){if(d.boxesEarned>0){bb.style.display='inline-block';bb.textContent='🎁 '+d.boxesEarned}else bb.style.display='none'}
+}
+updateTopBar();
+// Update top bar every time modal closes
+const _origCloseModal=closeModal;
+closeModal=function(){_origCloseModal();updateTopBar()};
+// Apply bedtime mode if on
+if(Player.get().bedtimeMode){applyBedtimeMode();if(typeof setMuted!=='undefined')setMuted(true)}
+
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))closeModal()});
 
 // Tab switching
@@ -777,6 +1553,10 @@ $$('.tab').forEach(t=>{
     $$('.tab-content').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));
     localStorage.setItem('activeTab',id);
     if(typeof SFX!=='undefined')SFX.tap();
+    if(typeof Player!=='undefined'){
+      const tv=JSON.parse(localStorage.getItem('tabsVisited')||'[]');
+      if(!tv.includes(id)){tv.push(id);localStorage.setItem('tabsVisited',JSON.stringify(tv));Player.bumpProgress('tabsVisited',1);Player.checkAchievements();}
+    }
   };
 });
 const savedTab=localStorage.getItem('activeTab');
@@ -4692,7 +5472,7 @@ function makeQuiz(QUIZ, emoji, title, label){
       const end=document.createElement('div');end.className='quiz-card quiz-end';
       const pct=Math.round(score*100/total);
       const stars=pct>=90?'⭐⭐⭐⭐⭐':pct>=75?'⭐⭐⭐⭐':pct>=60?'⭐⭐⭐':pct>=40?'⭐⭐':'⭐';
-      end.innerHTML=`<div style="font-size:48px">${emoji}</div><div class="big">Xong rồi!</div><div class="stars">${stars}</div><div class="summary">Đúng <b style="color:var(--neon-green)">${score}</b>/${total} (${pct}%)</div>`;
+      reportGameResult(label.toLowerCase().replace(/\s/g,''),{win:pct>=70,score:score,perfectQuiz:pct===100,streak:score});end.innerHTML=`<div style="font-size:48px">${emoji}</div><div class="big">Xong rồi!</div><div class="stars">${stars}</div><div class="summary">Đúng <b style="color:var(--neon-green)">${score}</b>/${total} (${pct}%)</div>`;
       mArea.appendChild(end);addBtn('Làm lại','warn',()=>{buildPool();render()});setStatus('Hoàn thành!');return;
     }
     const q=pool[idx];
@@ -5133,7 +5913,7 @@ games.mine2d = (()=>{
           if(b===B.COAL)svg+=`<circle cx="${px+CELL*0.3}" cy="${py+CELL*0.4}" r="2.5" fill="#000"/><circle cx="${px+CELL*0.7}" cy="${py+CELL*0.6}" r="2" fill="#000"/>`;
           if(b===B.IRON)svg+=`<circle cx="${px+CELL*0.35}" cy="${py+CELL*0.4}" r="2.5" fill="#e0bda3"/><circle cx="${px+CELL*0.7}" cy="${py+CELL*0.65}" r="2" fill="#e0bda3"/>`;
           if(b===B.GOLD)svg+=`<circle cx="${px+CELL*0.35}" cy="${py+CELL*0.35}" r="3" fill="#fff6a8"/><circle cx="${px+CELL*0.7}" cy="${py+CELL*0.65}" r="2.5" fill="#fff6a8"/>`;
-          if(b===B.DIAMOND)svg+=`<polygon points="${px+CELL*0.35},${py+CELL*0.3} ${px+CELL*0.65},${py+CELL*0.3} ${px+CELL*0.5},${py+CELL*0.7}" fill="#aaf4ff" stroke="#5ce1e6" stroke-width="1"/>`;
+          if(b===B.DIAMOND){if(typeof Player!=='undefined')Player.bumpProgress('mineDiamond');}if(b===B.DIAMOND)svg+=`<polygon points="${px+CELL*0.35},${py+CELL*0.3} ${px+CELL*0.65},${py+CELL*0.3} ${px+CELL*0.5},${py+CELL*0.7}" fill="#aaf4ff" stroke="#5ce1e6" stroke-width="1"/>`;
           if(b===B.GRASS)svg+=`<rect x="${px}" y="${py}" width="${CELL}" height="4" fill="#3a8c3a"/>`;
           // Block border
           svg+=`<rect x="${px}" y="${py}" width="${CELL}" height="${CELL}" fill="none" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>`;
@@ -5431,7 +6211,7 @@ games.obby = (()=>{
     if(player.x>=W-2&&player.y<=2){
       won=true;
       const prev=bestDeaths[currentLevel];
-      if(prev===undefined||deaths<prev){bestDeaths[currentLevel]=deaths;localStorage.setItem('obbyBest',JSON.stringify(bestDeaths))}
+      if(prev===undefined||deaths<prev){bestDeaths[currentLevel]=deaths;localStorage.setItem('obbyBest',JSON.stringify(bestDeaths))}reportGameResult('obby',{win:true,score:(stars.length-collected===0?100:50),obbyLevel:currentLevel+1});
     }
     // Out of bounds
     if(player.y>H+2)respawn();
@@ -5773,7 +6553,7 @@ games.yatzy = (()=>{
     const cat=CATS.find(c=>c.key===key);
     scores[key]=cat.score(dice);
     turn++;
-    if(Object.keys(scores).length>=CATS.length){gameOver=true;
+    if(Object.keys(scores).length>=CATS.length){gameOver=true;const totalScore=Object.values(scores).reduce((a,b)=>a+b,0);const hasYatzy=scores.yatzy>=50;reportGameResult('yatzy',{win:totalScore>=200,score:totalScore,yatzy50:hasYatzy});
       const total=Object.values(scores).reduce((a,b)=>a+b,0);
       const best=parseInt(localStorage.getItem('yatzyBest')||'0');
       if(total>best)localStorage.setItem('yatzyBest',total);
@@ -5912,7 +6692,7 @@ games.reversi = (()=>{
   }
   function checkEnd(){
     const m1=legalMoves(B).length,m2=legalMoves(W).length;
-    if(m1===0&&m2===0)gameOver=true;
+    if(m1===0&&m2===0){gameOver=true;const {b,w}=count();reportGameResult('reversi',{win:b>w,score:b});}
     else if(legalMoves(turn).length===0){turn=turn===B?W:B;if(legalMoves(turn).length===0)gameOver=true}
   }
   function count(){
@@ -6038,7 +6818,7 @@ games.archery = (()=>{
     };
     step();
     if(arrows<=0&&!gameOver){
-      setTimeout(()=>{if(shotArrows.every(a=>a.stuck))gameOver=true;render()},1000);
+      setTimeout(()=>{if(shotArrows.every(a=>a.stuck)){gameOver=true;const hadBull=shotArrows.some(a=>a.points===100);reportGameResult('archery',{win:score>=200,score:score,archeryBull:hadBull});}render()},1000);
     }
   }
   let flashMsg='';
@@ -6308,7 +7088,7 @@ games.seaBattle = (()=>{
       }
     }
     if(!hit)shots[idx]=1;
-    if(targetShips.every(s=>s.sunk)){winner=active;phase='over';render();return}
+    if(targetShips.every(s=>s.sunk)){winner=active;phase='over';reportGameResult('seaBattle',{win:active===1,score:100});render();return}
     if(sunkShip)flash(`💥 Chìm ${sunkShip.name}!`);
     else if(hit)flash('🎯 Trúng!');
     else flash('💧 Trượt');
@@ -6379,7 +7159,7 @@ games.seaBattle = (()=>{
       }
     }
     if(!hit)p2Shots[idx]=1;
-    if(p1Ships.every(s=>s.sunk)){winner=2;phase='over';render();return}
+    if(p1Ships.every(s=>s.sunk)){winner=2;phase='over';reportGameResult('seaBattle',{win:false,score:0});render();return}
     if(sunkShip)flash(`💀 Địch chìm ${sunkShip.name} của bạn!`);
     else if(hit)flash('💥 Địch trúng!');
     else flash('💧 Địch trượt');
@@ -6565,6 +7345,1968 @@ games.seaBattle = (()=>{
 
 
 /* ========== 52. ĐỌC CUỘN (Reading Roll) — chữ chạy dưới lên ========== */
+
+const STORIES = [
+{id:'empty_cup',cat:'thien',emoji:'🍵',title:'Tách Trà Đầy',author:'Thiền Nhật Bản',duration:'2 phút',
+content:`Một giáo sư đại học nổi tiếng đến gặp Thiền sư Nan-in để học về Thiền. Ông đến với đầu óc đầy ắp những kiến thức tích lũy sau nhiều năm nghiên cứu, sách vở và lý thuyết.
+
+Nan-in mời ông ngồi xuống và bắt đầu pha trà. Khi tách trà đã đầy, Nan-in vẫn tiếp tục rót. Trà tràn ra khỏi tách, chảy xuống bàn, xuống sàn.
+
+Vị giáo sư hốt hoảng kêu lên: "Thưa thầy, tách đã đầy rồi! Không thể chứa thêm được nữa đâu!"
+
+Nan-in nhìn ông với ánh mắt từ bi, mỉm cười nói: "Cũng như tách trà này, ông đang đến với tôi với cái đầu đầy ắp ý kiến và phỏng đoán. Làm sao tôi có thể chỉ cho ông về Thiền, khi ông chưa làm trống tách của mình?"
+
+Vị giáo sư im lặng. Lần đầu tiên trong đời, ông nhận ra rằng học hỏi thực sự không phải là tích lũy thêm, mà là buông bỏ những gì ta tưởng mình đã biết.
+
+Bài học này áp dụng cho mọi mặt của cuộc sống. Khi ta đến với một người mới, một công việc mới, một trải nghiệm mới — nếu ta mang theo định kiến và phán xét, ta đã đóng cửa tâm trí mình.
+
+Sự khôn ngoan thực sự bắt đầu khi ta sẵn lòng nói: "Tôi không biết." Hãy giữ tách trà của mình luôn rỗng. Đó là cách duy nhất để nước mới có thể chảy vào.`},
+
+{id:'two_wolves',cat:'thien',emoji:'🐺',title:'Hai Con Sói Trong Lòng',author:'Truyện cổ Cherokee',duration:'2 phút',
+content:`Một ông già người Cherokee dạy cháu trai mình về cuộc sống.
+
+"Cuộc chiến đang diễn ra bên trong ông," ông nói. "Đó là cuộc chiến khủng khiếp giữa hai con sói.
+
+Một con là Ác. Nó là giận dữ, ganh tị, ghen tuông, buồn bã, hối tiếc, tham lam, kiêu ngạo, thương hại bản thân, mặc cảm, oán giận, dối trá, kiêu căng và ích kỷ.
+
+Con kia là Thiện. Nó là niềm vui, hòa bình, tình yêu, hy vọng, thanh thản, khiêm tốn, nhân từ, lòng từ bi, hào phóng, sự thật, lòng trắc ẩn và đức tin.
+
+Cuộc chiến này cũng đang diễn ra bên trong cháu, và bên trong mọi người khác."
+
+Cháu trai suy nghĩ rồi hỏi: "Ông ơi, con sói nào sẽ thắng?"
+
+Ông già Cherokee trả lời: "Con sói mà cháu cho ăn."
+
+Câu chuyện ngắn nhưng chứa đựng sự thật sâu sắc: Tâm hồn ta phát triển theo những gì ta nuôi dưỡng. Mỗi ngày, mỗi giờ, ta đang lựa chọn cho con sói nào ăn.
+
+Khi ta xem nội dung tiêu cực — cho con sói ác ăn. Khi ta đọc sách hay, nghe nhạc đẹp, gặp người tử tế — nuôi con sói thiện.
+
+Khi ta giữ hận thù, ganh ghét — nuôi sự đen tối. Khi ta thực hành biết ơn, tha thứ, yêu thương — nuôi ánh sáng.
+
+Câu hỏi không phải "Ai sẽ thắng?" — mà là "Tôi đang cho ai ăn hôm nay?"`},
+
+{id:'fisherman',cat:'thien',emoji:'🎣',title:'Người Đánh Cá Mexico',author:'Heinrich Böll',duration:'3 phút',
+content:`Một doanh nhân Mỹ đứng trên bến tàu của một làng chài nhỏ ven biển Mexico, nhìn một ngư dân địa phương cập bờ với chiếc thuyền nhỏ chứa vài con cá ngừ vàng lớn.
+
+Vị doanh nhân khen ngợi chất lượng cá và hỏi ngư dân mất bao lâu để bắt được chúng. "Một thời gian ngắn thôi," ngư dân đáp.
+
+"Vậy tại sao ông không ở lâu hơn và bắt nhiều cá hơn?"
+
+"Có chừng này là đủ cho gia đình tôi rồi."
+
+"Vậy ông làm gì với thời gian còn lại?"
+
+Ngư dân mỉm cười: "Tôi ngủ dậy muộn, đánh bắt một chút, chơi với các con, ngủ trưa cùng vợ, tối đi vào làng, nhâm nhi rượu vang và chơi guitar với bạn bè. Tôi có một cuộc sống đầy đặn."
+
+Doanh nhân lắc đầu: "Tôi có bằng MBA Harvard. Tôi có thể giúp ông. Ông nên dành nhiều thời gian hơn để đánh cá. Với số tiền kiếm được, ông mua thuyền lớn hơn. Rồi đội tàu. Rồi nhà máy chế biến. Ông chuyển đến Mexico City, rồi LA, rồi New York để điều hành đế chế của mình."
+
+"Mất bao lâu?"
+
+"15 đến 20 năm thôi."
+
+"Rồi sao nữa?"
+
+"Đó là phần hay nhất! Ông sẽ tuyên bố lên sàn chứng khoán và bán cổ phần. Ông sẽ thành triệu phú!"
+
+"Triệu phú? Rồi sao nữa?"
+
+"Rồi ông có thể nghỉ hưu. Chuyển đến một làng chài nhỏ ven biển, ngủ dậy muộn, đánh bắt một chút, chơi với cháu, ngủ trưa cùng vợ, tối đi vào làng nhâm nhi rượu vang và chơi guitar với bạn bè..."
+
+Người ngư dân nhìn ông, mỉm cười, và không nói gì.
+
+Đôi khi ta đuổi theo những thứ ta đã có sẵn. Hạnh phúc không nằm ở đích đến — mà ở cách ta sống mỗi ngày, ngay lúc này.`},
+
+{id:'flat_rock',cat:'thien',emoji:'🪨',title:'Cõng Người Qua Sông',author:'Thiền cổ',duration:'2 phút',
+content:`Có một thiền sư đi qua một dòng sông cùng các đệ tử. Bên bờ sông, có một thiếu phụ đang lo lắng vì không biết cách qua sông. Cô sợ nước, sợ vấp ngã, sợ ướt.
+
+Vị thiền sư già không nói gì, lặng lẽ cõng thiếu phụ qua bờ bên kia. Đặt cô xuống an toàn, ông tiếp tục đi cùng các đệ tử.
+
+Suốt nửa ngày đường, một đệ tử trẻ cứ ấm ức không thể giữ trong lòng được nữa. Anh nói: "Thưa thầy, chúng ta là tu sĩ. Không được chạm vào phụ nữ. Tại sao thầy lại cõng người phụ nữ đó qua sông?"
+
+Thiền sư mỉm cười: "Ta đã đặt cô ấy xuống bên bờ sông từ nửa ngày trước rồi. Sao con vẫn còn cõng cô ấy đến tận đây?"
+
+Đệ tử lặng người. Anh đã cõng người phụ nữ ấy suốt nửa ngày — trong tâm trí mình. Ông thầy chỉ cõng cô ấy vài phút bằng đôi vai — rồi đặt xuống. Người đệ tử mới là người mệt mỏi nhất.
+
+Có những thứ trong đời ta cần làm rồi buông. Như giúp ai đó. Như tha thứ ai đó. Như chấp nhận một chuyện đã rồi.
+
+Nhưng tâm trí ta thường giữ chặt — phán xét, cay đắng, tiếc nuối — suốt nhiều năm trời. Ta tự cõng quá khứ trên vai mình.
+
+Hôm nay, hãy tự hỏi: Tôi đang cõng gì mà thực ra tôi đã có thể đặt xuống từ lâu?`},
+
+{id:'frog_well',cat:'thien',emoji:'🐸',title:'Ếch Ngồi Đáy Giếng',author:'Trang Tử',duration:'2 phút',
+content:`Có con ếch sống trong một cái giếng cạn từ thuở lọt lòng. Nó coi cái giếng là cả thế giới.
+
+Một hôm, có con rùa biển đi ngang qua, dừng lại nhìn xuống.
+
+Con ếch tự hào kể: "Cuộc sống của tôi tuyệt lắm! Tôi có cả giếng này làm nhà. Khi vui, tôi nhảy quanh viền giếng. Khi mệt, tôi nghỉ trong khe đá. Anh có xuống xem nhà tôi không?"
+
+Con rùa biển định xuống, nhưng cái chân trái mắc kẹt ở miệng giếng nhỏ. Nó rút chân ra, kể cho ếch về đại dương:
+
+"Anh bạn, biển rộng tới mức không thể đo bằng nghìn dặm. Sâu tới mức không thể đo bằng nghìn trượng. Thời vua Vũ trị thuỷ, 10 năm có 9 năm lụt — nước biển không tăng. Thời vua Thang hạn hán, 8 năm có 7 năm khô — nước biển không giảm. Sống ở biển, đó mới là niềm vui lớn."
+
+Con ếch há hốc miệng, mắt nhìn xa xăm. Lần đầu tiên trong đời, nó nhận ra cái giếng của mình nhỏ bé đến mức nào.
+
+Mỗi chúng ta đều có "cái giếng" của mình — định kiến, thói quen, lối suy nghĩ. Khi sống lâu trong đó, ta tưởng đó là toàn bộ thế giới.
+
+Đọc một cuốn sách hay, gặp một người khác biệt, đi đến một nơi xa lạ — đó là cách ta thoát ra khỏi giếng của mình.
+
+Câu hỏi không phải "Tôi có hạnh phúc trong giếng của mình không?" Câu hỏi là: "Có bao nhiêu thứ ngoài giếng mà tôi chưa biết?"`},
+
+{id:'three_filters',cat:'thien',emoji:'🔍',title:'Ba Cái Sàng của Socrates',author:'Socrates',duration:'2 phút',
+content:`Một người quen của triết gia Socrates chạy đến với vẻ vội vã: "Socrates, anh có biết tôi vừa nghe được chuyện gì về bạn anh không?"
+
+"Khoan đã," Socrates nói. "Trước khi anh kể, hãy để tôi sàng lọc qua ba cái sàng đã."
+
+"Ba cái sàng nào?"
+
+"Cái sàng thứ nhất là SỰ THẬT. Anh có chắc 100% chuyện anh sắp kể là sự thật không?"
+
+"Không, tôi chỉ nghe người khác kể lại..."
+
+"Vậy là anh không chắc. Hãy thử cái sàng thứ hai: SỰ TỬ TẾ. Chuyện anh sắp kể có phải là điều tốt đẹp về bạn tôi không?"
+
+"Không, thực ra ngược lại..."
+
+"Vậy chuyện không chắc đúng, lại không tử tế. Còn cái sàng cuối cùng: TÍNH ÍCH LỢI. Chuyện anh sắp kể có ích lợi gì cho tôi không?"
+
+"Không hẳn..."
+
+Socrates kết luận: "Vậy chuyện anh sắp kể không phải là sự thật, không tử tế, không ích lợi. Tại sao anh phải kể, và tại sao tôi phải nghe?"
+
+Bài học của Socrates dành cho mọi thế hệ: Trước khi nói điều gì về người khác, hãy để câu nói đó đi qua ba cái sàng.
+
+Có bao nhiêu cuộc đời bị huỷ hoại bởi tin đồn không kiểm chứng? Có bao nhiêu tình bạn tan vỡ vì lời nói sau lưng?
+
+Hãy là người làm cho thế giới ít độc hại hơn — không phải bằng cách im lặng trước cái xấu, mà bằng cách lựa chọn cẩn thận điều mình nói. Sự thật. Tử tế. Có ích.
+
+Nếu không có cả ba — hãy giữ im lặng.`},
+
+{id:'old_man_horse',cat:'thien',emoji:'🐴',title:'Tái Ông Mất Ngựa',author:'Hoài Nam Tử',duration:'3 phút',
+content:`Tại biên giới phía Bắc Trung Hoa, có một ông già được gọi là Tái Ông. Ông sống cùng người con trai duy nhất và một con ngựa quý.
+
+Một hôm, con ngựa của ông tự dưng chạy mất. Hàng xóm đến chia buồn: "Tiếc quá! Mất con ngựa quý vậy là một sự không may lớn."
+
+Tái Ông chỉ cười: "Mất ngựa chưa hẳn là điều xấu. Biết đâu lại tốt thì sao."
+
+Vài tháng sau, con ngựa quay về — không những thế, còn dắt theo một con ngựa hoang to khỏe, đẹp đẽ. Hàng xóm lại tới chúc mừng: "Quả là phúc lớn!"
+
+Tái Ông vẫn bình thản: "Được ngựa chưa hẳn là tốt. Biết đâu lại xấu thì sao."
+
+Người con trai mê con ngựa hoang, ngày nào cũng cưỡi. Một hôm, anh ngã ngựa, gãy chân, thành tật. Hàng xóm lại đến: "Thật bất hạnh! Con trai duy nhất giờ tàn phế."
+
+Tái Ông vẫn cười: "Gãy chân chưa hẳn là xấu. Biết đâu lại tốt thì sao."
+
+Năm sau, biên giới có chiến tranh. Triều đình bắt mọi thanh niên ra trận. 9 trên 10 đều tử trận. Con trai Tái Ông không phải đi vì tàn tật, nhờ vậy giữ được mạng sống.
+
+Câu chuyện này dạy ta một sự thật mà người Trung Hoa gọi là "Tái Ông thất mã, an tri phi phúc?" — Tái Ông mất ngựa, sao biết không phải phúc?
+
+Trong cuộc đời, ta thường vội kết luận điều gì là tốt, điều gì là xấu. Mất việc — xấu. Được thăng chức — tốt. Chia tay — xấu. Kết hôn — tốt.
+
+Nhưng cuộc đời phức tạp hơn nhiều. Người mất việc rồi mở công ty thành công. Người được thăng chức bị stress đến đột quỵ. Người chia tay gặp được tình yêu thực sự.
+
+Hôm nay, nếu một chuyện "xấu" xảy ra với bạn — hãy thử nói câu Tái Ông: "Biết đâu lại tốt thì sao?" Và nếu một chuyện "tốt" xảy ra — đừng quá kiêu căng, hãy giữ tâm thái khiêm nhường.
+
+Sự bình thản đến từ việc hiểu rằng ta không bao giờ biết hết câu chuyện.`},
+
+{id:'monk_pebble',cat:'thien',emoji:'💎',title:'Hòn Sỏi và Nước Mặn',author:'Thiền sư Ấn Độ',duration:'2 phút',
+content:`Một thanh niên đến gặp thầy mình, đau khổ vì những khó khăn trong cuộc đời. "Thưa thầy, tại sao con luôn cảm thấy đau? Mọi chuyện đều khó khăn, mọi nỗi buồn đều nặng nề."
+
+Thiền sư không trả lời ngay. Ông bảo đệ tử lấy một nắm muối, bỏ vào cốc nước nhỏ rồi uống.
+
+"Vị thế nào?" thầy hỏi.
+
+"Mặn không thể uống nổi, thưa thầy."
+
+Thiền sư bảo lấy nắm muối còn lại, ra hồ nước trong vắt. Đệ tử bỏ muối vào hồ, khuấy đều. Thầy bảo: "Bây giờ uống nước hồ."
+
+Đệ tử cúi xuống, uống một ngụm. "Ngọt và mát, thưa thầy."
+
+Thầy mỉm cười: "Đau khổ trong đời cũng như nắm muối. Lượng nó nhiều hay ít, không thể thay đổi. Nhưng cảm giác của đau khổ tùy thuộc vào bình chứa nó.
+
+Khi tâm con như cốc nước nhỏ, một chút muối cũng khiến cuộc đời mặn chát. Khi tâm con như hồ nước lớn, cùng số muối ấy không thay đổi được vị của hồ.
+
+Bài học không phải làm sao bớt muối — đời ai cũng có muối. Bài học là làm sao mở rộng tâm hồn mình."
+
+Người đệ tử cúi đầu, hiểu ra. Anh không cần thay đổi thế giới ngoài kia. Anh chỉ cần thay đổi cái cốc bên trong mình.
+
+Hãy đọc thêm sách. Hãy đi thêm nơi. Hãy yêu thêm người. Hãy thiền thêm phút. Mỗi điều đó nới rộng bình chứa của bạn — và đời sẽ bớt mặn đi.`},
+
+{id:'butterfly_dream',cat:'thien',emoji:'🦋',title:'Trang Tử Mộng Bướm',author:'Trang Tử',duration:'2 phút',
+content:`Trang Tử là một trong những triết gia vĩ đại nhất của Trung Hoa cổ. Một đêm, ông nằm mơ thấy mình là một con bướm — bay lượn tự do giữa hoa cỏ, không lo âu, không phiền muộn, chỉ là một con bướm đang sống trọn vẹn khoảnh khắc.
+
+Khi tỉnh dậy, ông sững người. Một câu hỏi xâm chiếm tâm hồn ông:
+
+"Ta vừa nằm mộng thấy mình là bướm. Hay là... con bướm đang nằm mộng thấy mình là ta?"
+
+Trang Tử không bao giờ trả lời được câu hỏi này. Nhưng chính trong cái không-trả-lời ấy, ông tìm ra sự khôn ngoan vĩ đại nhất.
+
+Có một sự khác biệt giữa Trang Tử và con bướm. Nhưng cũng có một sự thật sâu xa nối kết cả hai — đó là Đạo, dòng chảy của vũ trụ, nơi mọi hình thái đều biến đổi.
+
+Bài học không phải về việc ai thật ai mơ. Bài học là: ta đừng quá bám chấp vào một danh tính cố định.
+
+"Tôi là kỹ sư" — nhưng nếu mất việc, ta vẫn là ta. "Tôi là bố/mẹ" — nhưng trước khi có con, ta đã là ta. "Tôi là người Việt" — nhưng dưới lớp quốc tịch, ta là một con người. "Tôi là tôi" — nhưng cái tôi ấy 5 tuổi, 25 tuổi, 65 tuổi đều khác nhau.
+
+Khi ta hỏi sâu xa: "Tôi là ai?" — câu trả lời không phải là một danh từ. Đó là một động từ. Đó là dòng chảy của sự tồn tại.
+
+Hãy nhẹ nhàng với chính mình. Bạn không phải là chức danh, ngoại hình, thành tích, hay quá khứ. Bạn là một dòng chảy đang tự khám phá chính nó.`},
+
+{id:'monk_garden',cat:'thien',emoji:'🌸',title:'Khu Vườn Hoàn Hảo',author:'Truyện Nhật Bản',duration:'2 phút',
+content:`Một thiền sư già nổi tiếng khắp Nhật Bản về khu vườn của mình — đẹp đến mức hoàn hảo. Mỗi viên đá, mỗi gốc cây, mỗi đường cỏ đều được sắp xếp tỉ mỉ.
+
+Một ngày, ông sắp đón vị thiền sư danh tiếng từ Trung Quốc đến thăm. Suốt ba ngày trước đó, ông và các đệ tử lao động cật lực — cắt cỏ chính xác từng phân, sắp xếp từng viên đá, lau từng phiến lá. Khu vườn đạt đến độ hoàn hảo tuyệt đối.
+
+Trước khi khách đến, vị thiền sư già dạo quanh vườn lần cuối. Ông gật gù hài lòng. Sau đó, ông làm một điều khiến các đệ tử kinh ngạc:
+
+Ông đi đến cây phong già nhất, nhẹ nhàng lay nhẹ một cành. Vài chục chiếc lá vàng đỏ rơi xuống, rải rác trên thảm rêu và đường đá. Một số lá tản mác, một số chồng lên nhau, hoàn toàn ngẫu nhiên.
+
+Một đệ tử ngơ ngác: "Thầy ơi! Chúng con đã lau dọn rất kỹ. Tại sao thầy lại làm vườn lộn xộn?"
+
+Vị thiền sư cười: "Trước khi ta làm điều này, khu vườn quá hoàn hảo. Hoàn hảo nghĩa là chết. Vài chiếc lá rơi tự nhiên — bây giờ khu vườn mới sống động."
+
+Hoàn hảo là kẻ thù của vẻ đẹp.
+
+Khi ta cố làm mọi thứ hoàn hảo — bài viết, bữa ăn, ngôi nhà, bản thân — ta thường lấy đi linh hồn của nó. Cuộc sống đẹp ở những vết xước, ở những lá rơi, ở những điều bất ngờ.
+
+Đứa trẻ vẽ vụng nhưng đáng yêu. Bữa cơm gia đình hơi mặn nhưng ấm cúng. Người yêu có khuyết điểm nhưng là người yêu. Cuộc đời không phẳng phiu nhưng là cuộc đời.
+
+Đừng để chủ nghĩa hoàn hảo cướp đi niềm vui sống. Hãy chấp nhận vài chiếc lá rơi.`},
+
+{id:'farmer_son',cat:'thien',emoji:'🌾',title:'Người Nông Dân và Vụ Mùa',author:'Thiền cổ',duration:'2 phút',
+content:`Có một người nông dân lo lắng cả ngày về vụ mùa. Anh ta lo trời không mưa. Khi trời mưa, anh ta lo mưa quá nhiều. Khi nắng, anh ta lo cây cháy. Khi mây kéo về, anh ta lo bão.
+
+Mỗi đêm anh không ngủ được. Mỗi sáng anh thức dậy với lo âu mới. Vụ mùa năm đó thực ra rất tốt — nhưng anh đã không tận hưởng được ngày nào.
+
+Một ngày, có vị thiền sư đi qua. Người nông dân kể chuyện mình. "Thầy ơi, làm sao để con khỏi lo lắng?"
+
+Thiền sư hỏi: "Hôm nay, có chuyện gì con phải làm cho cây lúa không?"
+
+"Có. Con phải nhổ cỏ ở thửa Bắc, tưới nước ở thửa Nam."
+
+"Lo lắng có giúp con làm xong việc đó không?"
+
+"Không."
+
+"Khi con đang nhổ cỏ, có cần phải tưới nước cùng lúc không?"
+
+"Không, từng việc một."
+
+Thiền sư mỉm cười: "Vậy con đã có câu trả lời. Khi nhổ cỏ — chỉ nhổ cỏ. Khi tưới nước — chỉ tưới nước. Khi ăn cơm — chỉ ăn cơm. Khi ngủ — chỉ ngủ.
+
+Lo lắng là việc duy nhất con đang cố làm song song với mọi việc khác. Bỏ nó đi — con sẽ có gấp đôi thời gian để sống."
+
+Người nông dân ngạc nhiên. Ông áp dụng từ hôm sau. Việc gì đến tay thì làm, làm xong thì thôi, không lo trước, không tiếc sau. Vụ mùa năm đó của ông không thay đổi gì — nhưng ông thay đổi hoàn toàn.
+
+Lo lắng không trả nợ ngày mai. Nó chỉ rút cạn năng lượng của hôm nay.`},
+
+{id:'angel_speak',cat:'tamlinh',emoji:'👼',title:'Thiên Thần Trên Vai',author:'Truyện cổ',duration:'2 phút',
+content:`Theo truyền thuyết, khi một đứa trẻ ra đời, có hai thiên thần. Thiên thần thứ nhất ngồi trên vai phải, thì thầm những điều tốt đẹp. Thiên thần thứ hai ngồi trên vai trái, thì thầm những điều xấu.
+
+Cả đời ta là cuộc chiến giữa hai tiếng thì thầm này.
+
+Khi ta định giúp người ăn xin: thiên thần phải nói "Hãy giúp đi, anh ấy đói." Thiên thần trái nói: "Đừng, có khi anh ta lừa đảo."
+
+Khi bị xúc phạm: thiên thần phải nói "Hít một hơi sâu, đừng để cơn giận điều khiển." Thiên thần trái nói: "Mắng nó lại! Đừng để bị bắt nạt!"
+
+Khi mua đồ và được trả thừa tiền: thiên thần phải nói "Trả lại đi." Thiên thần trái nói: "Của trời cho, giữ luôn!"
+
+Hai thiên thần luôn ở đó. Cả đời ta đều nghe cả hai.
+
+Bí mật của một cuộc đời tốt đẹp không phải là không có thiên thần trái. Mọi người đều có. Bí mật là — ta nghe ai nhiều hơn.
+
+Mỗi lần ta nghe thiên thần phải và làm theo — thiên thần phải mạnh hơn. Mỗi lần ta nghe thiên thần trái và làm theo — thiên thần trái mạnh hơn.
+
+Sau 10 năm, 20 năm, 50 năm — một thiên thần sẽ to lớn vô cùng, một thiên thần sẽ nhỏ bé yếu ớt.
+
+Người tốt không phải là người không có cám dỗ. Họ là người đã rèn luyện thiên thần phải đến mức tự nhiên nói lớn hơn.
+
+Hôm nay, khi nghe cả hai tiếng thì thầm — hãy hỏi: "Tôi muốn nuôi ai? Tôi muốn trở thành ai sau 30 năm nữa?"`},
+
+{id:'last_arrow',cat:'tamlinh',emoji:'🏹',title:'Mũi Tên Của Vị Vua',author:'Truyện Ấn Độ',duration:'2 phút',
+content:`Có một vị vua già khôn ngoan, sắp qua đời. Ông gọi ba người con đến giường bệnh, đưa cho mỗi người một chiếc cung và một mũi tên.
+
+"Các con yêu, đây là bài học cuối của ta. Hãy bắn mũi tên này, và đem những gì các con bắn được về cho ta."
+
+Người con cả ra ngoài. Nhìn thấy con nai vàng đẹp đẽ, anh bắn. Trúng. Mang về một con nai chết.
+
+Người con thứ ra ngoài. Nhìn thấy con đại bàng oai phong, anh bắn. Trúng. Mang về một con đại bàng chết.
+
+Người con út ra ngoài, suy nghĩ rất lâu. Cuối cùng, anh ngẩng đầu, bắn mũi tên lên trời. Mũi tên bay vút vào không gian rồi rơi vào hồ nước xa, không thấy nữa. Anh trở về tay không.
+
+Hai anh khoe chiến tích. Vua già nhìn người con út: "Con bắn được gì?"
+
+"Cha ơi, con không mang được gì về. Mũi tên đã bay đi mất."
+
+Hai anh cười khẩy. Nhưng vua già mỉm cười rạng rỡ: "Con là người được kế thừa vương quốc."
+
+Vua nói: "Mũi tên của con cả đã giết một con nai. Mũi tên của con thứ đã giết một con đại bàng. Nhưng mũi tên của con út — không giết ai cả.
+
+Một vị vua thật sự không phải là người có sức mạnh giết hại nhiều nhất. Đó là người biết khi NÀO không nên dùng sức mạnh. Con út biết rằng đôi khi, lòng từ bi mạnh hơn cây cung. Đôi khi, không hành động mới là hành động đúng."
+
+Bài học cho ta hôm nay:
+
+Bạn có thể đáp trả người làm bạn tổn thương — nhưng có nên không? Bạn có thể nói tin xấu — nhưng có cần không? Bạn có thể chứng minh người khác sai — nhưng việc đó đáng giá không?
+
+Sức mạnh không nằm ở việc làm điều bạn CÓ THỂ làm. Sức mạnh nằm ở việc lựa chọn điều ĐÁNG làm. Đôi khi mũi tên đẹp nhất là mũi tên không trúng ai.`},
+
+{id:'salt_water',cat:'tamlinh',emoji:'🌊',title:'Hạt Muối Và Đại Dương',author:'Truyện Sufi',duration:'2 phút',
+content:`Có một hạt muối trên bãi biển nói với gió: "Tôi ước được biết đại dương là gì."
+
+Gió cười: "Vậy hãy đi tìm hiểu."
+
+Hạt muối lăn xuống mép nước. Một con sóng nhẹ ôm lấy nó. Hạt muối thấy mình tan chảy. "Ôi, tôi đang biến mất! Tôi đang chết!"
+
+Nhưng khi tan ra, hạt muối nhận ra một điều kỳ diệu. Nó không chết. Nó trở thành một phần của đại dương. Nó không còn là một hạt muối nhỏ bé — nó là cả đại dương.
+
+Trước đây, hạt muối chỉ có một góc nhìn — của riêng nó. Bây giờ, nó cảm nhận được vị mặn của triệu triệu giọt nước. Nó nghe được tiếng cá. Nó thấy mặt trăng phản chiếu từ trên xuống. Nó chạm vào bờ biển bên kia thế giới.
+
+Trở thành đại dương đầy hạnh phúc hơn là một hạt muối nhỏ bé.
+
+Bài học sâu xa của truyện cổ Sufi:
+
+Đôi khi, "mất chính mình" lại là điều tuyệt vời nhất.
+
+Chúng ta sống cả đời cố gắng giữ "cái tôi" — danh tính, kiêu hãnh, quan điểm, thành tích. Ta cứng đầu, ta phải đúng, ta phải hơn.
+
+Nhưng có những khoảnh khắc trong đời — khi ta yêu thực sự, khi ta ngắm hoàng hôn đẹp đẽ, khi ta nghe nhạc lay động tâm hồn, khi ta nâng đỡ ai đó — ta tạm thời quên đi "cái tôi". Trong khoảnh khắc đó, ta tan vào cái lớn hơn. Ta là tình yêu. Ta là vẻ đẹp. Ta là âm nhạc. Ta là sự kết nối.
+
+Đó là những khoảnh khắc hạnh phúc nhất trong đời.
+
+Hôm nay, đừng quá bám chấp vào "cái tôi". Hãy cho phép mình tan vào bữa cơm gia đình, một bản nhạc hay, một cuộc trò chuyện chân thật. Khoảnh khắc bạn quên mình — là khoảnh khắc bạn thực sự sống.`},
+
+{id:'broken_bowl',cat:'tamlinh',emoji:'🪞',title:'Cái Bát Vỡ Mạ Vàng',author:'Truyện Nhật Bản',duration:'2 phút',
+content:`Có một người mẹ đơn thân nghèo, có duy nhất một cái bát quý — bát sứ men ngọc đã 100 tuổi, do bà nội truyền lại.
+
+Một hôm, đứa con trai nhỏ vô tình làm rơi bát. CRẮC! Bát vỡ làm ba mảnh.
+
+Đứa con bé bỏng khóc nức nở: "Mẹ ơi, con xin lỗi! Mẹ tha cho con đi!"
+
+Người mẹ nhìn ba mảnh sứ vỡ trên sàn. Trong một giây, bà muốn khóc, muốn la. Nhưng bà hít sâu một hơi.
+
+Bà nhặt ba mảnh lên. Rồi mỉm cười với con: "Không sao đâu. Chúng ta sẽ làm điều gì đó tốt đẹp."
+
+Bà mang ba mảnh sứ đến nghệ nhân Kintsugi — nghệ thuật cổ xưa của Nhật Bản, ghép gốm sứ vỡ bằng VÀNG.
+
+Nghệ nhân lấy bột vàng pha với keo đặc biệt, kéo những đường vàng tinh tế nối các mảnh vỡ. Cái bát hoàn lại — nhưng không còn như cũ. Bây giờ nó có ba đường vàng lấp lánh xuyên qua hoa văn ngọc.
+
+Người mẹ mang bát về. Đứa con ngạc nhiên: "Mẹ! Bát đẹp hơn cả lúc chưa vỡ!"
+
+Người mẹ ôm con: "Đây là bài học mẹ muốn dạy con. Trong cuộc đời, ai cũng có lúc bị vỡ — bằng đau khổ, mất mát, thất bại, sai lầm. Người Nhật chúng ta tin rằng những vết nứt không phải là khuyết điểm cần che giấu.
+
+Chúng là phần lịch sử của ta. Chúng làm ta khác biệt. Khi ta để 'vàng' chảy vào những vết nứt — bằng cách học hỏi, trưởng thành, tha thứ, yêu thương — ta trở nên đẹp hơn cả khi chưa vỡ."
+
+Kintsugi không chỉ là nghệ thuật — đó là triết lý:
+- Vết sẹo trên tay ta là vàng — chúng kể câu chuyện ta đã sống.
+- Trái tim đã đau là vàng — nó biết yêu sâu hơn.
+- Sai lầm đã qua là vàng — chúng dạy ta khôn ngoan.
+
+Đừng cố giấu vết nứt của mình. Hãy mạ vàng chúng. Bạn không hỏng. Bạn là Kintsugi.`},
+
+{id:'three_questions',cat:'tamlinh',emoji:'❓',title:'Ba Câu Hỏi Quan Trọng',author:'Leo Tolstoy',duration:'3 phút',
+content:`Có một vị vua trẻ rất muốn làm việc đúng. Ông tự nhủ: "Nếu ta biết ba điều này, ta sẽ không bao giờ thất bại:
+1. THỜI ĐIỂM NÀO là quan trọng nhất để làm việc gì?
+2. NGƯỜI NÀO là quan trọng nhất để ta đối xử?
+3. VIỆC NÀO là quan trọng nhất phải làm?"
+
+Vua treo bảng khắp vương quốc. Nhiều nhà thông thái đến nhưng vua không hài lòng. Người ta kháo nhau có một ẩn sĩ trên núi rất khôn ngoan. Vua bí mật cải trang thành nông dân, leo núi tìm ẩn sĩ.
+
+Ẩn sĩ già đang đào đất trồng rau. Vua hỏi ba câu. Ẩn sĩ chỉ tiếp tục đào. Không trả lời.
+
+Vua tự cầm xẻng giúp đào suốt một giờ. Ẩn sĩ vẫn im lặng.
+
+Bỗng có một người đàn ông chạy đến — máu chảy từ vết thương sâu, ngã gục dưới chân ẩn sĩ.
+
+Vua không nghĩ — anh xé áo mình băng bó vết thương, ép vết máu, lo từng cử động. Người đàn ông tỉnh lại, dần khoẻ. Đến tối, anh mới đủ sức nói.
+
+"Thưa Đức Vua... tôi là kẻ thù của ngài. Tôi đã thề giết ngài để báo thù — vì ngài đã giết em trai tôi. Tôi phục kích trên đường về. Nhưng lính canh phát hiện, đâm tôi. Tôi chạy lên đây tìm ẩn sĩ chữa thương... và đến đúng nơi có ngài.
+
+Ngài đã cứu tôi — kẻ định giết ngài. Tôi xin tha tội. Từ nay, tôi nguyện làm tôi tớ trung thành của ngài."
+
+Vua xúc động. Sáng hôm sau, vua lại hỏi ẩn sĩ ba câu hỏi.
+
+Ẩn sĩ mỉm cười: "Thưa Đức Vua, ngài đã có câu trả lời rồi.
+
+1. THỜI ĐIỂM QUAN TRỌNG NHẤT là BÂY GIỜ. Quá khứ đã qua, tương lai chưa đến. Ta chỉ có hiện tại.
+
+2. NGƯỜI QUAN TRỌNG NHẤT là NGƯỜI ĐANG TRƯỚC MẶT TA. Không ai đảm bảo ta sẽ gặp người này lần nữa.
+
+3. VIỆC QUAN TRỌNG NHẤT là LÀM ĐIỀU TỐT CHO NGƯỜI ĐANG TRƯỚC MẶT TA.
+
+Hôm qua, nếu ngài không giúp tôi đào đất, ngài đã rời đi sớm và bị kẻ thù giết. Nếu ngài không cứu kẻ thù — ngài đã có thêm một kẻ thù vĩnh viễn. Bằng cách làm điều tốt cho người đang trước mặt — ngài đã sống sót và biến kẻ thù thành bạn."
+
+Bài học này áp dụng cho TẤT CẢ chúng ta, mỗi ngày: Hãy ở đây. Bây giờ. Với người trước mặt bạn. Làm điều tốt cho họ. Đó là cả triết học của một đời sống có ý nghĩa.`},
+
+{id:'old_river',cat:'tamlinh',emoji:'🏞️',title:'Dòng Sông và Sa Mạc',author:'Truyện Sufi',duration:'3 phút',
+content:`Có một dòng sông trẻ chảy từ trên núi cao xuống. Sông chảy qua đồng cỏ, vượt qua rừng, dừng lại ở các thác nước. Sông đã vượt qua tất cả.
+
+Cho đến một ngày, sông đến trước mặt một sa mạc khổng lồ.
+
+Sông cố gắng chảy qua. Nhưng cát hút hết nước. Sông cạn dần. Sông cố thêm — bốc hơi mất.
+
+"Sao tôi vượt qua được đây?" sông than thở. "Tôi đã vượt qua mọi thứ — núi, rừng, đồng — nhưng sa mạc đánh bại tôi!"
+
+Một giọng nói thì thầm trong gió: "Sông ơi, ngươi không thể vượt sa mạc bằng cách hiện tại. Ngươi cần bay."
+
+"Bay? Tôi là nước, làm sao bay được?"
+
+"Hãy cho phép gió đưa ngươi đi. Hãy hoá thành hơi, bay lên trời, qua sa mạc, rồi thành mưa rơi xuống bên kia."
+
+Sông sợ hãi. "Không! Tôi muốn giữ hình dạng của mình. Nếu tôi hoá hơi — tôi không còn là tôi nữa!"
+
+Gió kiên nhẫn: "Đúng, ngươi sẽ không còn là dòng sông này nữa. Nhưng ngươi sẽ là cái ngươi vốn là — nước. Nước có nhiều hình dạng. Sông chỉ là một trong số đó. Mưa cũng là ngươi. Sương cũng là ngươi. Hồ cũng là ngươi.
+
+Đừng bám vào hình dạng cũ. Hãy nhớ — bản chất ngươi là nước, không phải hình thái nước."
+
+Sông suy nghĩ rất lâu. Cuối cùng, sông buông bỏ. Sông để mình bốc hơi lên cao. Gió đưa hơi nước qua sa mạc. Mưa rơi xuống thung lũng bên kia. Nước tụ lại — thành một dòng sông mới, chảy tiếp về đại dương.
+
+Bài học cho mọi cuộc đời:
+
+Có những giai đoạn trong đời ta phải BUÔNG BỎ HÌNH DẠNG CŨ để tiếp tục đi.
+
+- Khi ta tốt nghiệp, ta buông vai trò "học sinh" để thành người đi làm.
+- Khi ta có con, ta buông tự do cũ để thành cha/mẹ.
+- Khi ta thất bại, ta buông kế hoạch cũ để tìm con đường mới.
+
+Mỗi lần buông bỏ — ta sợ. Vì ta nghĩ ta sẽ mất bản thân.
+
+Nhưng bí mật là: bản thân ta không phải hình dạng. Bản thân ta là bản chất. Sông và mưa cùng là một chất — nước.
+
+Khi cuộc đời đẩy bạn đến một "sa mạc" — đừng kháng cự. Hãy hỏi: "Tôi đang được mời bay lên thành hình dạng nào mới?"
+
+Buông bỏ không phải là mất. Đó là biến hình. Sông không chết khi thành mưa. Nó đang đi tiếp.`},
+{id:'three_stonecutters',cat:'self',emoji:'⛏️',title:'Ba Người Thợ Đá',author:'Truyện cổ Châu Âu',duration:'2 phút',
+content:`Một du khách đi qua một công trường xây dựng nhà thờ. Anh thấy ba người thợ đá đang làm việc, tất cả đều đang đập đá theo cùng một cách, cùng một dụng cụ.
+
+Anh đến gặp người thợ đầu tiên: "Anh đang làm gì vậy?"
+
+Người thợ thứ nhất đáp giọng bực bội: "Tôi đang đập đá. Đây là công việc bực bội nhất đời. Mỗi ngày tôi đến đây, đập những hòn đá ngu ngốc. Lưng đau, tay đau, không kiếm được mấy đồng. Phí cả đời người."
+
+Du khách đến gặp người thợ thứ hai. "Anh đang làm gì vậy?"
+
+Người thứ hai đáp đều đặn: "Tôi đang kiếm sống cho gia đình. Vợ và 4 đứa con ở nhà chờ tôi mang tiền về. Công việc khó nhọc nhưng cần thiết. Tôi làm hết giờ, lấy lương, về nhà."
+
+Cuối cùng, du khách đến gặp người thợ thứ ba — người đang làm việc với nụ cười rạng rỡ, hát nhỏ. "Anh đang làm gì vậy?"
+
+Người thứ ba ngước lên, ánh mắt sáng: "Tôi đang xây dựng một thánh đường vĩ đại! Nhà thờ này sẽ đứng vững 500 năm sau khi tôi chết. Hàng triệu người sẽ đến cầu nguyện ở đây. Tôi đang góp phần tạo nên một tác phẩm trường tồn. Mỗi viên đá tôi đập là một viên gạch xây thiên đường."
+
+Ba người, cùng công việc, cùng nỗi vất vả — ba cuộc đời hoàn toàn khác.
+
+Người thứ nhất sống trong đau khổ. Người thứ hai sống trong nghĩa vụ. Người thứ ba sống trong ý nghĩa.
+
+Sự khác biệt không nằm ở công việc — mà ở câu chuyện ta kể về công việc đó.
+
+Hôm nay bạn đang làm gì? Bạn đang "đập đá", "kiếm sống" hay "xây thánh đường"?
+
+Câu trả lời quyết định cuộc đời bạn.`},
+
+{id:'compound_effect',cat:'self',emoji:'📈',title:'1% Mỗi Ngày',author:'James Clear',duration:'3 phút',
+content:`Hãy tưởng tượng có hai anh em sinh đôi. Cả hai cùng tốt nghiệp đại học vào năm 25 tuổi. Cùng có công việc, sức khỏe và bạn bè giống nhau.
+
+Anh A bắt đầu cải thiện bản thân 1% mỗi ngày. Anh đọc 10 trang sách mỗi ngày. Tập thể dục 20 phút. Học 5 từ tiếng Anh mới. Tiết kiệm 50 nghìn. Chỉ những việc nhỏ.
+
+Anh B sống thoải mái — xem TV, ăn vặt, lướt mạng. Không có gì xấu hẳn. Anh ta chỉ "tệ đi" 1% mỗi ngày — không lớn lao gì.
+
+Một tháng trôi qua. Hai anh em vẫn trông giống nhau.
+
+Một năm trôi qua. Anh A đã đọc 3650 trang sách (khoảng 15 cuốn), giảm 5kg, biết thêm 1825 từ tiếng Anh, có 18 triệu tiền tiết kiệm. Anh B vẫn vậy — có lẽ tăng 2-3 kg.
+
+Năm năm sau, sự khác biệt đã rõ rệt. Anh A có thân hình tốt, đọc khoảng 75 cuốn sách, nói tiếng Anh trôi chảy, có 90 triệu tiết kiệm, được thăng chức. Anh B béo lên, mệt mỏi, công việc không tiến.
+
+Mười năm sau, hai anh em như sống ở hai thế giới khác.
+
+Đây là toán học của thói quen: 1.01^365 = 37.78. Nếu bạn tốt hơn 1% mỗi ngày trong 1 năm, bạn sẽ giỏi hơn 37 lần. Nếu bạn tệ đi 1% mỗi ngày, bạn sẽ về gần như 0.
+
+Bài học không phải là phải làm điều phi thường. Bài học là làm điều bình thường mỗi ngày.
+
+Đừng đợi đến thứ Hai. Đừng đợi đến tháng mới. Đừng đợi đến năm mới. Hôm nay — chỉ 1% — đủ để 5 năm sau bạn nhìn lại và không nhận ra chính mình.
+
+Mỗi cuốn sách bạn đọc là một mảnh ghép. Mỗi lần tập thể dục là một viên gạch. Mỗi đồng tiết kiệm là một bước. Một ngày không có ý nghĩa. Nhưng 1000 ngày — đó là một cuộc đời.`},
+
+{id:'starfish',cat:'self',emoji:'⭐',title:'Người Đàn Ông và Sao Biển',author:'Loren Eiseley',duration:'2 phút',
+content:`Một buổi sáng sau cơn bão lớn, một ông già đi dạo trên bãi biển. Thuỷ triều đã rút, để lại hàng nghìn con sao biển bị mắc cạn trên bờ. Dưới nắng mặt trời, chúng sẽ chết khô.
+
+Phía trước, ông thấy một cậu bé đang làm gì đó kỳ lạ. Cậu cúi xuống, nhặt một con sao biển, rồi ném nó xuống biển. Cúi xuống, nhặt, ném. Lặp lại không ngừng.
+
+Ông già tiến lại gần: "Cháu ơi, ông không hiểu cháu đang làm gì."
+
+"Cháu đang ném sao biển về biển ạ. Thuỷ triều rút quá xa, chúng sẽ chết nếu ở lại đây."
+
+Ông già nhìn dọc bờ biển dài hàng cây số, hàng nghìn con sao biển la liệt. "Nhưng cháu ơi, có hàng nghìn con sao biển kéo dài đến tận chân trời. Cháu không thể cứu hết. Việc của cháu không tạo ra sự khác biệt nào đâu!"
+
+Cậu bé cúi xuống nhặt một con sao biển khác, nhìn ông già, rồi ném con sao biển ấy xuống biển sâu. Quay lại ông, cậu nói:
+
+"Đối với con sao biển đó, ông ạ — nó tạo ra sự khác biệt rất lớn."
+
+Ông già lặng người. Ông cúi xuống, nhặt một con sao biển, và ném nó về biển.
+
+Bạn không thể cứu cả thế giới. Bạn không thể chữa lành mọi tổn thương. Bạn không thể giúp tất cả mọi người.
+
+Nhưng bạn có thể tạo ra sự khác biệt cho một người. Hôm nay.
+
+Một cuộc gọi điện cho người bạn cô đơn. Một lời khen cho đồng nghiệp đang nản. Một đồng tiền cho người ăn xin. Một câu chuyện kể cho con nghe. Một cái ôm cho người yêu.
+
+Mỗi hành động tốt nhỏ là một con sao biển được trở về biển. Đối với "con sao biển đó" — bạn là cả thế giới.
+
+Đừng để "không thể cứu hết" ngăn bạn cứu một người.`},
+
+{id:'broken_pot',cat:'self',emoji:'🪴',title:'Cái Bình Nứt',author:'Truyện cổ Trung Hoa',duration:'2 phút',
+content:`Một người gánh nước có hai cái bình. Cái bình bên trái lành lặn, hoàn hảo. Cái bình bên phải có một vết nứt.
+
+Mỗi sáng, anh ra giếng múc đầy hai bình, gánh về nhà. Cái bình lành luôn về đến nhà đầy nguyên. Cái bình nứt — đến nhà chỉ còn một nửa.
+
+Năm này qua năm khác, cái bình nứt cảm thấy xấu hổ. Một ngày, nó nói với người gánh:
+
+"Ông chủ ơi, tôi xin lỗi. Tôi là một cái bình tồi. Mỗi ngày tôi để mất nửa lượng nước. Lẽ ra ông chỉ cần một cái bình tốt là đủ."
+
+Người gánh nước mỉm cười nhân hậu: "Để ý xem khi ta gánh nước về nhà. Hãy nhìn lối đi bên phía mày."
+
+Cái bình nứt nhìn xuống. Trên con đường bên phía nó — phía mà nước rỉ ra mỗi ngày — mọc lên một dải hoa dại đẹp tuyệt vời. Hoa đủ màu, hương thơm ngát. Bên phía cái bình lành — chỉ có đất khô.
+
+"Ta biết mày có vết nứt," người gánh nước nói. "Nên ta đã gieo hạt hoa dọc lối mày đi. Mỗi ngày, mày đã tưới chúng. Suốt ba năm nay, ta đã hái những bông hoa này về bày bàn ăn nhà mình. Nếu mày không có vết nứt ấy — nhà ta đã không có gì đẹp đẽ như vậy."
+
+Mỗi chúng ta đều có "vết nứt" — khiếm khuyết, sai lầm, điểm yếu, quá khứ ta xấu hổ.
+
+Ta thường ước mình giống cái bình lành. Hoàn hảo. Không lộ ra điểm xấu.
+
+Nhưng cuộc đời lại trồng hoa đẹp nhất ở chỗ ta rỉ nước.
+
+Người chịu nhiều đau khổ thành nhà văn lay động. Người vấp ngã nhiều thành mentor tốt. Người có cha mẹ tan vỡ thành phụ huynh tuyệt vời. Người nghèo khó thành doanh nhân sáng tạo.
+
+Đừng giấu vết nứt của mình. Hãy bước đi với nó, và để cuộc đời gieo hoa lên đường bạn đi.`},
+
+{id:'two_pots',cat:'self',emoji:'☕',title:'Trứng, Cà Rốt và Cà Phê',author:'Khuyết danh',duration:'3 phút',
+content:`Một cô gái trẻ đến gặp mẹ, phàn nàn: "Mẹ ơi, đời con sao khó quá. Hết khó khăn này đến khó khăn khác. Con muốn bỏ cuộc."
+
+Người mẹ không nói gì. Bà dẫn con vào bếp, đặt 3 nồi nước lên bếp, đun sôi. Vào nồi thứ nhất, bà bỏ vài củ cà rốt. Nồi thứ hai, vài quả trứng. Nồi thứ ba, vài thìa cà phê xay.
+
+Sau 20 phút, bà tắt bếp.
+
+"Con thấy gì?" mẹ hỏi.
+
+"Cà rốt, trứng, và cà phê. Có gì lạ đâu?"
+
+Mẹ bảo con sờ vào cà rốt. Mềm nhũn. Bà bóc một quả trứng. Bên trong cứng lại. Bà nâng cốc cà phê thơm phức lên.
+
+"Cùng một hoàn cảnh — nước sôi," mẹ nói. "Nhưng ba phản ứng khác nhau.
+
+Cà rốt vào nồi cứng cáp, mạnh mẽ. Nhưng sau khi gặp nước sôi, nó mềm rũ, mất hết sức.
+
+Trứng vào nồi với lớp vỏ mỏng manh, bên trong là chất lỏng. Sau khi gặp nước sôi, bên trong cứng lại. Vỏ vẫn vậy, nhưng nó đã trở nên chai sạn.
+
+Cà phê — khi gặp nước sôi, nó không chỉ thay đổi. Nó còn thay đổi cả nước, biến nước thành thứ thơm ngon, có giá trị hơn.
+
+Con muốn là cà rốt, trứng, hay cà phê?
+
+Khi đời thử thách con — con sẽ mềm yếu bỏ cuộc? Con sẽ chai sạn lạnh lùng? Hay con sẽ là cà phê — biến hoàn cảnh khó khăn thành điều gì đó tốt đẹp hơn?"
+
+Cô gái lặng im. Lần đầu tiên cô hiểu rằng không phải hoàn cảnh định hình con người — mà là phản ứng của ta với hoàn cảnh.
+
+Cùng một biến cố:
+- Mất việc → có người sụp đổ, có người mở công ty
+- Tan vỡ → có người ghét đời, có người trưởng thành
+- Bệnh tật → có người tuyệt vọng, có người trân trọng từng ngày
+
+Sức nóng của cuộc đời không phải kẻ thù. Nó là phép thử.
+
+Hãy là cà phê. Đừng chỉ chịu đựng đau khổ — hãy biến nó thành thứ làm thơm cả thế giới quanh bạn.`},
+
+{id:'rocks_jar',cat:'self',emoji:'🫙',title:'Đá To, Đá Nhỏ, Cát',author:'Stephen Covey',duration:'2 phút',
+content:`Một giáo sư bước vào lớp với một cái lọ thuỷ tinh rỗng. Ông lấy ra các viên đá to bằng nắm tay, bỏ vào lọ cho đến khi không thể bỏ thêm.
+
+"Lọ đã đầy chưa?" ông hỏi.
+
+"Đầy rồi ạ," sinh viên đáp.
+
+Ông lấy ra một túi đá nhỏ, đổ vào lọ. Đá nhỏ lăn vào các khe hở giữa đá to. "Đầy chưa?"
+
+"Đầy rồi."
+
+Ông lấy ra cát, đổ vào. Cát lấp đầy các khe hở giữa đá nhỏ. "Đầy chưa?"
+
+"Đầy."
+
+Cuối cùng, ông đổ một cốc nước. Nước thấm vào những khe nhỏ còn lại.
+
+"Đây là cuộc đời của các bạn," giáo sư nói. "Đá to là những gì quan trọng nhất: gia đình, sức khoẻ, tình yêu, ước mơ, người thân. Đá nhỏ là công việc, nhà cửa, xe cộ. Cát là những việc nhỏ hàng ngày — tin nhắn, mạng xã hội, tranh luận vặt. Nước là chuyện nhảm nhí, drama.
+
+Nếu các bạn đổ cát vào lọ trước, sẽ không còn chỗ cho đá nhỏ và đá to nữa. Nếu các bạn dành cả ngày cho việc lặt vặt, sẽ không còn thời gian cho điều quan trọng."
+
+Một sinh viên hỏi: "Vậy ý nghĩa của nước là gì?"
+
+Giáo sư mỉm cười: "Cho dù lịch trình của bạn bận đến mức nào — vẫn luôn còn chỗ cho một cốc cà phê với người thân."
+
+Bài học sâu sắc: Đặt đá to vào lọ TRƯỚC.
+
+Mỗi sáng, hãy hỏi: "Đá to của tôi hôm nay là gì? Ai cần tôi? Việc gì quan trọng nhất?"
+
+Đừng để cát lấp đầy ngày của bạn trước khi bạn kịp đặt đá to.
+
+5 năm sau, không ai nhớ bạn đã trả lời bao nhiêu tin nhắn hôm nay. Nhưng họ sẽ nhớ bạn có gọi cho mẹ không. Có chơi với con không. Có theo đuổi ước mơ của mình không.
+
+Đá to trước. Luôn luôn.`},
+
+{id:'eagle_chicken',cat:'self',emoji:'🦅',title:'Đại Bàng Sống Trong Gà',author:'James Aggrey',duration:'2 phút',
+content:`Có một người nuôi gà tìm thấy quả trứng đại bàng. Anh đặt nó vào ổ gà, lẫn với trứng gà.
+
+Khi nở ra, chú đại bàng con không biết mình là đại bàng. Nó lớn lên cùng đàn gà, học bới đất, kêu cục cục, ăn ngô, đập cánh ngắn ngủi để bay lên hàng rào.
+
+Năm này qua năm khác, đại bàng sống như gà. Nó tin mình là gà.
+
+Một ngày, có con đại bàng thật bay ngang. Bay vút trên trời cao, hùng dũng, tự do. Đại bàng-gà nhìn lên kinh ngạc.
+
+"Con kia là gì?" nó hỏi gà mái già.
+
+"Đó là đại bàng — Vua của các loài chim. Nó thuộc về bầu trời. Chúng ta là gà — thuộc về mặt đất. Đừng nghĩ đến nó. Bay không phải nghề của chúng ta."
+
+Đại bàng-gà gật đầu, quay lại bới đất. Suốt đời nó sống và chết như một con gà — không bao giờ biết đôi cánh khổng lồ của mình có thể đưa nó vượt qua núi cao.
+
+Bao nhiêu người trong chúng ta đang sống như đại bàng-gà?
+
+Bạn có thể là nhà văn — nhưng môi trường bảo bạn nên làm kế toán. Bạn có thể là doanh nhân — nhưng gia đình muốn bạn làm công chức. Bạn có thể yêu thương ai đó khác — nhưng xã hội bảo bạn phải yêu kiểu nào.
+
+Có những đứa trẻ thiên tài lớn lên trong gia đình tầm thường — không bao giờ biết mình có cánh.
+
+Có những trái tim rộng lượng lớn lên trong môi trường ích kỷ — không bao giờ biết mình có thể yêu.
+
+Có những linh hồn nghệ sĩ lớn lên trong cha mẹ thực dụng — không bao giờ biết mình có ngôn ngữ riêng.
+
+Hôm nay, hãy hỏi: Tôi có đang sống như con đại bàng — hay như con gà?
+
+Nếu trong tim bạn có một tiếng gọi lớn — đó không phải là điên rồ. Đó là đôi cánh.
+
+Đừng để bất kỳ ai bảo bạn không thể bay. Họ chỉ nói vậy vì họ chưa từng bay.`},
+
+{id:'tortoise_eagle',cat:'self',emoji:'🐢',title:'Hai Loại Chiến Thắng',author:'Phỏng theo Aesop',duration:'2 phút',
+content:`Có cuộc đua nổi tiếng giữa rùa và thỏ. Thỏ chạy nhanh nhưng ngạo mạn, ngủ giữa đường. Rùa chậm nhưng kiên trì, không dừng. Rùa thắng.
+
+Nhưng câu chuyện không kết thúc ở đó.
+
+Thỏ quá xấu hổ, suy nghĩ rất nhiều. Nó nhận ra: nó thua không phải vì chạy chậm — mà vì tự mãn. Lần đua thứ hai, thỏ chạy không nghỉ, không nhìn lại. Thỏ thắng.
+
+Bài học: Lợi thế tự nhiên cộng với nỗ lực không nghỉ — sẽ thắng kẻ chỉ có nỗ lực.
+
+Rùa suy nghĩ về thất bại của mình. Rùa nhận ra: nó không thể thắng nếu chạy ở đường mòn quen thuộc. Lần đua thứ ba, rùa chọn đường khác — có một con sông cắt ngang. Thỏ chạy đến bờ sông, không bơi được. Rùa lội qua. Rùa thắng.
+
+Bài học: Khi không thể thắng bằng tốc độ, hãy thay đổi sân chơi.
+
+Cả hai con cuối cùng nhận ra: hai bên đã chiến đấu nhiều quá. Lần đua thứ tư, chúng cùng đua nhưng giúp nhau. Trên đường bằng, thỏ cõng rùa. Đến sông, rùa cõng thỏ. Cả hai cùng đến đích nhanh hơn bất kỳ lần đua đơn lẻ nào.
+
+Đó là chiến thắng lớn nhất — chiến thắng cùng nhau.
+
+Trong đời, ta thường nghĩ thành công là vượt qua người khác. Nhưng chiến thắng cao nhất là khi ta:
+
+1. Hiểu thế mạnh của mình (rùa biết mình bền bỉ)
+2. Không tự mãn về điểm mạnh (thỏ học từ thất bại đầu tiên)
+3. Chọn đúng sân chơi (rùa chọn đường có sông)
+4. Hợp tác thay vì cạnh tranh (cả hai cùng cõng nhau)
+
+Bạn không cần là thỏ hay rùa. Bạn cần biết:
+- Đâu là thế mạnh của tôi?
+- Tôi đang đua trên sân của ai?
+- Có ai tôi nên hợp tác thay vì cạnh tranh?
+
+Đời quá ngắn để chỉ ganh đua. Hãy tìm những con đường mà ta cùng đến đích.`},
+
+{id:'mountain_path',cat:'self',emoji:'⛰️',title:'Con Đường Lên Núi',author:'Phỏng theo Phật giáo',duration:'2 phút',
+content:`Có một ngọn núi cao. Trên đỉnh núi là một ngôi đền cổ với những lời dạy thiêng liêng.
+
+Có 100 con đường lên núi. Đường phía Đông dốc đứng nhưng ngắn. Đường phía Tây thoai thoải nhưng dài. Đường phía Bắc rậm rạp, đầy hoa rừng. Đường phía Nam khô khốc nhưng nhanh. Có người leo bằng dây thừng. Có người đi vòng quanh núi. Có người dừng nghỉ ở mỗi hồ. Có người không dừng cho đến đỉnh.
+
+Mỗi nhóm người leo núi cười chê nhóm khác:
+- "Đường các anh quá khó!" — nhóm leo dễ
+- "Đường các anh quá dài!" — nhóm leo nhanh
+- "Sao mà nhanh thế? Có thấy hoa đâu?" — nhóm thư thái
+- "Các anh dừng lại nhiều quá!" — nhóm bận rộn
+
+Họ cãi nhau suốt năm này qua năm khác. Mỗi nhóm tin rằng đường của họ là đường ĐÚNG NHẤT.
+
+Có một thiền sư già nhìn xuống từ đỉnh núi. Ông cười.
+
+"Họ không hiểu," ông nói với học trò mình. "Mọi đường đều dẫn lên đây. Mỗi đường phù hợp với một loại người. Đường khó cho người thích thử thách. Đường dễ cho người chậm rãi. Đường nhanh cho người gấp. Đường đẹp cho người yêu thiên nhiên.
+
+Người leo nhanh không hơn người leo chậm. Cả hai đều sẽ đến đỉnh — chỉ là khác lúc thôi. Khi đến nơi, không ai hỏi 'Bạn đến lúc mấy giờ?' — chỉ có 'Chào mừng đến đỉnh núi.'"
+
+Trong đời, có người 25 tuổi đã kết hôn, có người 40 tuổi mới yêu. Có người giàu sớm, có người giàu muộn. Có người tìm thấy nghề từ thuở nhỏ, có người 50 tuổi mới đổi nghề. Có người sinh con sớm, có người không sinh con cũng được.
+
+Tất cả đều đang leo núi của riêng mình. Đỉnh núi là sự bình an, trưởng thành, ý nghĩa cuộc đời.
+
+Đừng so sánh đường của bạn với đường người khác. Bạn không thua. Bạn không chậm. Bạn đang leo theo cách phù hợp với linh hồn bạn.
+
+Cứ leo. Đỉnh núi đang chờ.`},
+
+{id:'pencil_lesson',cat:'self',emoji:'✏️',title:'Năm Bài Học Từ Cây Bút Chì',author:'Paulo Coelho',duration:'2 phút',
+content:`Một cậu bé nhìn bà ngoại đang viết thư. Cậu thấy bà cầm cây bút chì cũ, mỉm cười.
+
+"Bà ơi, bà đang viết về cháu phải không? Cháu muốn lớn lên giống bà."
+
+Bà ngoại đặt bút xuống, ôm cháu vào lòng. "Cháu yêu, bà muốn cháu giống cây bút chì này hơn là giống bà."
+
+Cậu bé ngơ ngác. "Cây bút chì có gì đặc biệt đâu ạ?"
+
+"Có 5 bài học, cháu ạ.
+
+BÀI HỌC 1: Cây bút chì làm việc lớn — nhưng nó không bao giờ tự đi. Luôn có bàn tay dẫn đường. Bàn tay đó là Chúa, là vũ trụ, là sức mạnh lớn hơn cháu. Đừng tự cao. Cháu là dụng cụ trong một bàn tay vĩ đại.
+
+BÀI HỌC 2: Thỉnh thoảng cháu phải dừng để gọt bút. Đau đấy. Nhưng sau khi gọt, cây bút sắc hơn. Trong đời, có những lúc cháu sẽ đau — bị từ chối, bị tổn thương, bị mất mát. Đừng tránh nó. Đó là lúc cháu được mài giũa để trở nên sắc bén hơn.
+
+BÀI HỌC 3: Cây bút có một cục tẩy. Nó cho cháu biết: sai lầm không có gì xấu. Tẩy đi, viết lại. Cuộc đời cho phép cháu sửa sai — chừng nào cháu còn dám cầm bút.
+
+BÀI HỌC 4: Cái quan trọng nhất của cây bút không phải gỗ bên ngoài, mà than chì bên trong. Cũng vậy, đừng để vẻ ngoài đánh lừa cháu. Hãy chú ý đến bên trong — của mình và của người khác.
+
+BÀI HỌC 5: Cây bút chì luôn để lại dấu vết. Cũng vậy, mỗi việc cháu làm — tốt hay xấu — đều để lại vết hằn trên đời. Hãy ý thức về những vết hằn cháu để lại. Hãy viết một cuộc đời mà người ta đọc lại sẽ mỉm cười."
+
+Cậu bé giữ chặt cây bút chì. Sau này, khi bà mất, cây bút chì đó cậu vẫn giữ suốt đời — như lời nhắc nhở dịu dàng từ người yêu thương mình nhất.
+
+Đôi khi, sự khôn ngoan vĩ đại nhất nằm trong những đồ vật nhỏ nhất.`},
+
+{id:'two_friends',cat:'self',emoji:'👫',title:'Hai Người Bạn Qua Sa Mạc',author:'Truyện Ả Rập',duration:'2 phút',
+content:`Hai người bạn cùng đi qua sa mạc. Trên đường, có lúc họ tranh cãi gay gắt, và một người vô tình tát vào mặt người kia.
+
+Người bị tát rất đau. Nhưng anh không nói gì. Anh chỉ cúi xuống cát và viết:
+
+"Hôm nay, người bạn thân nhất của tôi đã tát vào mặt tôi."
+
+Họ tiếp tục đi. Đến một ốc đảo, họ quyết định tắm. Bỗng người bị tát hồi sáng trượt chân, bị cuốn vào dòng nước xoáy. Anh ấy suýt chết. Người bạn kia đã liều mình cứu anh.
+
+Khi đã khoẻ lại, anh đứng dậy, lấy con dao khắc lên đá:
+
+"Hôm nay, người bạn thân nhất đã cứu mạng tôi."
+
+Người bạn hỏi: "Khi tôi tát anh, anh viết lên cát. Bây giờ tôi cứu anh, anh khắc lên đá. Tại sao?"
+
+Người kia mỉm cười: "Khi ai đó làm ta tổn thương, hãy viết lên cát — để gió tha thứ và xoá đi. Khi ai đó làm ta điều tốt, hãy khắc lên đá — để không cơn gió nào có thể xoá."
+
+Bài học giản dị nhưng sâu sắc:
+
+Mỗi người trong đời ta đều có lúc làm ta đau. Bạn bè, người yêu, gia đình, đồng nghiệp — không ai hoàn hảo. Nếu ta khắc mọi tổn thương lên đá — đến cuối đời, ta sẽ chỉ thấy một thế giới đầy hằn thù.
+
+Mọi người cũng đều có lúc làm điều tốt với ta — đôi khi rất nhỏ, đôi khi rất lớn. Nếu ta viết những điều tốt đó lên cát — gió cuộc đời sẽ xoá hết, và ta sẽ quên ơn.
+
+Hãy đảo lại:
+- Vết thương — viết lên cát
+- Ơn nghĩa — khắc lên đá
+
+Cách này, trái tim ta sẽ:
+- Tha thứ dễ hơn (vì không nhớ chi tiết tổn thương)
+- Biết ơn lâu hơn (vì luôn nhớ ai đã giúp)
+
+Và cuối đời, khi nhìn lại, ta sẽ thấy một bức tường đá đầy ơn nghĩa — không phải một bãi cát đầy hằn thù.
+
+Đó là bí mật của hạnh phúc.`},
+
+{id:'old_carpenter',cat:'self',emoji:'🔨',title:'Người Thợ Mộc Già',author:'Khuyết danh',duration:'2 phút',
+content:`Có một người thợ mộc già tài năng. Suốt 40 năm anh xây nên những ngôi nhà đẹp đẽ cho công ty. Đến tuổi nghỉ hưu, anh báo với ông chủ.
+
+Ông chủ tiếc nuối — anh là người thợ giỏi nhất. Ông cố thuyết phục anh ở lại, nhưng anh thợ kiên quyết.
+
+"Được rồi," ông chủ nói. "Nhưng anh hãy làm cho tôi căn nhà cuối cùng — như một món quà tạm biệt."
+
+Người thợ đồng ý — nhưng trong lòng đã chán nản. Anh chỉ muốn nghỉ hưu cho nhanh. Lần đầu tiên trong 40 năm, anh làm việc cẩu thả. Vật liệu rẻ tiền. Đường gỗ không khớp. Sơn loang. Cửa sổ lệch. Nhà nhanh chóng hoàn thành — nhưng là căn nhà tệ nhất anh từng xây.
+
+Anh giao chìa khoá cho ông chủ. Ông chủ cầm chìa khoá, nhìn vào mắt anh, và trao nó lại:
+
+"Đây là chìa khoá nhà anh. Tôi tặng anh căn nhà này — để cảm ơn 40 năm anh phục vụ. Hãy sống ở đó cùng gia đình."
+
+Người thợ mộc lặng người. Nếu biết là nhà cho chính mình — anh đã xây bằng cả trái tim. Anh đã dùng vật liệu tốt nhất. Anh đã đo từng centimet cẩn thận.
+
+Bây giờ anh phải sống suốt đời còn lại trong căn nhà cẩu thả — căn nhà chính tay anh dựng nên.
+
+Bài học day dứt: Đời ta cũng vậy.
+
+Mỗi ngày, ta đang xây căn nhà — bằng những quyết định, hành động, lời nói, thói quen. Có lúc ta cẩu thả vì nghĩ "chỉ là việc cho người khác", "chỉ là công ty mà thôi", "chỉ là ngày bình thường".
+
+Nhưng cuối cùng, căn nhà ta xây — chính là cuộc đời ta sẽ ở.
+
+Cẩu thả với công việc — ta sẽ sống với năng lực tệ. Cẩu thả với quan hệ — ta sẽ sống cô đơn. Cẩu thả với sức khoẻ — ta sẽ sống với bệnh tật. Cẩu thả với tâm hồn — ta sẽ sống với phiền muộn.
+
+Hôm nay, dù bạn đang làm gì — hãy làm như thể đó là cho chính mình.
+
+Vì rốt cuộc, đúng là vậy.`},
+
+{id:'butterfly_cocoon',cat:'self',emoji:'🦋',title:'Chiếc Kén và Bàn Tay Tốt Bụng',author:'Khuyết danh',duration:'2 phút',
+content:`Một cậu bé tìm thấy chiếc kén của một con bướm. Một hôm, có cái lỗ nhỏ xuất hiện. Cậu ngồi cả ngày xem con bướm cố chen ra qua cái lỗ bé tí ấy.
+
+Sau nhiều giờ vật lộn, con bướm có vẻ kiệt sức. Nó không cố nữa. Nó chỉ thò một nửa thân ra, tới đó là dừng. Lưng vẫn kẹt trong kén.
+
+Cậu bé thương quá. Cậu lấy kéo cắt thoáng cái lỗ ra. Con bướm thoát ra dễ dàng.
+
+Nhưng có gì đó không ổn. Con bướm có thân hình sưng phồng, đôi cánh nhăn nheo, nhỏ bé.
+
+Cậu bé đợi đôi cánh nở ra. Cậu đợi nó bay. Nhưng không. Con bướm bò loanh quanh — cả đời nó không bao giờ bay được.
+
+Sau này, cậu bé học sinh vật. Cậu hiểu rằng:
+
+Sự vật lộn để chen qua lỗ bé tí của kén — là cách thiên nhiên đẩy chất lỏng từ thân con bướm vào đôi cánh. Không có cuộc vật lộn đó, đôi cánh không bơm đầy, không nở ra, không bay được.
+
+Lòng tốt của cậu bé đã giết chết khả năng bay của con bướm.
+
+Câu chuyện này là bài học đau lòng cho mọi bậc cha mẹ, mọi giáo viên, mọi người yêu thương ai đó.
+
+Khi ta cố làm dễ hết mọi thứ cho con cái, ta lấy đi đôi cánh của chúng. Khi ta giải quyết mọi vấn đề cho học trò, ta lấy đi khả năng tự suy nghĩ của chúng. Khi ta che chở người yêu khỏi mọi khó khăn, ta khiến họ yếu đuối hơn.
+
+Đôi khi tình yêu khôn ngoan là... đứng nhìn.
+
+Đứng nhìn người ta thương vật lộn — đau lắm. Nhưng cuộc vật lộn ấy chính là điều bơm cánh cho họ.
+
+Nếu hôm nay bạn đang ở giai đoạn khó khăn — đừng oán giận. Cuộc vật lộn này đang bơm chất lỏng vào đôi cánh bạn. Một ngày bạn sẽ bay xa hơn mình tưởng.
+
+Và nếu bạn đang nhìn ai đó vật lộn — đừng cắt kén của họ. Tin tưởng họ. Cho họ cơ hội tự nở ra. Đó là tình yêu đích thực.`},
+
+{id:'shoes_dog',cat:'self',emoji:'👟',title:'Người Đàn Ông Mất Giày',author:'Truyện cổ',duration:'2 phút',
+content:`Một người đàn ông ngồi trên tàu hoả. Tàu đang chạy. Anh ta đi đôi giày mới mua — đẹp, đắt tiền.
+
+Bỗng tàu đi qua một khúc cua. Một chiếc giày của anh rơi xuống — bay ra khỏi cửa tàu, mất hút bên đường ray.
+
+Mọi người trên tàu ngạc nhiên nhìn anh. Người đàn ông không tỏ ra buồn phiền. Anh ta nhanh chóng tháo chiếc giày còn lại — chiếc giày đẹp đắt tiền — và NÉM NÓ RA NGOÀI cùng phía với chiếc đã rơi!
+
+Cả toa tàu sửng sốt. Một người ngồi cạnh hỏi: "Sao anh lại ném đi? Đó là giày đẹp mà! Anh có thể giữ lại — biết đâu sửa được, hoặc bán phần kia!"
+
+Người đàn ông mỉm cười: "Một chiếc giày với tôi vô dụng. Nhưng có thể ai đó nghèo đi qua đây, nhặt được. Nếu tôi chỉ ném đi một chiếc — họ có một chiếc, cũng vô dụng. Nhưng nếu tôi ném cả hai chiếc cùng chỗ — họ có cả đôi. Vậy là họ có giày đi."
+
+Cả toa tàu im lặng. Một bài học sâu sắc trong vài giây.
+
+Bài học này về một thứ rất quan trọng: SỰ LINH HOẠT TRONG MẤT MÁT.
+
+Khi ta mất một thứ, ta thường có ba phản ứng phổ biến:
+1. Tiếc nuối hoài — "Sao lại mất nó?"
+2. Cố giữ phần còn lại — kể cả khi nó vô dụng
+3. Tức giận với hoàn cảnh, với người khác, với chính mình
+
+Người đàn ông trên tàu đi con đường thứ tư: BIẾN MẤT MÁT THÀNH MÓN QUÀ CHO NGƯỜI KHÁC.
+
+Anh ta không thể lấy lại chiếc giày đã rơi. Đời không cho ta retake nhiều thứ. Nhưng anh có thể chọn — phần còn lại làm gì.
+
+Áp dụng vào đời:
+- Khi mất việc → đừng cố giữ một phần "danh dự cũ", hãy dùng cơ hội để giúp người khác
+- Khi tình tan → đừng giữ những ký ức đau lòng, hãy dùng kinh nghiệm để giúp người khác đang yêu
+- Khi thất bại → đừng giữ cay đắng, hãy chia sẻ bài học
+
+Mất mát không thể tránh trong đời. Nhưng cách ta phản ứng với mất mát — đó là sự lựa chọn của chúng ta.
+
+Có người trở nên cay đắng. Có người trở nên rộng lượng. Cùng một mất mát — hai con người khác hẳn.
+
+Hôm nay, có gì bạn đang giữ — mà thực ra đã vô dụng? Hãy thử ném nó đi với lòng tử tế.`},
+
+{id:'monk_silence',cat:'self',emoji:'🤫',title:'Bốn Nhà Sư Im Lặng',author:'Truyện Phật giáo',duration:'2 phút',
+content:`Có bốn nhà sư trẻ quyết định ngồi thiền im lặng tuyệt đối trong bảy ngày. Họ thoả thuận: "Bất kỳ ai nói chuyện trước khi hết bảy ngày — phải chịu phạt."
+
+Họ ngồi xếp bằng trong căn phòng có ánh đèn dầu. Im lặng. Im lặng. Im lặng.
+
+Đến tối ngày thứ nhất, đèn dầu cạn dần. Ngọn lửa nhỏ đi. Một nhà sư trẻ không kìm được, thì thầm với người bên cạnh:
+
+"Anh ơi, đèn sắp tắt rồi đấy..."
+
+Nhà sư thứ hai liền lên tiếng: "Suỵt! Chúng ta đang im lặng. Anh không được nói!"
+
+Nhà sư thứ ba bực mình: "Cả hai anh đều vi phạm! Tôi không nói gì cả!"
+
+Nhà sư thứ tư mỉm cười kiêu hãnh: "Hahaha! Vậy chỉ có tôi là không nói chuyện!"
+
+Vị thiền sư già nghe được ngoài cửa, vào trong với gậy thiền. Bốn nhà sư cùng cúi đầu.
+
+Vị thiền sư cười: "Các con ạ, các con đều đã thất bại. Nhưng người thất bại nặng nhất là người tự hào nhất."
+
+Bài học sâu xa:
+
+Thiền không chỉ là im lặng bằng miệng. Đó là im lặng bằng cả tâm.
+
+Người sư thứ nhất nói vì lo lắng cho người khác. Tâm lo.
+Người sư thứ hai nói vì muốn sửa người khác. Tâm chỉ trích.
+Người sư thứ ba nói vì giận. Tâm bực.
+Người sư thứ tư nói vì kiêu hãnh — tự thấy mình giỏi hơn. Tâm kiêu.
+
+Tâm kiêu là tâm nguy hiểm nhất.
+
+Vì ba người trước biết mình sai. Họ có thể sửa. Người thứ tư không biết mình sai. Anh ta nghĩ mình đúng. Đó là chỗ chết của tu tập.
+
+Trong đời, đôi khi ta cũng vậy. Khi ta cảm thấy "Tôi tốt hơn họ" — hãy dừng lại. Đó là dấu hiệu kiêu hãnh đang xuất hiện.
+
+Hãy nhớ: cùng là người. Mỗi người đều đang vật lộn theo cách riêng. Không ai cao hơn ai về bản chất.
+
+Sự khiêm tốn không phải tự hạ thấp mình. Đó là không nâng mình lên trên người khác. Đó là sự bình đẳng của tâm hồn.`},
+
+{id:'mirror_man',cat:'self',emoji:'🪞',title:'Người Đàn Ông Trong Gương',author:'Khuyết danh',duration:'2 phút',
+content:`Có một người đàn ông cả đời chỉ trích người khác. Vợ không khéo. Đồng nghiệp ngu. Hàng xóm phiền. Con cái không nghe. Xã hội xuống cấp. Mọi thứ đều có vấn đề — trừ ông ta.
+
+Một ngày, ông gặp một thiền sư già. Ông kể lể: "Cuộc đời tôi đầy người tệ. Tại sao tôi luôn gặp những kẻ như vậy?"
+
+Thiền sư mỉm cười, đưa cho ông một chiếc gương: "Hãy nhìn vào đây và nói tôi nghe ông thấy gì."
+
+"Tôi thấy chính tôi."
+
+"Tốt. Bây giờ hãy đưa gương lại đây."
+
+Thiền sư cầm gương, thở hơi vào mặt gương — gương mờ đi. "Bây giờ ông thấy gì?"
+
+"Không thấy rõ nữa."
+
+"Đúng. Khi tâm ta đầy ấm ức, định kiến, phán xét — như hơi thở mờ này — ta không nhìn rõ ai cả. Tất cả mọi người đều mờ. Ta tưởng họ tệ — thực ra là gương của ta mờ."
+
+Ông ta phản ứng: "Vậy thầy nói là tại tôi à?"
+
+"Không. Tôi nói rằng cách ta nhìn thế giới phản ánh trạng thái bên trong ta.
+
+Người có tâm yêu thương — nhìn ai cũng thấy có gì đáng yêu.
+Người có tâm phán xét — nhìn ai cũng thấy lỗi.
+Người có tâm sợ — nhìn ai cũng thấy nguy hiểm.
+Người có tâm biết ơn — nhìn ai cũng thấy món quà.
+
+Thế giới ngoài kia không thay đổi nhiều. Cùng một thế giới, người này thấy đẹp, người kia thấy xấu — vì bên trong họ khác nhau."
+
+Người đàn ông trầm ngâm. Lần đầu tiên, ông nghĩ về điều này.
+
+Một câu hỏi mạnh để tự hỏi mỗi ngày:
+
+"Tại sao tôi lại để ý đến đặc điểm này ở người kia? Đặc điểm đó nói gì về TÔI?"
+
+- Tôi để ý họ kiêu — vì tôi muốn được tôn trọng?
+- Tôi để ý họ lười — vì tôi sợ mình cũng lười?
+- Tôi để ý họ giả tạo — vì tôi từng giả tạo trong việc gì?
+
+Mỗi lần phán xét người khác, ta đang nói về chính mình.
+
+Hôm nay, khi định chỉ trích ai đó — hãy nhìn gương trước.`},
+
+{id:'climb_late',cat:'self',emoji:'🌅',title:'Không Bao Giờ Là Quá Muộn',author:'Khuyết danh',duration:'2 phút',
+content:`Một người đàn ông 60 tuổi gặp lại bạn cũ. "Tôi luôn ước muốn được làm bác sĩ," ông nói. "Nhưng đã 60 rồi. Học y phải mất 8 năm. Khi tôi tốt nghiệp tôi sẽ 68 tuổi. Quá muộn rồi!"
+
+Bạn ông hỏi: "Nếu ông không học y, sau 8 năm nữa ông sẽ bao nhiêu tuổi?"
+
+"68 tuổi chứ sao."
+
+"Vậy đằng nào ông cũng sẽ 68 tuổi. Khác biệt duy nhất là ông sẽ là một bác sĩ 68 tuổi — hay một người tiếc nuối 68 tuổi."
+
+Người đàn ông lặng người. Ông đã không nghĩ theo cách đó. Năm sau, ông đăng ký vào trường y. Tám năm sau, ông trở thành bác sĩ — và làm việc thêm 20 năm nữa, giúp hàng ngàn bệnh nhân.
+
+Ta thường nghĩ: "Tôi đã quá già để bắt đầu." Nhưng câu hỏi không phải là tuổi của bạn. Câu hỏi là: bạn sẽ làm gì với thời gian còn lại?
+
+Vera Wang bắt đầu thiết kế thời trang ở tuổi 40 — và thành nhà thiết kế váy cưới nổi tiếng nhất thế giới.
+
+Đại tá Sanders mở KFC ở tuổi 65 — biến thành chuỗi nhà hàng triệu đô.
+
+Toni Morrison xuất bản tiểu thuyết đầu tiên ở 40 tuổi — sau này đoạt giải Nobel Văn học.
+
+Grandma Moses bắt đầu vẽ tranh ở tuổi 78. Bức tranh của bà bán hơn 1 triệu đô.
+
+Bạn không cần là họ. Bạn chỉ cần là bạn — phiên bản tốt hơn bạn của ngày hôm qua.
+
+Tuổi bạn không quan trọng. Quan trọng là bạn còn dám bắt đầu.
+
+Có thể bạn muốn:
+- Học một ngôn ngữ mới
+- Bắt đầu tập thể dục
+- Đổi nghề
+- Viết một cuốn sách
+- Du lịch một nơi mới
+- Mở một quán nhỏ
+- Hoà giải với người thân
+
+Tất cả đều khả thi. Bắt đầu hôm nay là hơn không bao giờ bắt đầu.
+
+Cây tốt nhất nên trồng cách đây 20 năm. Cây tốt thứ hai nên trồng — hôm nay.
+
+Đừng để câu "Tôi quá già" cướp đi 20 năm còn lại của bạn. Đứng dậy. Bắt đầu. Cuộc đời đang chờ.`},
+
+{id:'glass_water',cat:'self',emoji:'🥛',title:'Sức Nặng Của Ly Nước',author:'Khuyết danh',duration:'2 phút',
+content:`Một giáo sư tâm lý bước vào lớp với một ly nước trên tay. Sinh viên đoán bà sẽ hỏi "Ly này nửa đầy hay nửa vơi?"
+
+Nhưng bà chỉ hỏi: "Ly nước này nặng bao nhiêu?"
+
+Sinh viên đoán từ 100g đến 500g.
+
+Giáo sư mỉm cười: "Cân nặng tuyệt đối của nó không quan trọng. Điều quan trọng là tôi cầm nó bao lâu.
+
+Cầm 1 phút — không vấn đề.
+Cầm 1 giờ — cánh tay đau.
+Cầm cả ngày — tay cứng đờ, có thể tê liệt.
+
+Cân nặng không đổi. Nhưng càng cầm lâu, càng nặng.
+
+Đó là chuyện của lo lắng, ấm ức, và stress trong đời chúng ta.
+
+Suy nghĩ về vấn đề 5 phút — không vấn đề.
+Suy nghĩ về vấn đề 5 giờ — bắt đầu mệt.
+Suy nghĩ về vấn đề 5 ngày — kiệt sức.
+Suy nghĩ về vấn đề 5 năm — bị tê liệt cả cuộc đời.
+
+Bí quyết không phải là phải có một ly nước nhẹ hơn. Đời ai cũng có ly nước riêng — vấn đề tài chính, mối quan hệ, sức khoẻ, công việc.
+
+Bí quyết là biết khi nào ĐẶT LY NƯỚC XUỐNG."
+
+Bà đặt ly xuống bàn.
+
+"Hãy đặt vấn đề của bạn xuống trước khi đi ngủ. Đừng cầm nó cả đêm — bạn sẽ không ngủ được.
+
+Hãy đặt nó xuống khi ăn cơm với gia đình. Đừng để vấn đề công việc nhiễm vào bữa cơm.
+
+Hãy đặt nó xuống khi chơi với con. Khoảnh khắc đó là duy nhất — đừng để lo âu ăn cắp nó."
+
+Bài học sâu xa:
+
+Vấn đề không tự biến mất khi ta nghĩ về nó liên tục. Thực ra, càng nghĩ nhiều — vấn đề càng to ra trong tâm trí ta.
+
+Cách giải quyết vấn đề tốt nhất:
+1. Suy nghĩ tập trung trong khoảng thời gian giới hạn (15-30 phút)
+2. Viết ra giải pháp
+3. ĐẶT XUỐNG
+4. Quay lại sau khi tâm trí đã nghỉ
+
+Tâm trí giống cánh tay. Càng cầm lâu, càng yếu. Cần nghỉ để mạnh lại.
+
+Hôm nay, hãy thử: Đặt xuống. Buổi tối, không lo công việc. Cuối tuần, không lo deadline. Khi ăn, không lo gì cả — chỉ ăn.
+
+Tâm trí nghỉ ngơi sẽ trở lại với giải pháp tốt hơn.`},
+{id:'tortoise_hare',cat:'kids',emoji:'🐢',title:'Rùa và Thỏ',author:'Aesop',duration:'2 phút',
+content:`Ngày xưa, có chú thỏ ngạo mạn. Chú chạy rất nhanh và thường khoe khoang với mọi loài vật trong rừng.
+
+"Tôi chạy nhanh nhất trên đời! Không ai theo kịp tôi đâu!"
+
+Một hôm, chú rùa chậm chạp nhưng dễ thương đi qua. Thỏ cười: "Ha ha! Rùa kia, mày chạy chậm như con sên! Mày có dám đua với tao không?"
+
+Rùa nhìn thỏ điềm tĩnh: "Được. Tôi đua với anh."
+
+Cả rừng cười ầm. Sao rùa lại dám đua với thỏ? Nhưng rùa vẫn bình thản.
+
+Hôm sau, cuộc đua bắt đầu. Con cáo già đứng làm trọng tài: "Một, hai, ba — bắt đầu!"
+
+Thỏ phóng đi vù vù như tia chớp. Trong nháy mắt, thỏ đã đi xa lắm rồi. Thỏ ngoái lại — rùa vẫn ở vạch xuất phát.
+
+Thỏ cười khanh khách. "Rùa nó chậm thế, tao có ngủ một giấc rồi chạy vẫn về đích trước!"
+
+Thỏ ngồi xuống dưới gốc cây mát. Gió thổi nhẹ, lá xào xạc. Thỏ buồn ngủ quá. Thỏ ngủ thiếp đi.
+
+Trong khi đó, rùa cứ đi. Một bước. Hai bước. Ba bước. Rùa không dừng. Rùa không nghỉ. Rùa cứ đi mãi.
+
+Đến gần đích, rùa nhìn thấy thỏ đang ngủ ngon lành dưới gốc cây. Rùa không đánh thức thỏ. Rùa lẳng lặng bước qua, tiến về đích.
+
+"Đến nơi rồi!" rùa reo lên khẽ.
+
+Tiếng vỗ tay rộ lên. Thỏ choàng tỉnh. Ôi không! Rùa đã về đích!
+
+Thỏ vùng dậy chạy nhưng đã quá muộn. Rùa thắng cuộc đua.
+
+Thỏ xấu hổ cúi đầu. Rùa mỉm cười nói: "Anh thỏ ơi, anh chạy nhanh hơn em rất nhiều. Nhưng nhanh không phải là tất cả. Kiên trì mới quan trọng nhất."
+
+Từ đó, thỏ học được bài học quý báu: đừng bao giờ khoe khoang, đừng bao giờ coi thường người khác, và hãy luôn kiên trì đến cùng.
+
+Các bạn nhỏ ơi, đừng giống thỏ kiêu căng. Hãy giống rùa — chậm cũng được, miễn là bước đều và không bỏ cuộc!`},
+
+{id:'lion_mouse',cat:'kids',emoji:'🦁',title:'Sư Tử và Chuột Nhắt',author:'Aesop',duration:'2 phút',
+content:`Trong khu rừng già, có một con sư tử oai vệ đang ngủ trưa dưới gốc cây cổ thụ. Nắng vàng rọi xuống bộ lông vàng óng của sư tử.
+
+Một chú chuột nhắt bé xíu đang chạy qua, không để ý — vô tình chạy lên người sư tử. Sư tử giật mình tỉnh giấc, nhanh như chớp lấy chân chộp lấy chú chuột.
+
+"Mày dám đánh thức ta sao? Hôm nay mày sẽ làm bữa trưa cho ta!" sư tử gầm gừ.
+
+Chuột nhắt run rẩy: "Xin ngài tha mạng! Em nhỏ bé thế này, ăn em không đủ no đâu. Nếu ngài thả em ra, sau này em hứa sẽ giúp ngài!"
+
+Sư tử cười phá lên: "Hahaha! Mày bé tí xíu thế thì giúp được gì cho ta? Nhưng thôi, ta thấy mày tội nghiệp quá. Đi đi!"
+
+Chuột nhắt cảm ơn rối rít rồi chạy biến vào bụi cỏ.
+
+Vài ngày sau, sư tử đi săn trong rừng. Bỗng "RẦM!" — sư tử rơi vào một cái bẫy lưới do người thợ săn đặt. Càng giãy giụa, lưới càng siết chặt.
+
+Sư tử gầm thét vang trời, kêu cứu. Cả rừng nghe thấy. Voi đến nhưng không kéo nổi lưới. Hổ đến nhưng không cắn được dây dù răng sắc. Tê giác đến nhưng sừng quá to.
+
+Bỗng chú chuột nhắt nghe tiếng kêu, chạy đến. "Để em giúp anh sư tử!"
+
+Chuột nhắt nhỏ bé luồn vào lưới. Răng nhọn của chú gặm từng sợi dây. Một sợi. Hai sợi. Mười sợi. Một trăm sợi.
+
+Sau một thời gian, lưới rách. Sư tử thoát ra ngoài.
+
+Sư tử cảm động lắm. "Cảm ơn cậu! Một con vật bé nhỏ như cậu lại cứu được một con sư tử khổng lồ như ta. Ta đã sai khi coi thường cậu."
+
+Chuột nhắt cười vui: "Anh sư tử ơi, không ai quá nhỏ để giúp đỡ người khác. Cũng không ai quá lớn để cần giúp đỡ."
+
+Từ đó, sư tử và chuột nhắt trở thành bạn thân nhất rừng.
+
+Bài học: Đừng bao giờ coi thường người nhỏ bé. Một ngày nào đó, họ có thể là người cứu giúp chúng ta. Và hãy luôn tử tế — vì lòng tốt sẽ quay trở lại với mình.`},
+
+{id:'ugly_duckling',cat:'kids',emoji:'🦢',title:'Chú Vịt Con Xấu Xí',author:'Andersen',duration:'3 phút',
+content:`Vào một mùa hè ấm áp, mẹ vịt nằm ấp trứng trong tổ. Một, hai, ba ngày trôi qua. Cuối cùng, vỏ trứng nứt ra. Những chú vịt con vàng óng, xinh xắn lần lượt chui ra.
+
+Nhưng trứng cuối cùng to gấp đôi những quả khác. Nó nứt chậm hơn. Khi ra đời, chú vịt con này khác hẳn: lông xám, cổ dài, người to. Xấu xí!
+
+Mẹ vịt buồn lắm. Nhưng vẫn yêu thương cả 6 chú vịt như nhau.
+
+Các chú vịt con khác trêu chọc chú vịt xám: "Cậu xấu quá! Cậu không giống chúng tớ đâu!"
+
+Cả đàn gà, đàn ngỗng đều cười chú: "Cút đi! Mày xấu lắm!"
+
+Chú vịt xám rất buồn. Đêm ấy, chú bỏ nhà ra đi.
+
+Chú đi xa lắm. Mùa thu đến, lá vàng rơi. Mùa đông đến, tuyết phủ trắng xoá. Chú vịt xám lạnh, đói, cô đơn. Chú nằm co ro trong bụi cỏ, nghĩ rằng mình sẽ chết vì lạnh.
+
+Bỗng có một bác nông dân tốt bụng đi qua. Bác mang chú về nhà sưởi ấm. Nhưng chú vịt sợ hãi quá, đập vỡ bát sữa, làm rớt vại bột. Vợ bác đuổi chú đi.
+
+Lại một mình. Chú vịt xám lang thang trên những đầm lầy đóng băng. Bao đêm chú khóc thầm: "Sao mình lại sinh ra xấu xí thế này?"
+
+Cuối cùng, mùa xuân đến. Băng tan. Hoa nở. Chú vịt xám đến một cái hồ đẹp đẽ. Trên mặt nước, ba con chim trắng tinh, cổ dài thanh tao đang bơi. Chúng là những con thiên nga đẹp nhất chú từng thấy.
+
+"Mình tới gần chúng đi," chú nghĩ. "Có lẽ chúng sẽ giết mình. Nhưng thà chết bởi loài đẹp đẽ này còn hơn sống cô đơn mãi."
+
+Chú vịt xám bơi lại gần, cúi đầu chờ bị mổ. Bỗng chú nhìn xuống mặt nước...
+
+Chú không tin vào mắt mình! Trong gương nước, chú không còn là vịt xám xấu xí nữa. Chú là một con thiên nga trắng tinh, lộng lẫy nhất trong đàn!
+
+Những con thiên nga khác bơi đến, vây quanh chú: "Chào bạn mới! Hãy bay cùng chúng tôi!"
+
+Trẻ con đến hồ nước kêu lên: "Nhìn kìa! Con thiên nga mới đó đẹp nhất!"
+
+Chú vịt xám — bây giờ là thiên nga — cảm thấy hạnh phúc trào dâng. Tất cả những đau khổ chú chịu đựng giờ đáng giá. Vì đau khổ đó đã đưa chú đến đây — nơi chú thuộc về.
+
+Bài học cho các bạn nhỏ: Nếu bây giờ con cảm thấy mình "khác" mọi người, "không vừa vặn" — đừng buồn. Có thể con đang là vịt xám trong đàn vịt. Một ngày nào đó, con sẽ tìm thấy đàn thiên nga của mình. Và lúc đó, con sẽ hiểu vì sao con khác — vì con không phải vịt. Con là thiên nga.`},
+
+{id:'three_pigs',cat:'kids',emoji:'🐷',title:'Ba Chú Lợn Con',author:'Truyện cổ tích',duration:'3 phút',
+content:`Ngày xưa, có ba anh em lợn con sống cùng mẹ. Đến tuổi lớn, mẹ bảo: "Các con đi xây nhà riêng đi. Nhớ xây cho thật chắc, vì có con sói già hung dữ trong rừng."
+
+Lợn anh cả gặp một bác mang rơm. "Bán cho cháu ít rơm đi! Cháu xây nhà nhanh để còn chơi!" Cậu xây nhà bằng rơm trong nửa giờ. "Xong rồi! Bây giờ tôi đi chơi đây!"
+
+Lợn anh hai gặp một bác mang gỗ. Cậu xây nhà bằng gỗ trong hai giờ. "Xong rồi! Tôi đi chơi đây!"
+
+Lợn em út gặp một bác mang gạch. "Bán cho cháu thật nhiều gạch ạ. Cháu muốn xây nhà thật chắc." Cậu xây nhà bằng gạch suốt nửa năm — móng sâu, tường dày, mái chắc. Hai anh cười cậu: "Mày ngu thế! Xây gì lâu vậy?"
+
+Một đêm tối trời, con sói già đói bụng đi qua. Đến nhà rơm của lợn anh cả, sói gõ cửa.
+
+"Lợn ơi, mở cửa cho ta!"
+
+"Không!"
+
+"Vậy thì ta sẽ thổi! Ta sẽ thổi! Và ta sẽ thổi sập nhà mày!"
+
+Sói hít một hơi thật sâu... PHÙ! Nhà rơm bay tung tóe. Lợn anh cả khóc thét, chạy đến nhà gỗ của em.
+
+Sói đuổi theo. Đến nhà gỗ. "Vậy thì ta sẽ thổi!" PHÙ! PHÙ! Nhà gỗ kêu răng rắc. PHÙ! PHÙ! Nhà sập!
+
+Hai anh em chạy như bay đến nhà gạch của em út. Sói đuổi sát phía sau.
+
+Đến nhà gạch, sói thổi. PHÙ! PHÙ! PHÙ! Nhà không nhúc nhích. Sói thổi mạnh hơn — nhà vẫn đứng vững. Sói thổi đến mức tím mặt — nhà gạch vẫn không suy chuyển.
+
+Sói tức giận. Nó trèo lên ống khói, định tụt xuống bắt lợn.
+
+Lợn em thông minh đã đoán trước. Cậu đặt một nồi nước sôi to dưới ống khói. Sói tụt xuống — TÕM! — rơi thẳng vào nồi nước sôi. Sói chạy như ma đuổi ra khỏi nhà, không bao giờ dám quay lại nữa.
+
+Ba anh em ôm nhau cảm động. Hai anh nhận lỗi: "Em ơi, anh xin lỗi đã cười em. Xây chậm mà chắc thật là hay!"
+
+Bài học: Khi làm bất cứ việc gì — học tập, làm bài, xây dựng — đừng vội vàng cho xong. Hãy làm cẩn thận, làm chắc chắn. Việc tốt cần thời gian. Và sự kiên nhẫn luôn được đền đáp.`},
+
+{id:'fox_grapes',cat:'kids',emoji:'🍇',title:'Cáo và Chùm Nho',author:'Aesop',duration:'2 phút',
+content:`Một ngày hè nắng đẹp, chú cáo đói bụng đi tìm thức ăn. Đi mãi đi mãi, chú đến một vườn nho.
+
+Trên giàn cao, có những chùm nho chín mọng — tím sẫm, căng mòng, đẹp lóng lánh. Cáo nuốt nước miếng ực ực.
+
+"Ôi! Trông ngon quá! Phải ăn cho được mới được!"
+
+Cáo nhảy. Một lần. Hụt. Cáo nhảy. Hai lần. Hụt. Cáo nhảy. Ba lần. Vẫn hụt.
+
+Nho ở cao quá. Cáo nhảy cao bao nhiêu cũng không tới.
+
+Cáo cứ nhảy. Nhảy mãi. Nhảy đến mệt lừ. Mồ hôi chảy ròng ròng. Chân run lẩy bẩy.
+
+Bỗng nhìn lên thấy nho càng ngon hơn. Trên cành, có con chim sâu nhỏ ngó xuống cười khúc khích.
+
+"Anh cáo ơi, anh có muốn tớ giúp không?"
+
+Cáo xấu hổ, ngẩng cao đầu, cố giấu vẻ mệt mỏi. Cáo nói to: "Không cần đâu! Mình không thèm ăn nho đâu! Nhìn kỹ rồi mới biết... những trái nho này CHUA LẮM! CHUA ƠI LÀ CHUA! Ai ăn cũng phải nhăn mặt thôi! Hihi, mình thông minh nên mình không thèm!"
+
+Cáo bỏ đi, vừa đi vừa lẩm bẩm: "Nho chua... nho chua thật..."
+
+Con chim sâu chỉ cười. Nó biết những trái nho đó NGỌT LẮM. Cáo nói "chua" chỉ vì cáo không lấy được.
+
+Bài học: Khi không đạt được điều gì, chúng ta đừng làm như cáo — đừng nói xấu nó để tự an ủi mình.
+
+Có những bạn nhỏ thi không được điểm cao thì nói: "Học giỏi làm gì! Mệt người!" Có những bạn không được mời sinh nhật thì nói: "Sinh nhật nó không vui đâu!" Có những bạn không có món đồ chơi đẹp thì nói: "Đồ chơi đó xấu lắm!"
+
+Đó là cách cáo nói "nho chua". Nó không làm chúng ta tốt hơn. Nó chỉ làm chúng ta gian dối với chính mình.
+
+Khi không có được điều mình muốn, hãy nói thẳng: "Mình chưa làm được" hoặc "Mình muốn nhưng mình sẽ cố lần sau". Đó mới là dũng cảm thật sự.
+
+Đừng làm cáo. Hãy dũng cảm đối mặt với chính mình!`},
+
+{id:'turnip',cat:'kids',emoji:'🥕',title:'Củ Cải Khổng Lồ',author:'Truyện dân gian Nga',duration:'2 phút',
+content:`Có một ông cụ trồng một củ cải. Ông tưới nước, bón phân, nâng niu nó từng ngày. Củ cải lớn lên, lớn lên, lớn mãi — to chưa từng thấy!
+
+Đến mùa thu hoạch, ông cụ ra vườn. "Ôi củ cải to quá! Phải nhổ thôi!"
+
+Ông nắm chặt lá củ cải, kéo. "Hì... hà..." Không nhúc nhích.
+
+Ông cụ gọi: "Bà ơi! Ra giúp tôi với! Củ cải nó to quá!"
+
+Bà cụ chạy ra. Bà nắm tay ông. Ông nắm lá củ cải. Cả hai kéo. "Hì... hà..." Không nhúc nhích.
+
+Bà cụ gọi: "Cháu gái ơi! Ra giúp bà với!"
+
+Cô cháu gái chạy ra. Cô nắm tay bà. Bà nắm tay ông. Ông nắm lá củ cải. Ba người kéo. "Hì... hà..." Không nhúc nhích.
+
+Cô cháu gọi: "Cún ơi! Ra giúp tao với!"
+
+Chú chó chạy ra. Chú ngậm đuôi áo cháu. Cháu nắm tay bà. Bà nắm tay ông. Ông nắm lá củ cải. Bốn người-vật kéo. "Hì... hà..." Không nhúc nhích.
+
+Chó gọi: "Mèo ơi! Ra giúp tao với!"
+
+Chú mèo chạy ra. Mèo ngậm đuôi chó. Năm người-vật kéo. "Hì... hà..." Không nhúc nhích.
+
+Mèo gọi: "Chuột ơi! Ra giúp tao với!"
+
+Chuột nhắt bé tí xíu chạy ra. Chuột ngậm đuôi mèo. Mèo ngậm đuôi chó. Chó ngậm áo cháu. Cháu nắm tay bà. Bà nắm tay ông. Ông nắm lá củ cải. Sáu người-vật cùng kéo. "Hì... hà... HÌ... HÀ... HỰ!"
+
+BỘP! Củ cải nhổ lên!
+
+Cả nhà ngã chồng lên nhau. Cười ầm ĩ. Củ cải to lăn lông lốc xuống sân.
+
+Tối hôm đó, cả nhà ăn cơm vui vẻ — có canh củ cải, củ cải xào, củ cải kho. Mèo và chó được ăn nhiều thịt thơm. Chuột nhắt được đãi miếng pho mát to.
+
+Bài học: Khi việc khó quá một mình, hãy cùng nhau. Đừng coi thường người bé. Có khi chính người bé nhất là người tạo nên sự khác biệt!
+
+Các bạn nhỏ ơi, hãy nhớ: TINH THẦN ĐOÀN KẾT là sức mạnh kỳ diệu nhất!`},
+
+{id:'wolf_seven',cat:'kids',emoji:'🐐',title:'Bảy Chú Dê Con',author:'Anh em Grimm',duration:'3 phút',
+content:`Có một mẹ dê và bảy chú dê con sống trong rừng. Một hôm, mẹ dê phải đi chợ. Trước khi đi, mẹ căn dặn:
+
+"Các con ơi, hãy ở yên trong nhà. Đừng mở cửa cho ai cả. Vì có con sói già hung ác trong rừng. Mẹ nhận ra nó qua giọng nói khàn khàn và chân đen sì."
+
+Bảy chú dê con gật đầu: "Vâng mẹ!"
+
+Mẹ dê đi vừa khỏi, con sói đã đến gõ cửa. "Các con yêu ơi! Mở cửa! Mẹ về rồi!"
+
+Bảy chú dê con thông minh nói: "Đó không phải mẹ! Mẹ giọng nhẹ nhàng, không khàn như anh!"
+
+Sói tức lắm. Nó chạy ra hiệu thuốc, ăn cả nắm phấn để giọng nhẹ. Quay lại gõ cửa.
+
+Bảy chú dê hỏi: "Hãy đưa chân cho chúng tôi xem!"
+
+Sói đưa chân vào khe cửa. Bảy chú dê thấy chân đen sì: "Đó không phải mẹ! Mẹ chân trắng, không đen!"
+
+Sói lại tức. Nó chạy ra hàng bột, lăn chân vào bột trắng. Quay lại gõ cửa: "Các con yêu! Mẹ về rồi! Mở cửa!"
+
+Sói đưa chân ra — trắng! Tiếng nhẹ! Bảy chú dê tin là mẹ. Mở cửa.
+
+Sói nhảy vào! "Hú hú hú!"
+
+Bảy chú dê hoảng sợ chạy khắp nhà tìm chỗ trốn. Một chú trốn dưới bàn. Một chú trốn trên giường. Một chú trốn trong tủ. Một chú trốn vào bồn rửa. Một chú trốn vào lò sưởi. Một chú trốn vào tủ áo. Còn chú út — nhỏ nhất — trốn vào trong đồng hồ to.
+
+Sói tìm — tìm — tìm. Sói nuốt SÁU chú dê. Chỉ có chú út trốn trong đồng hồ không bị tìm thấy.
+
+Sói no quá. Sói ngủ ngon lành dưới gốc cây.
+
+Mẹ dê về. Thấy nhà tan hoang, mẹ khóc. Bỗng chú dê út chạy ra ôm mẹ, kể đầu đuôi.
+
+Mẹ dê chạy ra tìm sói. Sói đang ngủ — bụng to phồng. Mẹ dê lấy kéo, nhẹ nhàng cắt bụng sói. Một, hai, ba, bốn, năm, sáu — sáu chú dê con vẫn còn sống nguyên!
+
+Mẹ dê và bảy chú dê con ôm nhau khóc vì sung sướng. Sau đó, các chú đi tìm bảy hòn đá to, nhét vào bụng sói. Mẹ dê khâu lại cẩn thận.
+
+Khi sói tỉnh dậy, sói thấy khát nước. Sói ra suối uống. Đá nặng kéo sói rơi ùm xuống nước. Sói chết đuối.
+
+Cả nhà dê vui vẻ. Mẹ dê dạy con: "Hãy ngoan ngoãn nghe lời mẹ. Người lạ có thể giả vờ tốt. Nhưng nếu mẹ đã dặn không mở cửa — đừng bao giờ mở!"
+
+Bài học: Luôn nghe lời ba mẹ. Và khi gặp nguy hiểm, hãy bình tĩnh tìm chỗ an toàn như chú dê út!`},
+
+{id:'magic_pot',cat:'kids',emoji:'🍲',title:'Nồi Cháo Thần',author:'Anh em Grimm',duration:'2 phút',
+content:`Có một cô bé tốt bụng sống cùng mẹ trong một ngôi nhà nhỏ. Hai mẹ con rất nghèo.
+
+Một hôm, cô bé đi vào rừng hái dâu. Cô gặp một bà tiên già. Bà tiên đói lắm, xin chút thức ăn. Cô bé đưa hết dâu cho bà.
+
+Bà tiên cảm động. Bà tặng cô bé một chiếc nồi nhỏ.
+
+"Đây là nồi thần. Khi con muốn ăn cháo, hãy nói: 'NỒI ƠI, NẤU CHÁO!'. Khi muốn dừng, hãy nói: 'NỒI ƠI, NGỪNG NẤU!' Hãy nhớ kỹ hai câu này nhé."
+
+Cô bé về nhà, mừng rỡ kể cho mẹ nghe. "NỒI ƠI, NẤU CHÁO!"
+
+Lập tức, nồi tự nhiên đầy cháo thơm phức! Hai mẹ con ăn no nê.
+
+"NỒI ƠI, NGỪNG NẤU!" — nồi ngừng ngay.
+
+Từ đó, hai mẹ con không bao giờ đói nữa. Cô bé còn chia cháo cho hàng xóm nghèo.
+
+Một hôm, cô bé đi chơi xa. Mẹ ở nhà đói bụng quá. Mẹ đến cạnh nồi: "NỒI ƠI, NẤU CHÁO!"
+
+Lập tức, nồi đầy cháo. Mẹ ăn no nê. Khi muốn nồi dừng, mẹ nói: "Thôi! Đủ rồi!"
+
+Nồi không dừng.
+
+"Đừng nấu nữa!"
+
+Nồi vẫn nấu. Cháo tràn ra khỏi nồi, chảy xuống bàn.
+
+"Stop! Stop!" Cháo chảy xuống sàn.
+
+"Dừng đi! Dừng đi!" Cháo tràn ra ngoài cửa.
+
+Mẹ quên mất câu thần kỳ! Cháo tràn ngập nhà, ra đường, lấp khắp làng. Mọi người chạy lên đồi cao.
+
+Đúng lúc đó, cô bé về làng. Thấy cảnh tượng, cô vội chạy về nhà. Cháo ngập đến đầu gối, đến hông, đến cổ! Cô bé hét to:
+
+"NỒI ƠI, NGỪNG NẤU!"
+
+Nồi ngừng ngay tức khắc. Cháo từ từ rút xuống. Cả làng thở phào.
+
+Sau đó, dân làng mất nhiều ngày mới ăn hết cháo trên đường. Suốt mấy tháng, cả làng đều ăn cháo no thoả mãn.
+
+Bài học: Học gì cũng phải HỌC ĐẾN NƠI ĐẾN CHỐN. Biết một nửa còn nguy hiểm hơn không biết. Khi không nhớ rõ, đừng tự làm liều. Hãy hỏi người biết.`},
+
+{id:'lazy_grasshopper',cat:'kids',emoji:'🐜',title:'Kiến và Ve Sầu',author:'Aesop',duration:'2 phút',
+content:`Suốt mùa hè dài, có con ve sầu cứ hát cả ngày trên cành cây. "Ve ve ve... ve ve ve..." Bài hát êm tai vang khắp khu rừng.
+
+Trong khi đó, đàn kiến cần mẫn làm việc. Chúng tha hạt từ ruộng về tổ. Hạt thóc, hạt ngô, hạt đậu. Mỗi con kiến tha một hạt to gấp đôi mình.
+
+Ve sầu nhìn xuống cười: "Anh kiến ơi! Sao anh làm việc nhiều thế? Trời nắng đẹp thế này, hãy hát ca với tôi đi!"
+
+Kiến không trả lời. Kiến chỉ cúi đầu tiếp tục tha hạt.
+
+"Anh ngu thế! Anh không biết hưởng thụ à? Mùa hè ngắn ngủi lắm, phải vui chơi chứ!"
+
+Kiến nhìn lên ve sầu, ôn tồn: "Anh ve ơi, tôi cũng muốn hát ca như anh. Nhưng mùa đông sắp đến. Khi đó không có gì ăn. Bây giờ tôi vất vả một chút, mùa đông sẽ no đủ."
+
+Ve sầu phá lên cười: "Mùa đông còn xa lắm! Hát đi anh kiến, tận hưởng đi!"
+
+Kiến lắc đầu, đi tiếp công việc.
+
+Mùa hè qua đi. Mùa thu lá vàng rơi. Rồi mùa đông đến — gió lạnh thấu xương, tuyết phủ trắng rừng.
+
+Ve sầu run rẩy. Không có thức ăn. Không có nhà ấm. Lông tả tơi, bụng đói cào.
+
+Ve sầu nhớ đến đàn kiến. Tổ kiến chắc chắn đầy hạt. Ve sầu lê thân đến gõ cửa tổ kiến.
+
+"Anh kiến ơi... cho tôi xin chút thức ăn..."
+
+Đàn kiến đang sưởi ấm bên đống thóc ngô. Một con kiến già hiền hậu ra cửa: "Suốt mùa hè anh làm gì mà giờ không có thức ăn?"
+
+Ve sầu cúi đầu xấu hổ: "Tôi... tôi chỉ hát ca thôi..."
+
+Kiến gật gù: "Vậy thì bây giờ — hãy múa đi anh ve!"
+
+Đàn kiến cũng thấy tội nghiệp, cho ve sầu chút thức ăn để sống qua mùa đông. Nhưng ve sầu phải hứa: từ mùa hè năm sau, sẽ vừa hát vừa làm việc.
+
+Bài học cho các bạn nhỏ:
+
+1. Vui chơi quan trọng — nhưng việc cần làm cũng phải làm. CÂN BẰNG là chìa khoá.
+
+2. Hôm nay lười — ngày mai khổ. Hôm nay cố — ngày mai vui.
+
+3. Khi mùa hè (lúc còn dễ), hãy chuẩn bị cho mùa đông (lúc khó khăn). Học giỏi khi nhỏ để lớn lên có nghề.
+
+Nhưng quan trọng nhất: ĐỪNG QUÊN HÁT CA! Cuộc đời cần cả công việc và niềm vui. Hãy giống kiến — chăm chỉ mà vẫn yêu đời.`},
+
+{id:'magic_fish',cat:'kids',emoji:'🐟',title:'Ông Lão và Con Cá Vàng',author:'A. Pushkin',duration:'3 phút',
+content:`Có ông lão đánh cá nghèo sống cùng bà lão trong túp lều nhỏ ven biển. Suốt 33 năm, ông đánh cá mỗi ngày, bà ngồi nhà se chỉ.
+
+Một hôm, ông kéo lưới lên — bắt được một con cá vàng óng ánh. Cá nói tiếng người!
+
+"Ông lão ơi, xin tha cho tôi! Tôi là cá vàng có phép thuật. Tha tôi đi, tôi sẽ ban cho ông điều ước!"
+
+Ông lão tử tế: "Cá ơi, ta không cần gì cả. Ta thả ngươi về biển." Ông thả cá xuống nước.
+
+Về nhà, ông kể cho bà nghe. Bà la lên: "Ông ngu thật! Sao không xin chiếc thau giặt mới? Thau cũ vỡ rồi! Đi ra biển xin cá vàng ngay!"
+
+Ông lão ra biển. "Cá ơi! Bà nhà cần thau giặt mới." Cá vàng vẫy đuôi: "Vâng, có ngay!" Về nhà, bà có thau mới.
+
+Hôm sau bà la: "Ngu! Sao không xin túp lều mới!" Ông lại đi xin. Cá vàng cho lều mới đẹp.
+
+Bà chưa hài lòng: "Nhà nhỏ quá! Đi xin biệt thự!" Cá cho biệt thự.
+
+Vẫn chưa đủ: "Đi xin chức vợ thương gia!" Cá cho. Bà thành phu nhân thương gia.
+
+Vẫn chưa đủ: "Đi xin chức Nữ Hoàng!" Ông lão hoảng sợ nhưng vẫn đi. Cá cho. Bà thành Nữ Hoàng, ngồi ngai vàng, lính hầu hạ.
+
+Vài tháng sau, bà lại gọi: "Ông kia! Đi nói với cá vàng — ta muốn thành CHÚA TỂ BIỂN CẢ! Cá vàng phải phục vụ ta!"
+
+Ông lão run rẩy ra biển. Biển hôm nay đen sì, sóng to dữ dội. Ông lập cập gọi cá:
+
+"Cá ơi... vợ tôi... muốn thành Chúa Tể Biển Cả... cá vàng phải phục vụ bà ấy..."
+
+Cá vàng nổi lên, không nói gì. Chỉ vẫy đuôi rồi lặn xuống.
+
+Ông lão buồn bã quay về. Đến nơi — túp lều cũ kỹ với chiếc thau giặt vỡ đang chờ ông. Bà lão ngồi đó, lại nghèo y như xưa.
+
+Tất cả của cải, lâu đài, ngai vàng — biến mất hết. Vì bà đã quá tham lam.
+
+Bài học sâu sắc:
+
+1. THAM LAM SẼ MẤT TẤT CẢ. Bà lão có rất nhiều rồi, nhưng vẫn muốn hơn nữa. Cuối cùng — không gì cả.
+
+2. BIẾT ĐỦ LÀ HẠNH PHÚC. Người biết hài lòng với những gì mình có — sẽ luôn vui.
+
+3. ĐỪNG ĐỂ MÌNH BỊ CUỐN VÀO. Đôi khi yêu thương ai đó nghĩa là dám nói "không" khi họ đòi hỏi quá đáng.
+
+Khi nhận được thứ gì tốt — hãy biết ơn. Đừng coi đó là đương nhiên.`},
+
+{id:'snowwhite_dwarfs',cat:'kids',emoji:'👸',title:'Nàng Bạch Tuyết',author:'Anh em Grimm',duration:'3 phút',
+content:`Ngày xưa, có nàng công chúa tên Bạch Tuyết. Da nàng trắng như tuyết, môi đỏ như máu, tóc đen như gỗ mun. Nàng xinh đẹp và tốt bụng nhất vương quốc.
+
+Mẹ kế của nàng là một mụ phù thuỷ độc ác. Bà có chiếc gương thần. Mỗi sáng, bà hỏi:
+
+"Gương kia ngự ở trên tường, thế gian ai đẹp tựa nhường ta đây?"
+
+Gương đáp: "Nữ hoàng đẹp nhất, không ai bằng!"
+
+Một ngày, gương trả lời khác: "Nữ hoàng đẹp, nhưng Bạch Tuyết — gấp ngàn lần đẹp hơn!"
+
+Mụ ghen tức điên cuồng. Mụ sai thợ săn đưa Bạch Tuyết vào rừng giết đi. Thợ săn thương Bạch Tuyết quá, không nỡ giết, chỉ thả nàng vào rừng.
+
+Bạch Tuyết hoảng sợ chạy. Đến tối, nàng tìm thấy một ngôi nhà nhỏ. Bên trong có 7 chiếc giường nhỏ, 7 bộ chén dĩa nhỏ. Nàng mệt quá, ngủ thiếp đi.
+
+Khi tỉnh dậy, bảy chú lùn nhỏ bé đang vây quanh. Bạch Tuyết kể đầu đuôi. Các chú lùn thương quá: "Ở lại với chúng tôi!"
+
+Bạch Tuyết hạnh phúc sống với 7 chú lùn. Buổi sáng các chú đi làm mỏ vàng. Bạch Tuyết quét dọn, nấu ăn, hát ca.
+
+Trong khi đó, mụ phù thuỷ hỏi gương: "Ta đẹp nhất chứ?" Gương đáp: "Bạch Tuyết — đang sống cùng 7 chú lùn — vẫn đẹp nhất!"
+
+Mụ điên giận. Mụ pha thuốc độc, hoá thành bà bán táo già. Đến nhà 7 chú lùn lúc các chú đi vắng.
+
+"Cháu ơi! Mua táo nào!" Bạch Tuyết e ngại — chú lùn đã dặn không mở cửa người lạ. Nhưng quả táo đỏ tươi quá. Mụ già dụ: "Cô ăn thử một miếng nhé!" Bạch Tuyết cắn một miếng — gục xuống bất tỉnh.
+
+Mụ phù thuỷ cười khanh khách, biến mất.
+
+Tối các chú lùn về. Bạch Tuyết bất động trên giường, da vẫn trắng, môi vẫn đỏ — nhưng không thở. Các chú khóc thương. Họ đặt nàng vào quan tài thuỷ tinh, thay phiên canh giữ.
+
+Một hôm, có vị hoàng tử đi ngang. Chàng thấy Bạch Tuyết trong quan tài. Quá xúc động trước vẻ đẹp ấy, chàng xin được mang nàng về cung điện.
+
+Các chú lùn đồng ý. Trên đường khiêng quan tài, một người vô tình va vào gốc cây. RUNG! Miếng táo độc trong cổ Bạch Tuyết bật ra. Nàng tỉnh dậy!
+
+Hoàng tử quỳ xuống bên nàng: "Em ơi, anh yêu em! Hãy về cung cùng anh."
+
+Họ trở về cung điện. Đám cưới hoành tráng. Bảy chú lùn tham dự, vui vẻ.
+
+Bạch Tuyết và hoàng tử sống hạnh phúc trọn đời.
+
+Bài học:
+1. LÒNG TỐT BAO GIỜ CŨNG ĐƯỢC ĐỀN ĐÁP.
+2. GANH TỴ ĐỘC HẠI sẽ tự diệt mình.
+3. ĐỪNG MỞ CỬA CHO NGƯỜI LẠ. Đừng nhận thức ăn của người không quen.`},
+
+{id:'cinderella',cat:'kids',emoji:'👠',title:'Cô Bé Lọ Lem',author:'Perrault',duration:'3 phút',
+content:`Có một cô bé xinh đẹp tốt bụng. Sau khi mẹ mất, ba lấy vợ mới. Mẹ kế có hai cô con gái đành hanh ngoa ngoắt. Cả ba hành hạ cô bé — bắt làm việc nhà, ngủ trong bếp tro. Người ta gọi cô là "Lọ Lem" vì lúc nào cũng dính tro.
+
+Vua tổ chức dạ tiệc mời tất cả cô gái trong vương quốc — hoàng tử sẽ chọn vợ.
+
+Mẹ kế và hai con gái diện đẹp, hí hửng đi. Lọ Lem khóc trong bếp: "Con cũng muốn đi..."
+
+Bỗng có bà tiên đỡ đầu hiện ra. "Cháu ngoan, đừng khóc! Bà sẽ giúp."
+
+Bà tiên vẫy đũa thần:
+- Quả bí ngô biến thành cỗ xe vàng lộng lẫy
+- Sáu chú chuột biến thành sáu ngựa trắng
+- Một con thằn lằn biến thành người đánh xe
+- Tro bếp biến thành váy lụa lung linh
+- Chân trần biến thành đôi giày THUỶ TINH huyền diệu
+
+"Nhưng nhớ kỹ," bà tiên dặn, "đúng 12 giờ đêm phép thuật sẽ hết. Cháu phải rời tiệc trước nửa đêm!"
+
+Lọ Lem đến cung điện. Mọi người kinh ngạc — ai là nàng tiên xinh đẹp này? Hoàng tử bị hớp hồn, mời nàng nhảy suốt buổi.
+
+Khi chuông điểm 12 giờ kém một phút, Lọ Lem hốt hoảng chạy ra. Trên cầu thang đá, một chiếc giày thuỷ tinh rơi ra. Nàng không kịp lấy, vội chạy tiếp. Vừa ra khỏi cung, BÙM! Mọi thứ biến mất.
+
+Sáng hôm sau, hoàng tử cầm chiếc giày thuỷ tinh tuyên bố: "Ta sẽ cưới cô gái nào đi vừa chiếc giày này!"
+
+Lính đi khắp vương quốc thử giày. Đến nhà Lọ Lem, hai chị họ tranh nhau thử. Chị cả chân to — không vừa! Chị hai cố nhét chân — không vừa!
+
+Lính hỏi: "Còn ai khác trong nhà không?"
+
+Mẹ kế nói: "Không! Chỉ có hai con gái xinh đẹp của tôi!"
+
+Nhưng cánh cửa bếp hé ra — Lọ Lem rụt rè bước ra. "Em cũng muốn thử ạ."
+
+Hai chị cười khẩy: "Đứa bếp bẩn này thì sao? Vô lý!"
+
+Lính đặt giày vào chân Lọ Lem. VỪA KHÍT! Lọ Lem rút từ trong tạp dề ra — chiếc giày thuỷ tinh CÒN LẠI.
+
+Cả nhà sửng sốt. Hoàng tử nhận ra ngay nàng tiên đêm ấy.
+
+Đám cưới tổ chức hoành tráng. Lọ Lem trở thành công chúa. Nàng tốt bụng — không trừng phạt mẹ kế và hai chị, còn tha thứ và cho họ ở trong cung.
+
+Sống hạnh phúc trọn đời.
+
+Bài học:
+1. LÒNG TỐT VÀ KIÊN NHẪN luôn được đền đáp.
+2. VẺ ĐẸP THẬT đến từ bên trong. Hai chị đẹp nhưng độc ác. Lọ Lem dính tro — vẫn được chọn vì lòng đẹp.
+3. SỰ THA THỨ là sức mạnh lớn nhất. Lọ Lem có thể trả thù, nhưng nàng tha thứ.
+
+Các bạn nhỏ ơi, đôi khi bây giờ bạn không được công bằng — nhưng cứ tốt bụng, kiên nhẫn. Một ngày nào đó, cuộc đời sẽ đền đáp cho bạn.`},
+
+{id:'bunny_carrot',cat:'kids',emoji:'🐰',title:'Chú Thỏ Tham Lam',author:'Truyện Việt Nam',duration:'2 phút',
+content:`Có chú thỏ con sống cùng mẹ trong rừng. Mẹ thỏ ngày nào cũng đi kiếm cà rốt về cho con ăn.
+
+Một hôm, mẹ thỏ dắt con đi xa hơn thường lệ. Đến một cánh đồng cà rốt mênh mông, mẹ dặn: "Con ơi, hãy hái ba củ thôi nhé. Hái nhiều, mang nặng, con sẽ mệt."
+
+Thỏ con vâng dạ. Nhưng khi mẹ quay đi, thỏ con nghĩ: "Ba củ ít quá. Mình hái thật nhiều! Mang về ăn cả tuần khỏi đi xa!"
+
+Thỏ con hái. Một. Hai. Năm. Mười. Hai mươi củ cà rốt!
+
+Thỏ ôm vào lòng. Đặt lên đầu. Buộc vào lưng. Cà rốt rơi xuống đất. Thỏ nhặt lên — củ khác lại rơi.
+
+Mẹ thỏ quay lại nhìn, lắc đầu: "Con ơi, hãy bỏ bớt đi!"
+
+"Không mẹ! Con muốn mang hết!"
+
+Mẹ thỏ thở dài. Mẹ tự ôm 3 củ cà rốt của mình, đi trước.
+
+Thỏ con cố vác. Đi được ba bước — té! Cà rốt văng tứ tung. Thỏ con nhặt lên — đi ba bước nữa — té! Cứ thế.
+
+Sau một giờ, thỏ con mới đi được 100 mét. Mệt lả, đói meo.
+
+Bỗng từ trong bụi, một con cáo già nhô ra. "Hi hi! Chú thỏ con béo mọng đang mệt sao? Cáo có món súp ngon đây!"
+
+Thỏ con sợ run. Thỏ định chạy — nhưng vướng cà rốt, không chạy nổi!
+
+May quá, mẹ thỏ nghe tiếng, chạy về. Mẹ hét to: "Cáo già! Để con tôi yên!" Cáo già lẩn đi.
+
+Mẹ ôm thỏ con khóc: "Con yêu, con thấy chưa? Nếu con bỏ bớt cà rốt, con đã chạy thoát rồi. Tham lam khiến con suýt mất mạng!"
+
+Thỏ con xấu hổ: "Con xin lỗi mẹ. Con sẽ chỉ lấy đủ dùng thôi."
+
+Hai mẹ con bỏ lại các củ cà rốt thừa, chỉ giữ 3 củ. Về đến nhà nhẹ nhàng.
+
+Bài học cho các bạn:
+
+1. CHỈ LẤY ĐỦ DÙNG. Tham nhiều không có ích, chỉ thêm mệt.
+
+2. NGHE LỜI BA MẸ. Ba mẹ dạy gì cũng có lý do.
+
+3. THAM LAM CÓ THỂ NGUY HIỂM. Tham lam đồ ăn — béo phì. Tham lam game — học dốt. Tham lam quá mức — luôn dẫn đến đau khổ.
+
+Các bạn nhỏ, hãy nhớ: ĐỦ LÀ ĐẸP!`},
+
+{id:'cat_boot',cat:'kids',emoji:'🥾',title:'Chú Mèo Đi Hia',author:'Charles Perrault',duration:'3 phút',
+content:`Có một bác xay bột nghèo có ba người con. Trước khi mất, bác chia tài sản: con cả nhận cối xay, con thứ nhận con lừa, con út chỉ có... một con mèo!
+
+Người con út buồn bã: "Còn con mèo này — ăn xong rồi chết đói cùng tôi sao?"
+
+Bỗng con mèo lên tiếng: "Cậu chủ, đừng buồn! Hãy mua cho tôi một đôi hia và một cái túi vải. Tôi sẽ giúp cậu giàu sang!"
+
+Cậu chủ ngạc nhiên — mèo biết nói! Nhưng cậu cũng không có gì để mất. Cậu mua cho mèo đôi hia da đẹp.
+
+Mèo đi hia xong, oai phong hẳn lên. Mèo cầm túi vào rừng. Mèo bỏ ít cà rốt vào túi, đặt giữa đường thỏ thường đi. Một con thỏ tham ăn nhảy vào — TÉT!
+
+Mèo đem thỏ đến cung vua: "Tâu Đức Vua, tôi xin dâng món quà từ Hầu tước Carabas (tên tự đặt cho cậu chủ)."
+
+Vua vui mừng. Vài hôm sau, mèo bắt được chim trĩ, lại dâng vua. Rồi cá to. Rồi nai. Vua cứ nhận quà của "Hầu tước Carabas" và rất quý mến vị Hầu tước này.
+
+Một hôm, mèo nghe vua sắp đi dạo cùng công chúa bên bờ sông. Mèo bảo cậu chủ: "Hãy ra sông tắm, để quần áo bên bờ."
+
+Cậu chủ làm theo. Khi đoàn vua đi qua, mèo chạy ra hét: "Cứu! Cứu! Hầu tước Carabas bị cướp lột hết quần áo!"
+
+Vua sai lính cứu. Vua cho cậu mượn bộ y phục đẹp đẽ. Khi mặc xong, cậu trông như vương tử thật sự. Công chúa nhìn cậu — phải lòng ngay!
+
+Trong khi đó, mèo chạy trước. Mèo gặp các nông dân trên đường: "Khi vua hỏi đất này của ai, hãy nói 'Của Hầu tước Carabas'!" Nông dân sợ, đồng ý.
+
+Mèo chạy đến lâu đài lớn nhất vùng — của một lão phù thuỷ ác.
+
+Mèo gõ cửa: "Tâu phù thuỷ tôn kính, tôi nghe nói ngài có thể biến thành bất kỳ thứ gì. Có thật không?"
+
+Phù thuỷ tự cao: "Đúng vậy! Ta biến thành SƯ TỬ này!"
+
+PHẬT! — phù thuỷ thành sư tử khổng lồ. Mèo run nhưng vẫn nói: "Wow! Nhưng tôi không tin ngài biến được thành con CHUỘT bé tí!"
+
+Phù thuỷ tự ái: "Dễ thôi!"
+
+PHẬT! — phù thuỷ thành chuột nhắt. MỘP! Mèo nuốt chửng phù thuỷ!
+
+Khi vua đến, vua thấy "Hầu tước Carabas" đứng ở cửa lâu đài hoành tráng. Vua kinh ngạc trước sự giàu có của Hầu tước.
+
+Vua gả công chúa cho cậu. Cậu trai nghèo trở thành phò mã. Còn chú mèo đi hia được phong làm Bá tước!
+
+Bài học:
+1. ĐỪNG XEM NHẸ NHỮNG GÌ MÌNH CÓ. Có khi thứ tưởng vô dụng lại là báu vật.
+2. SỰ THÔNG MINH VÀ KIÊN TRÌ quý hơn của cải.
+3. LÒNG TỐT được đền đáp. Mèo giúp cậu chủ vì cậu đã mua hia.`},
+
+{id:'kid_oak',cat:'kids',emoji:'🌳',title:'Cây Sồi và Cây Sậy',author:'Aesop',duration:'2 phút',
+content:`Có một cây sồi to lớn mọc bên dòng sông. Cạnh đó, có cây sậy nhỏ bé yếu ớt.
+
+Cây sồi khoe khoang: "Sậy ơi, ngươi nhỏ bé thế kia. Một cơn gió nhẹ cũng đủ làm ngươi cúi đầu. Còn ta — to lớn, vững chãi, ngàn năm không lay chuyển!"
+
+Sậy mỉm cười: "Anh sồi ơi, anh nói đúng. Nhưng cúi đầu chưa hẳn là yếu."
+
+Một hôm, có cơn bão lớn ập đến. Gió thổi mạnh kinh khủng. Mưa như trút.
+
+Cây sồi đứng thẳng, không chịu cúi. "Ta sẽ không cúi đầu trước gió!"
+
+Sậy nhỏ bé thì nghiêng theo gió. Gió thổi qua trái — sậy nghiêng trái. Gió thổi qua phải — sậy nghiêng phải.
+
+Càng lúc gió càng mạnh. Cây sồi kiêu hãnh đứng thẳng. Cuối cùng — RẦM! Cây sồi to bị gió bẻ gãy đôi, đổ xuống đất.
+
+Khi bão tan, sậy nhỏ vẫn còn nguyên, đứng dậy thẳng tắp.
+
+Sậy nhìn sồi đã gãy, buồn: "Anh sồi ơi, anh quá cứng. Cứng nhưng giòn. Tôi nhỏ nhưng dẻo. Khi bão đến, ai biết cúi đầu — sẽ sống. Ai chỉ biết đứng thẳng — sẽ gãy."
+
+Bài học sâu sắc cho các bạn nhỏ:
+
+Trong cuộc sống, không phải lúc nào ta cũng đúng. Không phải lúc nào ta cũng phải thắng.
+
+Có những lúc — gặp người lớn tuổi nói lý, ta phải biết cúi đầu nghe. Có những lúc — đang cãi nhau với bạn, ta phải biết "thôi đi". Có những lúc — sai rồi, ta phải biết xin lỗi.
+
+Cúi đầu không phải hèn nhát. Đó là sự khôn ngoan.
+
+Cứng đầu, cứng cổ, không bao giờ chịu nhận sai — như cây sồi. Sớm muộn cũng gãy.
+
+Khi gặp bố mẹ giận, đừng cãi tay đôi. Đợi bố mẹ bớt giận, rồi nói chuyện.
+
+Khi thầy cô chỉ ra lỗi, đừng tự ái. Hãy lắng nghe, sửa sai.
+
+Khi bạn bè to tiếng, đừng đáp lại. Bão sẽ qua. Tình bạn ở lại.
+
+Học làm cây sậy nhé các bạn — dẻo dai, biết cúi đầu khi cần, đứng thẳng khi bão tan.
+
+Đó là cách sống thông minh nhất.`},
+
+{id:'kid_promise',cat:'kids',emoji:'🤝',title:'Cậu Bé Giữ Lời Hứa',author:'Truyện cổ Trung Hoa',duration:'2 phút',
+content:`Có một cậu bé tên Tăng Tử. Cậu sống cùng bố mẹ trong một ngôi làng nhỏ. Tăng Tử nổi tiếng là cậu bé ngoan, lễ phép, và đặc biệt — luôn giữ lời hứa.
+
+Một hôm, mẹ Tăng Tử chuẩn bị đi chợ. Tăng Tử bám theo, nằng nặc đòi đi.
+
+Mẹ bảo: "Con ở nhà ngoan. Khi mẹ về, mẹ sẽ giết heo cho con ăn cỗ."
+
+Tăng Tử nghe vậy mới chịu ở nhà. Cậu vui vẻ chờ mẹ về để được ăn thịt heo.
+
+Khi mẹ đi chợ về, bố Tăng Tử thấy mẹ đang xắn tay áo, chuẩn bị bắt con heo trong chuồng.
+
+Bố ngạc nhiên: "Em làm gì vậy? Sao lại bắt heo?"
+
+Mẹ đáp: "Em hứa với con sẽ giết heo cho nó ăn cỗ. Bây giờ em làm cho con."
+
+Bố cười: "Em ơi! Đó chỉ là câu nói dỗ con thôi! Trẻ con chóng quên. Nó không nhớ đâu! Heo này nuôi cả năm mới đến lứa. Giết một con — mất bao nhiêu tiền!"
+
+Mẹ Tăng Tử lắc đầu nghiêm túc: "Anh à, trẻ con không biết suy nghĩ. Chúng học từ bố mẹ. Nếu hôm nay em nói dối với con — dù chỉ là chuyện nhỏ — con sẽ học rằng nói dối là được. Lớn lên, con sẽ nói dối em, nói dối bạn bè, nói dối thầy cô. Em không muốn con học cách lừa dối. Một con heo nhỏ — không bằng một bài học lớn."
+
+Bố Tăng Tử lặng im. Bố hiểu vợ mình đúng.
+
+Hai vợ chồng cùng nhau giết heo, làm cỗ. Tăng Tử ăn cỗ ngon lành. Cậu bé không biết rằng — bố mẹ vừa dạy cậu bài học quý nhất đời.
+
+Sau này, Tăng Tử trở thành một trong những hiền triết nổi tiếng nhất Trung Hoa cổ. Người ta gọi ông là một trong "Tứ thánh" — bốn vị thánh của Nho giáo. Và đặc tính nổi bật nhất của Tăng Tử — đúng như mẹ đã trồng từ thuở bé — là LUÔN GIỮ LỜI HỨA.
+
+Bài học cho các bạn nhỏ:
+
+Khi đã hứa điều gì — DÙ NHỎ ĐẾN ĐÂU — hãy giữ lời.
+
+Hứa đúng 7 giờ về ăn cơm — hãy về đúng giờ. Hứa nay học bài xong mới chơi — hãy học xong. Hứa giúp bạn — hãy giúp đến nơi đến chốn.
+
+Mỗi lần giữ lời, bạn xây dựng một thứ rất quý — UY TÍN. Mỗi lần không giữ lời, bạn phá huỷ một chút uy tín ấy.
+
+Người uy tín được mọi người tin tưởng. Người không uy tín — dù nói gì cũng không ai tin.
+
+Và nhớ: TRẺ CON HỌC TỪ NGƯỜI LỚN. Nếu bạn thấy người lớn nói dối, đừng học theo. Hãy là người tốt hơn họ.
+
+Nếu bạn là người lớn — hãy giữ lời với con trẻ. Vì các em đang nhìn bạn để học cách sống.`}
+];
+
+
+/* ============== STORIES — 51 Truyện Full với Audiobook ============== */
+games.stories = (()=>{
+  const CATS = [
+    {id:'all', label:'📚 Tất cả', color:'var(--neon-cyan)'},
+    {id:'thien', label:'🧘 Thiền', color:'var(--neon-yellow)'},
+    {id:'tamlinh', label:'✨ Tâm linh', color:'var(--neon-pink)'},
+    {id:'self', label:'💪 Self-help', color:'var(--neon-purple)'},
+    {id:'kids', label:'🐰 Trẻ em', color:'#39ff7f'}
+  ];
+  let currentCat = 'all';
+  let currentStory = null;
+  let currentMode = null; // 'tts' | 'scroll' | null
+  let utterance = null;
+  let ttsState = 'idle'; // idle | playing | paused
+  let scrollAnim = null;
+
+  function stopTTS(){
+    try { window.speechSynthesis.cancel(); } catch(e){}
+    utterance = null;
+    ttsState = 'idle';
+  }
+
+  function stopScroll(){
+    if(scrollAnim){
+      const el = document.getElementById('storyScrollBox');
+      if(el) el.style.animation = 'none';
+      scrollAnim = null;
+    }
+  }
+
+  function stopAll(){
+    stopTTS();
+    stopScroll();
+  }
+
+  function init(){
+    stopAll();
+    currentStory = null;
+    currentMode = null;
+    renderList();
+  }
+
+  function renderList(){
+    stopAll();
+    mArea.innerHTML = '';
+    mCtrls.innerHTML = '';
+
+    // Header with description
+    const head = document.createElement('div');
+    head.style.cssText = 'text-align:center;margin-bottom:14px';
+    head.innerHTML = `<div style="font-size:13px;color:var(--muted);line-height:1.5">📖 <b style="color:var(--text)">${STORIES.length} truyện full</b> — chọn truyện, nghe hoặc đọc cuộn</div>`;
+    mArea.appendChild(head);
+
+    // Category filter chips
+    const chipsRow = document.createElement('div');
+    chipsRow.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:12px';
+    CATS.forEach(c=>{
+      const count = c.id==='all' ? STORIES.length : STORIES.filter(s=>s.cat===c.id).length;
+      const chip = document.createElement('button');
+      const active = currentCat===c.id;
+      chip.style.cssText = `padding:8px 12px;border-radius:18px;border:2px solid ${active?c.color:'rgba(255,255,255,.12)'};background:${active?'rgba(255,255,255,.08)':'rgba(0,0,0,.2)'};color:${active?c.color:'var(--text)'};font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;touch-action:manipulation;transition:all .15s`;
+      chip.innerHTML = `${c.label} <span style="opacity:.7;font-weight:400">(${count})</span>`;
+      chip.onclick = ()=>{
+        currentCat = c.id;
+        if(typeof SFX!=='undefined') SFX.tap();
+        renderList();
+      };
+      chipsRow.appendChild(chip);
+    });
+    mArea.appendChild(chipsRow);
+
+    // Stories list
+    const list = document.createElement('div');
+    list.style.cssText = 'display:flex;flex-direction:column;gap:8px';
+    const filtered = currentCat==='all' ? STORIES : STORIES.filter(s=>s.cat===currentCat);
+
+    if(filtered.length===0){
+      list.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px">Không có truyện nào</div>';
+    } else {
+      filtered.forEach(s=>{
+        const card = document.createElement('div');
+        card.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;cursor:pointer;touch-action:manipulation;transition:all .15s';
+        card.onmouseover = ()=>{card.style.background='rgba(255,255,255,.08)';card.style.borderColor='var(--neon-cyan)'};
+        card.onmouseout = ()=>{card.style.background='rgba(255,255,255,.04)';card.style.borderColor='rgba(255,255,255,.08)'};
+        card.innerHTML = `
+          <div style="font-size:32px;flex-shrink:0">${s.emoji}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:2px">${s.title}</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.3">${s.author} · ⏱ ${s.duration}</div>
+          </div>
+          <div style="color:var(--muted);font-size:18px;flex-shrink:0">→</div>`;
+        card.onclick = ()=>{
+          if(typeof SFX!=='undefined') SFX.open();
+          openStory(s);
+        };
+        list.appendChild(card);
+      });
+    }
+    mArea.appendChild(list);
+
+    addBtn('← Đóng','alt',closeModal);
+    setStatus(`📖 ${filtered.length} truyện · Chọn để đọc/nghe`);
+  }
+
+  function openStory(s){
+    stopAll();
+    currentStory = s;
+    currentMode = null;
+    mArea.innerHTML = '';
+    mCtrls.innerHTML = '';
+
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'max-width:600px;margin:0 auto';
+
+    // Title card
+    const titleCard = document.createElement('div');
+    titleCard.style.cssText = 'text-align:center;padding:18px;background:linear-gradient(135deg,rgba(0,240,255,.08),rgba(177,75,255,.08));border:1px solid rgba(0,240,255,.2);border-radius:14px;margin-bottom:14px';
+    titleCard.innerHTML = `
+      <div style="font-size:48px;margin-bottom:6px">${s.emoji}</div>
+      <div style="font-family:'Bungee',cursive;font-size:20px;color:var(--neon-yellow);line-height:1.2">${s.title}</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px">${s.author} · ⏱ ${s.duration}</div>`;
+    wrap.appendChild(titleCard);
+
+    // Mode selector
+    const modeRow = document.createElement('div');
+    modeRow.style.cssText = 'display:flex;gap:8px;margin-bottom:14px';
+
+    const ttsBtn = document.createElement('button');
+    ttsBtn.style.cssText = 'flex:1;padding:14px;background:linear-gradient(135deg,var(--neon-pink),var(--neon-purple));border:none;color:#fff;font-family:"Bungee",cursive;font-size:13px;border-radius:12px;cursor:pointer;touch-action:manipulation;box-shadow:0 4px 14px rgba(255,45,149,.3)';
+    ttsBtn.innerHTML = '🎧 NGHE';
+    ttsBtn.onclick = ()=>startTTS();
+
+    const scrollBtn = document.createElement('button');
+    scrollBtn.style.cssText = 'flex:1;padding:14px;background:linear-gradient(135deg,var(--neon-cyan),var(--neon-yellow));border:none;color:#000;font-family:"Bungee",cursive;font-size:13px;border-radius:12px;cursor:pointer;touch-action:manipulation;box-shadow:0 4px 14px rgba(0,240,255,.3)';
+    scrollBtn.innerHTML = '📜 ĐỌC CUỘN';
+    scrollBtn.onclick = ()=>startScroll();
+
+    modeRow.appendChild(ttsBtn);
+    modeRow.appendChild(scrollBtn);
+    wrap.appendChild(modeRow);
+
+    // TTS controls panel (hidden initially)
+    const ttsPanel = document.createElement('div');
+    ttsPanel.id = 'ttsPanel';
+    ttsPanel.style.cssText = 'display:none;padding:12px;background:rgba(255,45,149,.06);border:1px solid rgba(255,45,149,.2);border-radius:10px;margin-bottom:12px';
+    wrap.appendChild(ttsPanel);
+
+    // Story content (full text)
+    const contentBox = document.createElement('div');
+    contentBox.id = 'storyContent';
+    contentBox.style.cssText = 'background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;font-size:15px;line-height:1.8;color:var(--text);white-space:pre-wrap;max-height:none';
+    contentBox.textContent = s.content;
+    wrap.appendChild(contentBox);
+
+    mArea.appendChild(wrap);
+
+    addBtn('← Truyện khác','alt',()=>{stopAll();renderList()});
+    addBtn('← Đóng','alt',closeModal);
+    setStatus(`📖 ${s.title}`);
+  }
+
+  function buildTTSControls(){
+    const panel = document.getElementById('ttsPanel');
+    if(!panel) return;
+    const rate = parseFloat(localStorage.getItem('ttsRate')||'0.95');
+    panel.style.display = 'block';
+    panel.innerHTML = `
+      <div style="display:flex;gap:6px;justify-content:center;margin-bottom:10px;flex-wrap:wrap">
+        <button id="ttsPlayBtn" style="padding:10px 16px;background:var(--neon-pink);border:none;color:#fff;font-family:inherit;font-weight:700;border-radius:10px;cursor:pointer;touch-action:manipulation;font-size:13px">▶️ Phát</button>
+        <button id="ttsPauseBtn" style="padding:10px 16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:var(--text);font-family:inherit;font-weight:700;border-radius:10px;cursor:pointer;touch-action:manipulation;font-size:13px">⏸ Tạm dừng</button>
+        <button id="ttsStopBtn" style="padding:10px 16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:var(--text);font-family:inherit;font-weight:700;border-radius:10px;cursor:pointer;touch-action:manipulation;font-size:13px">⏹ Dừng</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)">
+        <span>🐢 Chậm</span>
+        <input type="range" id="ttsRateSlider" min="0.5" max="1.6" step="0.05" value="${rate}" style="flex:1">
+        <span>Nhanh 🐇</span>
+        <span id="ttsRateLabel" style="color:var(--neon-yellow);font-weight:700;min-width:36px;text-align:right">${rate.toFixed(2)}x</span>
+      </div>
+      <div id="ttsStatus" style="text-align:center;font-size:11px;color:var(--muted);margin-top:8px"></div>`;
+
+    document.getElementById('ttsPlayBtn').onclick = ()=>resumeOrStartTTS();
+    document.getElementById('ttsPauseBtn').onclick = ()=>pauseTTS();
+    document.getElementById('ttsStopBtn').onclick = ()=>{stopTTS();updateTTSStatus('⏹ Đã dừng')};
+    const slider = document.getElementById('ttsRateSlider');
+    slider.oninput = ()=>{
+      const v = parseFloat(slider.value);
+      localStorage.setItem('ttsRate', v);
+      document.getElementById('ttsRateLabel').textContent = v.toFixed(2)+'x';
+      // Restart at new speed if currently playing
+      if(ttsState==='playing'){
+        stopTTS();
+        startTTSPlayback();
+      }
+    };
+  }
+
+  function updateTTSStatus(msg){
+    const el = document.getElementById('ttsStatus');
+    if(el) el.textContent = msg;
+  }
+
+  function startTTS(){
+    if(!('speechSynthesis' in window)){
+      showToast('⚠️ Thiết bị không hỗ trợ đọc voice', 2500);
+      return;
+    }
+    currentMode = 'tts';
+    stopScroll();
+    buildTTSControls();
+    startTTSPlayback();
+  }
+
+  function startTTSPlayback(){
+    if(!currentStory) return;
+    stopTTS();
+    const rate = parseFloat(localStorage.getItem('ttsRate')||'0.95');
+    utterance = new SpeechSynthesisUtterance(currentStory.content);
+    utterance.lang = 'vi-VN';
+    utterance.rate = rate;
+    utterance.pitch = 1;
+    // Try to find Vietnamese voice
+    try {
+      const voices = window.speechSynthesis.getVoices();
+      const viVoice = voices.find(v=>v.lang && v.lang.toLowerCase().startsWith('vi'));
+      if(viVoice) utterance.voice = viVoice;
+    } catch(e){}
+    utterance.onstart = ()=>{
+      ttsState = 'playing';
+      updateTTSStatus('🔊 Đang đọc...');
+    };
+    utterance.onend = ()=>{
+      ttsState = 'idle';
+      updateTTSStatus('✅ Đã đọc xong!');
+      // Report to Player system
+      if(typeof reportGameResult!=='undefined') reportGameResult('stories',{win:true,bookFinished:true,score:50});
+    };
+    utterance.onerror = (e)=>{
+      ttsState = 'idle';
+      updateTTSStatus('⚠️ Lỗi: '+(e.error||'không rõ'));
+    };
+    utterance.onpause = ()=>{ttsState='paused';updateTTSStatus('⏸ Đã tạm dừng')};
+    utterance.onresume = ()=>{ttsState='playing';updateTTSStatus('🔊 Tiếp tục đọc...')};
+
+    try {
+      window.speechSynthesis.speak(utterance);
+    } catch(e){
+      updateTTSStatus('⚠️ Không thể phát: '+e.message);
+    }
+  }
+
+  function resumeOrStartTTS(){
+    if(ttsState==='paused'){
+      try { window.speechSynthesis.resume(); } catch(e){}
+    } else if(ttsState==='idle'){
+      startTTSPlayback();
+    }
+  }
+
+  function pauseTTS(){
+    if(ttsState==='playing'){
+      try { window.speechSynthesis.pause(); } catch(e){}
+    }
+  }
+
+  function startScroll(){
+    currentMode = 'scroll';
+    stopTTS();
+    const panel = document.getElementById('ttsPanel');
+    if(panel) panel.style.display = 'none';
+
+    const content = document.getElementById('storyContent');
+    if(!content || !currentStory) return;
+
+    // Wrap content with scroll container
+    const text = currentStory.content;
+    content.innerHTML = `<div id="storyScrollOuter" style="position:relative;height:60vh;overflow:hidden;border-radius:8px;background:linear-gradient(180deg,rgba(0,0,0,.4),transparent 10%,transparent 90%,rgba(0,0,0,.4))">
+      <div id="storyScrollBox" style="position:absolute;left:0;right:0;top:100%;padding:20px;font-size:16px;line-height:1.9;color:var(--text);white-space:pre-wrap;text-align:center;font-style:italic">${text}</div>
+    </div>
+    <div style="text-align:center;margin-top:10px;font-size:12px;color:var(--muted)">📜 Tự cuộn — đọc thư giãn · <button id="scrollStopBtn" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:var(--text);padding:4px 10px;border-radius:8px;font-family:inherit;font-size:11px;cursor:pointer;margin-left:6px">⏹ Dừng cuộn</button></div>`;
+
+    // Calculate scroll duration based on content length (slow reading pace)
+    const wordCount = text.split(/\s+/).length;
+    const duration = Math.max(30, wordCount * 0.5); // ~0.5s per word
+
+    // Use CSS animation via inline style
+    setTimeout(()=>{
+      const box = document.getElementById('storyScrollBox');
+      if(!box) return;
+      const containerH = box.parentElement.offsetHeight;
+      const contentH = box.scrollHeight;
+      box.style.animation = `storyScrollAnim ${duration}s linear forwards`;
+      box.style.setProperty('--scrollEnd', `-${contentH+100}px`);
+      scrollAnim = true;
+
+      box.addEventListener('animationend', ()=>{
+        scrollAnim = null;
+        // Mark as finished
+        if(typeof reportGameResult!=='undefined') reportGameResult('stories',{win:true,bookFinished:true,score:50});
+        showToast('📖 Đọc xong! +XP',2000);
+      });
+    }, 100);
+
+    const stopBtn = document.getElementById('scrollStopBtn');
+    if(stopBtn) stopBtn.onclick = ()=>{
+      stopScroll();
+      // Re-render plain content
+      content.innerHTML = '';
+      content.textContent = currentStory.content;
+    };
+  }
+
+  return {
+    title: '📖 Đọc truyện',
+    init: init,
+    cleanup: stopAll
+  };
+})();
+
 games.readingRoll = (()=>{
   // Self-help / inspirational passages
   const BOOKS=[
@@ -6913,7 +9655,7 @@ Stay hungry. Stay foolish.`,
     setStatus(`📜 <b>Quiz</b> · ${currentBook.title} · Câu ${quizIdx+1}/${currentBook.questions.length}`);
   }
   function renderResult(){
-    const total=currentBook.questions.length;
+    const total=currentBook.questions.length;reportGameResult('readingRoll',{win:true,score:quizScore*10,perfectQuiz:quizScore===total,bookFinished:true});
     const pct=Math.round(quizScore*100/total);
     const stars=pct>=90?'⭐⭐⭐⭐⭐':pct>=70?'⭐⭐⭐⭐':pct>=50?'⭐⭐⭐':pct>=30?'⭐⭐':'⭐';
     const lbl=pct>=90?'🌟 Đọc kỹ!':pct>=70?'📚 Tốt':pct>=50?'🌱 Tạm được':'💤 Cần đọc lại';
@@ -6976,7 +9718,7 @@ games.quotes = (()=>{
   function prev(){idx=(idx-1+QUOTES.length)%QUOTES.length;localStorage.setItem('quoteIdx',idx);if(typeof SFX!=='undefined')SFX.swoosh();render()}
   function random(){idx=Math.floor(Math.random()*QUOTES.length);localStorage.setItem('quoteIdx',idx);render()}
   function toggleSave(){
-    if(saved[idx])delete saved[idx];else saved[idx]=Date.now();
+    const wasSaved=saved[idx];if(saved[idx])delete saved[idx];else{saved[idx]=Date.now();if(typeof Player!=='undefined')Player.bumpProgress('quotesSaved');}
     localStorage.setItem('quoteSaved',JSON.stringify(saved));
     render();
   }
