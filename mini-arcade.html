@@ -775,14 +775,10 @@ footer b{color:var(--neon-cyan)}
     <div class="card" data-game="reaction" style="--ac:var(--neon-pink)"><div class="emoji">⚡</div><h3>Đo phản xạ</h3><p>Bấm ngay khi xanh — tính bằng mili-giây</p></div>
     <div class="card" data-game="rps" style="--ac:var(--neon-purple)"><div class="emoji">✊✋✌️</div><h3>Oẳn tù tì</h3><p>Đấu với máy — first to 5</p></div>
     <div class="card" data-game="numguess" style="--ac:var(--neon-cyan)"><div class="emoji">🎲</div><h3>Đoán số 1-100</h3><p>Máy nghĩ — bạn đoán, gợi ý cao/thấp</p></div>
-    <h3>Ném phi tiêu</h3><p>10 phi tiêu vào hồng tâm — tính điểm</p></div>
     <div class="card" data-game="mine2d" style="--ac:var(--neon-green)"><div class="emoji">🟫</div><h3>Minecraft 2D</h3><p>Đào - xây - craft. Tìm kim cương!</p></div>
     <div class="card" data-game="obby" style="--ac:var(--neon-pink)"><div class="emoji">🔴</div><h3>Obby</h3><p>Roblox-style — nhảy né lava, thu sao, 5 màn</p></div>
     <div class="card" data-game="woodBlock" style="--ac:var(--neon-orange)"><div class="emoji">🪵</div><h3>Khối gỗ</h3><p>Wood Block — lấp hàng/cột để xoá &amp; ghi điểm</p></div>
     <div class="card" data-game="yatzy" style="--ac:var(--neon-cyan)"><div class="emoji">🎲</div><h3>Yatzy</h3><p>5 xí ngầu — 13 ô điểm, full house, yatzy 50đ</p></div>
-    <h3>Reversi</h3><p>Othello 8×8 — kẹp quân để lật, đấu Bot/2 người</p></div>
-    <h3>Bắn cung</h3><p>Ngắm góc, canh gió, 10 tên/ván — hồng tâm 100đ</p></div>
-    <h3>Sea Battle</h3><p>Battleship cổ điển 10×10 — đặt 5 tàu, đấu AI</p></div>
   </div>
 </div>
 
@@ -826,6 +822,7 @@ footer b{color:var(--neon-cyan)}
 <div class="card" data-game="stories" style="--ac:var(--neon-yellow)"><div class="emoji">📖</div><h3>Đọc truyện</h3><p>51 truyện full: thiền, tâm linh, self-help, trẻ em — nghe audiobook hoặc đọc cuộn</p></div>
 <div class="card" data-game="readingRoll" style="--ac:var(--neon-cyan)"><div class="emoji">📜</div><h3>Đọc cuộn</h3><p>7 sách self-help: Atomic Habits, Đắc Nhân Tâm, Sapiens, Tony, Stoic, 7 Habits, Jobs (EN)</p></div>
     <div class="card" data-game="quotes" style="--ac:var(--neon-yellow)"><div class="emoji">💡</div><h3>Danh ngôn</h3><p>31 câu nói hay — Jobs, Gandhi, Lão Tử, Socrates kèm ý nghĩa</p></div>
+    <div class="card" data-game="chineseListen" style="--ac:#da291c"><div class="emoji">🇨🇳</div><h3>Học nghe tiếng Trung</h3><p>Nghe câu Trung Quốc · 84 câu chuẩn pinyin · 3 mức độ</p></div>
     <div class="card" data-game="englishListen" style="--ac:var(--neon-pink)"><div class="emoji">🎧</div><h3>Luyện nghe tiếng Anh</h3><p>30 câu — TTS đọc, đoán nghĩa tiếng Việt (3 cấp độ)</p></div>
   </div>
 </div>
@@ -1029,11 +1026,8 @@ const Player = (()=>{
     {id:'g2048_2048',name:'2048!',desc:'2048 đạt khối 2048',emoji:'🎯',check:d=>(d.gameStats.g2048?.bestScore||0)>=20000},
     {id:'mine_diamond',name:'Thợ Kim Cương',desc:'Mine2D đào kim cương',emoji:'💎',check:d=>(d.achievementProgress.mineDiamond||0)>=1},
     {id:'obby_complete',name:'Tower of Hell',desc:'Hoàn thành Obby màn 5',emoji:'🔴',check:d=>(d.achievementProgress.obbyMax||0)>=5},
-    {id:'archery_bullseye',name:'Hồng tâm',desc:'Bắn cung 100 điểm 1 phát',emoji:'🎯',check:d=>(d.achievementProgress.archeryBull||0)>=1},
     {id:'yatzy_50',name:'YATZY!',desc:'Đạt YATZY 50 điểm',emoji:'🎲',check:d=>(d.achievementProgress.yatzy50||0)>=1},
     {id:'wood_500',name:'Wood Master',desc:'Wood Block 500 điểm',emoji:'🪵',check:d=>(d.gameStats.woodBlock?.bestScore||0)>=500},
-    {id:'seabattle_win',name:'Đô đốc',desc:'Thắng 1 ván Sea Battle',emoji:'⚓',check:d=>(d.gameStats.seaBattle?.wins||0)>=1},
-    {id:'reversi_win',name:'Chiến lược gia',desc:'Thắng 1 ván Reversi',emoji:'⚫',check:d=>(d.gameStats.reversi?.wins||0)>=1},
     
     // Quiz/Learn
     {id:'quiz_perfect',name:'Học giỏi',desc:'Quiz đạt 100% 1 lần',emoji:'🎓',check:d=>(d.achievementProgress.perfectQuiz||0)>=1},
@@ -1088,7 +1082,6 @@ const Player = (()=>{
     if(result.perfectQuiz)bumpProgress('perfectQuiz');
     if(result.bookFinished)bumpProgress('booksRead');
     if(result.mineDiamond)bumpProgress('mineDiamond');
-    if(result.archeryBull)bumpProgress('archeryBull');
     if(result.yatzy50)bumpProgress('yatzy50');
     if(result.obbyLevel)data.achievementProgress.obbyMax=Math.max(data.achievementProgress.obbyMax||0,result.obbyLevel);
     
@@ -12406,6 +12399,235 @@ games.quotes = (()=>{
   return {title:'Câu danh ngôn',init};
 })();
 
+
+/* ============== HỌC NGHE TIẾNG TRUNG ============== */
+games.chineseListen = (()=>{
+  const PHRASES={
+    easy:[
+      {zh:'你好',py:'Nǐ hǎo',vi:'Xin chào',wrong:['Tạm biệt','Cảm ơn','Xin lỗi']},
+      {zh:'谢谢',py:'Xiè xie',vi:'Cảm ơn',wrong:['Xin chào','Xin lỗi','Tạm biệt']},
+      {zh:'不客气',py:'Bú kè qi',vi:'Không có chi',wrong:['Cảm ơn rất nhiều','Xin lỗi nhé','Đừng khách sáo nhé']},
+      {zh:'对不起',py:'Duì bù qǐ',vi:'Xin lỗi',wrong:['Không sao','Cảm ơn','Tạm biệt']},
+      {zh:'没关系',py:'Méi guān xi',vi:'Không sao',wrong:['Xin lỗi','Cảm ơn','Tôi không biết']},
+      {zh:'再见',py:'Zài jiàn',vi:'Tạm biệt',wrong:['Xin chào','Hẹn gặp lại sau','Chào buổi tối']},
+      {zh:'你叫什么名字?',py:'Nǐ jiào shén me míng zi?',vi:'Bạn tên gì?',wrong:['Bạn bao nhiêu tuổi?','Bạn ở đâu?','Bạn khỏe không?']},
+      {zh:'我叫小明',py:'Wǒ jiào Xiǎo Míng',vi:'Tôi tên Tiểu Minh',wrong:['Tôi là người Việt','Tôi 10 tuổi','Tôi sống ở Hà Nội']},
+      {zh:'我是越南人',py:'Wǒ shì Yuè nán rén',vi:'Tôi là người Việt Nam',wrong:['Tôi là người Trung','Tôi sống ở Mỹ','Tôi học tiếng Anh']},
+      {zh:'你好吗?',py:'Nǐ hǎo ma?',vi:'Bạn khỏe không?',wrong:['Bạn tên gì?','Bạn ở đâu?','Bạn làm gì?']},
+      {zh:'我很好',py:'Wǒ hěn hǎo',vi:'Tôi rất khỏe',wrong:['Tôi mệt','Tôi buồn','Tôi vui']},
+      {zh:'我十岁',py:'Wǒ shí suì',vi:'Tôi 10 tuổi',wrong:['Tôi 12 tuổi','Tôi 5 tuổi','Tôi 8 tuổi']},
+      {zh:'我饿了',py:'Wǒ è le',vi:'Tôi đói rồi',wrong:['Tôi khát rồi','Tôi mệt rồi','Tôi no rồi']},
+      {zh:'我渴了',py:'Wǒ kě le',vi:'Tôi khát rồi',wrong:['Tôi đói rồi','Tôi mệt rồi','Tôi buồn ngủ']},
+      {zh:'我累了',py:'Wǒ lèi le',vi:'Tôi mệt rồi',wrong:['Tôi đói rồi','Tôi vui rồi','Tôi giận rồi']},
+      {zh:'我爱你',py:'Wǒ ài nǐ',vi:'Tôi yêu bạn',wrong:['Tôi ghét bạn','Tôi nhớ bạn','Tôi quên bạn']},
+      {zh:'我不知道',py:'Wǒ bù zhī dào',vi:'Tôi không biết',wrong:['Tôi biết rồi','Tôi đồng ý','Tôi không hiểu']},
+      {zh:'早上好',py:'Zǎo shang hǎo',vi:'Chào buổi sáng',wrong:['Chào buổi tối','Chúc ngủ ngon','Tạm biệt']},
+      {zh:'晚安',py:'Wǎn ān',vi:'Chúc ngủ ngon',wrong:['Chào buổi sáng','Chào buổi tối','Hẹn gặp lại']},
+      {zh:'今天天气真好',py:'Jīn tiān tiān qì zhēn hǎo',vi:'Hôm nay thời tiết đẹp quá',wrong:['Hôm nay trời mưa','Hôm nay trời lạnh','Hôm qua trời nắng']},
+      {zh:'下雨了',py:'Xià yǔ le',vi:'Trời mưa rồi',wrong:['Trời nắng rồi','Tuyết rơi rồi','Có gió mạnh']},
+      {zh:'我喜欢吃米饭',py:'Wǒ xǐ huan chī mǐ fàn',vi:'Tôi thích ăn cơm',wrong:['Tôi thích ăn phở','Tôi không thích cơm','Tôi đang ăn cơm']},
+      {zh:'我有一个哥哥',py:'Wǒ yǒu yí ge gē ge',vi:'Tôi có một anh trai',wrong:['Tôi có một em trai','Tôi có một chị gái','Tôi không có anh chị']},
+      {zh:'这是什么?',py:'Zhè shì shén me?',vi:'Cái này là gì?',wrong:['Cái này của ai?','Cái này ở đâu?','Cái này bao nhiêu?']},
+      {zh:'这是书',py:'Zhè shì shū',vi:'Đây là sách',wrong:['Đây là bút','Đây là máy tính','Đây là điện thoại']},
+      {zh:'多少钱?',py:'Duō shǎo qián?',vi:'Bao nhiêu tiền?',wrong:['Cái này có không?','Bạn muốn gì?','Mấy giờ rồi?']},
+      {zh:'一二三四五',py:'Yī èr sān sì wǔ',vi:'Một hai ba bốn năm',wrong:['Sáu bảy tám chín mười','Trăm nghìn triệu','Nhỏ vừa to lớn khổng lồ']},
+      {zh:'我喜欢狗',py:'Wǒ xǐ huan gǒu',vi:'Tôi thích chó',wrong:['Tôi thích mèo','Tôi sợ chó','Tôi có một con chó']},
+      {zh:'你呢?',py:'Nǐ ne?',vi:'Còn bạn thì sao?',wrong:['Bạn ở đâu?','Bạn là ai?','Bạn đi đâu?']},
+      {zh:'慢一点',py:'Màn yì diǎn',vi:'Chậm một chút',wrong:['Nhanh một chút','Nói to lên','Im lặng đi']},
+      {zh:'我爸爸',py:'Wǒ bà ba',vi:'Bố tôi',wrong:['Mẹ tôi','Anh tôi','Em tôi']},
+      {zh:'我妈妈',py:'Wǒ mā ma',vi:'Mẹ tôi',wrong:['Bố tôi','Bà tôi','Chị tôi']},
+      {zh:'请坐',py:'Qǐng zuò',vi:'Mời ngồi',wrong:['Mời đứng','Mời vào','Mời đi']},
+      {zh:'请进',py:'Qǐng jìn',vi:'Mời vào',wrong:['Mời ra','Mời ngồi','Mời đi']},
+      {zh:'我喜欢你',py:'Wǒ xǐ huan nǐ',vi:'Tôi thích bạn',wrong:['Tôi ghét bạn','Tôi nhớ bạn','Tôi sợ bạn']}
+    ],
+    mid:[
+      {zh:'你能帮我吗?',py:'Nǐ néng bāng wǒ ma?',vi:'Bạn có thể giúp tôi không?',wrong:['Bạn có thể đến không?','Bạn có thể đi không?','Bạn có thể nói không?']},
+      {zh:'我想喝水',py:'Wǒ xiǎng hē shuǐ',vi:'Tôi muốn uống nước',wrong:['Tôi muốn ăn cơm','Tôi muốn về nhà','Tôi muốn đi ngủ']},
+      {zh:'厕所在哪儿?',py:'Cè suǒ zài nǎr?',vi:'Toilet ở đâu?',wrong:['Bệnh viện ở đâu?','Trường học ở đâu?','Nhà hàng ở đâu?']},
+      {zh:'今天星期几?',py:'Jīn tiān xīng qī jǐ?',vi:'Hôm nay thứ mấy?',wrong:['Hôm nay ngày mấy?','Mấy giờ rồi?','Hôm nay tháng mấy?']},
+      {zh:'我学中文',py:'Wǒ xué Zhōng wén',vi:'Tôi học tiếng Trung',wrong:['Tôi học tiếng Anh','Tôi dạy tiếng Trung','Tôi nói tiếng Trung giỏi']},
+      {zh:'我会说一点中文',py:'Wǒ huì shuō yì diǎn Zhōng wén',vi:'Tôi biết nói một chút tiếng Trung',wrong:['Tôi nói tiếng Trung rất giỏi','Tôi không biết tiếng Trung','Tôi đang học tiếng Anh']},
+      {zh:'请再说一遍',py:'Qǐng zài shuō yí biàn',vi:'Làm ơn nói lại một lần nữa',wrong:['Làm ơn im lặng','Làm ơn nói to hơn','Làm ơn nói chậm hơn']},
+      {zh:'你住在哪里?',py:'Nǐ zhù zài nǎ li?',vi:'Bạn sống ở đâu?',wrong:['Bạn đi đâu?','Bạn đến từ đâu?','Bạn làm việc ở đâu?']},
+      {zh:'我家有四口人',py:'Wǒ jiā yǒu sì kǒu rén',vi:'Nhà tôi có 4 người',wrong:['Nhà tôi có 3 người','Nhà tôi có 5 người','Tôi sống một mình']},
+      {zh:'这个多少钱?',py:'Zhè ge duō shǎo qián?',vi:'Cái này bao nhiêu tiền?',wrong:['Cái này là gì?','Cái này ở đâu?','Cái này của ai?']},
+      {zh:'太贵了',py:'Tài guì le',vi:'Đắt quá',wrong:['Rẻ quá','Đẹp quá','Mới quá']},
+      {zh:'便宜一点',py:'Pián yi yì diǎn',vi:'Rẻ một chút đi',wrong:['Đắt một chút','Cho tôi xem cái khác','Tôi không mua']},
+      {zh:'我爸爸是老师',py:'Wǒ bà ba shì lǎo shī',vi:'Bố tôi là giáo viên',wrong:['Mẹ tôi là giáo viên','Bố tôi là bác sĩ','Anh tôi là giáo viên']},
+      {zh:'现在几点了?',py:'Xiàn zài jǐ diǎn le?',vi:'Bây giờ mấy giờ?',wrong:['Hôm nay thứ mấy?','Bây giờ ở đâu?','Khi nào đi?']},
+      {zh:'我要去机场',py:'Wǒ yào qù jī chǎng',vi:'Tôi muốn đi sân bay',wrong:['Tôi muốn đi ga tàu','Tôi muốn về nhà','Tôi muốn đi chợ']},
+      {zh:'我每天七点起床',py:'Wǒ měi tiān qī diǎn qǐ chuáng',vi:'Tôi dậy lúc 7 giờ mỗi ngày',wrong:['Tôi đi ngủ lúc 7 giờ','Tôi ăn sáng lúc 7 giờ','Tôi đến trường lúc 7 giờ']},
+      {zh:'周末你做什么?',py:'Zhōu mò nǐ zuò shén me?',vi:'Cuối tuần bạn làm gì?',wrong:['Bạn đi đâu?','Bạn ăn gì?','Bạn ngủ lúc mấy giờ?']},
+      {zh:'我喜欢看电影',py:'Wǒ xǐ huan kàn diàn yǐng',vi:'Tôi thích xem phim',wrong:['Tôi thích nghe nhạc','Tôi thích đọc sách','Tôi thích chơi game']},
+      {zh:'我感冒了',py:'Wǒ gǎn mào le',vi:'Tôi bị cảm rồi',wrong:['Tôi đau đầu','Tôi đau bụng','Tôi rất khỏe']},
+      {zh:'请等一下',py:'Qǐng děng yí xià',vi:'Làm ơn đợi một chút',wrong:['Làm ơn đi nhanh','Làm ơn ngồi xuống','Làm ơn nói chuyện']},
+      {zh:'我不会做',py:'Wǒ bú huì zuò',vi:'Tôi không biết làm',wrong:['Tôi sẽ làm','Tôi không muốn làm','Tôi đã làm xong']},
+      {zh:'你吃饭了吗?',py:'Nǐ chī fàn le ma?',vi:'Bạn ăn cơm chưa?',wrong:['Bạn đi ngủ chưa?','Bạn về chưa?','Bạn đến chưa?']},
+      {zh:'一起去吧',py:'Yì qǐ qù ba',vi:'Cùng đi nào',wrong:['Tôi không đi','Bạn tự đi đi','Hôm nay không đi']},
+      {zh:'这是给你的',py:'Zhè shì gěi nǐ de',vi:'Cái này tặng cho bạn',wrong:['Cái này của tôi','Cái này không phải của bạn','Cái này mua đâu vậy?']},
+      {zh:'我也喜欢',py:'Wǒ yě xǐ huan',vi:'Tôi cũng thích',wrong:['Tôi không thích','Bạn có thích không?','Tôi rất ghét']},
+      {zh:'生日快乐',py:'Shēng rì kuài lè',vi:'Chúc mừng sinh nhật',wrong:['Chúc mừng năm mới','Chúc may mắn','Tạm biệt nhé']},
+      {zh:'新年快乐',py:'Xīn nián kuài lè',vi:'Chúc mừng năm mới',wrong:['Chúc mừng sinh nhật','Chào buổi sáng','Chúc ngủ ngon']},
+      {zh:'我爱我的家人',py:'Wǒ ài wǒ de jiā rén',vi:'Tôi yêu gia đình tôi',wrong:['Tôi nhớ bạn','Tôi yêu bạn','Tôi nhớ nhà']}
+    ],
+    hard:[
+      {zh:'虽然下雨,但是我们还是出去玩了',py:'Suī rán xià yǔ, dàn shì wǒ men hái shì chū qù wán le',vi:'Mặc dù trời mưa, nhưng chúng tôi vẫn ra ngoài chơi',wrong:['Trời mưa nên chúng tôi không ra ngoài','Hôm nay trời nắng đẹp','Chúng tôi sẽ đi chơi vào ngày mai']},
+      {zh:'如果我有时间,我就去看你',py:'Rú guǒ wǒ yǒu shí jiān, wǒ jiù qù kàn nǐ',vi:'Nếu tôi có thời gian, tôi sẽ đến thăm bạn',wrong:['Tôi vừa đến thăm bạn','Tôi không có thời gian','Bạn đến thăm tôi đi']},
+      {zh:'我已经学了三年中文了',py:'Wǒ yǐ jīng xué le sān nián Zhōng wén le',vi:'Tôi đã học tiếng Trung được 3 năm rồi',wrong:['Tôi bắt đầu học tiếng Trung','Tôi học tiếng Trung 5 năm rồi','Tôi không thể nói tiếng Trung']},
+      {zh:'我觉得这本书很有意思',py:'Wǒ jué de zhè běn shū hěn yǒu yì si',vi:'Tôi thấy cuốn sách này rất thú vị',wrong:['Cuốn sách này nhàm chán','Tôi không thích đọc sách','Cuốn sách này quá dài']},
+      {zh:'你能告诉我去火车站怎么走吗?',py:'Nǐ néng gào su wǒ qù huǒ chē zhàn zěn me zǒu ma?',vi:'Bạn có thể chỉ tôi cách đi đến ga tàu không?',wrong:['Ga tàu ở đâu?','Tôi vừa đến ga tàu','Tàu đến lúc mấy giờ?']},
+      {zh:'不管多忙,我每天都运动',py:'Bù guǎn duō máng, wǒ měi tiān dōu yùn dòng',vi:'Dù bận thế nào, tôi vẫn tập thể dục mỗi ngày',wrong:['Tôi quá bận nên không tập','Tôi rất ít khi tập thể dục','Tôi tập thể dục cuối tuần']},
+      {zh:'我希望明年能去中国',py:'Wǒ xī wàng míng nián néng qù Zhōng guó',vi:'Tôi hy vọng năm sau có thể đi Trung Quốc',wrong:['Tôi đã đến Trung Quốc rồi','Tôi không muốn đi Trung Quốc','Tôi sống ở Trung Quốc']},
+      {zh:'这是我吃过最好吃的菜',py:'Zhè shì wǒ chī guò zuì hǎo chī de cài',vi:'Đây là món ngon nhất tôi từng ăn',wrong:['Món này không ngon','Tôi chưa từng ăn món này','Tôi không thích món Trung']},
+      {zh:'你应该早点告诉我',py:'Nǐ yīng gāi zǎo diǎn gào su wǒ',vi:'Đáng lẽ bạn nên nói với tôi sớm hơn',wrong:['Bạn đã nói với tôi rồi','Đừng nói với tôi','Tôi sẽ nói với bạn']},
+      {zh:'我刚刚到这里',py:'Wǒ gāng gāng dào zhè lǐ',vi:'Tôi vừa mới đến đây',wrong:['Tôi sắp đi rồi','Tôi đã ở đây lâu rồi','Tôi không đến']},
+      {zh:'时间过得真快',py:'Shí jiān guò de zhēn kuài',vi:'Thời gian trôi nhanh thật',wrong:['Tôi không có thời gian','Đợi một chút','Hôm nay rất chậm']},
+      {zh:'不要紧, 慢慢来',py:'Bú yào jǐn, màn man lái',vi:'Không sao, từ từ thôi',wrong:['Nhanh lên đi','Tôi rất gấp','Có chuyện gì vậy?']},
+      {zh:'我们一直是好朋友',py:'Wǒ men yì zhí shì hǎo péng you',vi:'Chúng ta vẫn luôn là bạn tốt',wrong:['Chúng ta không phải bạn','Tôi không biết bạn','Chúng ta mới gặp']},
+      {zh:'我对中国文化很感兴趣',py:'Wǒ duì Zhōng guó wén huà hěn gǎn xìng qù',vi:'Tôi rất quan tâm đến văn hóa Trung Quốc',wrong:['Tôi không thích Trung Quốc','Văn hóa Trung Quốc nhàm chán','Tôi sống ở Trung Quốc']},
+      {zh:'请把书还给我',py:'Qǐng bǎ shū huán gěi wǒ',vi:'Làm ơn trả sách lại cho tôi',wrong:['Hãy cho tôi mượn sách','Sách này hay không?','Tôi đã trả sách rồi']},
+      {zh:'我打算明天去公园',py:'Wǒ dǎ suàn míng tiān qù gōng yuán',vi:'Tôi định ngày mai đi công viên',wrong:['Tôi vừa đi công viên về','Tôi không thích công viên','Hôm nay tôi đi công viên']},
+      {zh:'这个问题很难解决',py:'Zhè ge wèn tí hěn nán jiě jué',vi:'Vấn đề này rất khó giải quyết',wrong:['Vấn đề này dễ thôi','Tôi đã giải quyết xong','Đây không phải vấn đề']},
+      {zh:'我相信你能做到',py:'Wǒ xiāng xìn nǐ néng zuò dào',vi:'Tôi tin bạn có thể làm được',wrong:['Tôi không tin bạn','Việc này quá khó','Đừng thử nữa']},
+      {zh:'别担心,一切都会好的',py:'Bié dān xīn, yí qiè dōu huì hǎo de',vi:'Đừng lo, mọi chuyện sẽ ổn thôi',wrong:['Mọi chuyện rất tệ','Tôi rất lo lắng','Hãy lo lắng đi']},
+      {zh:'我从来没去过北京',py:'Wǒ cóng lái méi qù guò Běi jīng',vi:'Tôi chưa bao giờ đến Bắc Kinh',wrong:['Tôi vừa từ Bắc Kinh về','Tôi sống ở Bắc Kinh','Tôi sẽ không đến Bắc Kinh']}
+    ]
+  };
+  const LVL={easy:{lbl:'Dễ — Chào hỏi cơ bản',emoji:'🌱'},mid:{lbl:'Vừa — Giao tiếp hàng ngày',emoji:'🌿'},hard:{lbl:'Khó — Câu phức',emoji:'🌳'}};
+  let level=localStorage.getItem('chineseListenLevel')||'easy';
+  if(!LVL[level])level='easy';
+  let prob,score=0,total=0,streak=0,answered=false,picked=-1;
+  let voice=null;
+  let showChars=false; // toggle hiển thị chữ Hán
+
+  function pickVoice(){
+    if(!window.speechSynthesis)return null;
+    const voices=speechSynthesis.getVoices();
+    return voices.find(v=>/zh-CN|zh-TW|cmn/i.test(v.lang))||voices.find(v=>v.lang.startsWith('zh'))||null;
+  }
+  function speak(text){
+    if(!window.speechSynthesis){flash('⚠️ Trình duyệt không hỗ trợ TTS');return}
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    voice=voice||pickVoice();
+    if(voice)u.voice=voice;
+    u.rate=0.8;u.pitch=1;u.lang='zh-CN';
+    speechSynthesis.speak(u);
+  }
+  function gen(){
+    const pool=PHRASES[level];
+    const r=pool[Math.floor(Math.random()*pool.length)];
+    const opts=[r.vi, ...r.wrong].slice(0,4).sort(()=>Math.random()-0.5);
+    prob={zh:r.zh,py:r.py,vi:r.vi,opts};
+  }
+  function init(){
+    score=0;total=0;streak=0;answered=false;picked=-1;
+    if(window.speechSynthesis&&speechSynthesis.getVoices().length===0){
+      speechSynthesis.onvoiceschanged=()=>{voice=pickVoice()};
+    } else if(window.speechSynthesis){
+      voice=pickVoice();
+    }
+    gen();render();
+    setTimeout(()=>speak(prob.zh),400);
+  }
+  function setLevel(l){if(level===l)return;level=l;localStorage.setItem('chineseListenLevel',l);score=0;total=0;streak=0;answered=false;picked=-1;gen();render();setTimeout(()=>speak(prob.zh),300)}
+  function pick(v){if(answered)return;answered=true;picked=v;total++;const correct=(v===prob.vi);if(correct){score++;streak++}else streak=0;if(typeof SFX!=='undefined')correct?SFX.correct():SFX.wrong();if(typeof reportGameResult!=='undefined')reportGameResult('chineseListen',{win:correct,score:correct?10:0});render()}
+  function nextQ(){answered=false;picked=-1;gen();render();setTimeout(()=>speak(prob.zh),300)}
+  let flashMsg='';
+  function flash(m){flashMsg=m;render();setTimeout(()=>{flashMsg='';render()},1500)}
+
+  function render(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const wrap=document.createElement('div');
+    wrap.style.cssText='max-width:540px;margin:0 auto';
+
+    // Header score row
+    const hdr=document.createElement('div');
+    hdr.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 14px;background:linear-gradient(135deg,rgba(218,41,28,.12),rgba(255,230,0,.12));border:1px solid rgba(218,41,28,.3);border-radius:12px;margin-bottom:12px';
+    hdr.innerHTML=`<div style="font-family:'Bungee',cursive;font-size:14px;color:var(--neon-yellow)">🇨🇳 ${LVL[level].lbl}</div>
+      <div style="font-size:12px;color:var(--text)">✅ ${score}/${total} · 🔥 ${streak}</div>`;
+    wrap.appendChild(hdr);
+
+    // Level chips
+    const chips=document.createElement('div');
+    chips.style.cssText='display:flex;gap:6px;justify-content:center;margin-bottom:12px;flex-wrap:wrap';
+    Object.entries(LVL).forEach(([id,info])=>{
+      const b=document.createElement('button');
+      const a=level===id;
+      b.style.cssText=`padding:7px 12px;border-radius:18px;border:2px solid ${a?'var(--neon-yellow)':'rgba(255,255,255,.12)'};background:${a?'rgba(255,230,0,.1)':'rgba(0,0,0,.2)'};color:${a?'var(--neon-yellow)':'var(--text)'};font-family:inherit;font-size:11px;font-weight:700;cursor:pointer`;
+      b.innerHTML=`${info.emoji} ${info.lbl}`;
+      b.onclick=()=>setLevel(id);
+      chips.appendChild(b);
+    });
+    wrap.appendChild(chips);
+
+    // Listen card
+    const listenBox=document.createElement('div');
+    listenBox.style.cssText='text-align:center;padding:18px;background:linear-gradient(135deg,rgba(218,41,28,.08),rgba(218,41,28,.02));border:2px solid rgba(218,41,28,.3);border-radius:14px;margin-bottom:12px';
+
+    const listenBtn=document.createElement('button');
+    listenBtn.style.cssText='display:inline-flex;align-items:center;gap:8px;padding:14px 26px;background:linear-gradient(135deg,#da291c,#ff6b35);border:none;color:#fff;font-family:"Bungee",cursive;font-size:14px;border-radius:14px;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 18px rgba(218,41,28,.4)';
+    listenBtn.innerHTML='🔊 NGHE LẠI';
+    listenBtn.onclick=()=>speak(prob.zh);
+    listenBox.appendChild(listenBtn);
+
+    // Toggle show chars button
+    const showBtn=document.createElement('button');
+    showBtn.style.cssText=`display:block;margin:10px auto 0;padding:6px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:var(--text);font-family:inherit;font-size:11px;border-radius:8px;cursor:pointer`;
+    showBtn.textContent=showChars?'🙈 Ẩn chữ Hán':'👁️ Xem chữ Hán + pinyin';
+    showBtn.onclick=()=>{showChars=!showChars;render()};
+    listenBox.appendChild(showBtn);
+
+    if(showChars||answered){
+      const charBox=document.createElement('div');
+      charBox.style.cssText='margin-top:14px;padding:12px;background:rgba(0,0,0,.3);border-radius:10px';
+      charBox.innerHTML=`<div style="font-size:24px;color:#ffe600;font-weight:700;letter-spacing:3px;margin-bottom:4px">${prob.zh}</div>
+        <div style="font-size:13px;color:var(--neon-cyan);font-style:italic">${prob.py}</div>`;
+      listenBox.appendChild(charBox);
+    }
+    wrap.appendChild(listenBox);
+
+    // Question label
+    const qLbl=document.createElement('div');
+    qLbl.style.cssText='text-align:center;font-size:13px;color:var(--text);font-weight:700;margin-bottom:10px';
+    qLbl.innerHTML='❓ Câu vừa nghe có nghĩa là gì?';
+    wrap.appendChild(qLbl);
+
+    // Options
+    prob.opts.forEach(opt=>{
+      const b=document.createElement('button');
+      const isCorrect=answered&&opt===prob.vi;
+      const isPickedWrong=answered&&opt===picked&&opt!==prob.vi;
+      let bgC='rgba(255,255,255,.05)',brC='rgba(255,255,255,.12)';
+      if(isCorrect){bgC='rgba(57,255,127,.15)';brC='#39ff7f'}
+      else if(isPickedWrong){bgC='rgba(255,45,149,.15)';brC='var(--neon-pink)'}
+      b.style.cssText=`display:block;width:100%;padding:13px 14px;margin-bottom:8px;background:${bgC};border:2px solid ${brC};color:var(--text);font-family:inherit;font-size:14px;border-radius:10px;cursor:pointer;text-align:left;touch-action:manipulation;line-height:1.4`;
+      b.textContent=opt;
+      if(!answered)b.onclick=()=>pick(opt);
+      else b.disabled=true;
+      wrap.appendChild(b);
+    });
+
+    if(flashMsg){
+      const f=document.createElement('div');
+      f.style.cssText='padding:10px;margin-top:8px;background:rgba(255,230,0,.1);border:1px solid var(--neon-yellow);border-radius:8px;text-align:center;font-size:12px;color:var(--neon-yellow)';
+      f.textContent=flashMsg;
+      wrap.appendChild(f);
+    }
+
+    mArea.appendChild(wrap);
+
+    if(answered){
+      addBtn('CÂU TIẾP →','warn',nextQ);
+    }
+    addBtn('🔊 Nghe lại','alt',()=>speak(prob.zh));
+    addBtn('← Đóng','alt',closeModal);
+    setStatus(`🇨🇳 ${LVL[level].lbl} · ${score}/${total} đúng`);
+  }
+
+  return {title:'🇨🇳 Học nghe tiếng Trung',init};
+})();
+
 /* ========== 54. LUYỆN NGHE TIẾNG ANH — Đoán nghĩa ========== */
 games.englishListen = (()=>{
   const PHRASES={
@@ -12413,15 +12635,38 @@ games.englishListen = (()=>{
       {en:'Hello, how are you?',vi:'Xin chào, bạn khoẻ không?',wrong:['Tạm biệt nhé!','Bạn ăn cơm chưa?','Trời mưa rồi.']},
       {en:'I love you.',vi:'Tôi yêu bạn.',wrong:['Tôi ghét bạn.','Tôi mệt mỏi.','Tôi đói rồi.']},
       {en:'Good morning!',vi:'Chào buổi sáng!',wrong:['Chào buổi tối!','Chào buổi chiều!','Ngủ ngon nhé!']},
+      {en:'Good night!',vi:'Chúc ngủ ngon!',wrong:['Chào buổi sáng!','Tạm biệt!','Hẹn gặp lại!']},
       {en:'Thank you very much.',vi:'Cảm ơn bạn rất nhiều.',wrong:['Xin lỗi nhiều.','Tạm biệt nhé.','Chào mừng bạn.']},
+      {en:"You're welcome.",vi:'Không có gì.',wrong:['Cảm ơn nhé.','Xin lỗi bạn.','Tôi đồng ý.']},
+      {en:'I am sorry.',vi:'Tôi xin lỗi.',wrong:['Tôi cảm ơn.','Tôi vui lắm.','Tôi không biết.']},
       {en:'What is your name?',vi:'Tên bạn là gì?',wrong:['Bạn bao nhiêu tuổi?','Bạn ở đâu?','Bạn làm gì?']},
-      {en:'I am hungry.',vi:'Tôi đói.',wrong:['Tôi mệt.','Tôi khát.','Tôi vui.']},
-      {en:'The weather is nice today.',vi:'Hôm nay thời tiết đẹp.',wrong:['Hôm nay trời mưa.','Hôm qua tuyết rơi.','Tôi thích trời nắng.']},
-      {en:'I like to read books.',vi:'Tôi thích đọc sách.',wrong:['Tôi thích xem phim.','Tôi thích nghe nhạc.','Tôi thích nấu ăn.']},
+      {en:'My name is Mai.',vi:'Tên tôi là Mai.',wrong:['Tôi là người Việt Nam.','Tôi 10 tuổi.','Tôi sống ở Hà Nội.']},
       {en:'How old are you?',vi:'Bạn bao nhiêu tuổi?',wrong:['Bạn tên gì?','Bạn ở đâu?','Bạn khoẻ không?']},
+      {en:'I am ten years old.',vi:'Tôi mười tuổi.',wrong:['Tôi học lớp năm.','Tôi cao mét hai.','Tôi nặng ba mươi cân.']},
+      {en:'I am hungry.',vi:'Tôi đói.',wrong:['Tôi mệt.','Tôi khát.','Tôi vui.']},
+      {en:'I am thirsty.',vi:'Tôi khát nước.',wrong:['Tôi đói bụng.','Tôi buồn ngủ.','Tôi nóng.']},
+      {en:'I am tired.',vi:'Tôi mệt.',wrong:['Tôi vui.','Tôi giận.','Tôi đói.']},
+      {en:'I am happy.',vi:'Tôi vui.',wrong:['Tôi buồn.','Tôi giận.','Tôi sợ.']},
+      {en:'The weather is nice today.',vi:'Hôm nay thời tiết đẹp.',wrong:['Hôm nay trời mưa.','Hôm qua tuyết rơi.','Tôi thích trời nắng.']},
+      {en:'It is raining.',vi:'Trời đang mưa.',wrong:['Trời đang nắng.','Trời có tuyết.','Trời đầy gió.']},
+      {en:'It is very hot today.',vi:'Hôm nay trời rất nóng.',wrong:['Hôm nay trời rất lạnh.','Hôm nay trời mát.','Hôm nay trời ẩm.']},
+      {en:'I like to read books.',vi:'Tôi thích đọc sách.',wrong:['Tôi thích xem phim.','Tôi thích nghe nhạc.','Tôi thích nấu ăn.']},
+      {en:'I like ice cream.',vi:'Tôi thích kem.',wrong:['Tôi không thích kẹo.','Tôi muốn bánh ngọt.','Tôi ăn cơm.']},
       {en:'I am from Vietnam.',vi:'Tôi đến từ Việt Nam.',wrong:['Tôi sống ở Mỹ.','Tôi đi du lịch Nhật.','Tôi học tiếng Pháp.']},
+      {en:'Where are you from?',vi:'Bạn đến từ đâu?',wrong:['Bạn đang đi đâu?','Bạn sống ở đâu?','Bạn học trường nào?']},
       {en:'Where are you going?',vi:'Bạn đang đi đâu?',wrong:['Bạn đến từ đâu?','Bạn đang làm gì?','Bạn ăn gì?']},
-      {en:'I am a student.',vi:'Tôi là học sinh.',wrong:['Tôi là giáo viên.','Tôi là bác sĩ.','Tôi là kỹ sư.']}
+      {en:'I am going home.',vi:'Tôi đang về nhà.',wrong:['Tôi đang đi học.','Tôi đang đi chợ.','Tôi vừa đến nơi.']},
+      {en:'I am a student.',vi:'Tôi là học sinh.',wrong:['Tôi là giáo viên.','Tôi là bác sĩ.','Tôi là kỹ sư.']},
+      {en:'My father is a teacher.',vi:'Bố tôi là giáo viên.',wrong:['Mẹ tôi là bác sĩ.','Anh tôi là kỹ sư.','Bố tôi là công an.']},
+      {en:'I have two sisters.',vi:'Tôi có hai chị em gái.',wrong:['Tôi có một anh trai.','Tôi là con một.','Tôi có ba anh em.']},
+      {en:'This is my friend.',vi:'Đây là bạn của tôi.',wrong:['Đây là em tôi.','Kia là bố tôi.','Bạn ấy là cô giáo.']},
+      {en:'See you tomorrow.',vi:'Hẹn gặp lại ngày mai.',wrong:['Tạm biệt mãi mãi.','Hẹn gặp lại tuần sau.','Chào buổi sáng nhé.']},
+      {en:'Have a nice day!',vi:'Chúc bạn một ngày tốt lành!',wrong:['Chúc bạn ngủ ngon!','Chúc bạn ăn ngon!','Chúc mừng sinh nhật!']},
+      {en:'Happy birthday!',vi:'Chúc mừng sinh nhật!',wrong:['Chúc mừng năm mới!','Chào mừng bạn!','Tạm biệt nhé!']},
+      {en:'I want some water.',vi:'Tôi muốn một ít nước.',wrong:['Tôi muốn một ít bánh.','Tôi cần một cái cốc.','Tôi thích uống trà.']},
+      {en:'Open the door, please.',vi:'Làm ơn mở cửa.',wrong:['Đóng cửa lại đi.','Bật đèn lên nhé.','Tắt quạt đi.']},
+      {en:'Please sit down.',vi:'Mời ngồi xuống.',wrong:['Mời đứng dậy.','Mời đi ra.','Mời vào đi.']},
+      {en:'I do not understand.',vi:'Tôi không hiểu.',wrong:['Tôi hiểu rồi.','Tôi không biết.','Tôi đồng ý.']}
     ],
     mid:[
       {en:'Could you please speak more slowly?',vi:'Bạn có thể nói chậm hơn được không?',wrong:['Bạn có thể nói to hơn không?','Bạn có thể đứng dậy không?','Bạn có thể đi nhanh hơn không?']},
@@ -12433,7 +12678,23 @@ games.englishListen = (()=>{
       {en:'My favourite hobby is playing music.',vi:'Sở thích yêu thích của tôi là chơi nhạc.',wrong:['Tôi không thích chơi nhạc.','Tôi học nhạc ở trường.','Tôi thích nhảy múa.']},
       {en:'I usually wake up at six in the morning.',vi:'Tôi thường thức dậy lúc 6 giờ sáng.',wrong:['Tôi đi ngủ lúc 6 giờ tối.','Tôi ngủ trưa hàng ngày.','Tôi không bao giờ ngủ sớm.']},
       {en:'The restaurant is across the street.',vi:'Nhà hàng ở bên kia đường.',wrong:['Nhà hàng đóng cửa rồi.','Đồ ăn rất ngon.','Tôi đang tìm nhà hàng.']},
-      {en:'I forgot to bring my umbrella today.',vi:'Hôm nay tôi quên mang ô.',wrong:['Tôi mất ô tuần trước.','Trời không mưa hôm nay.','Tôi mua một cái ô mới.']}
+      {en:'I forgot to bring my umbrella today.',vi:'Hôm nay tôi quên mang ô.',wrong:['Tôi mất ô tuần trước.','Trời không mưa hôm nay.','Tôi mua một cái ô mới.']},
+      {en:'How much does this cost?',vi:'Cái này giá bao nhiêu?',wrong:['Cái này ở đâu?','Cái này của ai?','Cái này dùng làm gì?']},
+      {en:'Can you show me the way to the station?',vi:'Bạn có thể chỉ tôi đường đến ga không?',wrong:['Bạn có thể chở tôi đến ga không?','Bạn có biết ga ở đâu không?','Ga này có xa không?']},
+      {en:'I prefer tea to coffee.',vi:'Tôi thích trà hơn cà phê.',wrong:['Tôi thích cà phê hơn trà.','Tôi uống cả trà và cà phê.','Tôi không uống được trà.']},
+      {en:'I have already eaten lunch.',vi:'Tôi đã ăn trưa rồi.',wrong:['Tôi chưa ăn trưa.','Tôi sắp đi ăn trưa.','Tôi đang ăn trưa.']},
+      {en:'My birthday is next Sunday.',vi:'Sinh nhật của tôi là Chủ nhật tới.',wrong:['Sinh nhật tôi tuần trước.','Tôi sinh năm 2000.','Sinh nhật của bạn khi nào?']},
+      {en:'I take the bus to school every day.',vi:'Tôi đi xe buýt đến trường mỗi ngày.',wrong:['Tôi đi bộ đến trường.','Bố mẹ chở tôi đi học.','Tôi đi xe đạp đến trường.']},
+      {en:'Please turn off the lights before leaving.',vi:'Làm ơn tắt đèn trước khi đi.',wrong:['Hãy bật đèn lên.','Đừng đóng cửa.','Mở cửa sổ đi.']},
+      {en:'I am looking forward to the weekend.',vi:'Tôi đang mong đợi cuối tuần.',wrong:['Tôi ghét cuối tuần.','Cuối tuần này tôi bận.','Tôi không thích nghỉ.']},
+      {en:'My brother is taller than me.',vi:'Anh trai tôi cao hơn tôi.',wrong:['Tôi cao hơn anh trai.','Anh tôi nhỏ hơn tôi.','Hai anh em cao bằng nhau.']},
+      {en:'Could I borrow your pen for a moment?',vi:'Tôi có thể mượn bút của bạn một chút không?',wrong:['Tôi có cây bút mới.','Bạn có muốn bút của tôi không?','Cây bút này đẹp quá.']},
+      {en:'The movie was very interesting.',vi:'Bộ phim đó rất thú vị.',wrong:['Bộ phim đó dở tệ.','Tôi không xem phim đó.','Phim đó dài quá.']},
+      {en:'I learn English every day.',vi:'Tôi học tiếng Anh mỗi ngày.',wrong:['Tôi học tiếng Pháp mỗi ngày.','Tôi không thích học tiếng Anh.','Tiếng Anh khó quá.']},
+      {en:'What time does the train arrive?',vi:'Mấy giờ tàu đến?',wrong:['Tàu rời ga lúc nào?','Tàu này đi đâu?','Vé tàu bao nhiêu?']},
+      {en:'I have a headache today.',vi:'Hôm nay tôi bị đau đầu.',wrong:['Tôi bị đau bụng.','Tôi bị cảm cúm.','Tôi rất khoẻ.']},
+      {en:'Let me know when you arrive.',vi:'Cho tôi biết khi nào bạn đến nơi.',wrong:['Tôi sẽ đến đó sớm.','Bạn đến chưa?','Đừng làm phiền tôi.']},
+      {en:'I usually go to bed at ten.',vi:'Tôi thường đi ngủ lúc mười giờ.',wrong:['Tôi luôn dậy lúc mười giờ.','Tôi không bao giờ ngủ sớm.','Tôi ngủ lúc giữa đêm.']}
     ],
     hard:[
       {en:'I should have studied harder for the exam.',vi:'Đáng lẽ tôi nên học chăm chỉ hơn cho kỳ thi.',wrong:['Tôi đã học rất chăm chỉ cho kỳ thi.','Tôi sẽ học cho kỳ thi tiếp theo.','Kỳ thi quá dễ với tôi.']},
@@ -12443,7 +12704,20 @@ games.englishListen = (()=>{
       {en:'I wish I could speak English fluently.',vi:'Tôi ước gì có thể nói tiếng Anh trôi chảy.',wrong:['Tôi nói tiếng Anh rất tốt.','Tôi không cần học tiếng Anh.','Tiếng Anh dễ học.']},
       {en:'You should have told me earlier.',vi:'Đáng lẽ bạn nên nói với tôi sớm hơn.',wrong:['Tôi sẽ nói với bạn sau.','Bạn đã nói với tôi rồi.','Đừng nói với tôi.']},
       {en:'It is no use crying over spilled milk.',vi:'Khóc vì sữa đổ thì cũng vô ích.',wrong:['Đừng làm đổ sữa.','Tôi không thích uống sữa.','Hãy lau sữa đi.']},
-      {en:'Time flies when you are having fun.',vi:'Thời gian trôi nhanh khi bạn đang vui vẻ.',wrong:['Thời gian rất quý báu.','Tôi không có thời gian vui chơi.','Cuộc vui kết thúc rồi.']}
+      {en:'Time flies when you are having fun.',vi:'Thời gian trôi nhanh khi bạn đang vui vẻ.',wrong:['Thời gian rất quý báu.','Tôi không có thời gian vui chơi.','Cuộc vui kết thúc rồi.']},
+      {en:'The book I was looking for is out of stock.',vi:'Cuốn sách tôi tìm đã hết hàng.',wrong:['Cuốn sách tôi tìm rất mới.','Tôi đã mua được cuốn sách đó.','Hiệu sách hôm nay đóng cửa.']},
+      {en:'I am used to waking up early in the morning.',vi:'Tôi đã quen với việc dậy sớm vào buổi sáng.',wrong:['Tôi không bao giờ dậy sớm.','Tôi mới bắt đầu dậy sớm.','Buổi sáng tôi rất buồn ngủ.']},
+      {en:'Had I known earlier, I would have helped you.',vi:'Nếu tôi biết sớm hơn, tôi đã giúp bạn.',wrong:['Tôi đã giúp bạn rồi.','Tôi không thể giúp bạn.','Bạn không cần giúp đỡ.']},
+      {en:"It's not as easy as it looks.",vi:'Việc đó không dễ như nó trông có vẻ.',wrong:['Việc này rất dễ.','Việc đó nhìn khó nhưng dễ làm.','Tôi đã làm xong việc đó.']},
+      {en:'I have mixed feelings about the decision.',vi:'Tôi có cảm xúc lẫn lộn về quyết định này.',wrong:['Tôi hoàn toàn đồng ý.','Tôi cực lực phản đối.','Tôi không quan tâm gì cả.']},
+      {en:'Could you keep an eye on my bag for a minute?',vi:'Bạn có thể trông giúp túi của tôi một lát không?',wrong:['Bạn có thể mở túi giúp tôi không?','Bạn có thể mua cho tôi cái túi không?','Túi của bạn ở đâu?']},
+      {en:'I take full responsibility for what happened.',vi:'Tôi hoàn toàn chịu trách nhiệm về chuyện đã xảy ra.',wrong:['Đó không phải lỗi của tôi.','Tôi không biết chuyện gì đã xảy ra.','Ai đó phải chịu trách nhiệm.']},
+      {en:"Let's agree to disagree.",vi:'Hãy chấp nhận chúng ta khác quan điểm nhau.',wrong:['Chúng ta phải thống nhất.','Tôi đồng ý với bạn.','Bạn phải nghe theo tôi.']},
+      {en:'The traffic was so heavy that I missed the meeting.',vi:'Giao thông quá đông nên tôi đã lỡ cuộc họp.',wrong:['Tôi đã đến cuộc họp đúng giờ.','Cuộc họp bị huỷ.','Đường vắng nên tôi đến sớm.']},
+      {en:'I cannot afford to buy a new car right now.',vi:'Hiện tại tôi không đủ tiền mua xe mới.',wrong:['Tôi vừa mua xe mới.','Tôi không cần xe mới.','Xe của tôi vẫn còn tốt.']},
+      {en:'She apologized for being late to the meeting.',vi:'Cô ấy đã xin lỗi vì đến cuộc họp muộn.',wrong:['Cô ấy đến cuộc họp rất sớm.','Cô ấy không đến cuộc họp.','Cô ấy huỷ cuộc họp.']},
+      {en:'I am torn between two choices.',vi:'Tôi đang phân vân giữa hai lựa chọn.',wrong:['Tôi đã chọn xong.','Tôi không có lựa chọn nào.','Cả hai đều dở tệ.']},
+      {en:'You can count on me whenever you need help.',vi:'Bạn có thể trông cậy vào tôi bất cứ khi nào cần giúp.',wrong:['Tôi rất bận, không giúp được.','Đừng nhờ tôi nữa.','Tôi không quen bạn.']}
     ]
   };
   const LVL={easy:{lbl:'Dễ — Câu đơn giản',emoji:'🌱'},mid:{lbl:'Vừa — Câu thường ngày',emoji:'🌿'},hard:{lbl:'Khó — Câu phức',emoji:'🌳'}};
