@@ -810,7 +810,11 @@ footer b{color:var(--neon-cyan)}
     <div class="card" data-game="crafting" style="--ac:var(--neon-orange)"><div class="emoji">⛏️</div><h3>Crafting Minecraft</h3><p>Nhìn ô 3×3 — đoán item được tạo (12 công thức)</p></div>
     <div class="card" data-game="robloxQuiz" style="--ac:var(--neon-pink)"><div class="emoji">🔴</div><h3>Đố Roblox</h3><p>27 câu — Robux, Lua, Adopt Me, Blox Fruits, Bacon Hair...</p></div>
     <div class="card" data-game="guessGameTitle" style="--ac:var(--neon-yellow)"><div class="emoji">🎮</div><h3>Đoán game qua mô tả</h3><p>24 game phổ biến — Minecraft, Roblox, Liên Quân, Free Fire...</p></div>
-    <div class="card" data-game="stories" style="--ac:var(--neon-yellow)"><div class="emoji">📖</div><h3>Đọc truyện</h3><p>51 truyện full: thiền, tâm linh, self-help, trẻ em — nghe audiobook hoặc đọc cuộn</p></div>
+    <div class="card" data-game="draw" style="--ac:#ff2d95"><div class="emoji">🎨</div><h3>Vẽ tự do</h3><p>Vẽ tranh bằng ngón tay, zoom được, lưu vào bộ sưu tập hoặc tải về máy PNG</p></div>
+<div class="card" data-game="diary" style="--ac:#a3d8ff"><div class="emoji">📔</div><h3>Nhật ký Đậu</h3><p>Viết nhật ký mỗi ngày, chọn tâm trạng, thêm sticker, xem theo lịch</p></div>
+<div class="card" data-game="vnMap" style="--ac:#ff6f00"><div class="emoji">🇻🇳</div><h3>Bản đồ Việt Nam</h3><p>63 tỉnh trước & 34 tỉnh sau sáp nhập 2025 — diện tích, sáp nhập như nào</p></div>
+<div class="card" data-game="lifeSkills" style="--ac:var(--neon-purple)"><div class="emoji">🛡️</div><h3>Kỹ năng sống</h3><p>23 kỹ năng: khẩn cấp, bảo vệ bản thân, giao thông, sơ cứu... với quiz</p></div>
+<div class="card" data-game="stories" style="--ac:var(--neon-yellow)"><div class="emoji">📖</div><h3>Đọc truyện</h3><p>51 truyện full: thiền, tâm linh, self-help, trẻ em — nghe audiobook hoặc đọc cuộn</p></div>
 <div class="card" data-game="readingRoll" style="--ac:var(--neon-cyan)"><div class="emoji">📜</div><h3>Đọc cuộn</h3><p>7 sách self-help: Atomic Habits, Đắc Nhân Tâm, Sapiens, Tony, Stoic, 7 Habits, Jobs (EN)</p></div>
     <div class="card" data-game="quotes" style="--ac:var(--neon-yellow)"><div class="emoji">💡</div><h3>Danh ngôn</h3><p>31 câu nói hay — Jobs, Gandhi, Lão Tử, Socrates kèm ý nghĩa</p></div>
     <div class="card" data-game="englishListen" style="--ac:var(--neon-pink)"><div class="emoji">🎧</div><h3>Luyện nghe tiếng Anh</h3><p>30 câu — TTS đọc, đoán nghĩa tiếng Việt (3 cấp độ)</p></div>
@@ -9305,6 +9309,2310 @@ games.stories = (()=>{
     init: init,
     cleanup: stopAll
   };
+})();
+
+
+const LIFE_SKILLS = [
+// ============== AN TOÀN KHẨN CẤP (6) ==============
+{id:'lost_crowd',cat:'khancap',emoji:'🚸',title:'Khi bị lạc bố mẹ ở nơi đông',age:'4+ tuổi',importance:'critical',
+scenario:'Em đang đi siêu thị/công viên/lễ hội cùng bố mẹ. Đám đông rất đông. Khi quay lại — bố mẹ biến mất! Em không biết bố mẹ đi đâu. Em sẽ làm gì?',
+doThis:[
+'ĐỨNG YÊN ở chỗ vừa lạc — bố mẹ sẽ quay lại tìm đúng chỗ đó',
+'Nếu phải đi tìm người giúp — TÌM nhân viên mặc đồng phục (bảo vệ, thu ngân, công an)',
+'Hoặc tìm MẸ có con nhỏ — đa số sẽ giúp em',
+'Nói rõ: "Cháu bị lạc bố mẹ, tên cháu là [...], số điện thoại bố/mẹ là [...]"',
+'Học thuộc số điện thoại bố mẹ ngay từ bây giờ',
+'Ở nơi an toàn, KHÔNG rời chỗ cho đến khi gặp lại'
+],
+dontThis:[
+'KHÔNG đi loanh quanh tìm — bố mẹ sẽ không tìm thấy em',
+'KHÔNG khóc to giữa đám đông — người xấu có thể lợi dụng',
+'KHÔNG đi theo người lạ dù họ nói "Cô/chú biết bố mẹ cháu, đi theo cô/chú"',
+'KHÔNG ra khỏi cửa hàng/khu vực vì kẻ xấu thường dụ ra ngoài'
+],
+quiz:[
+{q:'Khi bị lạc bố mẹ ở siêu thị, em nên làm gì TRƯỚC?',opts:['Đi tìm bố mẹ khắp các tầng','Đứng yên chỗ vừa lạc','Khóc thật to để mọi người chú ý'],correct:1},
+{q:'Người LẠ nào em nên nhờ giúp khi bị lạc?',opts:['Bất kỳ ai nhìn hiền lành','Nhân viên mặc đồng phục, hoặc mẹ có con nhỏ','Người đàn ông cười với em'],correct:1},
+{q:'Một cô gái nói "Bố cháu nhờ cô đưa cháu về" - em làm gì?',opts:['Đi theo ngay','Không đi - đợi bố mẹ tự đến','Hỏi tên bố cháu rồi mới đi'],correct:1}
+]},
+
+{id:'stranger',cat:'khancap',emoji:'⚠️',title:'Khi người lạ tiếp cận',age:'3+ tuổi',importance:'critical',
+scenario:'Em đang đứng đợi mẹ ngoài cổng trường. Một cô/chú lạ đến gần, đưa kẹo và bảo: "Mẹ con nhờ cô/chú đón đấy. Lên xe đi cô/chú chở về." Em sẽ làm gì?',
+doThis:[
+'NÓI TO "KHÔNG! Cháu không quen cô/chú!" rồi chạy về phía cô giáo/bảo vệ',
+'Tạo BÍ MẬT GIA ĐÌNH: bố mẹ và em thoả thuận một MẬT KHẨU. Nếu người ta thật sự được nhờ đón — phải biết mật khẩu',
+'Nếu họ cố kéo — la hét to nhất có thể: "CỨU! Tôi không quen người này!"',
+'Cắn, đá, vùng vẫy mạnh — không cần lịch sự với kẻ xấu',
+'Chạy về chỗ đông người, không chạy vào ngõ vắng'
+],
+dontThis:[
+'KHÔNG nhận kẹo, đồ chơi, tiền từ người lạ',
+'KHÔNG lên xe với bất kỳ ai dù họ nói gì',
+'KHÔNG đi theo đến chỗ vắng — dù chỉ "ra đây xem chó con dễ thương"',
+'KHÔNG tin lời "Mẹ/bố con đang ốm/bị tai nạn, cô/chú đưa đến gặp"'
+],
+quiz:[
+{q:'Một người lạ rất hiền nói biết bố mẹ em, rủ đi - em làm gì?',opts:['Đi theo nếu họ trông tốt bụng','Hỏi mật khẩu gia đình - nếu không biết là kẻ xấu','Nhận đồ ăn rồi mới quyết định'],correct:1},
+{q:'Khi bị người lạ cố kéo đi, em nên?',opts:['Im lặng, đi theo cho đỡ rắc rối','La hét "CỨU!" thật to, cắn đá vùng vẫy','Khóc nhỏ để họ thương tha'],correct:1},
+{q:'Người tốt thật sự (như cô giáo) muốn giúp em sẽ?',opts:['Bắt em đi ngay vì gấp','Để em nói chuyện ở chỗ đông người, không kéo đi','Đưa kẹo trước'],correct:1}
+]},
+
+{id:'water_fall',cat:'khancap',emoji:'🏊',title:'Khi rơi xuống nước',age:'4+ tuổi',importance:'critical',
+scenario:'Em đang đứng gần bờ ao/sông/hồ bơi và bị trượt chân rơi xuống nước. Em không biết bơi giỏi. Người lớn không có ở đó. Em sẽ làm gì?',
+doThis:[
+'BÌNH TĨNH — hoảng loạn sẽ chìm nhanh hơn',
+'Hít một hơi thật sâu khi mặt vừa nổi lên',
+'NẰM NGỬA, mặt hướng lên trời như khúc gỗ trôi',
+'Hai tay dang ngang để giữ thăng bằng',
+'Đạp chân nhẹ nhàng, không vùng vẫy mạnh',
+'Hét to "CỨU!" khi mặt nổi lên — chờ người lớn đến',
+'Nếu gần bờ, từ từ bơi/đẩy người về phía bờ'
+],
+dontThis:[
+'KHÔNG vùng vẫy mạnh — càng vùng vẫy càng chìm nhanh',
+'KHÔNG mở miệng khi đầu chìm — sẽ uống nước',
+'KHÔNG nhảy xuống cứu bạn nếu em chưa biết bơi giỏi — gọi người lớn',
+'KHÔNG chơi gần ao hồ khi không có người lớn',
+'KHÔNG tin "bể bơi nông" — vẫn có thể chết đuối ở nước cạn'
+],
+quiz:[
+{q:'Khi vừa rơi xuống nước, điều quan trọng nhất là?',opts:['Vùng vẫy thật mạnh','Bình tĩnh, hít sâu, nằm ngửa nổi','Bơi nhanh vào bờ'],correct:1},
+{q:'Thấy bạn đuối nước, em nên?',opts:['Nhảy xuống cứu ngay','Gọi người lớn, ném phao/dây/cành cây','Bơi đến cứu nếu bạn ở gần'],correct:1},
+{q:'Bể bơi 0.5m có an toàn không?',opts:['Có, nước cạn không sao','Trẻ vẫn có thể chết đuối ở nước cạn','Chỉ cần biết bơi là OK'],correct:1}
+]},
+
+{id:'fire_home',cat:'khancap',emoji:'🔥',title:'Khi nhà có cháy',age:'5+ tuổi',importance:'critical',
+scenario:'Em đang ở nhà thì ngửi thấy mùi khét, thấy khói bốc lên từ bếp/phòng khác. Em đang một mình hoặc cùng em nhỏ hơn. Em sẽ làm gì?',
+doThis:[
+'KÊU TO "CHÁY! CHÁY!" để mọi người trong nhà biết',
+'CHẠY RA NGOÀI ngay — KHÔNG cố cứu đồ đạc, không tìm thú cưng',
+'Nếu có khói nhiều — CÚI THẤP/BÒ trên sàn (khói bốc lên cao, dưới sàn còn không khí)',
+'Lấy khăn ướt che mũi miệng nếu có thể',
+'KHÔNG mở cửa nếu thấy tay nắm NÓNG — có lửa bên kia, tìm lối khác',
+'Khi ra ngoài — gọi 114 (cứu hỏa) hoặc nhờ hàng xóm gọi',
+'KHÔNG quay vào nhà dù quên đồ gì',
+'Đứng tập trung ở điểm hẹn đã thoả thuận với gia đình'
+],
+dontThis:[
+'KHÔNG trốn dưới gầm giường, trong tủ — lính cứu hoả khó tìm',
+'KHÔNG dùng thang máy — luôn dùng cầu thang bộ',
+'KHÔNG cố tự dập lửa lớn — đó là việc của người lớn',
+'KHÔNG xối nước lên dầu/gas đang cháy — sẽ bùng lên'
+],
+quiz:[
+{q:'Có nhiều khói trong phòng, em nên?',opts:['Đứng thẳng chạy ra','Cúi thấp hoặc bò trên sàn','Bịt mắt và chạy nhanh'],correct:1},
+{q:'Tay nắm cửa thấy nóng, em làm gì?',opts:['Mở ra nhanh để thoát','Không mở - tìm lối khác','Đợi một chút rồi mở'],correct:1},
+{q:'Khi đã ra ngoài an toàn, em phát hiện quên thú cưng - làm gì?',opts:['Quay vào cứu','Không quay vào - báo lính cứu hoả','Mở cửa sổ gọi nó ra'],correct:1}
+]},
+
+{id:'emergency_number',cat:'khancap',emoji:'📞',title:'Số điện thoại khẩn cấp',age:'4+ tuổi',importance:'critical',
+scenario:'Khi có chuyện khẩn cấp, em cần gọi ai? Bố mẹ không có nhà, người thân đang bị thương, có người lạ vào nhà, hoặc thấy đám cháy. Em phải biết các số khẩn cấp.',
+doThis:[
+'113 — CÔNG AN (cướp, bạo lực, kẻ đột nhập, người mất tích)',
+'114 — CỨU HOẢ (cháy, mắc kẹt, sập đổ, người leo cây không xuống được)',
+'115 — CẤP CỨU Y TẾ (người bị thương nặng, ngất xỉu, đột quỵ)',
+'111 — TỔNG ĐÀI BẢO VỆ TRẺ EM (bị bạo hành, xâm hại — gọi miễn phí 24/7)',
+'Khi gọi: Nói TÊN, ĐỊA CHỈ rõ ràng, CHUYỆN GÌ ĐANG XẢY RA',
+'Học thuộc số điện thoại bố/mẹ',
+'Lưu số bố mẹ ở vị trí dễ thấy trong nhà (dán lên tủ lạnh)'
+],
+dontThis:[
+'KHÔNG gọi đùa các số này — bị phạt và lúc thật sự cần thì không ai tin',
+'KHÔNG cúp máy khi tổng đài đang hỏi — họ cần thông tin để đến cứu',
+'KHÔNG bịa địa chỉ — phải nói thật để xe cứu hoả/cấp cứu đến đúng nơi'
+],
+quiz:[
+{q:'Nhà bị cháy, em gọi số nào?',opts:['113','114','115'],correct:1},
+{q:'Bà đột nhiên ngất xỉu, em gọi số?',opts:['113','114','115'],correct:2},
+{q:'Khi gọi, em nói gì TRƯỚC TIÊN?',opts:['Khóc và kêu cứu','Tên, địa chỉ, chuyện gì xảy ra','Tả về kẻ xấu trông như thế nào'],correct:1}
+]},
+
+{id:'choking',cat:'khancap',emoji:'😵',title:'Khi bị hóc, nuốt vướng',age:'5+ tuổi',importance:'high',
+scenario:'Em (hoặc em nhỏ) đang ăn thì nuốt vướng một miếng to. Không thở được, mặt đỏ tía, chỉ tay vào cổ. Em phải làm gì?',
+doThis:[
+'Bình tĩnh - nói với người lớn ngay',
+'Nếu CÒN ho được: CỨ HO - cố ho mạnh để đẩy thức ăn ra',
+'Nếu KHÔNG ho được, không thở được: GỌI 115 ngay',
+'Người lớn sẽ thực hiện thủ thuật Heimlich: đứng sau, ôm bụng, đẩy mạnh lên',
+'Với em bé dưới 1 tuổi: úp ngược, vỗ giữa lưng 5 cái',
+'Sau khi miếng thức ăn ra - vẫn đưa đi viện kiểm tra'
+],
+dontThis:[
+'KHÔNG cho uống nước - sẽ làm tắc hơn',
+'KHÔNG dùng tay móc cổ - đẩy sâu hơn vào',
+'KHÔNG vỗ lưng khi người đó còn đứng được',
+'KHÔNG ăn vội, vừa ăn vừa cười nói',
+'KHÔNG đút quá đầy miệng - đặc biệt với trẻ nhỏ'
+],
+quiz:[
+{q:'Bạn em đang hóc, vẫn ho được mạnh - em làm gì?',opts:['Vỗ lưng thật mạnh','Để bạn tiếp tục ho, gọi người lớn','Cho uống nước'],correct:1},
+{q:'Em nhỏ 8 tháng bị hóc bánh, cách xử lý đúng?',opts:['Móc tay vào cổ','Úp ngược, vỗ 5 cái giữa lưng','Cho uống sữa'],correct:1},
+{q:'Đề phòng hóc, không nên làm gì?',opts:['Ăn từ tốn, nhai kỹ','Vừa ăn vừa nói cười to','Cắt thức ăn miếng nhỏ'],correct:1}
+]},
+
+// ============== BẢO VỆ BẢN THÂN (5) ==============
+{id:'private_parts',cat:'baove',emoji:'🩲',title:'Vùng riêng tư - Quy tắc đồ lót',age:'3+ tuổi',importance:'critical',
+scenario:'Vùng riêng tư là những phần cơ thể bị che bởi đồ lót/đồ bơi: ngực (với bạn nữ), bộ phận sinh dục, mông. Quy tắc QUAN TRỌNG NHẤT mà mọi trẻ phải biết.',
+doThis:[
+'CƠ THỂ LÀ CỦA EM. Không ai được chạm vào vùng riêng tư của em',
+'Chỉ có BỐ/MẸ giúp em tắm/vệ sinh khi còn nhỏ, hoặc BÁC SĨ khi khám bệnh (có bố mẹ ngồi cạnh)',
+'Nếu ai đó chạm vào - dù là người quen, người thân, thầy cô, anh chị - em phải NÓI VỚI BỐ MẸ',
+'Đó KHÔNG PHẢI lỗi của em, dù người ta nói "em làm thế là sai"',
+'Em có quyền nói "KHÔNG! Đừng chạm vào con!"',
+'Bí mật về cơ thể là BÍ MẬT XẤU - phải kể ra ngay'
+],
+dontThis:[
+'KHÔNG để ai chụp ảnh vùng riêng tư của em',
+'KHÔNG xem hình ảnh "không phù hợp" mà người khác cho xem',
+'KHÔNG giữ bí mật khi ai đó dặn "đừng nói với bố mẹ"',
+'KHÔNG tin "em sẽ bị phạt nếu kể" - bố mẹ sẽ YÊU em hơn vì em đã nói thật',
+'KHÔNG để mình bị cô lập với người lớn lạ ở chỗ vắng'
+],
+quiz:[
+{q:'Một người chú quen biết chạm vào vùng riêng tư của em, dặn "đừng nói" - em làm gì?',opts:['Giữ bí mật','Kể với bố mẹ NGAY','Im lặng để không gây rắc rối'],correct:1},
+{q:'Vùng riêng tư là gì?',opts:['Chỉ là bộ phận sinh dục','Phần bị che bởi đồ lót/đồ bơi','Toàn bộ cơ thể'],correct:1},
+{q:'Khi ai đó muốn chạm và em không thích, em có quyền?',opts:['Im lặng để không bị giận','Nói "KHÔNG!" to và bỏ đi','Nhịn vì họ là người lớn'],correct:1}
+]},
+
+{id:'safe_touch',cat:'baove',emoji:'🤚',title:'Đụng chạm an toàn vs không an toàn',age:'4+ tuổi',importance:'critical',
+scenario:'Không phải mọi cái ôm đều an toàn, không phải mọi đụng chạm đều xấu. Em cần phân biệt để biết khi nào nói "không".',
+doThis:[
+'ĐỤNG CHẠM TỐT: bố mẹ ôm chúc ngủ, ông bà thơm trán, bác sĩ khám có mẹ ngồi cạnh, nắm tay khi qua đường, bạn vỗ vai động viên',
+'ĐỤNG CHẠM XẤU: khi vào vùng riêng tư, khi em không thoải mái, khi người ta dặn giữ bí mật, khi diễn ra chỗ vắng',
+'NGHE CƠ THỂ MÌNH: nếu cảm thấy KHÓ CHỊU, BUỒN, SỢ - đó là dấu hiệu xấu',
+'Em có quyền nói "Con không thích được ôm/hôn lúc này" - kể cả với người thân',
+'Có quyền không ôm/hôn họ hàng nếu em không muốn',
+'BÍ MẬT TỐT: tổ chức sinh nhật bất ngờ cho mẹ. BÍ MẬT XẤU: ai đó dặn không kể về việc họ chạm vào em'
+],
+dontThis:[
+'KHÔNG cho phép ai làm em khó chịu chỉ vì họ là "người lớn", "người thân", "người quen"',
+'KHÔNG nghĩ "im lặng cho đỡ rắc rối" - càng im lặng người xấu càng hành động',
+'KHÔNG tin "đây là cách thể hiện tình yêu" - tình yêu thật không làm em sợ'
+],
+quiz:[
+{q:'Cô của em hay thơm lên môi em mỗi khi gặp, em không thoải mái - làm gì?',opts:['Cho qua vì cô là người thân','Nói với bố mẹ và cô là không thích','Vẫn để cô làm cho cô vui'],correct:1},
+{q:'Bí mật TỐT là?',opts:['Bạn cho em xem ảnh không hợp - dặn không kể','Tổ chức sinh nhật bất ngờ cho mẹ','Cô giúp việc đánh em nhưng dặn không nói'],correct:1},
+{q:'Khi đụng chạm khiến em SỢ hay KHÓ CHỊU, đó là?',opts:['Bình thường, phải chịu','Tín hiệu đụng chạm xấu - cần kể bố mẹ','Lỗi do em quá nhạy cảm'],correct:1}
+]},
+
+{id:'say_no',cat:'baove',emoji:'🙅',title:'Quyền nói "KHÔNG"',age:'4+ tuổi',importance:'high',
+scenario:'Đôi khi người lớn (cô bác, bạn của bố mẹ, hàng xóm) hoặc bạn bè muốn em làm điều em không thích/không muốn. Em có quyền nói "KHÔNG".',
+doThis:[
+'Em có quyền nói KHÔNG khi: ai đó muốn xem/chạm vùng riêng tư, muốn em giữ bí mật xấu, ép em ăn/uống thứ gì lạ, muốn chở em đi đâu mà không có bố mẹ biết',
+'Cũng có quyền nói KHÔNG khi: bị ép tham gia trò chơi nguy hiểm, bị bạn dụ làm điều xấu (trốn học, lấy đồ người khác)',
+'Nói KHÔNG dứt khoát, không cần giải thích nhiều: "Không ạ, con không thích" hoặc "Con không muốn"',
+'Nếu họ vẫn ép — đứng dậy, rời đi, kể cho bố mẹ',
+'Bố mẹ sẽ KHÔNG mắng em vì đã nói KHÔNG đúng lúc'
+],
+dontThis:[
+'KHÔNG ngại "làm họ buồn" — sức khoẻ và an toàn của em quan trọng hơn',
+'KHÔNG để bị ép vì "anh chị em cùng làm rồi mà"',
+'KHÔNG tin "đây là quy tắc bí mật của người lớn"',
+'KHÔNG sợ "sẽ bị phạt nếu kể" — bố mẹ thật sự thương em sẽ ủng hộ'
+],
+quiz:[
+{q:'Bạn rủ em trốn học đi chơi - em làm gì?',opts:['Đi cho vui','Nói KHÔNG, kể với cô/bố mẹ','Đi nhưng không kể'],correct:1},
+{q:'Cô bác hỏi "Cháu cho cô hôn nhé?" mà em không muốn?',opts:['Để cô hôn cho cô vui','Nói "Cháu không thích ạ"','Khóc to'],correct:1},
+{q:'Người ta nói "Đừng kể bố mẹ chuyện này nhé!"',opts:['Giữ bí mật như họ dặn','Đó là dấu hiệu xấu - phải kể bố mẹ','Hỏi xem họ có cho quà không'],correct:1}
+]},
+
+{id:'bullying',cat:'baove',emoji:'😠',title:'Khi bị bắt nạt',age:'5+ tuổi',importance:'high',
+scenario:'Ở trường, có bạn (hoặc nhóm bạn) hay trêu chọc, đánh, lấy đồ, đặt biệt danh xấu cho em. Em buồn, sợ đi học. Em sẽ làm gì?',
+doThis:[
+'NÓI VỚI NGƯỜI LỚN: cô giáo, bố mẹ, anh chị. Bắt nạt KHÔNG phải lỗi của em',
+'Đứng thẳng người, nhìn vào mắt người bắt nạt, nói rõ "Dừng lại! Tớ không thích thế!"',
+'Chơi cùng nhóm — bắt nạt thường tấn công người một mình',
+'Ghi lại (viết nhật ký) ngày giờ, ai làm gì - để báo cô giáo có bằng chứng',
+'Tìm bạn tốt — không nhất thiết phải nhiều, 1-2 bạn tốt là đủ',
+'Học võ/tập thể dục — không phải để đánh lại, mà để có tự tin'
+],
+dontThis:[
+'KHÔNG đánh lại — em sẽ bị phạt và họ càng tấn công',
+'KHÔNG im lặng, "tự chịu cho qua" — bắt nạt sẽ leo thang',
+'KHÔNG tin "bị bắt nạt vì em đáng bị" — không ai đáng bị bắt nạt',
+'KHÔNG cô lập mình — đó là điều người bắt nạt muốn',
+'KHÔNG bắt nạt người yếu hơn để "trả thù xã hội"'
+],
+quiz:[
+{q:'Bị bạn cùng lớp đánh, em làm gì TRƯỚC?',opts:['Đánh lại để dạy nó','Kể với cô giáo và bố mẹ','Im lặng để khỏi mất bạn'],correct:1},
+{q:'Người bắt nạt thường chọn ai?',opts:['Người một mình, hiền','Người có nhiều bạn','Người mạnh hơn'],correct:0},
+{q:'Khi đối mặt với người bắt nạt, em nên?',opts:['Cúi đầu, đi nhanh','Đứng thẳng, nhìn mắt, nói rõ "Dừng lại"','Cười để xoa dịu'],correct:1}
+]},
+
+// ============== AN TOÀN GIAO THÔNG (4) ==============
+{id:'cross_street',cat:'giaothong',emoji:'🚸',title:'Qua đường an toàn',age:'4+ tuổi',importance:'critical',
+scenario:'Em cần đi qua đường để đến trường, đến công viên, hay sang nhà bạn. Đường có thể đông xe. Em phải qua đường thế nào để an toàn?',
+doThis:[
+'Tìm vạch trắng (lối qua đường có vạch ngựa vằn) hoặc đèn tín hiệu',
+'Dừng lại ở mép vỉa hè, KHÔNG đi xuống lòng đường ngay',
+'Nhìn TRÁI - PHẢI - TRÁI lần nữa (vì xe ô tô đi bên phải, em nhìn trái trước)',
+'Lắng nghe tiếng còi, tiếng động cơ',
+'KHI ĐÈN ĐỎ cho xe, ĐÈN XANH cho người đi bộ — mới qua',
+'Đi bộ thẳng, KHÔNG chạy (vì có thể vấp ngã)',
+'Giơ tay cao báo hiệu cho xe biết em đang qua',
+'Nắm tay người lớn nếu em dưới 7 tuổi'
+],
+dontThis:[
+'KHÔNG qua đường khi nhìn điện thoại, nghe nhạc tai nghe',
+'KHÔNG chạy ra giữa đường để bắt xe buýt/đuổi bạn',
+'KHÔNG qua đường ở chỗ khuất tầm nhìn (sau xe đậu, gần xe to)',
+'KHÔNG tin "xe sẽ tránh em" — phải đợi xe dừng hẳn',
+'KHÔNG qua đường khi đường đôi mà xe đông — đi đến cầu vượt/hầm'
+],
+quiz:[
+{q:'Trước khi qua đường, em nhìn theo thứ tự?',opts:['Phải - Trái - Phải','Trái - Phải - Trái','Chỉ cần nhìn phía trước'],correct:1},
+{q:'Đèn xanh cho người đi bộ vừa nhấp nháy - em làm gì?',opts:['Chạy nhanh qua','Đợi đèn tiếp theo','Vừa đi vừa nhìn điện thoại'],correct:1},
+{q:'Ở chỗ không có vạch qua đường, em nên?',opts:['Qua chỗ thoáng tầm nhìn, không qua sau xe to','Qua bất cứ chỗ nào ngắn nhất','Đợi cô giáo dắt'],correct:0}
+]},
+
+{id:'bike_safety',cat:'giaothong',emoji:'🚲',title:'Đi xe đạp an toàn',age:'6+ tuổi',importance:'high',
+scenario:'Em được bố mẹ cho xe đạp riêng. Em muốn đi xe đến trường, đến công viên, hoặc chỉ đi quanh ngõ. Đi xe đạp đúng cách để không bị tai nạn.',
+doThis:[
+'ĐỘI MŨ BẢO HIỂM mỗi lần lên xe — kể cả đi quanh nhà',
+'Mặc áo sáng màu, có phản quang nếu trời tối',
+'Kiểm tra phanh, lốp, chuông trước khi đi',
+'Đi bên PHẢI đường (cùng chiều xe ô tô)',
+'Giơ tay báo hiệu trước khi rẽ',
+'Đi chậm khi qua ngã ba ngã tư — DỪNG nhìn rồi mới đi',
+'Tránh đường cao tốc, đường lớn',
+'Khoảng cách an toàn với xe khác — không sát quá',
+'Nếu trời mưa, đường trơn — nên dắt xe hoặc về nhà'
+],
+dontThis:[
+'KHÔNG đèo bạn — xe đạp trẻ em chỉ dành cho 1 người',
+'KHÔNG buông tay, làm trò "không tay" — rất dễ ngã',
+'KHÔNG cầm điện thoại, nghe tai nghe khi đi xe',
+'KHÔNG bám xe ô tô, xe máy đang chạy',
+'KHÔNG đi xe vào buổi tối khi không có đèn xe',
+'KHÔNG đi ngược chiều — bị xe đâm rất nguy hiểm'
+],
+quiz:[
+{q:'Đi xe đạp quanh nhà, có cần mũ bảo hiểm?',opts:['Không cần - đi gần','Cần - tai nạn xảy ra bất kỳ đâu','Tuỳ tâm trạng'],correct:1},
+{q:'Trước khi rẽ trái, em phải?',opts:['Bóp phanh và rẽ','Giơ tay trái báo hiệu, nhìn sau','Cứ thế rẽ'],correct:1},
+{q:'Bạn xin đèo, em làm gì?',opts:['Đèo bạn cho vui','Từ chối - xe trẻ em chỉ chở 1 người','Đèo nhưng đi chậm'],correct:1}
+]},
+
+{id:'car_safety',cat:'giaothong',emoji:'🚗',title:'Trên ô tô an toàn',age:'3+ tuổi',importance:'high',
+scenario:'Em ngồi ô tô cùng bố mẹ đi học, đi chơi. Tai nạn ô tô có thể xảy ra bất ngờ. Em phải biết cách ngồi an toàn.',
+doThis:[
+'NGỒI GHẾ SAU — trẻ em dưới 12 tuổi luôn ngồi ghế sau',
+'CÀI DÂY AN TOÀN mọi chuyến đi, dù xa hay gần',
+'Trẻ dưới 4 tuổi: ngồi ghế chuyên dụng cho trẻ em (car seat)',
+'Ngồi yên, không la hét — không làm bố mẹ mất tập trung lái xe',
+'Khoá cửa từ bên trong khi xe chạy',
+'Xuống xe phía LỀ ĐƯỜNG — không xuống phía mặt đường',
+'Khi xe dừng — đợi xe dừng hẳn rồi mới mở cửa',
+'Nếu xe có khoá trẻ em, đề nghị bố mẹ kích hoạt'
+],
+dontThis:[
+'KHÔNG bao giờ ngồi ghế trước nếu em dưới 12 tuổi — túi khí nổ có thể giết',
+'KHÔNG thò tay/đầu ra cửa sổ — xe ngược chiều có thể quẹt',
+'KHÔNG đứng/quỳ trên ghế — phanh gấp sẽ văng',
+'KHÔNG để em nhỏ chơi với chìa khoá xe',
+'KHÔNG ở trong xe một mình khi xe đậu — nắng nóng có thể tử vong',
+'KHÔNG dùng dây an toàn cho 2 người ngồi chung'
+],
+quiz:[
+{q:'Em 8 tuổi, ngồi ô tô ở vị trí nào?',opts:['Ghế trước cạnh bố','Ghế sau, cài dây an toàn','Đứng giữa cho dễ nhìn'],correct:1},
+{q:'Khi xe đang chạy, em buồn ngủ muốn nằm xuống ghế?',opts:['Nằm xuống, tháo dây an toàn','Vẫn ngồi, cài dây - dùng gối tựa','Ngồi sàn xe cho rộng'],correct:1},
+{q:'Bố mẹ vào cửa hàng 5 phút, em ở lại xe?',opts:['OK, 5 phút thôi','Không OK - xe nóng có thể nguy hiểm','Mở cửa sổ là OK'],correct:1}
+]},
+
+{id:'motorbike',cat:'giaothong',emoji:'🛵',title:'Trên xe máy an toàn',age:'4+ tuổi',importance:'high',
+scenario:'Ở Việt Nam, đi xe máy là phổ biến. Em được bố mẹ chở đi học, đi chơi bằng xe máy. Phải đảm bảo an toàn vì xe máy nguy hiểm hơn ô tô.',
+doThis:[
+'ĐỘI MŨ BẢO HIỂM ĐÚNG KÍCH CỠ — kể cả đi quanh nhà',
+'Mũ phải CÀI QUAI cẩn thận, không lỏng',
+'Mặc áo dài tay, quần dài để bảo vệ da khi ngã',
+'Ngồi sau lưng bố/mẹ - hai tay ÔM CHẶT bố/mẹ',
+'Hai chân đặt lên gác chân — không thả lủng lẳng',
+'Nhìn về phía trước, không quay đầu nhìn lung tung',
+'Nói TRƯỚC nếu em muốn đổi tư thế (chuột rút, mỏi)',
+'Khi xuống xe — đợi xe dừng hẳn, xuống về phía vỉa hè'
+],
+dontThis:[
+'KHÔNG ngủ gật trên xe — sẽ rơi xuống đường',
+'KHÔNG đứng lên ghế gắn, ngồi lệch một bên',
+'KHÔNG thò chân vào bánh sau — bị cuốn rất nặng',
+'KHÔNG nhảy xuống xe khi xe còn chạy',
+'KHÔNG ăn quà, chơi điện thoại trên xe — làm bố mẹ mất tập trung',
+'KHÔNG đứng giữa khi 3 người trên xe — chỗ đó nguy hiểm nhất'
+],
+quiz:[
+{q:'Mũ bảo hiểm quan trọng nhất khi?',opts:['Đi xa, ra đường lớn','Mọi lần lên xe, kể cả gần','Khi trời nắng to'],correct:1},
+{q:'Khi đi xe máy, em ngồi như thế nào?',opts:['Hai tay buông xuôi cho thoải mái','Ôm chặt bố/mẹ, chân đặt gác chân','Đứng lên để nhìn xa'],correct:1},
+{q:'Buồn ngủ trên xe, em làm gì?',opts:['Cố nhắm mắt một chút','Nói bố/mẹ dừng nghỉ - đừng ngủ','Tựa đầu vào vai bố/mẹ và ngủ'],correct:1}
+]},
+
+// ============== AN TOÀN Ở NHÀ (4) ==============
+{id:'electric',cat:'onha',emoji:'⚡',title:'An toàn điện ở nhà',age:'4+ tuổi',importance:'high',
+scenario:'Trong nhà có ổ điện, dây điện, đồ điện ở khắp nơi. Điện không nhìn thấy nhưng có thể GIẾT NGƯỜI. Em phải biết quy tắc an toàn.',
+doThis:[
+'Rút phích cắm bằng cách cầm ĐẦU PHÍCH, không cầm dây',
+'Tay phải KHÔ khi chạm vào ổ điện, công tắc',
+'Tránh xa dây điện bị đứt, hở',
+'Báo bố mẹ ngay nếu thấy mùi khét, khói từ ổ điện',
+'Đồ điện hư - báo bố mẹ, không tự sửa',
+'Khi trời mưa to sấm sét - không sờ vào tivi, máy tính, điện thoại đang cắm',
+'Nếu thấy ai bị điện giật - KHÔNG kéo bằng tay, hãy NGẮT ĐIỆN trước (bật cầu dao xuống), rồi gọi 115'
+],
+dontThis:[
+'KHÔNG cho ngón tay, vật nhọn, đũa, đồ kim loại vào ổ điện',
+'KHÔNG cắm/rút phích khi tay ướt',
+'KHÔNG dùng nhiều đồ điện trên 1 ổ — sẽ quá tải, cháy',
+'KHÔNG kéo dây điện qua chỗ ướt, qua thảm bị giẫm nhiều',
+'KHÔNG chơi với dây điện, sợi đồng',
+'KHÔNG dùng máy sấy tóc, đồ điện trong phòng tắm khi đang tắm'
+],
+quiz:[
+{q:'Tay vừa rửa xong, em cắm điện?',opts:['OK, không sao','Lau khô tay trước','Lau qua áo cho khô'],correct:1},
+{q:'Thấy bạn bị điện giật, em làm gì?',opts:['Kéo bạn ra ngay','Ngắt cầu dao trước, rồi mới giúp','Hét gọi người'],correct:1},
+{q:'Trời sấm sét to, em đang xem TV?',opts:['Cứ xem, nhà có chống sét','Tắt và rút phích TV','Đứng xa TV nhưng vẫn xem'],correct:1}
+]},
+
+{id:'kitchen',cat:'onha',emoji:'🔥',title:'An toàn trong bếp',age:'5+ tuổi',importance:'high',
+scenario:'Bếp có nhiều thứ nguy hiểm: bếp gas/bếp điện đang nóng, nồi nước sôi, dao sắc, lò vi sóng. Em vào bếp cần cẩn thận.',
+doThis:[
+'Hỏi bố mẹ TRƯỚC khi vào bếp lúc đang nấu',
+'Đứng xa bếp đang lửa ít nhất 1 mét',
+'Cầm tay cầm nồi, chảo bằng KHĂN DÀY hoặc GĂNG TAY chịu nhiệt',
+'Cầm dao bằng tay phải (nếu thuận phải), lưỡi dao hướng XUỐNG khi đi',
+'Tóc dài phải BUỘC GỌN khi gần bếp lửa',
+'Quần áo ôm gọn — không váy/áo rộng gần lửa',
+'Nếu thấy lửa lan ra ngoài bếp gas - KHOÁ VAN GAS ngay, gọi bố mẹ',
+'Nồi nước sôi - kéo về phía trong, không để tay cầm chìa ra ngoài (trẻ chạy qua đụng vào)'
+],
+dontThis:[
+'KHÔNG mở cửa lò vi sóng đang chạy',
+'KHÔNG đổ nước vào dầu/mỡ đang cháy — sẽ BÙNG lên cao',
+'KHÔNG đặt khăn, giấy gần bếp đang lửa',
+'KHÔNG nghịch dao như đồ chơi',
+'KHÔNG đặt đồ kim loại vào lò vi sóng',
+'KHÔNG cố nhấc nồi nặng khi em chưa đủ sức'
+],
+quiz:[
+{q:'Chảo dầu đang cháy bốc lửa, em làm gì?',opts:['Đổ nước dập','Tắt bếp + đậy nắp/khăn ướt','Khuấy mạnh cho lửa tắt'],correct:1},
+{q:'Cầm dao đi qua nhà bếp, em cầm thế nào?',opts:['Lưỡi dao hướng lên','Lưỡi dao hướng xuống','Lưỡi dao về phía trước'],correct:1},
+{q:'Nồi nước sôi trên bếp, tay cầm hướng?',opts:['Chìa ra ngoài cho dễ cầm','Quay vào trong bếp','Không quan trọng'],correct:1}
+]},
+
+{id:'sharp',cat:'onha',emoji:'🔪',title:'Đồ sắc nhọn và thuốc',age:'3+ tuổi',importance:'high',
+scenario:'Trong nhà có dao, kéo, kim, kim loại sắc; có thuốc, hoá chất tẩy rửa, nước rửa chén... Tất cả đều nguy hiểm với trẻ.',
+doThis:[
+'Thuốc — CHỈ uống khi BỐ MẸ đưa cho. KHÔNG tự lấy uống dù trông giống kẹo',
+'Hoá chất tẩy rửa, nước javel, nước rửa chén — KHÔNG đụng vào, để xa em nhỏ',
+'Dao kéo — chỉ dùng khi có người lớn hướng dẫn',
+'Kim — không cầm chạy, không đặt trên ghế/giường',
+'Đồ thuỷ tinh vỡ - KHÔNG tự nhặt bằng tay, gọi người lớn',
+'Bao bì nylon, túi nhựa — KHÔNG úp vào mặt, em nhỏ có thể ngạt thở',
+'Pin (đặc biệt pin cúc áo) — KHÔNG cho vào miệng, tai, mũi, nguy hiểm chết người'
+],
+dontThis:[
+'KHÔNG thử thuốc của anh chị, người lớn vì "trông như kẹo"',
+'KHÔNG uống nước trong chai khi không chắc là gì',
+'KHÔNG để em nhỏ chơi gần dao kéo',
+'KHÔNG nghịch hộp đựng pin, nuốt pin',
+'KHÔNG mở chai hoá chất ngửi xem mùi gì',
+'KHÔNG cầm vật sắc nhọn khi chạy'
+],
+quiz:[
+{q:'Em thấy 1 viên thuốc đẹp trên bàn?',opts:['Ăn thử xem','Không động vào - hỏi bố mẹ','Đưa cho bạn em'],correct:1},
+{q:'Em đánh rơi cốc thuỷ tinh, vỡ nát?',opts:['Tự nhặt mảnh vỡ','Gọi người lớn, không dùng tay nhặt','Đá vào góc rồi quên đi'],correct:1},
+{q:'Em nhỏ 2 tuổi cầm pin cúc áo định cho vào miệng?',opts:['Kệ nó','Lấy ngay, nói bố mẹ - pin có thể giết em bé','Hôn nó cho em vui'],correct:1}
+]},
+
+{id:'elevator',cat:'onha',emoji:'🛗',title:'An toàn thang máy',age:'5+ tuổi',importance:'medium',
+scenario:'Em hay đi thang máy ở nhà chung cư, trung tâm thương mại, bệnh viện. Thang máy có thể nguy hiểm nếu không cẩn thận.',
+doThis:[
+'Đợi thang máy DỪNG HẲN rồi mới bước vào/ra',
+'Đứng QUAY MẶT về phía cửa - không quay lưng',
+'Nắm tay người lớn khi đi cùng bố mẹ',
+'Nếu thang máy ĐỨNG bất ngờ - bấm CHUÔNG BÁO ĐỘNG, gọi to "Cứu" qua chuông',
+'Trong thang dừng - đứng yên, không nhảy, không cố cạy cửa',
+'Đợi sự cứu hộ từ ngoài',
+'Nếu có hoả hoạn — KHÔNG dùng thang máy, dùng cầu thang bộ'
+],
+dontThis:[
+'KHÔNG vội chen vào khi cửa đang đóng — bị kẹp',
+'KHÔNG nhảy trong thang đang chạy',
+'KHÔNG bấm tất cả các nút cho vui',
+'KHÔNG đi thang máy một mình khi còn nhỏ (dưới 6 tuổi)',
+'KHÔNG cố cạy cửa khi thang bị kẹt — chờ nhân viên',
+'KHÔNG nghịch cảm biến chống kẹp cửa'
+],
+quiz:[
+{q:'Thang máy bị kẹt đột ngột giữa tầng, em làm gì?',opts:['Cạy cửa ra','Bấm chuông báo động, đợi cứu','Nhảy thật mạnh'],correct:1},
+{q:'Cửa thang máy đang đóng, em đến muộn?',opts:['Chen vào nhanh','Đợi chuyến tiếp theo','Lấy tay chặn cửa'],correct:1},
+{q:'Có hoả hoạn trong toà nhà, em ở tầng 5?',opts:['Dùng thang máy xuống cho nhanh','Dùng cầu thang bộ - thang máy có thể bị mất điện kẹt','Đợi cứu trong phòng'],correct:1}
+]},
+
+// ============== SƠ CỨU CƠ BẢN (3) ==============
+{id:'bleed',cat:'socuu',emoji:'🩹',title:'Khi bị chảy máu',age:'4+ tuổi',importance:'high',
+scenario:'Em (hoặc bạn) bị đứt tay, ngã trầy đầu gối, hoặc chảy máu cam. Em phải biết cách xử lý trước khi gọi người lớn.',
+doThis:[
+'CHẢY MÁU NHỎ (đứt tay, trầy):\n  → Rửa sạch dưới VÒI NƯỚC máy 1-2 phút\n  → Ép GẠC SẠCH (hoặc khăn) lên vết thương 5 phút\n  → Khi máu ngừng, dán băng cá nhân',
+'CHẢY MÁU NHIỀU (cắt sâu):\n  → Ép mạnh khăn sạch lên vết thương\n  → Nâng cao tay/chân lên cao\n  → Gọi người lớn / 115 ngay',
+'CHẢY MÁU CAM:\n  → Cúi đầu hơi xuống TRƯỚC (không ngửa lên - máu chảy vào họng)\n  → Bấm chặt cánh mũi 10 phút\n  → Thở bằng miệng',
+'Trầy xước nhỏ - bôi thuốc sát trùng/cồn rồi dán băng',
+'Vết thương dài hơn 1cm, sâu - đến viện khâu'
+],
+dontThis:[
+'KHÔNG bôi nước miếng, bùn, vôi vào vết thương — sẽ nhiễm trùng',
+'KHÔNG bóc vảy khi vết thương đang lành',
+'KHI CHẢY MÁU CAM - KHÔNG ngửa đầu lên (máu vào họng gây buồn nôn)',
+'KHÔNG tự rút vật cắm sâu (dao, kim) — chờ bác sĩ',
+'KHÔNG để vết thương hở quá lâu - dễ nhiễm trùng'
+],
+quiz:[
+{q:'Chảy máu cam, em làm gì?',opts:['Ngửa đầu lên trời','Cúi đầu xuống, bấm cánh mũi','Nằm xuống ngay'],correct:1},
+{q:'Đứt tay, bước ĐẦU TIÊN?',opts:['Bôi cồn ngay','Rửa dưới vòi nước sạch','Quấn băng chặt'],correct:1},
+{q:'Có cây nhọn cắm sâu vào tay, em làm?',opts:['Rút ra ngay','Để nguyên, gọi 115','Bôi cồn quanh'],correct:1}
+]},
+
+{id:'burn',cat:'socuu',emoji:'🔥',title:'Khi bị bỏng',age:'4+ tuổi',importance:'high',
+scenario:'Em chạm vào nồi nóng, đổ cà phê/nước sôi lên người, hoặc bị bỏng bếp. Da đỏ, đau rát, đôi khi phồng rộp. Em phải làm gì NGAY?',
+doThis:[
+'XỐI NƯỚC MÁT LẠNH (không phải nước đá) lên vùng bỏng 15-20 PHÚT',
+'Trong khi xối — gọi bố mẹ/người lớn',
+'Tháo nhẫn, vòng tay, đồng hồ ở vùng bỏng (trước khi sưng)',
+'Quần áo dính vào bỏng — KHÔNG kéo ra, cắt xung quanh',
+'Phủ vải sạch (khăn) lên vết bỏng để bảo vệ',
+'Nếu bỏng to hơn lòng bàn tay HOẶC bỏng mặt/vùng nhạy cảm — đi viện',
+'Uống nhiều nước'
+],
+dontThis:[
+'KHÔNG bôi KEM ĐÁNH RĂNG, dầu, mỡ, nước mắm, bơ — không có tác dụng, gây nhiễm trùng',
+'KHÔNG đặt đá lên — sẽ làm tổn thương thêm da',
+'KHÔNG chọc thủng bọng nước phồng — để bác sĩ làm',
+'KHÔNG bôi đông y/lá cây không rõ',
+'KHÔNG mặc quần áo chật lên vùng bỏng'
+],
+quiz:[
+{q:'Vừa bị bỏng nước sôi vào tay, BƯỚC 1?',opts:['Bôi kem đánh răng','Xối nước mát 15-20 phút','Đặt đá lên'],correct:1},
+{q:'Vết bỏng phồng rộp, em làm gì?',opts:['Chọc cho nước ra','Không chọc - phủ vải sạch, đi viện','Bóc lớp da chết'],correct:1},
+{q:'Áo dính vào da bỏng, em?',opts:['Kéo ra ngay','Cắt quần áo xung quanh, không kéo','Cứ kệ áo'],correct:1}
+]},
+
+{id:'bites',cat:'socuu',emoji:'🐝',title:'Khi bị côn trùng đốt',age:'4+ tuổi',importance:'medium',
+scenario:'Em chơi ngoài vườn/công viên và bị muỗi, kiến, ong, sâu róm đốt. Da ngứa, đỏ, sưng. Em phải làm gì?',
+doThis:[
+'MUỖI ĐỐT - rửa sạch, bôi kem chống ngứa, không gãi nhiều',
+'ONG ĐỐT - lấy nọc (cạo bằng thẻ cứng, KHÔNG nặn bằng nhíp), chườm lạnh',
+'KIẾN ĐEN/ĐỎ - rửa nước xà phòng, chườm lạnh',
+'SÂU RÓM - dùng băng dính DÁN VÀO chỗ đụng để lấy LÔNG, sau đó rửa',
+'RẮN CẮN - GỌI 115 NGAY, giữ vết cắn THẤP hơn tim, hạn chế cử động',
+'CHÓ CẮN - rửa kỹ vết thương dưới nước 15 phút, đến viện chích phòng dại NGAY',
+'Quan sát 30 phút sau: nếu sưng mặt, khó thở, nổi mề đay → SHOCK PHẢN VỆ, gọi 115'
+],
+dontThis:[
+'KHÔNG nặn nọc ong bằng tay/nhíp — nọc lan thêm',
+'KHÔNG cắn vết rắn cắn hút nọc (như phim cũ) — vô tác dụng và nguy hiểm',
+'KHÔNG bôi nước miếng, bùn, thuốc lào',
+'KHÔNG gãi mạnh khiến chảy máu nhiễm trùng',
+'KHÔNG bỏ qua vết chó/mèo cắn — bệnh dại chết 100%'
+],
+quiz:[
+{q:'Bị ong đốt, em lấy nọc thế nào?',opts:['Nặn bằng tay','Cạo bằng thẻ cứng','Hút bằng miệng'],correct:1},
+{q:'Bị chó cắn nhẹ, da chỉ đỏ?',opts:['Bôi cồn là OK','Đi viện chích phòng dại NGAY','Đợi xem có sưng không'],correct:1},
+{q:'Bị muỗi đốt, sau đó nổi mề đay khắp người, khó thở?',opts:['Bình thường, sẽ hết','SHOCK phản vệ - gọi 115 NGAY','Uống thuốc dị ứng đợi'],correct:1}
+]},
+
+// ============== KỸ NĂNG XÃ HỘI & CẢM XÚC (2) ==============
+{id:'anger',cat:'xahoi',emoji:'😤',title:'Quản lý cơn giận',age:'4+ tuổi',importance:'high',
+scenario:'Em bị bạn giành đồ chơi, bị mắng oan, bị bố mẹ không cho làm điều mình muốn. Em cảm thấy GIẬN, muốn la hét, đánh người. Em phải làm sao?',
+doThis:[
+'CẢM NHẬN cơn giận: tim đập nhanh, mặt nóng, tay nắm chặt — đó là cơn giận',
+'HÍT THỞ SÂU: hít vào 4 giây, giữ 4 giây, thở ra 4 giây. Làm 5 lần',
+'ĐẾM 1 đến 10 trước khi nói/làm gì',
+'TÌM CHỖ YÊN TĨNH (phòng riêng, góc sân) ngồi 5 phút',
+'NÓI ra điều mình giận: "Con đang giận vì..." - không đánh, không la',
+'CHẠY/NHẢY/ĐẤM gối nếu cần xả năng lượng',
+'Sau khi bình tĩnh - tìm cách giải quyết VẤN ĐỀ (chia đồ chơi, xin lỗi, hoà giải)'
+],
+dontThis:[
+'KHÔNG đánh người dù họ làm em giận',
+'KHÔNG ném, đập vỡ đồ — sẽ tiếc sau',
+'KHÔNG nói "Tôi GHÉT bạn/mẹ/em!" khi giận — lời nói có thể tổn thương lâu',
+'KHÔNG giấu cơn giận hoàn toàn — sẽ bùng nổ to hơn sau',
+'KHÔNG ăn để xả stress — thói xấu cả đời'
+],
+quiz:[
+{q:'Bạn lấy đồ chơi của em, em cảm thấy giận?',opts:['Đánh bạn cho bạn nhớ','Hít sâu 5 lần, rồi nói "Trả đồ cho mình!"','Khóc to để cô giáo phạt bạn'],correct:1},
+{q:'Khi giận, KHÔNG nên làm gì?',opts:['Hít thở sâu','Ngồi một mình 5 phút','Đập vỡ đồ và hét to'],correct:2},
+{q:'Cách tốt nhất nói khi giận?',opts:['"Tôi ghét bạn!"','"Con đang giận vì..."','Im lặng, không nói gì'],correct:1}
+]},
+
+{id:'lying',cat:'xahoi',emoji:'🤥',title:'Nói thật, không nói dối',age:'4+ tuổi',importance:'high',
+scenario:'Em làm vỡ bình hoa quý của mẹ. Em sợ bị mắng. Em có thể nói dối "Con không biết ai làm" hoặc "Em làm vỡ". Em phải làm gì đúng?',
+doThis:[
+'NÓI THẬT — kể với bố mẹ điều đã xảy ra',
+'Xin lỗi và hứa lần sau cẩn thận hơn',
+'Sẵn sàng chịu hậu quả (giúp dọn, mua bình mới bằng tiền tiết kiệm)',
+'Nếu em làm sai nhưng sợ kể - hãy nhớ: SỰ THẬT bị phát hiện sau sẽ đáng sợ hơn',
+'Bố mẹ sẽ THƯƠNG em hơn vì đã can đảm nói thật',
+'Không "đổ tội cho em nhỏ" vì em không phản đối được',
+'Trong những chuyện lớn (bạo lực, bị xâm hại, nguy hiểm) — NÓI THẬT là CỨU MẠNG em'
+],
+dontThis:[
+'KHÔNG nói dối nhỏ - dần thành thói quen lớn',
+'KHÔNG đổ tội cho người khác (anh chị, em nhỏ, thú cưng)',
+'KHÔNG giấu việc xấu vì sợ phạt - giấu càng lâu, hậu quả càng to',
+'KHÔNG hứa "Sẽ không bao giờ" làm việc gì khi không chắc - đó cũng là dối',
+'KHÔNG nói dối để "tốt cho người khác" - mất lòng tin'
+],
+quiz:[
+{q:'Em làm vỡ điện thoại của bố?',opts:['Giấu đi, không kể','Kể thật, xin lỗi, đề nghị tiết kiệm bù','Đổ tội cho em nhỏ'],correct:1},
+{q:'Em quên làm bài tập, cô giáo hỏi?',opts:['Nói "Em quên vở ở nhà"','Nói thật "Em quên làm, cô cho em làm bù"','Nói "Em làm rồi nhưng để quên"'],correct:1},
+{q:'Một người chú dặn "đừng nói với bố mẹ chuyện hôm nay"?',opts:['Giữ bí mật như chú dặn','KỂ NGAY với bố mẹ - đó là dấu hiệu xấu','Đợi xem chú có cho quà không'],correct:1}
+]}
+];
+
+
+/* ============== LIFE SKILLS — 23 Kỹ năng sống thiết yếu ============== */
+games.lifeSkills = (()=>{
+  const SKILL_CATS = [
+    {id:'all', label:'📚 Tất cả', color:'var(--neon-cyan)'},
+    {id:'khancap', label:'🚨 Khẩn cấp', color:'var(--neon-pink)'},
+    {id:'baove', label:'🛡️ Bảo vệ bản thân', color:'var(--neon-purple)'},
+    {id:'giaothong', label:'🚦 Giao thông', color:'var(--neon-yellow)'},
+    {id:'onha', label:'🏠 Ở nhà', color:'#39ff7f'},
+    {id:'socuu', label:'🩹 Sơ cứu', color:'#ff6f00'},
+    {id:'xahoi', label:'💬 Xã hội', color:'#a3d8ff'}
+  ];
+  let curCat = 'all';
+  let curSkill = null;
+  let quizState = null; // {qIdx, answers, correct}
+
+  function init(){
+    curCat = 'all';
+    curSkill = null;
+    quizState = null;
+    renderList();
+  }
+
+  function importanceBadge(imp){
+    if(imp==='critical') return '<span style="background:rgba(255,45,149,.2);color:#ff6b9f;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;border:1px solid rgba(255,45,149,.4)">⚡ Cực quan trọng</span>';
+    if(imp==='high') return '<span style="background:rgba(255,230,0,.15);color:#ffe600;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;border:1px solid rgba(255,230,0,.3)">⭐ Quan trọng</span>';
+    return '<span style="background:rgba(0,240,255,.1);color:#00f0ff;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700">📋 Cơ bản</span>';
+  }
+
+  function renderList(){
+    mArea.innerHTML = '';
+    mCtrls.innerHTML = '';
+
+    const head = document.createElement('div');
+    head.style.cssText = 'text-align:center;margin-bottom:14px';
+    head.innerHTML = `<div style="font-size:13px;color:var(--muted);line-height:1.5">🛡️ <b style="color:var(--text)">${LIFE_SKILLS.length} kỹ năng</b> dạy con tự bảo vệ và sống an toàn</div>`;
+    mArea.appendChild(head);
+
+    // Category chips
+    const chipsRow = document.createElement('div');
+    chipsRow.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:12px';
+    SKILL_CATS.forEach(c=>{
+      const count = c.id==='all' ? LIFE_SKILLS.length : LIFE_SKILLS.filter(s=>s.cat===c.id).length;
+      const chip = document.createElement('button');
+      const active = curCat===c.id;
+      chip.style.cssText = `padding:8px 12px;border-radius:18px;border:2px solid ${active?c.color:'rgba(255,255,255,.12)'};background:${active?'rgba(255,255,255,.08)':'rgba(0,0,0,.2)'};color:${active?c.color:'var(--text)'};font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;touch-action:manipulation;transition:all .15s`;
+      chip.innerHTML = `${c.label} <span style="opacity:.7;font-weight:400">(${count})</span>`;
+      chip.onclick = ()=>{
+        curCat = c.id;
+        if(typeof SFX!=='undefined') SFX.tap();
+        renderList();
+      };
+      chipsRow.appendChild(chip);
+    });
+    mArea.appendChild(chipsRow);
+
+    // Skills list
+    const list = document.createElement('div');
+    list.style.cssText = 'display:flex;flex-direction:column;gap:8px';
+    const filtered = curCat==='all' ? LIFE_SKILLS : LIFE_SKILLS.filter(s=>s.cat===curCat);
+
+    if(filtered.length===0){
+      list.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px">Không có kỹ năng nào</div>';
+    } else {
+      filtered.forEach(s=>{
+        const card = document.createElement('div');
+        card.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;cursor:pointer;touch-action:manipulation;transition:all .15s';
+        card.onmouseover = ()=>{card.style.background='rgba(255,255,255,.08)';card.style.borderColor='var(--neon-purple)'};
+        card.onmouseout = ()=>{card.style.background='rgba(255,255,255,.04)';card.style.borderColor='rgba(255,255,255,.08)'};
+        card.innerHTML = `
+          <div style="font-size:32px;flex-shrink:0">${s.emoji}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:4px">${s.title}</div>
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+              ${importanceBadge(s.importance)}
+              <span style="font-size:11px;color:var(--muted)">👶 ${s.age}</span>
+            </div>
+          </div>
+          <div style="color:var(--muted);font-size:18px;flex-shrink:0">→</div>`;
+        card.onclick = ()=>{
+          if(typeof SFX!=='undefined') SFX.open();
+          openSkill(s);
+        };
+        list.appendChild(card);
+      });
+    }
+    mArea.appendChild(list);
+
+    addBtn('← Đóng','alt',closeModal);
+    setStatus(`🛡️ ${filtered.length} kỹ năng · Chọn để học`);
+  }
+
+  function openSkill(s){
+    curSkill = s;
+    quizState = null;
+    mArea.innerHTML = '';
+    mCtrls.innerHTML = '';
+
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'max-width:620px;margin:0 auto';
+
+    // Title card
+    const titleCard = document.createElement('div');
+    titleCard.style.cssText = 'text-align:center;padding:18px;background:linear-gradient(135deg,rgba(177,75,255,.1),rgba(255,45,149,.1));border:1px solid rgba(177,75,255,.25);border-radius:14px;margin-bottom:14px';
+    titleCard.innerHTML = `
+      <div style="font-size:56px;margin-bottom:6px">${s.emoji}</div>
+      <div style="font-family:'Bungee',cursive;font-size:18px;color:var(--neon-yellow);line-height:1.2;margin-bottom:8px">${s.title}</div>
+      <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
+        ${importanceBadge(s.importance)}
+        <span style="background:rgba(255,255,255,.06);color:var(--muted);padding:2px 8px;border-radius:6px;font-size:11px">👶 ${s.age}</span>
+      </div>`;
+    wrap.appendChild(titleCard);
+
+    // Scenario box
+    const scenBox = document.createElement('div');
+    scenBox.style.cssText = 'padding:14px;background:rgba(0,240,255,.05);border-left:3px solid var(--neon-cyan);border-radius:8px;margin-bottom:14px';
+    scenBox.innerHTML = `<div style="font-size:12px;color:var(--neon-cyan);font-weight:700;margin-bottom:6px">📖 TÌNH HUỐNG</div><div style="font-size:14px;line-height:1.6;color:var(--text)">${s.scenario}</div>`;
+    wrap.appendChild(scenBox);
+
+    // DO THIS
+    const doBox = document.createElement('div');
+    doBox.style.cssText = 'padding:14px;background:rgba(57,255,127,.06);border-left:3px solid #39ff7f;border-radius:8px;margin-bottom:10px';
+    let doHTML = '<div style="font-size:12px;color:#39ff7f;font-weight:700;margin-bottom:10px">✅ NÊN LÀM</div>';
+    s.doThis.forEach(item=>{
+      doHTML += `<div style="display:flex;gap:8px;margin-bottom:8px;font-size:13px;line-height:1.5"><span style="color:#39ff7f;flex-shrink:0">✓</span><span style="white-space:pre-wrap">${item}</span></div>`;
+    });
+    doBox.innerHTML = doHTML;
+    wrap.appendChild(doBox);
+
+    // DON'T
+    const dontBox = document.createElement('div');
+    dontBox.style.cssText = 'padding:14px;background:rgba(255,45,149,.06);border-left:3px solid var(--neon-pink);border-radius:8px;margin-bottom:14px';
+    let dontHTML = '<div style="font-size:12px;color:var(--neon-pink);font-weight:700;margin-bottom:10px">❌ KHÔNG NÊN</div>';
+    s.dontThis.forEach(item=>{
+      dontHTML += `<div style="display:flex;gap:8px;margin-bottom:8px;font-size:13px;line-height:1.5"><span style="color:var(--neon-pink);flex-shrink:0">✗</span><span>${item}</span></div>`;
+    });
+    dontBox.innerHTML = dontHTML;
+    wrap.appendChild(dontBox);
+
+    // Quiz button
+    if(s.quiz && s.quiz.length>0){
+      const quizBtn = document.createElement('button');
+      quizBtn.style.cssText = 'display:block;width:100%;padding:14px;background:linear-gradient(135deg,var(--neon-purple),var(--neon-pink));border:none;color:#fff;font-family:"Bungee",cursive;font-size:14px;border-radius:12px;cursor:pointer;touch-action:manipulation;box-shadow:0 4px 14px rgba(177,75,255,.3)';
+      quizBtn.innerHTML = `🎯 KIỂM TRA HIỂU BIẾT (${s.quiz.length} câu)`;
+      quizBtn.onclick = ()=>startQuiz(s);
+      wrap.appendChild(quizBtn);
+    }
+
+    mArea.appendChild(wrap);
+    addBtn('← Kỹ năng khác','alt',()=>renderList());
+    addBtn('← Đóng','alt',closeModal);
+    setStatus(`🛡️ ${s.title}`);
+  }
+
+  function startQuiz(s){
+    quizState = {skill:s, qIdx:0, answers:[], correct:0};
+    renderQuestion();
+  }
+
+  function renderQuestion(){
+    const {skill, qIdx} = quizState;
+    const q = skill.quiz[qIdx];
+    mArea.innerHTML = '';
+    mCtrls.innerHTML = '';
+
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'max-width:560px;margin:0 auto';
+
+    // Progress
+    const prog = document.createElement('div');
+    prog.style.cssText = 'margin-bottom:18px';
+    prog.innerHTML = `
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px">
+        <span>${skill.emoji} ${skill.title}</span>
+        <span>Câu ${qIdx+1}/${skill.quiz.length}</span>
+      </div>
+      <div style="height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden">
+        <div style="height:100%;width:${(qIdx+1)/skill.quiz.length*100}%;background:linear-gradient(90deg,var(--neon-cyan),var(--neon-yellow));transition:width .3s"></div>
+      </div>`;
+    wrap.appendChild(prog);
+
+    // Question
+    const qBox = document.createElement('div');
+    qBox.style.cssText = 'padding:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-bottom:14px;font-size:15px;line-height:1.5;color:var(--text);font-weight:600';
+    qBox.innerHTML = `❓ ${q.q}`;
+    wrap.appendChild(qBox);
+
+    // Options
+    q.opts.forEach((opt,i)=>{
+      const btn = document.createElement('button');
+      btn.style.cssText = 'display:block;width:100%;padding:14px 16px;margin-bottom:10px;background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.12);color:var(--text);font-family:inherit;font-size:14px;border-radius:10px;cursor:pointer;touch-action:manipulation;text-align:left;line-height:1.4;transition:all .15s';
+      btn.innerHTML = `<b style="color:var(--neon-cyan);margin-right:8px">${String.fromCharCode(65+i)}.</b> ${opt}`;
+      btn.onmouseover = ()=>{btn.style.borderColor='var(--neon-cyan)';btn.style.background='rgba(0,240,255,.08)'};
+      btn.onmouseout = ()=>{btn.style.borderColor='rgba(255,255,255,.12)';btn.style.background='rgba(255,255,255,.05)'};
+      btn.onclick = ()=>answerQuestion(i);
+      wrap.appendChild(btn);
+    });
+
+    mArea.appendChild(wrap);
+    addBtn('← Bỏ quiz','alt',()=>openSkill(skill));
+  }
+
+  function answerQuestion(picked){
+    const {skill, qIdx} = quizState;
+    const q = skill.quiz[qIdx];
+    const isRight = picked === q.correct;
+    quizState.answers.push({picked, correct:q.correct});
+    if(isRight) quizState.correct++;
+    if(typeof SFX!=='undefined') {
+      if(isRight) SFX.correct && SFX.correct();
+      else SFX.wrong && SFX.wrong();
+    }
+
+    // Highlight buttons
+    const btns = mArea.querySelectorAll('button');
+    btns.forEach((b,i)=>{
+      if(!b.innerHTML.includes('<b')) return; // skip non-option buttons
+      const idx = Array.from(btns).filter(bb=>bb.innerHTML.includes('<b')).indexOf(b);
+      if(idx === q.correct){
+        b.style.borderColor = '#39ff7f';
+        b.style.background = 'rgba(57,255,127,.15)';
+      } else if(idx === picked){
+        b.style.borderColor = 'var(--neon-pink)';
+        b.style.background = 'rgba(255,45,149,.15)';
+      }
+      b.disabled = true;
+      b.onclick = null;
+    });
+
+    // Show feedback
+    const fb = document.createElement('div');
+    fb.style.cssText = `padding:12px;margin-top:8px;border-radius:10px;font-size:13px;font-weight:600;text-align:center;${isRight?'background:rgba(57,255,127,.12);color:#39ff7f;border:1px solid rgba(57,255,127,.3)':'background:rgba(255,45,149,.12);color:#ff6b9f;border:1px solid rgba(255,45,149,.3)'}`;
+    fb.innerHTML = isRight ? '✅ Đúng rồi! Giỏi quá!' : `❌ Sai rồi! Câu đúng là <b>${String.fromCharCode(65+q.correct)}</b>: ${q.opts[q.correct]}`;
+    mArea.querySelector('div').appendChild(fb);
+
+    // Next button
+    mCtrls.innerHTML = '';
+    const nextBtn = document.createElement('button');
+    nextBtn.style.cssText = 'padding:12px 22px;background:linear-gradient(135deg,var(--neon-cyan),var(--neon-yellow));border:none;color:#000;font-family:"Bungee",cursive;font-size:13px;border-radius:10px;cursor:pointer;touch-action:manipulation';
+    const isLast = qIdx >= skill.quiz.length - 1;
+    nextBtn.textContent = isLast ? '🏆 XEM KẾT QUẢ' : 'CÂU TIẾP →';
+    nextBtn.onclick = ()=>{
+      if(isLast) showResult();
+      else { quizState.qIdx++; renderQuestion(); }
+    };
+    mCtrls.appendChild(nextBtn);
+  }
+
+  function showResult(){
+    const {skill, correct, answers} = quizState;
+    const total = skill.quiz.length;
+    const pct = Math.round(correct/total*100);
+    mArea.innerHTML = '';
+    mCtrls.innerHTML = '';
+
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'max-width:520px;margin:0 auto;text-align:center';
+
+    const emoji = pct===100?'🏆':pct>=70?'⭐':pct>=50?'👍':'📚';
+    const msg = pct===100?'Tuyệt vời! Đậu đã hiểu hoàn toàn!':pct>=70?'Giỏi lắm! Đậu nắm chắc kỹ năng này':pct>=50?'Cũng tốt — đọc lại để nhớ kỹ hơn nhé':'Cần đọc lại kỹ năng này — quan trọng lắm!';
+    const color = pct===100?'#39ff7f':pct>=70?'#ffe600':pct>=50?'#00f0ff':'#ff6b9f';
+
+    wrap.innerHTML = `
+      <div style="font-size:72px;margin-bottom:10px">${emoji}</div>
+      <div style="font-family:'Bungee',cursive;font-size:28px;color:${color};margin-bottom:4px">${correct}/${total}</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:20px">${msg}</div>
+      <div style="padding:18px;background:rgba(255,255,255,.04);border-radius:12px;margin-bottom:18px">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Kỹ năng vừa học</div>
+        <div style="font-size:48px;margin-bottom:6px">${skill.emoji}</div>
+        <div style="font-weight:700;color:var(--neon-yellow)">${skill.title}</div>
+      </div>`;
+    mArea.appendChild(wrap);
+
+    // Report to Player
+    if(typeof reportGameResult!=='undefined'){
+      reportGameResult('lifeSkills', {win:pct>=70, score:correct*10, perfectQuiz:pct===100, lifeSkillLearned:true});
+    }
+
+    addBtn('🔄 Làm lại','alt',()=>startQuiz(skill));
+    addBtn('📖 Đọc lại','alt',()=>openSkill(skill));
+    addBtn('← Kỹ năng khác','alt',()=>renderList());
+    addBtn('← Đóng','alt',closeModal);
+    setStatus(`🎯 ${correct}/${total} câu đúng (${pct}%)`);
+  }
+
+  return {
+    title: '🛡️ Kỹ năng sống',
+    init: init
+  };
+})();
+
+
+
+/* ============== VẼ TỰ DO — Canvas drawing with collections ============== */
+games.draw = (()=>{
+  const STORE_KEY = 'drawCollections';
+  const CANVAS_W = 1200, CANVAS_H = 1500;
+  const PALETTE = [
+    '#000000','#ffffff','#888888','#7a3b1b',
+    '#e60012','#ff7300','#ffd400','#a4d233',
+    '#39ff7f','#00c98f','#00b3e6','#0066cc',
+    '#7a3aff','#ff2d95','#ffa6c9','#ffe0bd'
+  ];
+  const TEMPLATES = [
+    {id:'blank',label:'Trang trắng',draw:null},
+    {id:'cat',label:'Mèo',emoji:'🐱',draw:(ctx,w,h)=>{
+      ctx.strokeStyle='#999';ctx.lineWidth=3;ctx.lineCap='round';
+      const cx=w/2,cy=h/2;
+      ctx.beginPath();ctx.arc(cx,cy,200,0,Math.PI*2);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(cx-140,cy-160);ctx.lineTo(cx-180,cy-260);ctx.lineTo(cx-80,cy-200);ctx.closePath();ctx.stroke();
+      ctx.beginPath();ctx.moveTo(cx+140,cy-160);ctx.lineTo(cx+180,cy-260);ctx.lineTo(cx+80,cy-200);ctx.closePath();ctx.stroke();
+      ctx.beginPath();ctx.arc(cx-60,cy-30,18,0,Math.PI*2);ctx.stroke();
+      ctx.beginPath();ctx.arc(cx+60,cy-30,18,0,Math.PI*2);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(cx-15,cy+30);ctx.lineTo(cx+15,cy+30);ctx.lineTo(cx,cy+55);ctx.closePath();ctx.stroke();
+      ctx.beginPath();ctx.moveTo(cx-30,cy+90);ctx.quadraticCurveTo(cx,cy+120,cx+30,cy+90);ctx.stroke();
+    }},
+    {id:'flower',label:'Hoa',emoji:'🌸',draw:(ctx,w,h)=>{
+      ctx.strokeStyle='#999';ctx.lineWidth=3;
+      const cx=w/2,cy=h/2;
+      for(let i=0;i<6;i++){
+        const a=i*Math.PI/3;
+        const px=cx+Math.cos(a)*120,py=cy+Math.sin(a)*120;
+        ctx.beginPath();ctx.ellipse(px,py,90,55,a,0,Math.PI*2);ctx.stroke();
+      }
+      ctx.beginPath();ctx.arc(cx,cy,55,0,Math.PI*2);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(cx,cy+180);ctx.lineTo(cx,cy+400);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(cx,cy+280);ctx.quadraticCurveTo(cx-80,cy+260,cx-130,cy+320);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(cx,cy+340);ctx.quadraticCurveTo(cx+80,cy+320,cx+130,cy+380);ctx.stroke();
+    }},
+    {id:'fish',label:'Cá',emoji:'🐟',draw:(ctx,w,h)=>{
+      ctx.strokeStyle='#999';ctx.lineWidth=3;
+      const cx=w/2,cy=h/2;
+      ctx.beginPath();ctx.ellipse(cx,cy,200,110,0,0,Math.PI*2);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(cx+180,cy);ctx.lineTo(cx+300,cy-90);ctx.lineTo(cx+300,cy+90);ctx.closePath();ctx.stroke();
+      ctx.beginPath();ctx.arc(cx-100,cy-20,15,0,Math.PI*2);ctx.stroke();
+      ctx.beginPath();ctx.arc(cx-100,cy-20,5,0,Math.PI*2);ctx.fillStyle='#999';ctx.fill();
+      ctx.beginPath();ctx.moveTo(cx-40,cy-90);ctx.quadraticCurveTo(cx-20,cy-130,cx+30,cy-95);ctx.stroke();
+    }},
+    {id:'house',label:'Nhà',emoji:'🏠',draw:(ctx,w,h)=>{
+      ctx.strokeStyle='#999';ctx.lineWidth=3;
+      const cx=w/2,cy=h/2;
+      ctx.strokeRect(cx-180,cy-50,360,260);
+      ctx.beginPath();ctx.moveTo(cx-220,cy-50);ctx.lineTo(cx,cy-220);ctx.lineTo(cx+220,cy-50);ctx.closePath();ctx.stroke();
+      ctx.strokeRect(cx-40,cy+60,80,150);
+      ctx.strokeRect(cx-140,cy,60,60);
+      ctx.strokeRect(cx+80,cy,60,60);
+      ctx.beginPath();ctx.moveTo(cx-140,cy+30);ctx.lineTo(cx-80,cy+30);ctx.moveTo(cx-110,cy);ctx.lineTo(cx-110,cy+60);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(cx+80,cy+30);ctx.lineTo(cx+140,cy+30);ctx.moveTo(cx+110,cy);ctx.lineTo(cx+110,cy+60);ctx.stroke();
+    }},
+    {id:'car',label:'Xe',emoji:'🚗',draw:(ctx,w,h)=>{
+      ctx.strokeStyle='#999';ctx.lineWidth=3;
+      const cx=w/2,cy=h/2;
+      ctx.beginPath();
+      ctx.moveTo(cx-240,cy+50);ctx.lineTo(cx-180,cy-30);ctx.lineTo(cx-60,cy-30);ctx.lineTo(cx-30,cy-90);ctx.lineTo(cx+120,cy-90);ctx.lineTo(cx+170,cy-30);ctx.lineTo(cx+240,cy-30);ctx.lineTo(cx+240,cy+50);ctx.closePath();ctx.stroke();
+      ctx.beginPath();ctx.arc(cx-140,cy+50,40,0,Math.PI*2);ctx.stroke();
+      ctx.beginPath();ctx.arc(cx+140,cy+50,40,0,Math.PI*2);ctx.stroke();
+      ctx.strokeRect(cx-50,cy-80,70,50);
+      ctx.strokeRect(cx+30,cy-80,80,50);
+    }}
+  ];
+
+  let canvas, ctx, container, wrap;
+  let tool='brush', color='#000000', size=6;
+  let isDrawing=false;
+  let strokeStart={x:0,y:0};
+  let undoStack=[], redoStack=[];
+  const MAX_UNDO=20;
+  // Zoom & pan
+  let scale=1, panX=0, panY=0;
+  let pinchInit=null;
+  let activePointers=new Map();
+  let lastPanMid=null;
+
+  function load(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'[]')}catch(e){return []}}
+  function save(d){localStorage.setItem(STORE_KEY,JSON.stringify(d))}
+
+  function init(){
+    tool='brush';color='#000000';size=6;
+    scale=1;panX=0;panY=0;
+    undoStack=[];redoStack=[];
+    activePointers.clear();
+    renderHome();
+  }
+
+  function renderHome(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const home=document.createElement('div');
+    home.style.cssText='max-width:500px;margin:0 auto;text-align:center';
+    home.innerHTML=`
+      <div style="font-size:64px;margin-bottom:8px">🎨</div>
+      <div style="font-family:'Bungee',cursive;font-size:22px;color:var(--neon-yellow);margin-bottom:6px">Vẽ Tự Do</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:20px">Vẽ tranh, lưu vào bộ sưu tập hoặc tải về máy</div>
+      <div id="dwActions" style="display:flex;flex-direction:column;gap:10px"></div>`;
+    mArea.appendChild(home);
+    const acts=home.querySelector('#dwActions');
+
+    const newBtn=document.createElement('button');
+    newBtn.style.cssText='padding:16px;background:linear-gradient(135deg,var(--neon-cyan),var(--neon-purple));border:none;color:#fff;font-family:"Bungee",cursive;font-size:15px;border-radius:14px;cursor:pointer;touch-action:manipulation;box-shadow:0 4px 14px rgba(0,240,255,.3)';
+    newBtn.innerHTML='🖌️ VẼ TRANH MỚI';
+    newBtn.onclick=()=>pickTemplate();
+    acts.appendChild(newBtn);
+
+    const galBtn=document.createElement('button');
+    const cols=load();
+    const totalImg=cols.reduce((s,c)=>s+(c.items?.length||0),0);
+    galBtn.style.cssText='padding:16px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.15);color:var(--text);font-family:inherit;font-weight:700;font-size:14px;border-radius:14px;cursor:pointer;touch-action:manipulation';
+    galBtn.innerHTML=`🖼️ BỘ SƯU TẬP <span style="color:var(--neon-yellow)">(${cols.length} BST · ${totalImg} tranh)</span>`;
+    galBtn.onclick=()=>renderGallery();
+    acts.appendChild(galBtn);
+
+    addBtn('← Đóng','alt',closeModal);
+    setStatus('🎨 Vẽ tự do · '+cols.length+' bộ sưu tập');
+  }
+
+  function pickTemplate(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const head=document.createElement('div');
+    head.style.cssText='text-align:center;margin-bottom:14px';
+    head.innerHTML='<div style="font-family:\'Bungee\',cursive;color:var(--neon-cyan);font-size:18px">Chọn mẫu để bắt đầu</div><div style="font-size:12px;color:var(--muted);margin-top:4px">Vẽ tự do hoặc tô màu sẵn</div>';
+    mArea.appendChild(head);
+
+    const grid=document.createElement('div');
+    grid.style.cssText='display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:520px;margin:0 auto';
+    TEMPLATES.forEach(t=>{
+      const card=document.createElement('button');
+      card.style.cssText='padding:18px 12px;background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.12);border-radius:12px;cursor:pointer;touch-action:manipulation;color:var(--text);font-family:inherit;text-align:center;transition:all .15s';
+      card.innerHTML=`<div style="font-size:36px;margin-bottom:6px">${t.emoji||'📄'}</div><div style="font-size:13px;font-weight:700">${t.label}</div>`;
+      card.onmouseover=()=>{card.style.borderColor='var(--neon-cyan)';card.style.background='rgba(0,240,255,.08)'};
+      card.onmouseout=()=>{card.style.borderColor='rgba(255,255,255,.12)';card.style.background='rgba(255,255,255,.05)'};
+      card.onclick=()=>openEditor(t);
+      grid.appendChild(card);
+    });
+    mArea.appendChild(grid);
+    addBtn('← Quay lại','alt',renderHome);
+  }
+
+  function openEditor(template){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+
+    // Top toolbar (tools)
+    const topbar=document.createElement('div');
+    topbar.style.cssText='display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-bottom:8px';
+    const tools=[
+      {id:'brush',icon:'🖌️',label:'Cọ'},
+      {id:'eraser',icon:'🧽',label:'Tẩy'},
+      {id:'fill',icon:'🪣',label:'Đổ'},
+    ];
+    tools.forEach(t=>{
+      const b=document.createElement('button');
+      b.dataset.tool=t.id;
+      b.style.cssText='padding:8px 10px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.12);border-radius:8px;color:var(--text);font-family:inherit;font-size:12px;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;gap:4px';
+      b.innerHTML=`<span style="font-size:16px">${t.icon}</span><span>${t.label}</span>`;
+      b.onclick=()=>{tool=t.id;refreshToolUI()};
+      topbar.appendChild(b);
+    });
+    // Undo/Redo
+    ['↶','↷'].forEach((icon,i)=>{
+      const b=document.createElement('button');
+      b.style.cssText='padding:8px 12px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.12);border-radius:8px;color:var(--text);font-family:inherit;font-size:18px;cursor:pointer;touch-action:manipulation;font-weight:700';
+      b.textContent=icon;
+      b.onclick=()=>i===0?doUndo():doRedo();
+      topbar.appendChild(b);
+    });
+    // Reset zoom
+    const zoomBtn=document.createElement('button');
+    zoomBtn.style.cssText='padding:8px 10px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.12);border-radius:8px;color:var(--text);font-family:inherit;font-size:12px;cursor:pointer;touch-action:manipulation';
+    zoomBtn.innerHTML='🔍 100%';
+    zoomBtn.onclick=()=>{scale=1;panX=0;panY=0;applyTransform()};
+    topbar.appendChild(zoomBtn);
+    mArea.appendChild(topbar);
+
+    // Canvas container
+    container=document.createElement('div');
+    container.style.cssText='position:relative;width:100%;height:55vh;min-height:340px;background:#222;border-radius:12px;overflow:hidden;touch-action:none;border:2px solid rgba(255,255,255,.15)';
+    wrap=document.createElement('div');
+    wrap.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;transform-origin:0 0';
+
+    canvas=document.createElement('canvas');
+    canvas.width=CANVAS_W;canvas.height=CANVAS_H;
+    canvas.style.cssText='display:block;width:100%;height:auto;background:#fff;touch-action:none';
+    ctx=canvas.getContext('2d',{willReadFrequently:true});
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
+    ctx.lineCap='round';ctx.lineJoin='round';
+    if(template.draw){template.draw(ctx,CANVAS_W,CANVAS_H)}
+
+    wrap.appendChild(canvas);
+    container.appendChild(wrap);
+
+    // Zoom indicator overlay
+    const zoomInd=document.createElement('div');
+    zoomInd.id='dwZoomInd';
+    zoomInd.style.cssText='position:absolute;top:8px;right:8px;background:rgba(0,0,0,.7);color:#fff;padding:4px 10px;border-radius:8px;font-size:11px;font-weight:700;pointer-events:none;font-family:monospace';
+    zoomInd.textContent='100% · 2 ngón để zoom';
+    container.appendChild(zoomInd);
+
+    mArea.appendChild(container);
+
+    // Color palette
+    const palBox=document.createElement('div');
+    palBox.style.cssText='display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-top:10px;padding:8px;background:rgba(0,0,0,.2);border-radius:10px';
+    PALETTE.forEach(c=>{
+      const sw=document.createElement('button');
+      sw.dataset.color=c;
+      sw.style.cssText=`width:32px;height:32px;border-radius:50%;background:${c};border:3px solid ${c===color?'var(--neon-cyan)':(c==='#ffffff'?'rgba(0,0,0,.3)':'rgba(255,255,255,.2)')};cursor:pointer;touch-action:manipulation;transition:all .15s;${c==='#ffffff'?'box-shadow:inset 0 0 0 1px #ccc':''}`;
+      sw.onclick=()=>{color=c;tool='brush';refreshPaletteUI();refreshToolUI()};
+      palBox.appendChild(sw);
+    });
+    // Custom color picker
+    const customWrap=document.createElement('label');
+    customWrap.style.cssText='display:inline-flex;align-items:center;cursor:pointer;width:32px;height:32px;border-radius:50%;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);border:3px solid rgba(255,255,255,.2);overflow:hidden';
+    const customInput=document.createElement('input');
+    customInput.type='color';customInput.value=color;
+    customInput.style.cssText='opacity:0;width:100%;height:100%;cursor:pointer';
+    customInput.oninput=()=>{color=customInput.value;refreshPaletteUI();refreshToolUI()};
+    customWrap.appendChild(customInput);
+    palBox.appendChild(customWrap);
+    mArea.appendChild(palBox);
+
+    // Size slider
+    const sizeRow=document.createElement('div');
+    sizeRow.style.cssText='display:flex;align-items:center;gap:10px;margin-top:8px;padding:6px 12px';
+    sizeRow.innerHTML=`<span style="font-size:11px;color:var(--muted);min-width:50px">Cỡ: <b id="dwSizeLbl">${size}px</b></span>`;
+    const slider=document.createElement('input');
+    slider.type='range';slider.min=1;slider.max=60;slider.value=size;
+    slider.style.cssText='flex:1';
+    slider.oninput=()=>{size=parseInt(slider.value);document.getElementById('dwSizeLbl').textContent=size+'px'};
+    sizeRow.appendChild(slider);
+    mArea.appendChild(sizeRow);
+
+    // Bottom action buttons
+    addBtn('💾 LƯU','warn',()=>saveDialog());
+    addBtn('🗑️ Xoá tất cả','alt',()=>{
+      if(confirm('Xoá hết tranh và bắt đầu lại?')){
+        ctx.fillStyle='#fff';ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
+        if(template.draw)template.draw(ctx,CANVAS_W,CANVAS_H);
+        pushUndo();
+      }
+    });
+    addBtn('← Quay lại','alt',()=>{if(confirm('Quay lại sẽ mất tranh chưa lưu. Tiếp tục?'))renderHome()});
+
+    setupPointer();
+    refreshToolUI();
+    refreshPaletteUI();
+    pushUndo();
+    setStatus('🎨 Vẽ thoải mái · Pinch 2 ngón để zoom');
+  }
+
+  function refreshToolUI(){
+    mArea.querySelectorAll('[data-tool]').forEach(b=>{
+      const active=b.dataset.tool===tool;
+      b.style.borderColor=active?'var(--neon-yellow)':'rgba(255,255,255,.12)';
+      b.style.background=active?'rgba(255,230,0,.15)':'rgba(255,255,255,.06)';
+    });
+  }
+  function refreshPaletteUI(){
+    mArea.querySelectorAll('[data-color]').forEach(s=>{
+      const c=s.dataset.color;
+      s.style.borderColor=c===color?'var(--neon-cyan)':(c==='#ffffff'?'rgba(0,0,0,.3)':'rgba(255,255,255,.2)');
+      s.style.transform=c===color?'scale(1.15)':'scale(1)';
+    });
+  }
+
+  function applyTransform(){
+    if(!wrap)return;
+    wrap.style.transform=`translate(${panX}px,${panY}px) scale(${scale})`;
+    const ind=document.getElementById('dwZoomInd');
+    if(ind)ind.textContent=Math.round(scale*100)+'%'+(scale===1?' · 2 ngón để zoom':'');
+  }
+
+  function getCanvasCoords(clientX,clientY){
+    const rect=canvas.getBoundingClientRect();
+    const x=(clientX-rect.left)/rect.width*CANVAS_W;
+    const y=(clientY-rect.top)/rect.height*CANVAS_H;
+    return {x,y};
+  }
+
+  function setupPointer(){
+    container.addEventListener('pointerdown',onDown);
+    container.addEventListener('pointermove',onMove);
+    container.addEventListener('pointerup',onUp);
+    container.addEventListener('pointercancel',onUp);
+    container.addEventListener('pointerleave',onUp);
+  }
+
+  function onDown(e){
+    e.preventDefault();
+    container.setPointerCapture(e.pointerId);
+    activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+
+    if(activePointers.size===2){
+      // Start pinch — cancel current drawing
+      if(isDrawing){isDrawing=false}
+      const pts=Array.from(activePointers.values());
+      const dx=pts[1].x-pts[0].x,dy=pts[1].y-pts[0].y;
+      pinchInit={dist:Math.hypot(dx,dy),scale:scale,panX:panX,panY:panY,
+        midX:(pts[0].x+pts[1].x)/2,midY:(pts[0].y+pts[1].y)/2};
+      return;
+    }
+
+    if(activePointers.size===1){
+      // Start drawing
+      if(tool==='fill'){
+        const p=getCanvasCoords(e.clientX,e.clientY);
+        floodFill(Math.floor(p.x),Math.floor(p.y),color);
+        pushUndo();
+        return;
+      }
+      isDrawing=true;
+      const p=getCanvasCoords(e.clientX,e.clientY);
+      strokeStart=p;
+      ctx.strokeStyle=tool==='eraser'?'#ffffff':color;
+      ctx.lineWidth=tool==='eraser'?size*2:size;
+      ctx.beginPath();
+      ctx.moveTo(p.x,p.y);
+      // Tiny dot if just tap
+      ctx.lineTo(p.x+0.01,p.y+0.01);
+      ctx.stroke();
+    }
+  }
+
+  function onMove(e){
+    if(!activePointers.has(e.pointerId))return;
+    e.preventDefault();
+    activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+
+    if(activePointers.size===2 && pinchInit){
+      // Pinch zoom + pan
+      const pts=Array.from(activePointers.values());
+      const dx=pts[1].x-pts[0].x,dy=pts[1].y-pts[0].y;
+      const dist=Math.hypot(dx,dy);
+      const ratio=dist/pinchInit.dist;
+      const newScale=Math.max(0.5,Math.min(5,pinchInit.scale*ratio));
+      // Pan based on midpoint movement
+      const newMidX=(pts[0].x+pts[1].x)/2,newMidY=(pts[0].y+pts[1].y)/2;
+      const dMidX=newMidX-pinchInit.midX,dMidY=newMidY-pinchInit.midY;
+      // Adjust pan so the zoom centers around midpoint
+      const containerRect=container.getBoundingClientRect();
+      const cx=pinchInit.midX-containerRect.left,cy=pinchInit.midY-containerRect.top;
+      panX=pinchInit.panX+dMidX-(newScale-pinchInit.scale)*(cx-pinchInit.panX)/pinchInit.scale;
+      panY=pinchInit.panY+dMidY-(newScale-pinchInit.scale)*(cy-pinchInit.panY)/pinchInit.scale;
+      scale=newScale;
+      applyTransform();
+      return;
+    }
+
+    if(isDrawing && activePointers.size===1){
+      const p=getCanvasCoords(e.clientX,e.clientY);
+      ctx.lineTo(p.x,p.y);
+      ctx.stroke();
+    }
+  }
+
+  function onUp(e){
+    if(activePointers.has(e.pointerId))activePointers.delete(e.pointerId);
+    if(activePointers.size<2)pinchInit=null;
+    if(isDrawing && activePointers.size===0){
+      isDrawing=false;
+      pushUndo();
+    }
+  }
+
+  function pushUndo(){
+    try{
+      undoStack.push(canvas.toDataURL('image/png'));
+      if(undoStack.length>MAX_UNDO)undoStack.shift();
+      redoStack=[];
+    }catch(e){}
+  }
+
+  function doUndo(){
+    if(undoStack.length<2)return;
+    redoStack.push(undoStack.pop());
+    loadImageData(undoStack[undoStack.length-1]);
+  }
+
+  function doRedo(){
+    if(redoStack.length===0)return;
+    const d=redoStack.pop();
+    undoStack.push(d);
+    loadImageData(d);
+  }
+
+  function loadImageData(dataUrl){
+    const img=new Image();
+    img.onload=()=>{
+      ctx.clearRect(0,0,CANVAS_W,CANVAS_H);
+      ctx.drawImage(img,0,0);
+    };
+    img.src=dataUrl;
+  }
+
+  // Flood fill (paint bucket)
+  function floodFill(sx,sy,fillHex){
+    if(sx<0||sy<0||sx>=CANVAS_W||sy>=CANVAS_H)return;
+    const imgData=ctx.getImageData(0,0,CANVAS_W,CANVAS_H);
+    const data=imgData.data;
+    const idx0=(sy*CANVAS_W+sx)*4;
+    const tr=data[idx0],tg=data[idx0+1],tb=data[idx0+2];
+    // Parse fillHex to RGB
+    const fr=parseInt(fillHex.slice(1,3),16);
+    const fg=parseInt(fillHex.slice(3,5),16);
+    const fb=parseInt(fillHex.slice(5,7),16);
+    if(tr===fr&&tg===fg&&tb===fb)return;
+    const stack=[[sx,sy]];
+    const tol=8; // tolerance for color match
+    while(stack.length){
+      const [x,y]=stack.pop();
+      if(x<0||y<0||x>=CANVAS_W||y>=CANVAS_H)continue;
+      const i=(y*CANVAS_W+x)*4;
+      if(Math.abs(data[i]-tr)>tol||Math.abs(data[i+1]-tg)>tol||Math.abs(data[i+2]-tb)>tol)continue;
+      data[i]=fr;data[i+1]=fg;data[i+2]=fb;data[i+3]=255;
+      stack.push([x+1,y],[x-1,y],[x,y+1],[x,y-1]);
+    }
+    ctx.putImageData(imgData,0,0);
+  }
+
+  function saveDialog(){
+    const dialog=document.createElement('div');
+    dialog.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:400;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)';
+    const inner=document.createElement('div');
+    inner.style.cssText='background:linear-gradient(135deg,rgba(30,10,60,.98),rgba(15,5,40,.98));border:1px solid var(--neon-cyan);border-radius:18px;padding:22px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;color:var(--text)';
+    const cols=load();
+    inner.innerHTML=`
+      <div style="font-family:'Bungee',cursive;font-size:18px;color:var(--neon-yellow);text-align:center;margin-bottom:14px">💾 Lưu tranh</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:12px;text-align:center">Đậu muốn lưu vào đâu?</div>
+      <button id="dwSaveDown" style="display:block;width:100%;padding:14px;margin-bottom:8px;background:linear-gradient(135deg,var(--neon-pink),var(--neon-purple));border:none;color:#fff;font-family:'Bungee',cursive;font-size:13px;border-radius:12px;cursor:pointer">📥 Tải về máy (PNG)</button>
+      <div style="font-size:12px;color:var(--muted);margin:10px 0 8px;font-weight:700">Hoặc lưu vào bộ sưu tập:</div>
+      <div id="dwColList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;max-height:200px;overflow-y:auto"></div>
+      <button id="dwNewCol" style="display:block;width:100%;padding:10px;background:rgba(255,255,255,.06);border:2px dashed rgba(255,255,255,.25);color:var(--text);font-family:inherit;font-weight:700;border-radius:10px;cursor:pointer;margin-bottom:10px">➕ Tạo bộ sưu tập mới</button>
+      <button id="dwSaveCancel" style="display:block;width:100%;padding:10px;background:transparent;border:1px solid rgba(255,255,255,.15);color:var(--text);font-family:inherit;border-radius:10px;cursor:pointer">Huỷ</button>`;
+    dialog.appendChild(inner);
+    document.body.appendChild(dialog);
+
+    const list=inner.querySelector('#dwColList');
+    if(cols.length===0){
+      list.innerHTML='<div style="font-size:12px;color:var(--muted);text-align:center;padding:10px">Chưa có bộ sưu tập nào</div>';
+    }
+    cols.forEach(c=>{
+      const b=document.createElement('button');
+      b.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px;cursor:pointer';
+      b.innerHTML=`<span>${c.emoji||'📁'} ${c.name}</span><span style="color:var(--muted);font-size:11px">${c.items?.length||0} tranh</span>`;
+      b.onclick=()=>{saveToCollection(c.id);dialog.remove()};
+      list.appendChild(b);
+    });
+
+    inner.querySelector('#dwSaveDown').onclick=()=>{downloadPNG();dialog.remove()};
+    inner.querySelector('#dwNewCol').onclick=()=>{dialog.remove();newCollectionDialog()};
+    inner.querySelector('#dwSaveCancel').onclick=()=>dialog.remove();
+  }
+
+  function downloadPNG(){
+    try{
+      const dataUrl=canvas.toDataURL('image/png');
+      const a=document.createElement('a');
+      a.href=dataUrl;
+      a.download='dau-tranh-'+Date.now()+'.png';
+      document.body.appendChild(a);a.click();a.remove();
+      showToast('📥 Đã tải tranh về máy!',2000);
+      if(typeof reportGameResult!=='undefined')reportGameResult('draw',{win:true,score:30});
+    }catch(e){showToast('⚠️ Không thể tải về: '+e.message,2500)}
+  }
+
+  function newCollectionDialog(){
+    const name=prompt('Tên bộ sưu tập mới (ví dụ: "Tranh con vật", "Mùa hè 2026"):');
+    if(!name||!name.trim())return saveDialog();
+    const emojis=['📁','🎨','🌈','🌸','🐱','🦄','🌊','⭐','🍓','🦋'];
+    const emoji=emojis[Math.floor(Math.random()*emojis.length)];
+    const cols=load();
+    const id='col_'+Date.now();
+    cols.push({id,name:name.trim(),emoji,createdAt:Date.now(),items:[]});
+    save(cols);
+    saveToCollection(id);
+  }
+
+  function saveToCollection(colId){
+    const cols=load();
+    const c=cols.find(x=>x.id===colId);
+    if(!c){showToast('⚠️ Không tìm thấy BST',1500);return}
+    try{
+      const dataUrl=canvas.toDataURL('image/png');
+      // Compress: scale down for storage
+      const thumb=document.createElement('canvas');
+      thumb.width=400;thumb.height=Math.round(400*CANVAS_H/CANVAS_W);
+      const tctx=thumb.getContext('2d');
+      const img=new Image();
+      img.onload=()=>{
+        tctx.drawImage(img,0,0,thumb.width,thumb.height);
+        const thumbData=thumb.toDataURL('image/jpeg',0.7);
+        c.items=c.items||[];
+        c.items.unshift({id:'img_'+Date.now(),ts:Date.now(),data:thumbData,fullData:dataUrl});
+        // Limit per collection to avoid localStorage overflow
+        if(c.items.length>30)c.items=c.items.slice(0,30);
+        try{
+          save(cols);
+          showToast(`✅ Đã lưu vào "${c.name}"!`,2000);
+          if(typeof reportGameResult!=='undefined')reportGameResult('draw',{win:true,score:50});
+        }catch(e){
+          // Storage full - remove fullData and retry
+          c.items.forEach(it=>delete it.fullData);
+          try{save(cols);showToast('✅ Lưu (chế độ tiết kiệm) vào "'+c.name+'"',2200)}
+          catch(e2){showToast('⚠️ Bộ nhớ đầy. Hãy xoá bớt tranh cũ.',2500)}
+        }
+      };
+      img.src=dataUrl;
+    }catch(e){showToast('⚠️ Lỗi khi lưu: '+e.message,2500)}
+  }
+
+  function renderGallery(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const head=document.createElement('div');
+    head.style.cssText='text-align:center;margin-bottom:14px';
+    head.innerHTML='<div style="font-family:\'Bungee\',cursive;color:var(--neon-cyan);font-size:18px">🖼️ Bộ sưu tập</div>';
+    mArea.appendChild(head);
+
+    const cols=load();
+    if(cols.length===0){
+      const empty=document.createElement('div');
+      empty.style.cssText='text-align:center;padding:40px 20px;color:var(--muted)';
+      empty.innerHTML='<div style="font-size:48px;margin-bottom:10px">📭</div>Chưa có bộ sưu tập nào.<br>Hãy vẽ tranh và tạo BST đầu tiên!';
+      mArea.appendChild(empty);
+    } else {
+      cols.forEach(c=>{
+        const box=document.createElement('div');
+        box.style.cssText='margin-bottom:14px;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px';
+        const head=document.createElement('div');
+        head.style.cssText='display:flex;align-items:center;gap:10px;margin-bottom:10px';
+        head.innerHTML=`<span style="font-size:24px">${c.emoji||'📁'}</span>
+          <div style="flex:1"><div style="font-weight:700;font-size:14px">${c.name}</div>
+          <div style="font-size:11px;color:var(--muted)">${(c.items||[]).length} tranh</div></div>`;
+        const delBtn=document.createElement('button');
+        delBtn.style.cssText='background:rgba(255,45,149,.15);border:1px solid rgba(255,45,149,.3);color:var(--neon-pink);font-family:inherit;padding:5px 10px;border-radius:8px;font-size:11px;cursor:pointer';
+        delBtn.textContent='🗑️ Xoá BST';
+        delBtn.onclick=()=>{
+          if(confirm(`Xoá bộ sưu tập "${c.name}" và toàn bộ tranh?`)){
+            const cs=load();
+            save(cs.filter(x=>x.id!==c.id));
+            renderGallery();
+          }
+        };
+        head.appendChild(delBtn);
+        box.appendChild(head);
+
+        if((c.items||[]).length>0){
+          const grid=document.createElement('div');
+          grid.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:6px';
+          c.items.forEach(it=>{
+            const tile=document.createElement('div');
+            tile.style.cssText='position:relative;aspect-ratio:1;background:#fff;border-radius:6px;overflow:hidden;cursor:pointer';
+            const img=document.createElement('img');
+            img.src=it.data;
+            img.style.cssText='width:100%;height:100%;object-fit:cover';
+            tile.appendChild(img);
+            tile.onclick=()=>viewImage(it,c);
+            grid.appendChild(tile);
+          });
+          box.appendChild(grid);
+        } else {
+          box.innerHTML+='<div style="text-align:center;font-size:11px;color:var(--muted);padding:10px">Chưa có tranh</div>';
+        }
+        mArea.appendChild(box);
+      });
+    }
+
+    addBtn('🖌️ Vẽ tranh mới','warn',()=>pickTemplate());
+    addBtn('← Quay lại','alt',renderHome);
+  }
+
+  function viewImage(it,col){
+    const dialog=document.createElement('div');
+    dialog.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(10px)';
+    const fullData=it.fullData||it.data;
+    dialog.innerHTML=`
+      <img src="${fullData}" style="max-width:100%;max-height:60vh;background:#fff;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.5)">
+      <div style="color:#999;font-size:11px;margin-top:10px">${new Date(it.ts).toLocaleString('vi-VN')}</div>
+      <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;justify-content:center">
+        <button id="vDown" style="padding:10px 16px;background:linear-gradient(135deg,var(--neon-cyan),var(--neon-purple));border:none;color:#fff;font-family:'Bungee',cursive;font-size:12px;border-radius:10px;cursor:pointer">📥 Tải về máy</button>
+        <button id="vDel" style="padding:10px 16px;background:rgba(255,45,149,.15);border:1px solid var(--neon-pink);color:var(--neon-pink);font-family:inherit;font-weight:700;font-size:12px;border-radius:10px;cursor:pointer">🗑️ Xoá tranh</button>
+        <button id="vClose" style="padding:10px 16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-family:inherit;font-weight:700;font-size:12px;border-radius:10px;cursor:pointer">Đóng</button>
+      </div>`;
+    document.body.appendChild(dialog);
+    dialog.querySelector('#vDown').onclick=()=>{
+      const a=document.createElement('a');a.href=fullData;a.download='dau-tranh-'+it.ts+'.png';
+      document.body.appendChild(a);a.click();a.remove();
+      showToast('📥 Đã tải!',1500);
+    };
+    dialog.querySelector('#vDel').onclick=()=>{
+      if(confirm('Xoá tranh này?')){
+        const cs=load();
+        const cc=cs.find(x=>x.id===col.id);
+        if(cc){cc.items=cc.items.filter(i=>i.id!==it.id);save(cs)}
+        dialog.remove();renderGallery();
+      }
+    };
+    dialog.querySelector('#vClose').onclick=()=>dialog.remove();
+  }
+
+  return {title:'🎨 Vẽ tự do',init};
+})();
+
+
+/* ============== NHẬT KÝ — Modern cute diary with mood tracking ============== */
+games.diary = (()=>{
+  const STORE_KEY = 'dauDiary';
+  const MOODS = [
+    {id:'happy', emoji:'😊', label:'Vui', color:'#39ff7f', bg:'rgba(57,255,127,.15)'},
+    {id:'love',  emoji:'🥰', label:'Yêu thương', color:'#ff2d95', bg:'rgba(255,45,149,.15)'},
+    {id:'excited', emoji:'🤩', label:'Thích thú', color:'#ffe600', bg:'rgba(255,230,0,.15)'},
+    {id:'calm', emoji:'😌', label:'Bình yên', color:'#00f0ff', bg:'rgba(0,240,255,.15)'},
+    {id:'tired', emoji:'😪', label:'Mệt', color:'#a3d8ff', bg:'rgba(163,216,255,.15)'},
+    {id:'sad', emoji:'😢', label:'Buồn', color:'#7a3aff', bg:'rgba(122,58,255,.15)'},
+    {id:'angry', emoji:'😡', label:'Giận', color:'#ff6f00', bg:'rgba(255,111,0,.15)'},
+    {id:'sick', emoji:'🤒', label:'Không khoẻ', color:'#888', bg:'rgba(136,136,136,.15)'}
+  ];
+  const STICKERS = ['⭐','🌈','🎂','🎁','🏆','🌸','🐱','🦄','🦋','🍓','🍦','🎈','💖','✨','🌟','🍀'];
+
+  let viewMode = 'home'; // home | write | calendar | list | view
+  let currentEntry = null;
+  let currentMonth = new Date().getMonth();
+  let currentYear = new Date().getFullYear();
+
+  function load(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'[]')}catch(e){return []}}
+  function save(d){localStorage.setItem(STORE_KEY,JSON.stringify(d))}
+  function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+  function fmtDate(s){const d=new Date(s);return d.toLocaleDateString('vi-VN',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'})}
+  function fmtShort(s){const d=new Date(s);return d.getDate()+'/'+(d.getMonth()+1)}
+
+  function init(){
+    viewMode='home';
+    currentEntry=null;
+    renderHome();
+  }
+
+  function renderHome(){
+    viewMode='home';
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const data=load();
+    const today=todayStr();
+    const todayEntry=data.find(e=>e.date===today);
+
+    const wrap=document.createElement('div');
+    wrap.style.cssText='max-width:540px;margin:0 auto';
+
+    // Hero card
+    const hero=document.createElement('div');
+    const greeting=new Date().getHours()<12?'Chào buổi sáng':new Date().getHours()<18?'Chào buổi chiều':'Chào buổi tối';
+    hero.style.cssText='text-align:center;padding:24px 18px;background:linear-gradient(135deg,#ffb6e1,#a3d8ff,#b6f0e1);border-radius:22px;margin-bottom:16px;color:#1a0a2e;position:relative;overflow:hidden';
+    hero.innerHTML=`
+      <div style="position:absolute;top:-20px;right:-20px;font-size:80px;opacity:.25">📔</div>
+      <div style="position:absolute;bottom:-30px;left:-10px;font-size:60px;opacity:.2">✨</div>
+      <div style="font-family:'Bungee',cursive;font-size:18px;margin-bottom:4px;color:#5a2d6e">📔 Nhật Ký Của Đậu</div>
+      <div style="font-size:13px;opacity:.8;margin-bottom:14px">${greeting}, Đậu!</div>
+      <div style="font-size:11px;background:rgba(255,255,255,.5);display:inline-block;padding:4px 12px;border-radius:10px;color:#5a2d6e;font-weight:700">${fmtDate(today)}</div>`;
+    wrap.appendChild(hero);
+
+    // Today action
+    const todayCard=document.createElement('button');
+    if(todayEntry){
+      todayCard.style.cssText='display:block;width:100%;padding:18px;margin-bottom:10px;background:linear-gradient(135deg,'+(getMood(todayEntry.mood)?.bg||'rgba(255,255,255,.08)')+',rgba(255,255,255,.03));border:2px solid '+(getMood(todayEntry.mood)?.color||'rgba(255,255,255,.15)')+';border-radius:16px;color:var(--text);font-family:inherit;cursor:pointer;text-align:left;touch-action:manipulation';
+      todayCard.innerHTML=`
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="font-size:42px">${getMood(todayEntry.mood)?.emoji||'📝'}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:2px">Hôm nay đã viết</div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:2px">${todayEntry.title||'Nhật ký hôm nay'}</div>
+            <div style="font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(todayEntry.content||'').slice(0,60)}...</div>
+          </div>
+          <div style="color:var(--neon-cyan);font-size:18px">✏️</div>
+        </div>`;
+      todayCard.onclick=()=>openWrite(todayEntry);
+    } else {
+      todayCard.style.cssText='display:block;width:100%;padding:18px;margin-bottom:10px;background:linear-gradient(135deg,rgba(255,45,149,.1),rgba(0,240,255,.1));border:2px dashed rgba(255,255,255,.25);border-radius:16px;color:var(--text);font-family:inherit;cursor:pointer;text-align:center;touch-action:manipulation';
+      todayCard.innerHTML=`
+        <div style="font-size:36px;margin-bottom:6px">✍️</div>
+        <div style="font-family:'Bungee',cursive;font-size:15px;color:var(--neon-yellow);margin-bottom:4px">VIẾT HÔM NAY</div>
+        <div style="font-size:12px;color:var(--muted)">Tâm trạng + 1-2 dòng kỷ niệm</div>`;
+      todayCard.onclick=()=>openWrite(null);
+    }
+    wrap.appendChild(todayCard);
+
+    // Stats card
+    if(data.length>0){
+      const stats=document.createElement('div');
+      stats.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px';
+      const moodCount={};
+      data.forEach(e=>{if(e.mood)moodCount[e.mood]=(moodCount[e.mood]||0)+1});
+      const topMood=Object.entries(moodCount).sort((a,b)=>b[1]-a[1])[0];
+      const topMoodObj=topMood?getMood(topMood[0]):null;
+      [
+        {v:data.length,l:'📝 Trang nhật ký'},
+        {v:topMoodObj?topMoodObj.emoji:'📊',l:topMoodObj?'Hay nhất: '+topMoodObj.label:'Tâm trạng'},
+        {v:(data.length>0?Math.ceil((Date.now()-new Date(data[data.length-1].date).getTime())/86400000):0)+'d',l:'⏱ Từ ngày đầu'}
+      ].forEach(s=>{
+        const c=document.createElement('div');
+        c.style.cssText='background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px;text-align:center';
+        c.innerHTML=`<div style="font-size:20px;font-family:'Bungee',cursive;color:var(--neon-yellow);line-height:1">${s.v}</div><div style="font-size:10px;color:var(--muted);margin-top:4px">${s.l}</div>`;
+        stats.appendChild(c);
+      });
+      wrap.appendChild(stats);
+    }
+
+    // Navigation tiles
+    const nav=document.createElement('div');
+    nav.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:8px';
+    [
+      {icon:'📅',label:'Lịch tháng',fn:renderCalendar,color:'var(--neon-cyan)'},
+      {icon:'📋',label:'Tất cả ('+data.length+')',fn:renderList,color:'var(--neon-purple)'}
+    ].forEach(n=>{
+      const b=document.createElement('button');
+      b.style.cssText=`padding:14px;background:rgba(255,255,255,.05);border:1px solid ${n.color};border-radius:12px;color:var(--text);font-family:inherit;cursor:pointer;touch-action:manipulation`;
+      b.innerHTML=`<div style="font-size:24px;margin-bottom:4px">${n.icon}</div><div style="font-size:12px;font-weight:700;color:${n.color}">${n.label}</div>`;
+      b.onclick=n.fn;
+      nav.appendChild(b);
+    });
+    wrap.appendChild(nav);
+
+    mArea.appendChild(wrap);
+    addBtn('← Đóng','alt',closeModal);
+    setStatus(`📔 ${data.length} trang nhật ký`);
+  }
+
+  function getMood(id){return MOODS.find(m=>m.id===id)}
+
+  function openWrite(existing){
+    viewMode='write';
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const isNew=!existing;
+    let mood=existing?.mood||'happy';
+    let stickers=existing?.stickers||[];
+
+    const wrap=document.createElement('div');
+    wrap.style.cssText='max-width:520px;margin:0 auto';
+
+    // Header
+    const head=document.createElement('div');
+    head.style.cssText='text-align:center;margin-bottom:14px';
+    head.innerHTML=`<div style="font-family:'Bungee',cursive;font-size:16px;color:var(--neon-yellow)">${isNew?'✍️ Viết hôm nay':'✏️ Sửa nhật ký'}</div><div style="font-size:11px;color:var(--muted);margin-top:4px">${fmtDate(existing?.date||todayStr())}</div>`;
+    wrap.appendChild(head);
+
+    // Mood selector
+    const moodLabel=document.createElement('div');
+    moodLabel.style.cssText='font-size:12px;color:var(--text);margin-bottom:8px;font-weight:700';
+    moodLabel.innerHTML='💭 Hôm nay Đậu cảm thấy thế nào?';
+    wrap.appendChild(moodLabel);
+
+    const moodGrid=document.createElement('div');
+    moodGrid.style.cssText='display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px';
+    MOODS.forEach(m=>{
+      const b=document.createElement('button');
+      b.dataset.mid=m.id;
+      const active=mood===m.id;
+      b.style.cssText=`padding:10px 4px;background:${active?m.bg:'rgba(255,255,255,.04)'};border:2px solid ${active?m.color:'rgba(255,255,255,.1)'};border-radius:12px;color:var(--text);font-family:inherit;cursor:pointer;touch-action:manipulation;transition:all .15s`;
+      b.innerHTML=`<div style="font-size:26px;margin-bottom:2px">${m.emoji}</div><div style="font-size:10px;font-weight:600">${m.label}</div>`;
+      b.onclick=()=>{
+        mood=m.id;
+        moodGrid.querySelectorAll('[data-mid]').forEach(bb=>{
+          const mm=MOODS.find(x=>x.id===bb.dataset.mid);
+          const a=bb.dataset.mid===mood;
+          bb.style.background=a?mm.bg:'rgba(255,255,255,.04)';
+          bb.style.borderColor=a?mm.color:'rgba(255,255,255,.1)';
+        });
+      };
+      moodGrid.appendChild(b);
+    });
+    wrap.appendChild(moodGrid);
+
+    // Title input
+    const titleLbl=document.createElement('div');
+    titleLbl.style.cssText='font-size:12px;color:var(--text);margin-bottom:6px;font-weight:700';
+    titleLbl.textContent='✨ Tiêu đề (tuỳ chọn)';
+    wrap.appendChild(titleLbl);
+    const titleInput=document.createElement('input');
+    titleInput.type='text';
+    titleInput.value=existing?.title||'';
+    titleInput.placeholder='VD: Đi công viên với bố...';
+    titleInput.maxLength=80;
+    titleInput.style.cssText='display:block;width:100%;padding:10px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;color:var(--text);font-family:inherit;font-size:14px;margin-bottom:12px;box-sizing:border-box';
+    wrap.appendChild(titleInput);
+
+    // Content textarea
+    const contentLbl=document.createElement('div');
+    contentLbl.style.cssText='font-size:12px;color:var(--text);margin-bottom:6px;font-weight:700';
+    contentLbl.textContent='📝 Hôm nay có chuyện gì?';
+    wrap.appendChild(contentLbl);
+    const contentBox=document.createElement('textarea');
+    contentBox.value=existing?.content||'';
+    contentBox.placeholder='Hôm nay con đã...';
+    contentBox.rows=6;
+    contentBox.style.cssText='display:block;width:100%;padding:12px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;color:var(--text);font-family:inherit;font-size:14px;line-height:1.6;margin-bottom:12px;box-sizing:border-box;resize:vertical';
+    wrap.appendChild(contentBox);
+
+    // Stickers
+    const stickerLbl=document.createElement('div');
+    stickerLbl.style.cssText='font-size:12px;color:var(--text);margin-bottom:6px;font-weight:700';
+    stickerLbl.innerHTML='🎀 Thêm sticker (tuỳ chọn) <span style="color:var(--muted);font-weight:400;font-size:11px">- bấm để thêm/bớt</span>';
+    wrap.appendChild(stickerLbl);
+
+    const stickerRow=document.createElement('div');
+    stickerRow.style.cssText='display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px;padding:8px;background:rgba(0,0,0,.2);border-radius:10px';
+    STICKERS.forEach(s=>{
+      const b=document.createElement('button');
+      const active=stickers.includes(s);
+      b.style.cssText=`width:34px;height:34px;background:${active?'rgba(255,230,0,.2)':'rgba(255,255,255,.05)'};border:2px solid ${active?'var(--neon-yellow)':'transparent'};border-radius:8px;cursor:pointer;font-size:18px;touch-action:manipulation`;
+      b.textContent=s;
+      b.onclick=()=>{
+        if(stickers.includes(s))stickers=stickers.filter(x=>x!==s);
+        else stickers.push(s);
+        const a=stickers.includes(s);
+        b.style.background=a?'rgba(255,230,0,.2)':'rgba(255,255,255,.05)';
+        b.style.borderColor=a?'var(--neon-yellow)':'transparent';
+      };
+      stickerRow.appendChild(b);
+    });
+    wrap.appendChild(stickerRow);
+
+    mArea.appendChild(wrap);
+
+    addBtn('💾 Lưu','warn',()=>{
+      const content=contentBox.value.trim();
+      const title=titleInput.value.trim();
+      if(!content && !title){showToast('Hãy viết ít nhất tiêu đề hoặc nội dung',2000);return}
+      const data=load();
+      const date=existing?.date||todayStr();
+      const newEntry={
+        id:existing?.id||'dr_'+Date.now(),
+        date,mood,title,content,stickers,
+        updatedAt:Date.now()
+      };
+      const idx=data.findIndex(e=>e.date===date);
+      if(idx>=0)data[idx]=newEntry;
+      else data.unshift(newEntry);
+      data.sort((a,b)=>b.date.localeCompare(a.date));
+      save(data);
+      if(typeof reportGameResult!=='undefined')reportGameResult('diary',{win:true,score:30,perfectQuiz:false});
+      showToast('✅ Đã lưu nhật ký!',1800);
+      renderHome();
+    });
+    if(existing){
+      addBtn('🗑️ Xoá','alt',()=>{
+        if(!confirm('Xoá nhật ký ngày '+fmtDate(existing.date)+'?'))return;
+        const data=load();
+        save(data.filter(e=>e.id!==existing.id));
+        renderHome();
+      });
+    }
+    addBtn('← Huỷ','alt',renderHome);
+    setStatus(`✏️ ${isNew?'Viết mới':'Sửa'} · ${fmtDate(existing?.date||todayStr())}`);
+  }
+
+  function renderCalendar(){
+    viewMode='calendar';
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const wrap=document.createElement('div');
+    wrap.style.cssText='max-width:520px;margin:0 auto';
+
+    const data=load();
+    const entriesByDate={};
+    data.forEach(e=>{entriesByDate[e.date]=e});
+
+    // Header with nav
+    const head=document.createElement('div');
+    head.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding:0 4px';
+    const monthNames=['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'];
+    head.innerHTML=`
+      <button id="dCalPrev" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:var(--text);padding:8px 14px;border-radius:10px;cursor:pointer;font-family:inherit;font-size:18px;font-weight:700">‹</button>
+      <div style="text-align:center"><div style="font-family:'Bungee',cursive;font-size:18px;color:var(--neon-yellow)">${monthNames[currentMonth]} ${currentYear}</div></div>
+      <button id="dCalNext" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:var(--text);padding:8px 14px;border-radius:10px;cursor:pointer;font-family:inherit;font-size:18px;font-weight:700">›</button>`;
+    wrap.appendChild(head);
+
+    // Week header
+    const wkHead=document.createElement('div');
+    wkHead.style.cssText='display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px';
+    ['CN','T2','T3','T4','T5','T6','T7'].forEach(d=>{
+      const c=document.createElement('div');
+      c.style.cssText='text-align:center;font-size:11px;color:var(--muted);font-weight:700;padding:4px 0';
+      c.textContent=d;
+      wkHead.appendChild(c);
+    });
+    wrap.appendChild(wkHead);
+
+    // Calendar grid
+    const cal=document.createElement('div');
+    cal.style.cssText='display:grid;grid-template-columns:repeat(7,1fr);gap:4px';
+    const firstDay=new Date(currentYear,currentMonth,1).getDay();
+    const daysInMonth=new Date(currentYear,currentMonth+1,0).getDate();
+    const today=todayStr();
+    // Empty cells before day 1
+    for(let i=0;i<firstDay;i++){
+      const e=document.createElement('div');
+      cal.appendChild(e);
+    }
+    for(let d=1;d<=daysInMonth;d++){
+      const ds=currentYear+'-'+String(currentMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+      const ent=entriesByDate[ds];
+      const isToday=ds===today;
+      const cell=document.createElement('button');
+      cell.style.cssText=`aspect-ratio:1;border-radius:10px;border:2px solid ${isToday?'var(--neon-yellow)':'rgba(255,255,255,.08)'};background:${ent?(getMood(ent.mood)?.bg||'rgba(255,255,255,.06)'):'rgba(255,255,255,.03)'};color:var(--text);font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;touch-action:manipulation;padding:0`;
+      cell.innerHTML=`<div style="font-size:13px;font-weight:${isToday?'700':'400'};color:${isToday?'var(--neon-yellow)':'var(--text)'}">${d}</div>${ent?`<div style="font-size:14px;margin-top:1px">${getMood(ent.mood)?.emoji||'📝'}</div>`:''}`;
+      cell.onclick=()=>{
+        if(ent)openView(ent);
+        else if(ds<=today)openWriteDate(ds);
+      };
+      cal.appendChild(cell);
+    }
+    wrap.appendChild(cal);
+
+    // Legend
+    const legend=document.createElement('div');
+    legend.style.cssText='margin-top:14px;font-size:11px;color:var(--muted);text-align:center;padding:10px;background:rgba(255,255,255,.03);border-radius:8px';
+    legend.innerHTML='💡 Bấm vào ngày có emoji để xem · Ngày trống để viết';
+    wrap.appendChild(legend);
+
+    mArea.appendChild(wrap);
+    document.getElementById('dCalPrev').onclick=()=>{
+      currentMonth--;if(currentMonth<0){currentMonth=11;currentYear--}
+      renderCalendar();
+    };
+    document.getElementById('dCalNext').onclick=()=>{
+      currentMonth++;if(currentMonth>11){currentMonth=0;currentYear++}
+      renderCalendar();
+    };
+    addBtn('← Quay lại','alt',renderHome);
+  }
+
+  function openWriteDate(ds){
+    // Open write for a specific past date
+    openWrite({date:ds,mood:'happy',title:'',content:'',stickers:[]});
+  }
+
+  function renderList(){
+    viewMode='list';
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const data=load();
+    const wrap=document.createElement('div');
+    wrap.style.cssText='max-width:540px;margin:0 auto';
+
+    const head=document.createElement('div');
+    head.style.cssText='text-align:center;margin-bottom:14px';
+    head.innerHTML=`<div style="font-family:'Bungee',cursive;font-size:18px;color:var(--neon-yellow)">📋 Tất cả nhật ký</div><div style="font-size:12px;color:var(--muted);margin-top:2px">${data.length} trang</div>`;
+    wrap.appendChild(head);
+
+    if(data.length===0){
+      const empty=document.createElement('div');
+      empty.style.cssText='text-align:center;padding:40px 20px;color:var(--muted)';
+      empty.innerHTML='<div style="font-size:48px;margin-bottom:10px">📭</div>Chưa có trang nhật ký nào.';
+      wrap.appendChild(empty);
+    } else {
+      data.forEach(e=>{
+        const m=getMood(e.mood);
+        const card=document.createElement('button');
+        card.style.cssText=`display:block;width:100%;padding:14px;margin-bottom:8px;background:linear-gradient(135deg,${m?.bg||'rgba(255,255,255,.04)'},rgba(255,255,255,.02));border:1px solid ${m?.color||'rgba(255,255,255,.1)'};border-left:4px solid ${m?.color||'rgba(255,255,255,.1)'};border-radius:12px;color:var(--text);font-family:inherit;cursor:pointer;text-align:left;touch-action:manipulation`;
+        card.innerHTML=`
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <span style="font-size:28px">${m?.emoji||'📝'}</span>
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:700;font-size:13px">${e.title||'(Không tiêu đề)'}</div>
+              <div style="font-size:11px;color:var(--muted)">${fmtDate(e.date)}</div>
+            </div>
+          </div>
+          ${e.content?`<div style="font-size:12px;color:var(--muted);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${e.content.replace(/</g,'&lt;')}</div>`:''}
+          ${e.stickers&&e.stickers.length?`<div style="font-size:14px;margin-top:6px">${e.stickers.join(' ')}</div>`:''}`;
+        card.onclick=()=>openView(e);
+        wrap.appendChild(card);
+      });
+    }
+    mArea.appendChild(wrap);
+    addBtn('← Quay lại','alt',renderHome);
+  }
+
+  function openView(e){
+    viewMode='view';
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const m=getMood(e.mood);
+    const wrap=document.createElement('div');
+    wrap.style.cssText='max-width:520px;margin:0 auto';
+
+    const hero=document.createElement('div');
+    hero.style.cssText=`text-align:center;padding:24px 18px;background:linear-gradient(135deg,${m?.bg||'rgba(255,255,255,.08)'},rgba(255,255,255,.03));border:1px solid ${m?.color||'rgba(255,255,255,.15)'};border-radius:18px;margin-bottom:14px`;
+    hero.innerHTML=`
+      <div style="font-size:64px;margin-bottom:6px">${m?.emoji||'📝'}</div>
+      <div style="font-family:'Bungee',cursive;font-size:18px;color:${m?.color||'var(--neon-yellow)'};margin-bottom:4px">${m?.label||'Nhật ký'}</div>
+      <div style="font-size:11px;color:var(--muted)">${fmtDate(e.date)}</div>`;
+    wrap.appendChild(hero);
+
+    if(e.title){
+      const t=document.createElement('div');
+      t.style.cssText='font-size:16px;font-weight:700;color:var(--text);margin-bottom:10px;padding:0 4px';
+      t.textContent=e.title;
+      wrap.appendChild(t);
+    }
+    if(e.content){
+      const c=document.createElement('div');
+      c.style.cssText='font-size:14px;line-height:1.7;color:var(--text);padding:14px;background:rgba(255,255,255,.04);border-radius:12px;white-space:pre-wrap;margin-bottom:10px';
+      c.textContent=e.content;
+      wrap.appendChild(c);
+    }
+    if(e.stickers&&e.stickers.length){
+      const s=document.createElement('div');
+      s.style.cssText='text-align:center;font-size:32px;letter-spacing:6px;padding:10px';
+      s.textContent=e.stickers.join(' ');
+      wrap.appendChild(s);
+    }
+
+    mArea.appendChild(wrap);
+    addBtn('✏️ Sửa','warn',()=>openWrite(e));
+    addBtn('🗑️ Xoá','alt',()=>{
+      if(!confirm('Xoá trang nhật ký này?'))return;
+      const data=load();
+      save(data.filter(x=>x.id!==e.id));
+      renderHome();
+    });
+    addBtn('← Quay lại','alt',viewMode==='view'?renderList:renderHome);
+  }
+
+  return {title:'📔 Nhật ký',init};
+})();
+
+
+/* ============== BẢN ĐỒ VIỆT NAM — Trước & Sau sáp nhập 2025 ============== */
+games.vnMap = (()=>{
+  // 34 đơn vị hành chính sau sáp nhập (1/7/2025) — Nghị quyết 202/2025/QH15
+  // Diện tích km², dân số người (xấp xỉ 2024)
+  // Mỗi mục: {id, name, type:'tinh'|'tp', area, pop, region, capital, kept (true=giữ nguyên), oldProvinces:[]}
+  const NEW_UNITS = [
+    // 6 thành phố trực thuộc trung ương
+    {id:'hanoi',name:'Hà Nội',type:'tp',area:3358,pop:8800000,region:'bac',capital:'Hà Nội',kept:true,oldProvinces:['Hà Nội'],note:'Thủ đô · Đã sáp nhập Hà Tây từ 2008',emoji:'🏛️'},
+    {id:'hcm',name:'TP. Hồ Chí Minh',type:'tp',area:6772,pop:14000000,region:'nam',capital:'TP.HCM',kept:false,oldProvinces:['TP.HCM','Bình Dương','Bà Rịa-Vũng Tàu'],note:'Đại đô thị lớn nhất Việt Nam',emoji:'🏙️'},
+    {id:'haiphong',name:'Hải Phòng',type:'tp',area:3195,pop:4100000,region:'bac',capital:'Hải Phòng',kept:false,oldProvinces:['Hải Phòng','Hải Dương'],note:'Cảng biển lớn miền Bắc',emoji:'⚓'},
+    {id:'danang',name:'Đà Nẵng',type:'tp',area:11859,pop:3000000,region:'trung',capital:'Đà Nẵng',kept:false,oldProvinces:['Đà Nẵng','Quảng Nam'],note:'Thành phố đáng sống nhất VN',emoji:'🌉'},
+    {id:'hue',name:'Huế',type:'tp',area:4947,pop:1200000,region:'trung',capital:'Huế',kept:true,oldProvinces:['Thừa Thiên Huế'],note:'Cố đô · Di sản UNESCO',emoji:'🏯'},
+    {id:'cantho',name:'Cần Thơ',type:'tp',area:6361,pop:3200000,region:'nam',capital:'Cần Thơ',kept:false,oldProvinces:['Cần Thơ','Hậu Giang','Sóc Trăng'],note:'Trung tâm ĐBSCL',emoji:'🌾'},
+
+    // 11 tỉnh giữ nguyên (đã được nêu trong NEW_UNITS này)
+    {id:'caobang',name:'Cao Bằng',type:'tinh',area:6700,pop:540000,region:'bac',capital:'Cao Bằng',kept:true,oldProvinces:['Cao Bằng'],note:'Thác Bản Giốc nổi tiếng',emoji:'💧'},
+    {id:'dienbien',name:'Điện Biên',type:'tinh',area:9541,pop:625000,region:'bac',capital:'Điện Biên Phủ',kept:true,oldProvinces:['Điện Biên'],note:'Chiến thắng Điện Biên Phủ 1954',emoji:'⚔️'},
+    {id:'hatinh',name:'Hà Tĩnh',type:'tinh',area:5994,pop:1300000,region:'trung',capital:'Hà Tĩnh',kept:true,oldProvinces:['Hà Tĩnh'],note:'Quê hương đại thi hào Nguyễn Du',emoji:'📜'},
+    {id:'laichau',name:'Lai Châu',type:'tinh',area:9069,pop:480000,region:'bac',capital:'Lai Châu',kept:true,oldProvinces:['Lai Châu'],note:'Biên giới Việt - Trung',emoji:'🏔️'},
+    {id:'langson',name:'Lạng Sơn',type:'tinh',area:8310,pop:800000,region:'bac',capital:'Lạng Sơn',kept:true,oldProvinces:['Lạng Sơn'],note:'Cửa khẩu Hữu Nghị',emoji:'🛂'},
+    {id:'nghean',name:'Nghệ An',type:'tinh',area:16487,pop:3400000,region:'trung',capital:'Vinh',kept:true,oldProvinces:['Nghệ An'],note:'Quê Bác Hồ · Tỉnh rộng nhất VN',emoji:'⭐'},
+    {id:'quangninh',name:'Quảng Ninh',type:'tinh',area:6178,pop:1400000,region:'bac',capital:'Hạ Long',kept:true,oldProvinces:['Quảng Ninh'],note:'Vịnh Hạ Long · Di sản UNESCO',emoji:'🛥️'},
+    {id:'sonla',name:'Sơn La',type:'tinh',area:14123,pop:1300000,region:'bac',capital:'Sơn La',kept:true,oldProvinces:['Sơn La'],note:'Hồ thủy điện Sơn La',emoji:'⚡'},
+    {id:'thanhhoa',name:'Thanh Hóa',type:'tinh',area:11129,pop:3700000,region:'trung',capital:'Thanh Hóa',kept:true,oldProvinces:['Thanh Hóa'],note:'Quê hương các vua Lê',emoji:'👑'},
+
+    // 19 tỉnh mới (kết quả sáp nhập)
+    {id:'angiang',name:'An Giang',type:'tinh',area:9888,pop:3100000,region:'nam',capital:'Long Xuyên',kept:false,oldProvinces:['An Giang','Kiên Giang'],note:'Đảo Phú Quốc · Bảy Núi',emoji:'🏝️'},
+    {id:'bacninh',name:'Bắc Ninh',type:'tinh',area:4719,pop:3600000,region:'bac',capital:'Bắc Ninh',kept:false,oldProvinces:['Bắc Ninh','Bắc Giang'],note:'Quan họ Bắc Ninh',emoji:'🎶'},
+    {id:'camau',name:'Cà Mau',type:'tinh',area:7942,pop:2200000,region:'nam',capital:'Cà Mau',kept:false,oldProvinces:['Cà Mau','Bạc Liêu'],note:'Mũi Cà Mau · Cực Nam Tổ Quốc',emoji:'🦐'},
+    {id:'daklak',name:'Đắk Lắk',type:'tinh',area:18097,pop:2400000,region:'tay',capital:'Buôn Ma Thuột',kept:false,oldProvinces:['Đắk Lắk','Phú Yên'],note:'Cà phê Buôn Ma Thuột',emoji:'☕'},
+    {id:'dongnai',name:'Đồng Nai',type:'tinh',area:12737,pop:4400000,region:'nam',capital:'Biên Hòa',kept:false,oldProvinces:['Đồng Nai','Bình Phước'],note:'Công nghiệp · Cao su',emoji:'🏭'},
+    {id:'dongthap',name:'Đồng Tháp',type:'tinh',area:5938,pop:3300000,region:'nam',capital:'Cao Lãnh',kept:false,oldProvinces:['Đồng Tháp','Tiền Giang'],note:'Sen Tháp Mười',emoji:'🪷'},
+    {id:'gialai',name:'Gia Lai',type:'tinh',area:21577,pop:3500000,region:'tay',capital:'Pleiku',kept:false,oldProvinces:['Gia Lai','Bình Định'],note:'Cao nguyên · Bãi biển Quy Nhơn',emoji:'🏞️'},
+    {id:'hungyen',name:'Hưng Yên',type:'tinh',area:2515,pop:3200000,region:'bac',capital:'Hưng Yên',kept:false,oldProvinces:['Hưng Yên','Thái Bình'],note:'Lúa nước đồng bằng sông Hồng',emoji:'🌾'},
+    {id:'khanhhoa',name:'Khánh Hòa',type:'tinh',area:8556,pop:1900000,region:'trung',capital:'Nha Trang',kept:false,oldProvinces:['Khánh Hòa','Ninh Thuận'],note:'Biển Nha Trang · Tháp Chàm',emoji:'🏖️'},
+    {id:'lamdong',name:'Lâm Đồng',type:'tinh',area:24233,pop:3300000,region:'tay',capital:'Đà Lạt',kept:false,oldProvinces:['Lâm Đồng','Bình Thuận','Đắk Nông'],note:'Đà Lạt · Phan Thiết · Tỉnh rộng nhất sau sáp nhập',emoji:'🌹'},
+    {id:'laocai',name:'Lào Cai',type:'tinh',area:13257,pop:1500000,region:'bac',capital:'Lào Cai',kept:false,oldProvinces:['Lào Cai','Yên Bái'],note:'Sapa · Fansipan · Mù Cang Chải',emoji:'🌄'},
+    {id:'ninhbinh',name:'Ninh Bình',type:'tinh',area:3942,pop:4400000,region:'bac',capital:'Ninh Bình',kept:false,oldProvinces:['Ninh Bình','Hà Nam','Nam Định'],note:'Tràng An · Bái Đính',emoji:'⛩️'},
+    {id:'phutho',name:'Phú Thọ',type:'tinh',area:9361,pop:4000000,region:'bac',capital:'Việt Trì',kept:false,oldProvinces:['Phú Thọ','Vĩnh Phúc','Hòa Bình'],note:'Đền Hùng · Cội nguồn dân tộc',emoji:'🏵️'},
+    {id:'quangngai',name:'Quảng Ngãi',type:'tinh',area:14833,pop:1900000,region:'trung',capital:'Quảng Ngãi',kept:false,oldProvinces:['Quảng Ngãi','Kon Tum'],note:'Lý Sơn · Măng Đen',emoji:'🌋'},
+    {id:'quangtri',name:'Quảng Trị',type:'tinh',area:12700,pop:2100000,region:'trung',capital:'Đông Hà',kept:false,oldProvinces:['Quảng Trị','Quảng Bình'],note:'Phong Nha-Kẻ Bàng · Vĩ tuyến 17',emoji:'🕳️'},
+    {id:'tayninh',name:'Tây Ninh',type:'tinh',area:8536,pop:2900000,region:'nam',capital:'Tây Ninh',kept:false,oldProvinces:['Tây Ninh','Long An'],note:'Núi Bà Đen · Cao Đài',emoji:'⛰️'},
+    {id:'thainguyen',name:'Thái Nguyên',type:'tinh',area:8375,pop:1700000,region:'bac',capital:'Thái Nguyên',kept:false,oldProvinces:['Thái Nguyên','Bắc Kạn'],note:'Trà Thái Nguyên · Hồ Ba Bể',emoji:'🍵'},
+    {id:'tuyenquang',name:'Tuyên Quang',type:'tinh',area:13796,pop:1500000,region:'bac',capital:'Tuyên Quang',kept:false,oldProvinces:['Tuyên Quang','Hà Giang'],note:'Tân Trào · Đồng Văn',emoji:'🪨'},
+    {id:'vinhlong',name:'Vĩnh Long',type:'tinh',area:6296,pop:3400000,region:'nam',capital:'Vĩnh Long',kept:false,oldProvinces:['Vĩnh Long','Bến Tre','Trà Vinh'],note:'Dừa Bến Tre · Vùng sông nước',emoji:'🥥'}
+  ];
+
+  // 63 tỉnh thành cũ (trước 1/7/2025) — diện tích km²
+  // Mapping mỗi tỉnh cũ → tỉnh mới
+  const OLD_PROVINCES = [
+    {old:'Hà Nội',area:3358,new:'Hà Nội'},
+    {old:'TP. Hồ Chí Minh',area:2095,new:'TP. Hồ Chí Minh'},
+    {old:'Bà Rịa-Vũng Tàu',area:1980,new:'TP. Hồ Chí Minh'},
+    {old:'Bình Dương',area:2695,new:'TP. Hồ Chí Minh'},
+    {old:'Hải Phòng',area:1527,new:'Hải Phòng'},
+    {old:'Hải Dương',area:1668,new:'Hải Phòng'},
+    {old:'Đà Nẵng',area:1285,new:'Đà Nẵng'},
+    {old:'Quảng Nam',area:10574,new:'Đà Nẵng'},
+    {old:'Thừa Thiên Huế',area:4947,new:'Huế'},
+    {old:'Cần Thơ',area:1439,new:'Cần Thơ'},
+    {old:'Hậu Giang',area:1622,new:'Cần Thơ'},
+    {old:'Sóc Trăng',area:3300,new:'Cần Thơ'},
+    {old:'An Giang',area:3537,new:'An Giang'},
+    {old:'Kiên Giang',area:6351,new:'An Giang'},
+    {old:'Bắc Ninh',area:822,new:'Bắc Ninh'},
+    {old:'Bắc Giang',area:3897,new:'Bắc Ninh'},
+    {old:'Cà Mau',area:5295,new:'Cà Mau'},
+    {old:'Bạc Liêu',area:2647,new:'Cà Mau'},
+    {old:'Đắk Lắk',area:13125,new:'Đắk Lắk'},
+    {old:'Phú Yên',area:4972,new:'Đắk Lắk'},
+    {old:'Đồng Nai',area:5907,new:'Đồng Nai'},
+    {old:'Bình Phước',area:6830,new:'Đồng Nai'},
+    {old:'Đồng Tháp',area:3384,new:'Đồng Tháp'},
+    {old:'Tiền Giang',area:2554,new:'Đồng Tháp'},
+    {old:'Gia Lai',area:15511,new:'Gia Lai'},
+    {old:'Bình Định',area:6066,new:'Gia Lai'},
+    {old:'Hưng Yên',area:930,new:'Hưng Yên'},
+    {old:'Thái Bình',area:1585,new:'Hưng Yên'},
+    {old:'Khánh Hòa',area:5217,new:'Khánh Hòa'},
+    {old:'Ninh Thuận',area:3339,new:'Khánh Hòa'},
+    {old:'Lâm Đồng',area:9783,new:'Lâm Đồng'},
+    {old:'Bình Thuận',area:7942,new:'Lâm Đồng'},
+    {old:'Đắk Nông',area:6508,new:'Lâm Đồng'},
+    {old:'Lào Cai',area:6364,new:'Lào Cai'},
+    {old:'Yên Bái',area:6893,new:'Lào Cai'},
+    {old:'Ninh Bình',area:1378,new:'Ninh Bình'},
+    {old:'Hà Nam',area:861,new:'Ninh Bình'},
+    {old:'Nam Định',area:1664,new:'Ninh Bình'},
+    {old:'Phú Thọ',area:3534,new:'Phú Thọ'},
+    {old:'Vĩnh Phúc',area:1238,new:'Phú Thọ'},
+    {old:'Hòa Bình',area:4591,new:'Phú Thọ'},
+    {old:'Quảng Ngãi',area:5135,new:'Quảng Ngãi'},
+    {old:'Kon Tum',area:9690,new:'Quảng Ngãi'},
+    {old:'Quảng Trị',area:4621,new:'Quảng Trị'},
+    {old:'Quảng Bình',area:8065,new:'Quảng Trị'},
+    {old:'Tây Ninh',area:4041,new:'Tây Ninh'},
+    {old:'Long An',area:4495,new:'Tây Ninh'},
+    {old:'Thái Nguyên',area:3563,new:'Thái Nguyên'},
+    {old:'Bắc Kạn',area:4860,new:'Thái Nguyên'},
+    {old:'Tuyên Quang',area:5870,new:'Tuyên Quang'},
+    {old:'Hà Giang',area:7929,new:'Tuyên Quang'},
+    {old:'Vĩnh Long',area:1525,new:'Vĩnh Long'},
+    {old:'Bến Tre',area:2360,new:'Vĩnh Long'},
+    {old:'Trà Vinh',area:2358,new:'Vĩnh Long'},
+    {old:'Cao Bằng',area:6700,new:'Cao Bằng'},
+    {old:'Điện Biên',area:9541,new:'Điện Biên'},
+    {old:'Hà Tĩnh',area:5994,new:'Hà Tĩnh'},
+    {old:'Lai Châu',area:9069,new:'Lai Châu'},
+    {old:'Lạng Sơn',area:8310,new:'Lạng Sơn'},
+    {old:'Nghệ An',area:16487,new:'Nghệ An'},
+    {old:'Quảng Ninh',area:6178,new:'Quảng Ninh'},
+    {old:'Sơn La',area:14123,new:'Sơn La'},
+    {old:'Thanh Hóa',area:11129,new:'Thanh Hóa'}
+  ];
+
+  const REGIONS = {bac:{label:'Miền Bắc',emoji:'🏔️',color:'#00f0ff'},trung:{label:'Miền Trung',emoji:'🌊',color:'#ffe600'},tay:{label:'Tây Nguyên',emoji:'🌲',color:'#39ff7f'},nam:{label:'Miền Nam',emoji:'🌴',color:'#ff2d95'}};
+
+  let mode='new'; // 'new'|'old'|'mapping'|'stats'
+  let regionFilter='all';
+
+  function init(){mode='new';regionFilter='all';renderHome()}
+
+  function renderHome(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const wrap=document.createElement('div');
+    wrap.style.cssText='max-width:560px;margin:0 auto';
+
+    // Hero
+    const hero=document.createElement('div');
+    hero.style.cssText='text-align:center;padding:20px;background:linear-gradient(135deg,rgba(218,41,28,.15),rgba(255,230,0,.15));border:1px solid rgba(218,41,28,.3);border-radius:16px;margin-bottom:14px';
+    hero.innerHTML=`
+      <div style="font-size:48px;margin-bottom:6px">🇻🇳</div>
+      <div style="font-family:'Bungee',cursive;font-size:20px;color:var(--neon-yellow);margin-bottom:4px">Bản đồ Việt Nam</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5">Khám phá 63 tỉnh trước và 34 tỉnh sau sáp nhập (1/7/2025)</div>`;
+    wrap.appendChild(hero);
+
+    // Mode selector — 4 tabs
+    const tabs=document.createElement('div');
+    tabs.style.cssText='display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px';
+    const tabBtns=[
+      {id:'new',icon:'🆕',label:'34 tỉnh hiện tại',sub:'Sau 1/7/2025',color:'var(--neon-cyan)'},
+      {id:'old',icon:'📜',label:'63 tỉnh cũ',sub:'Trước 1/7/2025',color:'var(--neon-purple)'},
+      {id:'mapping',icon:'🔀',label:'Sáp nhập như nào?',sub:'Bảng đối chiếu',color:'var(--neon-pink)'},
+      {id:'stats',icon:'📊',label:'Top diện tích',sub:'Lớn nhất / nhỏ nhất',color:'var(--neon-yellow)'}
+    ];
+    tabBtns.forEach(t=>{
+      const b=document.createElement('button');
+      b.style.cssText=`padding:14px;background:rgba(255,255,255,.05);border:1px solid ${t.color};border-radius:12px;color:var(--text);font-family:inherit;cursor:pointer;text-align:center;touch-action:manipulation`;
+      b.innerHTML=`<div style="font-size:28px;margin-bottom:4px">${t.icon}</div><div style="font-size:12px;font-weight:700;color:${t.color}">${t.label}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">${t.sub}</div>`;
+      b.onclick=()=>{mode=t.id;regionFilter='all';renderMode()};
+      tabs.appendChild(b);
+    });
+    wrap.appendChild(tabs);
+
+    // Quick stats
+    const qstats=document.createElement('div');
+    qstats.style.cssText='padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;font-size:12px;line-height:1.7;color:var(--text)';
+    qstats.innerHTML=`
+      <div style="font-weight:700;margin-bottom:8px;color:var(--neon-yellow)">📈 Tóm tắt sáp nhập 2025</div>
+      <div>📅 Hiệu lực: <b>1/7/2025</b> (Nghị quyết 202/2025/QH15)</div>
+      <div>📍 Trước: <b>63 tỉnh thành</b> (58 tỉnh + 5 TP)</div>
+      <div>📍 Sau: <b>34 đơn vị</b> (28 tỉnh + 6 TP)</div>
+      <div>✅ Giữ nguyên: <b>11 tỉnh thành</b></div>
+      <div>🔀 Sáp nhập: <b>52 tỉnh</b> → 23 đơn vị mới</div>`;
+    wrap.appendChild(qstats);
+
+    mArea.appendChild(wrap);
+    addBtn('← Đóng','alt',closeModal);
+    setStatus('🇻🇳 Khám phá bản đồ Việt Nam');
+  }
+
+  function renderMode(){
+    if(mode==='new')renderNewList();
+    else if(mode==='old')renderOldList();
+    else if(mode==='mapping')renderMapping();
+    else if(mode==='stats')renderStats();
+  }
+
+  function renderNewList(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const wrap=document.createElement('div');
+    wrap.style.cssText='max-width:560px;margin:0 auto';
+
+    const head=document.createElement('div');
+    head.style.cssText='text-align:center;margin-bottom:12px';
+    head.innerHTML='<div style="font-family:\'Bungee\',cursive;font-size:18px;color:var(--neon-cyan)">🆕 34 tỉnh thành Việt Nam</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Sau sáp nhập 1/7/2025</div>';
+    wrap.appendChild(head);
+
+    // Region filter chips
+    const chips=document.createElement('div');
+    chips.style.cssText='display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:12px';
+    [{id:'all',label:'📍 Cả nước'},...Object.entries(REGIONS).map(([id,r])=>({id,label:r.emoji+' '+r.label}))].forEach(c=>{
+      const b=document.createElement('button');
+      const active=regionFilter===c.id;
+      b.style.cssText=`padding:7px 11px;border-radius:18px;border:2px solid ${active?'var(--neon-cyan)':'rgba(255,255,255,.12)'};background:${active?'rgba(0,240,255,.1)':'rgba(0,0,0,.2)'};color:${active?'var(--neon-cyan)':'var(--text)'};font-family:inherit;font-size:11px;font-weight:700;cursor:pointer`;
+      b.textContent=c.label;
+      b.onclick=()=>{regionFilter=c.id;renderNewList()};
+      chips.appendChild(b);
+    });
+    wrap.appendChild(chips);
+
+    // List
+    const filtered=regionFilter==='all'?NEW_UNITS:NEW_UNITS.filter(u=>u.region===regionFilter);
+    const sorted=[...filtered].sort((a,b)=>{
+      // TP first, then tỉnh, then alpha
+      if(a.type!==b.type)return a.type==='tp'?-1:1;
+      return a.name.localeCompare(b.name,'vi');
+    });
+
+    sorted.forEach(u=>{
+      const card=document.createElement('button');
+      const regColor=REGIONS[u.region]?.color||'#888';
+      card.style.cssText=`display:block;width:100%;padding:12px;margin-bottom:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-left:4px solid ${regColor};border-radius:10px;color:var(--text);font-family:inherit;cursor:pointer;text-align:left;touch-action:manipulation`;
+      card.innerHTML=`
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:28px">${u.emoji||'📍'}</span>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+              <span style="font-weight:700;font-size:14px">${u.name}</span>
+              ${u.type==='tp'?'<span style="background:rgba(255,230,0,.15);color:var(--neon-yellow);padding:1px 6px;border-radius:5px;font-size:9px;font-weight:700">TP TRỰC THUỘC TW</span>':''}
+              ${u.kept?'<span style="background:rgba(57,255,127,.15);color:#39ff7f;padding:1px 6px;border-radius:5px;font-size:9px;font-weight:700">GIỮ NGUYÊN</span>':'<span style="background:rgba(255,45,149,.15);color:var(--neon-pink);padding:1px 6px;border-radius:5px;font-size:9px;font-weight:700">SÁP NHẬP</span>'}
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">📐 ${u.area.toLocaleString('vi-VN')} km² · 👥 ${(u.pop/1000000).toFixed(1)}M</div>
+          </div>
+          <span style="color:var(--muted)">→</span>
+        </div>`;
+      card.onclick=()=>showNewDetail(u);
+      wrap.appendChild(card);
+    });
+
+    mArea.appendChild(wrap);
+    addBtn('← Quay lại','alt',renderHome);
+  }
+
+  function showNewDetail(u){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const wrap=document.createElement('div');
+    wrap.style.cssText='max-width:540px;margin:0 auto';
+    const regColor=REGIONS[u.region]?.color||'#888';
+
+    const hero=document.createElement('div');
+    hero.style.cssText=`text-align:center;padding:24px 18px;background:linear-gradient(135deg,rgba(0,240,255,.1),rgba(177,75,255,.1));border:1px solid ${regColor};border-radius:18px;margin-bottom:14px`;
+    hero.innerHTML=`
+      <div style="font-size:64px;margin-bottom:6px">${u.emoji||'📍'}</div>
+      <div style="font-family:'Bungee',cursive;font-size:22px;color:var(--neon-yellow);margin-bottom:4px">${u.name}</div>
+      <div style="font-size:12px;color:${regColor};font-weight:700">${u.type==='tp'?'Thành phố trực thuộc Trung ương':'Tỉnh'} · ${REGIONS[u.region]?.label||''}</div>`;
+    wrap.appendChild(hero);
+
+    // Info cards
+    const grid=document.createElement('div');
+    grid.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px';
+    [
+      {l:'📐 Diện tích',v:u.area.toLocaleString('vi-VN')+' km²'},
+      {l:'👥 Dân số',v:(u.pop/1000000).toFixed(1)+' triệu'},
+      {l:'🏛️ Tỉnh lỵ',v:u.capital},
+      {l:'🔀 Trạng thái',v:u.kept?'Giữ nguyên':'Sáp nhập'}
+    ].forEach(s=>{
+      const c=document.createElement('div');
+      c.style.cssText='background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px';
+      c.innerHTML=`<div style="font-size:11px;color:var(--muted);margin-bottom:4px">${s.l}</div><div style="font-size:14px;font-weight:700;color:var(--text)">${s.v}</div>`;
+      grid.appendChild(c);
+    });
+    wrap.appendChild(grid);
+
+    // Old provinces merger
+    if(!u.kept && u.oldProvinces.length>1){
+      const mergeBox=document.createElement('div');
+      mergeBox.style.cssText='padding:14px;background:rgba(255,45,149,.06);border:1px solid rgba(255,45,149,.2);border-radius:12px;margin-bottom:10px';
+      mergeBox.innerHTML='<div style="font-size:12px;color:var(--neon-pink);font-weight:700;margin-bottom:8px">🔀 Sáp nhập từ '+u.oldProvinces.length+' tỉnh cũ:</div>';
+      u.oldProvinces.forEach(op=>{
+        const old=OLD_PROVINCES.find(o=>o.old===op);
+        const row=document.createElement('div');
+        row.style.cssText='display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px';
+        row.innerHTML=`<span>📍 ${op}</span><span style="color:var(--muted)">${old?old.area.toLocaleString('vi-VN')+' km²':'-'}</span>`;
+        mergeBox.appendChild(row);
+      });
+      // Sum
+      const oldTotal=u.oldProvinces.reduce((s,op)=>{const o=OLD_PROVINCES.find(x=>x.old===op);return s+(o?o.area:0)},0);
+      const sumRow=document.createElement('div');
+      sumRow.style.cssText='display:flex;justify-content:space-between;padding:8px 0 0;font-size:13px;font-weight:700;color:var(--neon-yellow);margin-top:4px';
+      sumRow.innerHTML=`<span>📊 Tổng diện tích mới:</span><span>${oldTotal.toLocaleString('vi-VN')} km²</span>`;
+      mergeBox.appendChild(sumRow);
+      wrap.appendChild(mergeBox);
+    }
+
+    // Note
+    if(u.note){
+      const note=document.createElement('div');
+      note.style.cssText='padding:12px;background:rgba(255,230,0,.06);border-left:3px solid var(--neon-yellow);border-radius:8px;font-size:13px;color:var(--text);line-height:1.5';
+      note.innerHTML=`💡 <b>Điểm nổi bật:</b> ${u.note}`;
+      wrap.appendChild(note);
+    }
+
+    mArea.appendChild(wrap);
+    addBtn('← Danh sách','alt',renderNewList);
+    addBtn('← Đóng','alt',closeModal);
+  }
+
+  function renderOldList(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const wrap=document.createElement('div');
+    wrap.style.cssText='max-width:560px;margin:0 auto';
+
+    const head=document.createElement('div');
+    head.style.cssText='text-align:center;margin-bottom:14px';
+    head.innerHTML='<div style="font-family:\'Bungee\',cursive;font-size:18px;color:var(--neon-purple)">📜 63 tỉnh thành cũ</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Trước ngày 1/7/2025</div>';
+    wrap.appendChild(head);
+
+    const sorted=[...OLD_PROVINCES].sort((a,b)=>a.old.localeCompare(b.old,'vi'));
+    sorted.forEach(o=>{
+      const newU=NEW_UNITS.find(n=>n.name===o.new);
+      const kept=o.old===o.new||(newU?.kept);
+      const card=document.createElement('div');
+      card.style.cssText='display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;font-size:13px';
+      card.innerHTML=`
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700;color:var(--text)">📍 ${o.old}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">📐 ${o.area.toLocaleString('vi-VN')} km² · → <b style="color:var(--neon-cyan)">${o.new}</b></div>
+        </div>
+        ${kept?'<span style="background:rgba(57,255,127,.15);color:#39ff7f;padding:2px 7px;border-radius:5px;font-size:9px;font-weight:700">GIỮ</span>':'<span style="background:rgba(255,45,149,.15);color:var(--neon-pink);padding:2px 7px;border-radius:5px;font-size:9px;font-weight:700">NHẬP</span>'}`;
+      wrap.appendChild(card);
+    });
+
+    mArea.appendChild(wrap);
+    addBtn('← Quay lại','alt',renderHome);
+  }
+
+  function renderMapping(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const wrap=document.createElement('div');
+    wrap.style.cssText='max-width:560px;margin:0 auto';
+
+    const head=document.createElement('div');
+    head.style.cssText='text-align:center;margin-bottom:14px';
+    head.innerHTML='<div style="font-family:\'Bungee\',cursive;font-size:18px;color:var(--neon-pink)">🔀 Bảng đối chiếu sáp nhập</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Tỉnh cũ → Tỉnh mới</div>';
+    wrap.appendChild(head);
+
+    // Group by new province
+    const groups={};
+    OLD_PROVINCES.forEach(o=>{
+      if(!groups[o.new])groups[o.new]=[];
+      groups[o.new].push(o);
+    });
+    // Sort: merged first, then kept
+    const newSorted=Object.keys(groups).sort((a,b)=>{
+      const am=groups[a].length>1,bm=groups[b].length>1;
+      if(am!==bm)return am?-1:1;
+      return a.localeCompare(b,'vi');
+    });
+
+    newSorted.forEach(newName=>{
+      const olds=groups[newName];
+      const isMerge=olds.length>1;
+      const newU=NEW_UNITS.find(u=>u.name===newName);
+      const total=olds.reduce((s,o)=>s+o.area,0);
+
+      const box=document.createElement('div');
+      box.style.cssText=`padding:12px;margin-bottom:10px;background:${isMerge?'rgba(255,45,149,.06)':'rgba(57,255,127,.05)'};border:1px solid ${isMerge?'rgba(255,45,149,.25)':'rgba(57,255,127,.2)'};border-radius:12px`;
+      let html=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:22px">${newU?.emoji||'📍'}</span><div style="flex:1"><div style="font-weight:700;color:var(--neon-yellow);font-size:14px">${newName}</div><div style="font-size:10px;color:var(--muted)">${isMerge?'🔀 SÁP NHẬP từ '+olds.length+' tỉnh':'✅ GIỮ NGUYÊN'}</div></div></div>`;
+      if(isMerge){
+        html+='<div style="font-size:12px;color:var(--text);padding-left:8px;line-height:1.7">';
+        olds.forEach(o=>{
+          html+=`<div>• ${o.old} <span style="color:var(--muted)">(${o.area.toLocaleString('vi-VN')} km²)</span></div>`;
+        });
+        html+=`<div style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.1);font-weight:700;color:var(--neon-cyan)">📊 Tổng: ${total.toLocaleString('vi-VN')} km²</div>`;
+        html+='</div>';
+      } else {
+        html+=`<div style="font-size:12px;color:var(--muted);padding-left:8px">📐 ${total.toLocaleString('vi-VN')} km²</div>`;
+      }
+      box.innerHTML=html;
+      wrap.appendChild(box);
+    });
+
+    mArea.appendChild(wrap);
+    addBtn('← Quay lại','alt',renderHome);
+  }
+
+  function renderStats(){
+    mArea.innerHTML='';mCtrls.innerHTML='';
+    const wrap=document.createElement('div');
+    wrap.style.cssText='max-width:560px;margin:0 auto';
+
+    const head=document.createElement('div');
+    head.style.cssText='text-align:center;margin-bottom:14px';
+    head.innerHTML='<div style="font-family:\'Bungee\',cursive;font-size:18px;color:var(--neon-yellow)">📊 Top diện tích</div>';
+    wrap.appendChild(head);
+
+    // After merger - top 5 biggest
+    const sortedByArea=[...NEW_UNITS].sort((a,b)=>b.area-a.area);
+    const sec1=document.createElement('div');
+    sec1.style.cssText='margin-bottom:14px';
+    sec1.innerHTML='<div style="font-size:13px;color:var(--neon-cyan);font-weight:700;margin-bottom:8px">🥇 5 tỉnh RỘNG nhất (sau sáp nhập)</div>';
+    sortedByArea.slice(0,5).forEach((u,i)=>{
+      const row=document.createElement('div');
+      row.style.cssText='display:flex;align-items:center;gap:10px;padding:10px;margin-bottom:5px;background:rgba(255,230,0,.06);border:1px solid rgba(255,230,0,.2);border-radius:8px;font-size:13px';
+      row.innerHTML=`<span style="font-family:'Bungee',cursive;color:var(--neon-yellow);font-size:18px;min-width:32px">${i+1}</span><span style="font-size:22px">${u.emoji||'📍'}</span><div style="flex:1"><div style="font-weight:700">${u.name}</div><div style="font-size:11px;color:var(--muted)">${u.kept?'Giữ nguyên':'Sáp nhập '+u.oldProvinces.length+' tỉnh'}</div></div><div style="text-align:right"><div style="font-weight:700;color:var(--neon-yellow)">${u.area.toLocaleString('vi-VN')}</div><div style="font-size:10px;color:var(--muted)">km²</div></div>`;
+      sec1.appendChild(row);
+    });
+    wrap.appendChild(sec1);
+
+    // Smallest
+    const sec2=document.createElement('div');
+    sec2.style.cssText='margin-bottom:14px';
+    sec2.innerHTML='<div style="font-size:13px;color:var(--neon-pink);font-weight:700;margin-bottom:8px">📐 5 tỉnh NHỎ nhất</div>';
+    sortedByArea.slice(-5).reverse().forEach((u,i)=>{
+      const row=document.createElement('div');
+      row.style.cssText='display:flex;align-items:center;gap:10px;padding:10px;margin-bottom:5px;background:rgba(255,45,149,.05);border:1px solid rgba(255,45,149,.15);border-radius:8px;font-size:13px';
+      row.innerHTML=`<span style="font-family:'Bungee',cursive;color:var(--neon-pink);font-size:18px;min-width:32px">${i+1}</span><span style="font-size:22px">${u.emoji||'📍'}</span><div style="flex:1"><div style="font-weight:700">${u.name}</div></div><div style="text-align:right"><div style="font-weight:700;color:var(--neon-pink)">${u.area.toLocaleString('vi-VN')}</div><div style="font-size:10px;color:var(--muted)">km²</div></div>`;
+      sec2.appendChild(row);
+    });
+    wrap.appendChild(sec2);
+
+    // Most populous
+    const byPop=[...NEW_UNITS].sort((a,b)=>b.pop-a.pop).slice(0,5);
+    const sec3=document.createElement('div');
+    sec3.innerHTML='<div style="font-size:13px;color:#39ff7f;font-weight:700;margin-bottom:8px">👥 5 tỉnh ĐÔNG dân nhất</div>';
+    byPop.forEach((u,i)=>{
+      const row=document.createElement('div');
+      row.style.cssText='display:flex;align-items:center;gap:10px;padding:10px;margin-bottom:5px;background:rgba(57,255,127,.05);border:1px solid rgba(57,255,127,.15);border-radius:8px;font-size:13px';
+      row.innerHTML=`<span style="font-family:'Bungee',cursive;color:#39ff7f;font-size:18px;min-width:32px">${i+1}</span><span style="font-size:22px">${u.emoji||'📍'}</span><div style="flex:1"><div style="font-weight:700">${u.name}</div></div><div style="text-align:right"><div style="font-weight:700;color:#39ff7f">${(u.pop/1000000).toFixed(1)}M</div><div style="font-size:10px;color:var(--muted)">người</div></div>`;
+      sec3.appendChild(row);
+    });
+    wrap.appendChild(sec3);
+
+    mArea.appendChild(wrap);
+    addBtn('← Quay lại','alt',renderHome);
+  }
+
+  return {title:'🇻🇳 Bản đồ Việt Nam',init};
 })();
 
 games.readingRoll = (()=>{
